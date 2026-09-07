@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>US datacenter siting suitability, September 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F4F6; --panel:#FFFFFF; --ink:#18212B; --muted:#5C6773; --rule:#D3DAE1; --rule-soft:#E6EAEE;
+    --warn:#B5432A; --focus:#2456A6;
+    --c0:#00204C; --c1:#31446B; --c2:#666970; --c3:#958F78; --c4:#C4B56C; --c5:#FFEA46;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5}
+  a{color:var(--focus)}
+  button{font:inherit}
+  .wrap{max-width:1240px;margin:0 auto;padding:28px 24px 56px}
+  header h1{font-weight:300;font-size:clamp(28px,3.6vw,40px);line-height:1.12;letter-spacing:-0.01em;margin:0 0 10px;max-width:22ch}
+  header p.lede{margin:0;max-width:66ch;color:var(--muted)}
+  header .asof{margin-top:6px;font-size:13px;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;margin-top:26px;align-items:start}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .mapcard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 14px 10px;position:relative}
+  svg.map{width:100%;height:auto;display:block}
+  .state{stroke:#F2F4F6;stroke-width:0.9;cursor:pointer;transition:opacity .12s}
+  .state:hover,.state.selected{stroke:var(--ink);stroke-width:1.6}
+  .state:focus{outline:none;stroke:var(--focus);stroke-width:2}
+  .dim .state:not(.selected):not(:hover){opacity:.55}
+  .hatch{pointer-events:none}
+  .lens{display:flex;gap:6px;flex-wrap:wrap;margin:0 4px 10px}
+  .lens button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:5px 10px;font-size:13px;cursor:pointer;color:var(--ink)}
+  .lens button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .lens button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  .scatter{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:16px 18px 10px;margin-top:24px}
+  .scatter h2{font-weight:600;font-size:15px;margin:0 0 4px}
+  .scatter p{margin:0 0 8px;font-size:13.5px;color:var(--muted);max-width:80ch}
+  .scatter svg{width:100%;height:auto;display:block}
+  .scatter .dot{cursor:pointer}
+  .scatter .dot:hover circle,.scatter .dot.selected circle{stroke:var(--ink);stroke-width:2}
+  .legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:10px 4px 0;font-size:13px;color:var(--muted)}
+  .ramp{width:180px;height:10px;border-radius:2px;background:linear-gradient(90deg,var(--c0),var(--c1),var(--c2),var(--c3),var(--c4),var(--c5))}
+  .legend .key{display:flex;align-items:center;gap:8px}
+  .swatch{width:18px;height:12px;border:1px solid var(--rule)}
+  .tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;padding:8px 10px;border-radius:4px;font-size:13px;line-height:1.35;max-width:240px;display:none;z-index:5}
+  .tip b{font-weight:600}
+  .tip .sc{font-size:20px;font-weight:300;display:block;margin:2px 0 2px}
+  .tip .small{opacity:.8}
+  aside .card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:16px}
+  aside h2{font-size:15px;font-weight:600;margin:0 0 4px}
+  aside p.hint{margin:0 0 12px;font-size:13px;color:var(--muted)}
+  .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .presets button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:5px 9px;font-size:13px;cursor:pointer;color:var(--ink)}
+  .presets button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .presets button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  .w{display:grid;grid-template-columns:1fr 34px;gap:8px;align-items:center;margin:9px 0}
+  .w label{font-size:13.5px;display:block}
+  .w .sub{display:block;font-size:12px;color:var(--muted);line-height:1.3}
+  .w input[type=range]{grid-column:1/2;width:100%;accent-color:var(--ink);margin:2px 0 0}
+  .w .val{grid-column:2/3;grid-row:1/3;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+  .total{font-size:12px;color:var(--muted);margin-top:8px}
+  .detail{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:18px 20px;margin-top:24px}
+  .detail .top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
+  .detail h2{font-weight:300;font-size:28px;margin:0;line-height:1.1}
+  .detail .rank{color:var(--muted);font-size:14px}
+  .detail .score{font-size:40px;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
+  .detail .score small{font-size:14px;color:var(--muted);font-weight:400;margin-left:4px}
+  .chip{display:inline-block;border:1px solid var(--warn);color:var(--warn);border-radius:3px;padding:1px 7px;font-size:12.5px;margin-left:10px;vertical-align:middle}
+  .bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px 28px;margin:16px 0 6px}
+  .bar{display:grid;grid-template-columns:140px 1fr 36px;align-items:center;gap:10px;font-size:13.5px}
+  .bar .track{height:8px;background:var(--rule-soft);border-radius:2px;overflow:hidden}
+  .bar .fill{height:100%;background:var(--ink)}
+  .bar .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .detail p.note{margin:12px 0 0;max-width:80ch}
+  .detail p.srcs{margin:10px 0 0;max-width:80ch;font-size:12.5px;color:var(--muted);line-height:1.6}
+  .tablecard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:6px 0 0;margin-top:24px;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+  th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--rule-soft);white-space:nowrap}
+  th{font-weight:500;color:var(--muted);cursor:pointer;user-select:none;position:sticky;top:0;background:var(--panel)}
+  th:hover{color:var(--ink)}
+  th.sorted{color:var(--ink)}
+  th.sorted::after{content:" ▾";font-size:11px}
+  th.sorted.asc::after{content:" ▴"}
+  td:nth-child(2),th:nth-child(2){text-align:left}
+  td:first-child,th:first-child{text-align:right;color:var(--muted);width:36px}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:#F6F8FA}
+  tbody tr.selected{background:#EEF2F6}
+  td.tot{font-weight:600}
+  td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:var(--warn);margin-left:6px;vertical-align:middle}
+  .meth{margin-top:32px;max-width:78ch}
+  .meth h2{font-weight:600;font-size:17px;margin:0 0 8px}
+  .meth h3{font-weight:600;font-size:14.5px;margin:18px 0 6px}
+  .meth p,.meth li{color:#2B3540}
+  .meth ul{padding-left:18px;margin:6px 0}
+  .meth li{margin:3px 0}
+  .meth .src li{font-size:13.5px}
+  .meth .caveat{border-left:3px solid var(--warn);padding:8px 12px;background:#FFF7F4;margin:14px 0}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Where can you still build a large datacenter in the United States?</h1>
+  <p class="lede">State-level suitability for hyperscale and AI-training development, weighing power headroom, power cost, incentive policy, community and permitting friction, water, natural hazards, climate connectivity and buildout momentum. Switch lenses above the map, or move the weights, and the map, ranking and table recompute.</p>
+  <div class="asof">Composite as of September 7, 2026. Power prices are EIA 2024 annual industrial averages (latest full-year data). Hatched states have a statewide action in 2026 that changes the calculus.</div>
+</header>
+
+<div class="grid">
+  <div class="mapcard">
+    <div class="lens" id="lens">
+      <button data-l="all" aria-pressed="true">Combined</button>
+      <button data-l="politics" aria-pressed="false">Political will and plausibility</button>
+      <button data-l="physical" aria-pressed="false">Physical fundamentals</button>
+    </div>
+    <svg class="map" viewBox="0 0 975 610" role="img" aria-label="Choropleth map of US states colored by datacenter siting suitability score">
+      <defs>
+        <pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="7" stroke="#B5432A" stroke-width="1.6" opacity=".85"/>
+        </pattern>
+      </defs>
+      <g id="states"></g>
+      <g id="hatches" class="hatch"></g>
+      <g id="labels" class="hatch"></g>
+    </svg>
+    <div class="tip" id="tip"></div>
+    <div class="legend">
+      <div class="key"><span>Constrained</span><div class="ramp"></div><span>Favorable</span></div>
+      <div class="key"><div class="swatch" style="background:url(#h) #C4B56C;background-image:repeating-linear-gradient(45deg,#B5432A 0 1.5px,transparent 1.5px 6px)"></div><span>Statewide 2026 pause, moratorium or tax change</span></div>
+      <div class="key"><span id="hint" style="font-size:12.5px">Hover for scores, click to pin a state.</span></div>
+    </div>
+  </div>
+
+  <aside>
+    <div class="card">
+      <h2>Weights</h2>
+      <p class="hint">What matters for your build. Defaults reflect an AI training campus where time-to-power dominates.</p>
+      <div class="presets" id="presets">
+        <button data-p="ai" aria-pressed="true">AI campus</button>
+        <button data-p="cost" aria-pressed="false">Cheapest to run</button>
+        <button data-p="safe" aria-pressed="false">Lowest risk</button>
+        <button data-p="colo" aria-pressed="false">Connectivity first</button>
+      </div>
+      <div id="weights"></div>
+      <div class="total" id="total"></div>
+    </div>
+  </aside>
+</div>
+
+<section class="detail" id="detail" aria-live="polite"></section>
+
+<section class="scatter" id="scatter">
+  <h2>Physical fundamentals against political will and plausibility</h2>
+  <p>Each dot is a state. Right means cheap, available power with manageable water, hazard and climate. Up means the state government is courting the buildout, communities are not blocking it, and projects are actually landing. The lines are the medians. Top-right is where both stories agree; bottom-right has the physics but not the politics; top-left has the welcome mat but not the power.</p>
+  <svg viewBox="0 0 900 520" role="img" aria-label="Scatter plot of states by physical fundamentals and political plausibility" id="scsvg"></svg>
+</section>
+
+<div class="tablecard">
+  <table id="tbl">
+    <thead><tr id="thead"></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<section class="meth">
+  <h2>How the score is built</h2>
+  <p>Each state gets eight sub-scores on a 0 to 100 scale. The composite is the weighted average using the sliders above. Higher always means more favorable for development.</p>
+  <ul>
+    <li><b>Power cost</b>: EIA-861 2024 average industrial retail price. 5.43¢/kWh (New Mexico) maps to 100 and 13¢ or more maps to 0, linearly. This is an average-revenue benchmark, not a tariff quote; large-load tariffs, PJM capacity charges and Virginia's new 1.1¢/kWh consumption tax sit on top of it.</li>
+    <li><b>Power headroom</b>: judgment score (1 to 5) from utility queue reporting, ISO capacity outlooks and 2026 executive actions. Virginia (7-year waits for 100 MW at Dominion) and Texas (interconnections paused Aug 3, 2026 pending audit) score low; North Dakota, and the TVA and Southeast utilities that have approved generation, score high.</li>
+    <li><b>Incentive and policy climate</b>: judgment score from whether a sales tax exemption exists and is stable in 2026, plus statewide pauses, repeals, consumption taxes and cost-allocation laws.</li>
+    <li><b>Community and permitting friction</b>: judgment score from tracked local moratoriums (ElectricChoice counted 321 across 32 states as of Sept 1, 2026, with New Jersey, Ohio, Michigan and Georgia the most) and recent site rejections.</li>
+    <li><b>Water</b>: judgment score from basin stress, 2026 drought and shortage declarations (Colorado River Tier 1, record-low western snowpack), and state water-scarcity rules.</li>
+    <li><b>Natural hazard</b>: judgment score aligned to FEMA National Risk Index patterns (hurricane, tornado, wildfire, seismic).</li>
+    <li><b>Climate for cooling</b>: judgment score from cooling degree days and humidity; colder and drier scores higher.</li>
+    <li><b>Buildout momentum</b>: judgment score from tracked project counts (PoweredByWho, Aterio) and 2025 to 2026 hyperscale commitments. Texas, Virginia and Georgia lead; New England trails.</li>
+    <li><b>Connectivity and ecosystem</b>: judgment score from operating datacenter counts, fiber and cable-landing density, and labor pool.</li>
+  </ul>
+  <p>The two lenses are fixed weight sets: political will and plausibility is 40% incentives and policy, 35% community and permitting, 25% momentum; physical fundamentals is 30% power headroom, 25% power cost, 20% water, 15% natural hazard, 10% climate. The posture label (Courting, Courting with conditions, Reviewing or paused, Restrictive, No active state posture) summarizes each governor's and legislature's 2026 actions.</p>
+  <div class="caveat">Five of the eight factors are structured judgment calls, not measured data. They are grounded in the sources below and were checked state by state, but reasonable analysts would move individual states one notch either way. Treat the composite as a screening tool for which states to diligence, not as a site decision. County and utility service territory matter more than state lines once you get to shortlisting.</div>
+  <h3>Sources checked</h3>
+  <ul class="src">
+    <li>U.S. Energy Information Administration, <a href="https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx">EIA-861 historical state data, 2010 onward</a> (Total Electric Industry sheet, 2024 industrial price). All 50 values on this page were diffed against that file on Sept 7, 2026.</li>
+    <li>CNBC, <a href="https://www.cnbc.com/2026/07/09/ohio-no-1-americas-top-states-for-business-rankings.html">America's Top States for Business 2026</a> and <a href="https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html">Best States for AI Data Centers</a> (July 9, 2026).</li>
+    <li>Governor of New York, <a href="https://www.governor.ny.gov/executive-order/no-62-establishing-temporary-moratorium-data-centers-new-york-while-state-develops">Executive Order 62</a> (July 14, 2026); <a href="https://esd.ny.gov/sites/default/files/media/document/CIF-Policy-Outline-071426.pdf">ESD Community Investment Framework outline</a>; <a href="https://www.nysenate.gov/legislation/bills/2025/S10642">S10642</a>; <a href="https://www.dwt.com/blogs/energy--environmental-law-blog/2026/07/ny-data-center-permitting-pause-executive-order-62">Davis Wright Tremaine</a> and <a href="https://www.dlapiper.com/en-us/insights/publications/2026/07/new-york-state-legislature-passes-first-in-the-nation-data-center-moratorium">DLA Piper</a> alerts.</li>
+    <li>Texas Governor's <a href="https://gov.texas.gov/news/post/governor-abbott-directs-comprehensive-data-center-audit">Aug 3, 2026 audit directive</a> and <a href="https://www.houstonpublicmedia.org/articles/news/energy-environment/2026/06/10/554138/data-center-texas-energy-grid-electricity-regulation-greg-abbott/">June 10 cost-allocation directive</a>; <a href="https://www.ercot.com/services/comm/mkt_notices/M-A080326-01">ERCOT Market Notice M-A080326-01</a>; <a href="https://www.utilitydive.com/news/ercot-texas-puc-data-center-audit/828472/">Utility Dive</a>, <a href="https://www.gibsondunn.com/what-governor-abbotts-data-center-audit-directive-means-for-ercot-and-the-batch-zero-study-process/">Gibson Dunn</a>, <a href="https://www.hklaw.com/en/insights/publications/2026/08/texas-gov-abbott-directs-data-center-audit">Holland &amp; Knight</a> and <a href="https://www.mcguirewoods.com/client-resources/alerts/2025/7/texas-senate-bill-6-significantly-expands-regulatory-oversight-over-large-loads-in-ercot/">McGuireWoods on SB 6</a>.</li>
+    <li>Ashurst Perkins Coie, <a href="https://www.ashurstperkinscoie.com/en/insights/the-rack-the-changing-landscape-for-data-centers-us/">US multistate executive actions on data centers</a> (July 29, 2026), covering NY, NJ, PA, UT, TX, AZ, NC, VT, VA, ME, WY, OH, IL and MI.</li>
+    <li>Arizona: <a href="https://www.azleg.gov/legtext/57leg/2R/summary/S.1861-4168ATT_ASENACTED.DOCX.htm">SB 1861 enacted summary</a>; <a href="https://www.kjzz.org/business/2026-07-14/agency-received-flood-of-applications-ahead-of-pause-on-arizona-data-center-tax-breaks">KJZZ</a> on pre-pause applications; <a href="https://www.cap-az.com/cap-system/planning-and-processes/shortage-impacts/">Central Arizona Project</a> shortage impacts; <a href="https://www.sonorandesert.org/2026/08/06/data-centers-update/">Coalition for Sonoran Desert Protection</a> on Tucson, Pima and Pinal actions.</li>
+    <li>Illinois: <a href="https://gov-pritzker-newsroom.prezly.com/gov-pritzker-pauses-new-data-center-tax-incentives">Governor's June 5, 2026 release</a>; <a href="https://capitolnewsillinois.com/news/regulators-ok-comeds-plan-to-increase-deposit-costs-for-large-load-projects-like-data-centers/">Capitol News Illinois</a> on ComEd's queue; <a href="https://insidelines.pjm.com/pjm-capacity-auction-procures-138318-mw-of-generation-resources-as-work-continues-to-address-growing-electricity-demand/">PJM 2028/29 auction results</a>.</li>
+    <li>Ohio: <a href="https://bgindependentmedia.org/dewine-pauses-tax-exemptions-for-data-new-centers/">DeWine May 27, 2026 release (reprint)</a>; <a href="https://ohiohouse.gov/legislation/136/hb957">HB 957</a>; <a href="https://www.datacenterfrontier.com/machine-learning/article/55366132/softbanks-10-gw-ohio-campus-marks-a-turning-point-for-ai-infrastructure">Data Center Frontier</a> on SoftBank Piketon.</li>
+    <li>Utah: <a href="https://governor.utah.gov/wp-content/uploads/2026.05.29-EO-Higher-Bar-for-Data-Center-Development-1.pdf">Executive Order 2026-03</a>; <a href="https://www.boxeldercountyut.gov/666/Stratos-Project-Referendum">Box Elder County Stratos referendum page</a>; <a href="https://utahnewsdispatch.com/2026/06/04/stratos-data-center-referendum-group-appeal-to-a-judge/">Utah News Dispatch</a>.</li>
+    <li>Virginia: <a href="https://www.williamsmullen.com/insights/news/legal-news/virginia-budget-creates-new-electricity-consumption-tax-data-centers">Williams Mullen</a> and <a href="https://www.hklaw.com/en/insights/publications/2026/08/virginia-preserves-data-center-tax-incentive">Holland &amp; Knight</a> on the 2026 budget; <a href="https://lis.virginia.gov/bill-details/20261/HB153/text/CHAP0567">HB 153 (Ch. 567)</a>; <a href="https://budget.lis.virginia.gov/amendment/2026/2/HB30/Introduced/CR/366/7c/">Budget Item 366 #7c</a>; <a href="https://www.cbre.com/insights/books/north-america-data-center-trends-h2-2025/northern-virginia-data-center-market">CBRE Northern Virginia</a>; <a href="https://www.coopercenter.org/research/jlarc-report-data-centers-virginia">JLARC 2024 report</a>; <a href="https://www.bloomberg.com/news/articles/2024-08-29/data-centers-face-seven-year-wait-for-power-hookups-in-virginia">Bloomberg</a> on Dominion waits.</li>
+    <li>North Carolina: <a href="https://www.ncleg.gov/BillLookup/2025/S257">S257 / S.L. 2026-41</a>; <a href="https://taxnews.ey.com/news/2026-1662-north-carolina-repeals-sales-and-use-tax-exemption-for-electricity-used-at-qualifying-data-centers">EY</a> and <a href="https://www.datacenterknowledge.com/regulations/nc-ends-data-center-power-tax-break-keeps-capital-incentives">Data Center Knowledge</a> on the electricity exemption repeal; <a href="https://www.bisnow.com/charlotte/news/data-center-community-relations/charlotte-approves-150-day-pause-data-center-development-134903">Bisnow</a> (Charlotte), <a href="https://www.wfae.org/2026-08-26/durham-county-data-center-moratorium">WFAE</a> (Durham County), <a href="https://abc11.com/post/apex-nc-leaders-hold-public-hearing-proposed-data-center-moratorium/18885810/">ABC11</a> (Apex).</li>
+    <li>Construction Owners Club state-by-state incentive update (Aug 3, 2026), citing NCSL and Good Jobs First.</li>
+    <li>Georgia PSC December 2025 order certifying 9,885 MW; WTOC reporting on the 69 GW large-load pipeline.</li>
+    <li><a href="https://www.electricchoice.com/datacenters/moratoriums/">ElectricChoice moratorium tracker</a> (Sept 1, 2026), datacenterbans.com, <a href="https://dcmap.us/">dcmap.us</a> policy tracker, Rockefeller Institute and Good Jobs First moratorium briefs.</li>
+    <li>PoweredByWho state project database (Aug 2026), Visual Capitalist/Aterio pipeline counts, thenetworkinstallers operating-site counts.</li>
+    <li>Quartz, Fortune and the ABA Water Spring 2026 report on western water stress and data center consumption; Bureau of Reclamation 2026 Lake Mead shortage condition.</li>
+    <li>Ascend Analytics, Utility Dive and Introl on PJM, ERCOT and MISO large-load queues; Construction Owners Club market-by-market power timelines.</li>
+  </ul>
+</section>
+</div>
+
+<script>__TOPOJSON_LIB__</script>
+<script>
+const TOPO = __TOPO__;
+const STATES = __STATES__;
+
+const FACTORS = [
+  {k:"pw", name:"Power headroom", sub:"queue length, utility receptivity, 2026 pauses"},
+  {k:"p",  name:"Power cost", sub:"EIA 2024 industrial ¢/kWh"},
+  {k:"po", name:"Incentives and policy", sub:"exemption status, statewide actions"},
+  {k:"op", name:"Community and permitting", sub:"local moratoriums, site rejections"},
+  {k:"w",  name:"Water", sub:"basin stress, drought, scarcity rules"},
+  {k:"h",  name:"Natural hazard", sub:"hurricane, tornado, seismic, wildfire"},
+  {k:"c",  name:"Climate for cooling", sub:"cooling degree days, humidity"},
+  {k:"x",  name:"Connectivity and ecosystem", sub:"fiber, existing market, labor"},
+  {k:"mo", name:"Buildout momentum", sub:"tracked projects, recent hyperscale commitments"}
+];
+const LENSES = {
+  all:      {pw:25,p:20,po:15,op:10,w:10,h:5,c:5,x:5,mo:5},
+  politics: {pw:0,p:0,po:40,op:35,w:0,h:0,c:0,x:0,mo:25},
+  physical: {pw:30,p:25,po:0,op:0,w:20,h:15,c:10,x:0,mo:0}
+};
+const PRESETS = {
+  ai:   {pw:25,p:20,po:15,op:10,w:10,h:5,c:5,x:5,mo:5},
+  cost: {pw:15,p:35,po:15,op:5,w:5,h:5,c:10,x:5,mo:5},
+  safe: {pw:15,p:10,po:15,op:15,w:15,h:20,c:5,x:5,mo:0},
+  colo: {pw:15,p:15,po:10,op:10,w:5,h:10,c:5,x:25,mo:5}
+};
+let weights = {...PRESETS.ai};
+let selected = null;
+let sortKey = "total", sortAsc = false;
+
+const NAME2ABBR = {}; STATES.forEach(s=>NAME2ABBR[s.n]=s.a);
+const BY = {}; STATES.forEach(s=>BY[s.a]=s);
+
+function sub(s,k){
+  if(k==="p"){ return Math.max(0,Math.min(1,(13-s.p)/(13-5.43)))*100; }
+  return (s[k]-1)/4*100;
+}
+function lensScore(s,W){ const tw=Object.values(W).reduce((a,b)=>a+b,0)||1; let t=0; FACTORS.forEach(f=>{t+=(W[f.k]||0)*sub(s,f.k);}); return t/tw; }
+function compute(){
+  STATES.forEach(s=>{
+    s.total = lensScore(s,weights);
+    s.pol = lensScore(s,LENSES.politics);
+    s.phy = lensScore(s,LENSES.physical);
+  });
+  const sorted=[...STATES].sort((a,b)=>b.total-a.total);
+  sorted.forEach((s,i)=>s.rank=i+1);
+}
+
+// cividis-like ramp
+const STOPS=[[0,32,76],[49,68,107],[102,105,112],[149,143,120],[196,181,108],[255,234,70]];
+function color(v){ // v 0..100
+  const lo=30, hi=80; // stretch to where scores actually land
+  let t=Math.max(0,Math.min(1,(v-lo)/(hi-lo)));
+  const seg=t*(STOPS.length-1), i=Math.min(STOPS.length-2,Math.floor(seg)), f=seg-i;
+  const a=STOPS[i], b=STOPS[i+1];
+  const c=a.map((x,j)=>Math.round(x+(b[j]-x)*f));
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+
+// --- map ---
+function pathOf(geom){
+  const f = topojson.feature(TOPO, geom).geometry;
+  const rings = f.type==="Polygon" ? [f.coordinates] : f.coordinates;
+  let d="";
+  rings.forEach(poly=>poly.forEach(ring=>{
+    ring.forEach((pt,i)=>{ d += (i?"L":"M")+pt[0].toFixed(1)+","+pt[1].toFixed(1); });
+    d+="Z";
+  }));
+  return d;
+}
+function centroidOf(geom){
+  const f = topojson.feature(TOPO, geom).geometry;
+  const rings = f.type==="Polygon" ? [f.coordinates] : f.coordinates;
+  // use largest ring bbox center
+  let best=null,bestArea=-1;
+  rings.forEach(poly=>{const r=poly[0];let minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;r.forEach(p=>{minx=Math.min(minx,p[0]);maxx=Math.max(maxx,p[0]);miny=Math.min(miny,p[1]);maxy=Math.max(maxy,p[1]);});const ar=(maxx-minx)*(maxy-miny);if(ar>bestArea){bestArea=ar;best=[(minx+maxx)/2,(miny+maxy)/2];}});
+  return best;
+}
+const gStates=document.getElementById("states"), gHatch=document.getElementById("hatches"), gLabels=document.getElementById("labels");
+const tip=document.getElementById("tip"), mapcard=document.querySelector(".mapcard");
+const svgEl=document.querySelector("svg.map");
+const paths={};
+TOPO.objects.states.geometries.forEach(g=>{
+  const abbr=NAME2ABBR[g.properties.name]; if(!abbr) return;
+  const d=pathOf(g);
+  const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+  p.setAttribute("d",d); p.setAttribute("class","state"); p.dataset.a=abbr; p.setAttribute("tabindex","0");
+  p.setAttribute("aria-label",g.properties.name);
+  gStates.appendChild(p); paths[abbr]=p;
+  if(BY[abbr].tag){
+    const h=document.createElementNS("http://www.w3.org/2000/svg","path");
+    h.setAttribute("d",d); h.setAttribute("fill","url(#hatch)"); h.setAttribute("stroke","none");
+    gHatch.appendChild(h);
+  }
+  const c=centroidOf(g);
+  const small=["RI","DE","DC","CT","NJ","MD","NH","VT","MA","HI"].includes(abbr);
+  if(!small){
+    const t=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute("x",c[0]); t.setAttribute("y",c[1]+4); t.setAttribute("text-anchor","middle");
+    t.setAttribute("font-size","11"); t.setAttribute("font-weight","500"); t.setAttribute("fill","#fff");
+    t.setAttribute("style","paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px;font-family:inherit");
+    t.textContent=abbr; gLabels.appendChild(t);
+  }
+  p.addEventListener("mousemove",e=>showTip(abbr,e));
+  p.addEventListener("mouseleave",()=>tip.style.display="none");
+  p.addEventListener("click",()=>select(abbr));
+  p.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select(abbr);} });
+  p.addEventListener("focus",e=>{ const r=p.getBoundingClientRect(); showTip(abbr,{clientX:r.left+r.width/2,clientY:r.top+r.height/2}); });
+  p.addEventListener("blur",()=>tip.style.display="none");
+});
+
+function bestWorst(s){
+  const arr=FACTORS.map(f=>({f,v:sub(s,f.k)}));
+  arr.sort((a,b)=>b.v-a.v);
+  return {best:arr[0].f.name.toLowerCase(), worst:arr[arr.length-1].f.name.toLowerCase()};
+}
+function showTip(abbr,e){
+  const s=BY[abbr], bw=bestWorst(s);
+  tip.innerHTML=`<b>${s.n}</b>${s.tag?` <span class="small">(${s.tag})</span>`:""}<span class="sc">${s.total.toFixed(0)} <span class="small" style="font-size:13px">rank ${s.rank} of 50</span></span><span class="small">${s.st}<br>Physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}<br>Strongest: ${bw.best}<br>Weakest: ${bw.worst}</span>`;
+  tip.style.display="block";
+  const r=mapcard.getBoundingClientRect();
+  let x=e.clientX-r.left+14, y=e.clientY-r.top+14;
+  if(x+250>r.width) x=e.clientX-r.left-254;
+  if(y+90>r.height) y=e.clientY-r.top-96;
+  tip.style.left=x+"px"; tip.style.top=y+"px";
+}
+function paint(){
+  STATES.forEach(s=>{ paths[s.a].style.fill=color(s.total); });
+}
+
+// --- weights UI ---
+const wbox=document.getElementById("weights");
+FACTORS.forEach(f=>{
+  const d=document.createElement("div"); d.className="w";
+  d.innerHTML=`<label for="w-${f.k}">${f.name}<span class="sub">${f.sub}</span></label><span class="val" id="v-${f.k}"></span><input type="range" id="w-${f.k}" min="0" max="40" step="5">`;
+  wbox.appendChild(d);
+  const inp=d.querySelector("input");
+  inp.addEventListener("input",()=>{ weights[f.k]=+inp.value; setPressed(null); setLens(null); refresh(); });
+});
+function syncSliders(){
+  FACTORS.forEach(f=>{ document.getElementById("w-"+f.k).value=weights[f.k]; document.getElementById("v-"+f.k).textContent=weights[f.k]; });
+  const tw=Object.values(weights).reduce((a,b)=>a+b,0);
+  document.getElementById("total").textContent=`Weights sum to ${tw}; the score is normalized so the total does not need to be 100.`;
+}
+function setPressed(id){
+  document.querySelectorAll("#presets button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.p===id ? "true":"false"));
+}
+document.querySelectorAll("#presets button").forEach(b=>b.addEventListener("click",()=>{ weights={...PRESETS[b.dataset.p]}; setPressed(b.dataset.p); setLens("all"); refresh(); }));
+function setLens(id){ document.querySelectorAll("#lens button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.l===id?"true":"false")); }
+document.querySelectorAll("#lens button").forEach(b=>b.addEventListener("click",()=>{ weights={...LENSES[b.dataset.l]}; setLens(b.dataset.l); setPressed(b.dataset.l==="all"?"ai":null); refresh(); }));
+
+// --- detail ---
+function select(abbr){
+  selected=abbr;
+  document.querySelectorAll(".state").forEach(p=>p.classList.toggle("selected",p.dataset.a===abbr));
+  document.querySelectorAll("#tbody tr").forEach(tr=>tr.classList.toggle("selected",tr.dataset.a===abbr));
+  document.querySelectorAll("#scsvg .dot").forEach(g=>g.classList.toggle("selected",g.dataset.a===abbr));
+  renderDetail();
+}
+function renderDetail(){
+  const box=document.getElementById("detail");
+  if(!selected){
+    const top=[...STATES].sort((a,b)=>a.rank-b.rank).slice(0,5).map(s=>s.n).join(", ");
+    box.innerHTML=`<div class="top"><h2>Pick a state</h2></div><p class="note">With the current weights the top five are ${top}. Click any state on the map or a row in the table to see how its score breaks down and what changed in 2026.</p>`;
+    return;
+  }
+  const s=BY[selected];
+  const bars=FACTORS.map(f=>{const v=sub(s,f.k);const extra=f.k==="p"?` (${s.p.toFixed(2)}¢)`:"";return `<div class="bar"><span>${f.name}${extra}</span><div class="track"><div class="fill" style="width:${v}%"></div></div><span class="n">${v.toFixed(0)}</span></div>`;}).join("");
+  const srcs=(s.srcs&&s.srcs.length)?`<p class="srcs">Sources: ${s.srcs.map(r=>`<a href="${r.u}" target="_blank" rel="noopener">${r.t}</a>`).join(" · ")}</p>`:"";
+  box.innerHTML=`<div class="top"><div><h2>${s.n}${s.tag?`<span class="chip">${s.tag}</span>`:""}</h2><div class="rank">Rank ${s.rank} of 50 with current weights. State posture: ${s.st}. Physical fundamentals ${s.phy.toFixed(0)}, political will and plausibility ${s.pol.toFixed(0)}.</div></div><div class="score">${s.total.toFixed(0)}<small>of 100</small></div></div><div class="bars">${bars}</div><p class="note">${s.note}</p>${srcs}`;
+}
+
+// --- table ---
+const COLS=[
+  {k:"rank",label:"#"},{k:"n",label:"State"},{k:"total",label:"Score"},
+  {k:"p",label:"¢/kWh"},{k:"pw",label:"Headroom"},{k:"po",label:"Policy"},{k:"op",label:"Community"},
+  {k:"w",label:"Water"},{k:"h",label:"Hazard"},{k:"c",label:"Climate"},{k:"x",label:"Fiber"},{k:"mo",label:"Momentum"},
+  {k:"phy",label:"Physical"},{k:"pol",label:"Political"}
+];
+const thead=document.getElementById("thead");
+COLS.forEach(c=>{
+  const th=document.createElement("th"); th.textContent=c.label; th.dataset.k=c.k;
+  th.title=c.k==="n"?"":"Click to sort";
+  th.addEventListener("click",()=>{ if(sortKey===c.k){sortAsc=!sortAsc;} else {sortKey=c.k; sortAsc=(c.k==="n"||c.k==="p"||c.k==="rank");} renderTable(); });
+  thead.appendChild(th);
+});
+function renderTable(){
+  document.querySelectorAll("#thead th").forEach(th=>{ th.classList.toggle("sorted",th.dataset.k===sortKey); th.classList.toggle("asc",th.dataset.k===sortKey&&sortAsc); });
+  const rows=[...STATES].sort((a,b)=>{
+    let va=a[sortKey], vb=b[sortKey];
+    if(typeof va==="string") return sortAsc? va.localeCompare(vb) : vb.localeCompare(va);
+    return sortAsc? va-vb : vb-va;
+  });
+  const tb=document.getElementById("tbody");
+  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" class="${s.a===selected?"selected":""}"><td>${s.rank}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${s.total.toFixed(0)}</td><td>${s.p.toFixed(2)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${s.mo}</td><td>${s.phy.toFixed(0)}</td><td>${s.pol.toFixed(0)}</td></tr>`).join("");
+  tb.querySelectorAll("tr").forEach(tr=>tr.addEventListener("click",()=>select(tr.dataset.a)));
+}
+
+function median(a){const b=[...a].sort((x,y)=>x-y);const m=b.length>>1;return b.length%2?b[m]:(b[m-1]+b[m])/2;}
+function renderScatter(){
+  const svg=document.getElementById("scsvg"); const L=52,R=880,T=18,B=478;
+  const xs=v=>L+(R-L)*(v/100), ys=v=>B-(B-T)*(v/100);
+  const mx=median(STATES.map(s=>s.phy)), my=median(STATES.map(s=>s.pol));
+  let h=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="#D3DAE1"/><line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="#D3DAE1"/>`;
+  h+=`<line x1="${xs(mx)}" y1="${T}" x2="${xs(mx)}" y2="${B}" stroke="#B5432A" stroke-dasharray="3 4" opacity=".6"/><line x1="${L}" y1="${ys(my)}" x2="${R}" y2="${ys(my)}" stroke="#B5432A" stroke-dasharray="3 4" opacity=".6"/>`;
+  [0,25,50,75,100].forEach(v=>{h+=`<text x="${xs(v)}" y="${B+16}" font-size="11" text-anchor="middle" fill="#5C6773">${v}</text><text x="${L-8}" y="${ys(v)+4}" font-size="11" text-anchor="end" fill="#5C6773">${v}</text>`;});
+  h+=`<text x="${(L+R)/2}" y="${B+36}" font-size="12.5" text-anchor="middle" fill="#18212B">Physical fundamentals (power headroom, power cost, water, hazard, climate)</text>`;
+  h+=`<text transform="translate(14 ${(T+B)/2}) rotate(-90)" font-size="12.5" text-anchor="middle" fill="#18212B">Political will and plausibility (policy, community, momentum)</text>`;
+  // label placement with collision avoidance
+  const placed=[]; const LW=16, LH=11;
+  const cands=[[8,4],[-24,4],[-8,-9],[-8,17],[8,-8],[8,16],[-24,-8],[-24,16],[8,28],[-8,-20]];
+  const pts=STATES.map(s=>({s,x:xs(s.phy),y:ys(s.pol)}));
+  pts.forEach(p=>placed.push({x:p.x-6,y:p.y-6,w:12,h:12,dot:true}));
+  const hit=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
+  pts.forEach(p=>{
+    let best=null;
+    for(const [dx,dy] of cands){ const box={x:p.x+dx,y:p.y+dy-LH,w:LW,h:LH}; if(!placed.some(q=>hit(box,q)&&!(q.dot&&q.x===p.x-6&&q.y===p.y-6))){best=[dx,dy,box];break;} }
+    if(!best){ best=[8,4,{x:p.x+8,y:p.y+4-LH,w:LW,h:LH}]; }
+    placed.push(best[2]); p.lx=p.x+best[0]; p.ly=p.y+best[1];
+  });
+  pts.forEach(p=>{const s=p.s;
+    h+=`<g class="dot ${s.a===selected?"selected":""}" data-a="${s.a}"><circle cx="${p.x}" cy="${p.y}" r="6" fill="${color(s.total)}" stroke="#fff" stroke-width="1.2"/><text x="${p.lx}" y="${p.ly}" font-size="10.5" fill="#18212B" style="paint-order:stroke;stroke:#fff;stroke-width:2.5px">${s.a}</text><title>${s.n}: physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}. ${s.st}.</title></g>`;
+  });
+  svg.innerHTML=h;
+  svg.querySelectorAll(".dot").forEach(g=>g.addEventListener("click",()=>select(g.dataset.a)));
+}
+function refresh(){ compute(); syncSliders(); paint(); renderDetail(); renderTable(); renderScatter(); }
+refresh();
+</script>
+</body>
+</html>
