@@ -1,64 +1,61 @@
-# US datacenter siting suitability, 2026
+# US datacenter comparison, 2026
 
-An interactive, single-file map ranking all 50 states on suitability for large-scale (hyperscale and AI-training) datacenter development, as of September 2026.
+An interactive map for exploring state-level conditions for hyperscale and AI training development. [Live site](https://sonnetx.github.io/datacenter-map/).
 
-Live site: https://sonnetx.github.io/datacenter-map/
+## Interface
 
-## What it does
+- Find a state above the map, select a leading candidate, or use the map, scatter plot or table.
+- State profiles open in a side panel with Overview, Scores and Sources tabs. Profiles support keyboard navigation and close with Escape.
+- Choose Balanced, Build sooner, Lower costs, Lower risk or Connectivity first, then adjust relative priorities. Effective percentage shares update automatically.
+- Switch between Combined, Political outlook and Physical fundamentals without losing custom priorities. Editing a slider returns to Combined.
+- Priorities collapse above the map on mobile. Wide charts and tables scroll within their containers.
 
-- Choropleth of composite suitability with adjustable weights across nine factors
-- Three lenses: Combined, Political outlook, Physical fundamentals
-- Scatter plotting the two lenses against each other, with median quadrants
-- Per-state breakdown, 2026 policy notes and posture label (Courting, Courting with conditions, Reviewing or paused, Restrictive, No active state posture)
-- Sortable 50-state table
-- Methodology and source list on the page
+Hatching identifies a recorded 2026 statewide policy action. Its scope differs by state; consult the profile and original record.
 
-Hatched states have a statewide 2026 action affecting development: New York's EO 62 moratorium, Texas's interconnection pause, incentive pauses in Arizona, Illinois and Ohio, North Carolina's electricity exemption repeal, Virginia's consumption tax, Utah's stricter review order.
+## Model version 2
 
-## Scoring
+Balanced is the default: each of eight factors receives 12.5%. Fit is the weighted mean of their normalized values, on a fixed 0–100 scale.
 
-Each state has eight sub-scores plus power price, all mapped to 0 to 100 (higher is more favorable). The composite is a weighted average.
-
-| Factor | Basis |
+| Factor | Input and normalization |
 |---|---|
-| Power cost | EIA-861 2024 industrial average, 5.43¢ = 100, 13¢+ = 0 |
-| Power headroom | 1 to 5 judgment: queues, utility receptivity, 2026 pauses |
-| Incentives and policy | 1 to 5 judgment: exemption status, statewide actions |
-| Community and permitting | 1 to 5 judgment: local moratoriums, site rejections |
-| Water | 1 to 5 judgment: basin stress, drought, scarcity rules |
-| Natural hazard | 1 to 5 judgment aligned to FEMA NRI patterns |
-| Climate for cooling | 1 to 5 judgment: cooling degree days, humidity |
-| Connectivity and ecosystem | 1 to 5 judgment: fiber, existing market, labor |
-| Buildout momentum | 1 to 5 judgment: tracked projects, recent commitments |
+| Power cost | EIA 2024 industrial average; 100 at 5¢/kWh, 0 at 35¢/kWh, linear between, clamped outside. Users can change these preference anchors. |
+| Power headroom | Provisional analyst rating, 1–5 |
+| Incentives and policy | Provisional analyst rating, 1–5 |
+| Community and permitting | Provisional analyst rating, 1–5 |
+| Water | Provisional analyst rating, 1–5 |
+| Natural hazard | Provisional analyst rating, 1–5 |
+| Climate for cooling | Provisional analyst rating, 1–5 |
+| Connectivity and ecosystem | Provisional analyst rating, 1–5 |
 
-Lens weights: Political = policy 40, community 35, momentum 25. Physical = headroom 30, cost 25, water 20, hazard 15, climate 10.
+Analyst ratings map to 0, 25, 50, 75 and 100. Equal steps are an assumption, not measured differences. Momentum remains context and contributes no points.
 
-Only power cost is measured data; the rest are structured judgment calls grounded in the sources listed on the page. Treat the composite as a screening tool for which states to investigate, not a site decision.
+Delivery concerns use the lower of headroom and permitting: 1 = major, 2 = elevated, 3–5 = lower. Default ranking compares fit; optional Delivery first compares concern groups before fit. These groups are model judgments, not confirmed connection timelines or permitting eligibility.
 
-## Updating
+Each profile reports the rank range obtained by moving one active analyst rating one level at a time, holding other states fixed. Delivery first also varies headroom and permitting when their fit weights are zero. This limited sensitivity test is not a confidence interval. Exact ties share ranks; all-zero weights remove scores and ranks.
 
-All scores, notes and per-state source links live in `data/states.json`. Each state has an optional `srcs` list of `{"t": title, "u": url}` entries that render under the state's note. Edit that file, then:
+Reference weights: Political outlook = policy 50%, permitting 50%. Physical fundamentals = headroom 30%, price 25%, water 20%, hazards 15%, climate 10%. Cost anchors also affect the physical reference score.
 
-```
+## Evidence
+
+All 50 electricity prices matched the EIA-861 historical workbook's 2024 industrial data, Total Electric Industry sheet. These are historical state averages, not datacenter tariffs. Seven analyst factors remain provisional and have not been individually validated against original records.
+
+State citations carry `type`, with optional `supports` and `reviewed` fields explaining a checked document's scope. Source type identifies the publisher's role, not a credibility rating. Company announcements are self-reported; advocacy statements describe their publisher's position. References to policy events do not establish numerical ratings.
+
+See the [model and source change record](review/2026-09-07-model-v2.md), [initial review](review/2026-09-07-review.md), and [EIA comparison](review/power-price-check-2026-09-07.csv). The initial review and HTTP audit are historical snapshots and include sources subsequently removed.
+
+## Development and deployment
+
+Edit `src/template.html` for the interface/model and `data/states.json` for state records. Rebuild the checked-in page and run the scoring tests:
+
+```sh
 python3 build.py
+node --test tests/model.test.cjs
 ```
 
-`index.html` is fully self-contained (map geometry and TopoJSON library are inlined), so the site has no runtime dependencies.
+The model tests run the actual scoring code with Node's built-in test runner; no package install is needed. Browser interaction tests require Python Playwright and Chromium:
 
-## Deploying to GitHub Pages
+```sh
+python3 tests/browser.py
+```
 
-1. Create an empty repo on GitHub.
-2. In this folder:
-   ```
-   git init && git add . && git commit -m "Datacenter siting suitability map"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/<repo-name>.git
-   git push -u origin main
-   ```
-3. Repo Settings, Pages, Source: Deploy from a branch, Branch: `main`, folder `/ (root)`. The site appears at the URL above within a minute or two.
-
-## Data sources
-
-Full linked list on the page, under Methodology. An independent review of the sources, scoring and interaction design is in [review/](review/), along with the EIA price comparison and the recorded HTTP status of every cited link. Power prices were diffed against the EIA-861 historical state file (Total Electric Industry, 2024 industrial) on Sept 7, 2026 and all 50 match. The eight hatched statewide actions were checked against primary sources (executive order text, bill pages, ERCOT notices, enacted budgets) on the same date.
-
-Summary: EIA-861; CNBC Top States for Business 2026; New York EO 62; Texas Governor directives (June 10 and Aug 3, 2026) and ERCOT notices; Ashurst Perkins Coie multistate executive action review; Williams Mullen and Bloomberg Tax (Virginia budget); Data Center Knowledge and EY (North Carolina); Construction Owners Club incentive update citing NCSL and Good Jobs First; Georgia PSC December 2025 order; ElectricChoice, datacenterbans.com and dcmap.us moratorium trackers; PoweredByWho and Aterio project counts; Quartz, Fortune and ABA on western water stress; Ascend Analytics and Utility Dive on interconnection queues.
+Map geometry and TopoJSON are inlined into `index.html`; external fonts are optional. GitHub Pages deploys `index.html` from the root of `main` after a push.

@@ -43,29 +43,33 @@
 "c": 1,
 "x": 4,
 "tag": "Incentive pause",
-"note": "Phoenix is a top-tier market with roughly 100 operating sites. The 2026 budget (SB 1861, signed June 13) bars new data center applications for the sales tax exemption from July 1, 2026 through June 30, 2029, and 113 applications rushed in during the last two weeks. Existing certifications are untouched, and the pause changes incentive eligibility rather than prohibiting construction. The Colorado River Tier 1 shortage, in place since 2022, trims Arizona's supply about 18% again in 2026. Backlash is now regulatory: Tucson adopted data center rules Aug 5, Pima County imposed a 120-day moratorium Aug 11, and Pinal County denied the La Osa rezoning Aug 26, 2026.",
+"note": "Phoenix is an established datacenter market. The 2026 budget (SB 1861, signed June 13) bars new data center applications for the sales tax exemption from July 1, 2026 through June 30, 2029, and 113 applications rushed in during the last two weeks. Existing certifications are untouched, and the pause changes incentive eligibility rather than prohibiting construction. The Colorado River Tier 1 shortage, in place since 2022, trims Arizona's supply about 18% again in 2026. On August 11, Pima County approved direction to develop a resolution for a 120-day moratorium in unincorporated areas. The agenda record establishes that direction; it does not by itself establish when a final moratorium took effect.",
 "mo": 4,
 "st": "Reviewing or paused",
 "srcs": [
 {
 "t": "SB 1861 enacted summary (Ariz. Legislature)",
-"u": "https://www.azleg.gov/legtext/57leg/2R/summary/S.1861-4168ATT_ASENACTED.DOCX.htm"
+"u": "https://www.azleg.gov/legtext/57leg/2R/summary/S.1861-4168ATT_ASENACTED.DOCX.htm",
+"type": "Government record",
+"supports": "New incentive applications and relief paused July 1, 2026–June 30, 2029; this is not a construction ban.",
+"reviewed": "2026-09-07"
 },
 {
 "t": "KJZZ, 113 applications before the pause",
-"u": "https://www.kjzz.org/business/2026-07-14/agency-received-flood-of-applications-ahead-of-pause-on-arizona-data-center-tax-breaks"
+"u": "https://www.kjzz.org/business/2026-07-14/agency-received-flood-of-applications-ahead-of-pause-on-arizona-data-center-tax-breaks",
+"type": "Reporting"
 },
 {
 "t": "Central Arizona Project shortage impacts",
-"u": "https://www.cap-az.com/cap-system/planning-and-processes/shortage-impacts/"
+"u": "https://www.cap-az.com/cap-system/planning-and-processes/shortage-impacts/",
+"type": "Government record"
 },
 {
-"t": "Sonoran Desert data centers update, Aug 2026",
-"u": "https://www.sonorandesert.org/2026/08/06/data-centers-update/"
-},
-{
-"t": "dcmap.us Phoenix market",
-"u": "https://dcmap.us/markets/phoenix/"
+"t": "Pima County Board of Supervisors, August 11 action",
+"u": "https://pima.legistar.com/LegislationDetail.aspx?ID=8165122&GUID=2ED83826-7496-4CA5-AB1E-7CA334C3F51F",
+"type": "Government record",
+"supports": "Approved direction to develop a 120-day moratorium resolution for unincorporated Pima County. This agenda record does not establish the effective date of a final resolution.",
+"reviewed": "2026-09-07"
 }
 ]
 },
@@ -87,19 +91,23 @@
 "srcs": [
 {
 "t": "Talk Business on the Arkansas hyperscale buildout",
-"u": "https://talkbusiness.net/2026/02/hyperscale-data-centers-come-to-arkansas/"
+"u": "https://talkbusiness.net/2026/02/hyperscale-data-centers-come-to-arkansas/",
+"type": "Reporting"
 },
 {
 "t": "KARK on the Conway data center protest",
-"u": "https://www.kark.com/news/local-news/more-than-100-protestors-voice-concerns-at-conway-city-hall-meeting-over-proposed-data-center/"
+"u": "https://www.kark.com/news/local-news/more-than-100-protestors-voice-concerns-at-conway-city-hall-meeting-over-proposed-data-center/",
+"type": "Reporting"
 },
 {
 "t": "Arkansas Advocate on the data center debate",
-"u": "https://arkansasadvocate.com/2026/05/22/arkansas-explained-understanding-the-data-center-boom-and-debate/"
+"u": "https://arkansasadvocate.com/2026/05/22/arkansas-explained-understanding-the-data-center-boom-and-debate/",
+"type": "Reporting"
 },
 {
 "t": "Entergy Arkansas 2026 rate case",
-"u": "https://www.entergyarkansas.com/ratecase2026"
+"u": "https://www.entergyarkansas.com/ratecase2026",
+"type": "Company statement"
 }
 ]
 },
@@ -195,7 +203,7 @@
 "c": 2,
 "x": 5,
 "tag": "",
-"note": "Atlanta is a top-tier growth market. Georgia PSC approved 9,885 MW of new Georgia Power generation in Dec 2025 mostly for large loads; the large-load pipeline reached ~69 GW. The sales tax exemption survived a repeal push and runs through 2032, but 28 local moratoriums (Savannah, Rockdale, Newton and others) make site entitlement harder.",
+"note": "Atlanta is a top-tier growth market. Georgia PSC approved 9,885 MW of new Georgia Power generation in Dec 2025 mostly for large loads; the large-load pipeline reached ~69 GW. The sales tax exemption survived a repeal push and runs through 2032, but local permitting must be checked for the specific project location.",
 "mo": 5,
 "st": "Courting"
 },
@@ -233,19 +241,23 @@
 "srcs": [
 {
 "t": "Idaho Code 63-3622VV server equipment exemption",
-"u": "https://legislature.idaho.gov/statutesrules/idstat/title63/t63ch36/sect63-3622vv/"
+"u": "https://legislature.idaho.gov/statutesrules/idstat/title63/t63ch36/sect63-3622vv/",
+"type": "Government record"
 },
 {
 "t": "Idaho Commerce on the data center exemption",
-"u": "https://commerce.idaho.gov/incentives/data-center-sales-tax-exemption/"
+"u": "https://commerce.idaho.gov/incentives/data-center-sales-tax-exemption/",
+"type": "Government record"
 },
 {
 "t": "Meta's $1.2bn Kuna data center goes live",
-"u": "https://www.datacenterdynamics.com/en/news/metas-12bn-data-center-in-kuna-idaho-goes-live/"
+"u": "https://www.datacenterdynamics.com/en/news/metas-12bn-data-center-in-kuna-idaho-goes-live/",
+"type": "Reporting"
 },
 {
 "t": "Idaho Business Review on record-low snowpack",
-"u": "https://idahobusinessreview.com/2026/04/06/idaho-historic-snow-drought-lowest-snowpack/"
+"u": "https://idahobusinessreview.com/2026/04/06/idaho-historic-snow-drought-lowest-snowpack/",
+"type": "Reporting"
 }
 ]
 },
@@ -267,15 +279,18 @@
 "srcs": [
 {
 "t": "Governor's office, June 5, 2026 pause",
-"u": "https://gov-pritzker-newsroom.prezly.com/gov-pritzker-pauses-new-data-center-tax-incentives"
+"u": "https://gov-pritzker-newsroom.prezly.com/gov-pritzker-pauses-new-data-center-tax-incentives",
+"type": "Government record"
 },
 {
 "t": "Capitol News Illinois on ComEd large-load pipeline",
-"u": "https://capitolnewsillinois.com/news/regulators-ok-comeds-plan-to-increase-deposit-costs-for-large-load-projects-like-data-centers/"
+"u": "https://capitolnewsillinois.com/news/regulators-ok-comeds-plan-to-increase-deposit-costs-for-large-load-projects-like-data-centers/",
+"type": "Reporting"
 },
 {
 "t": "PJM 2028/29 auction results",
-"u": "https://insidelines.pjm.com/pjm-capacity-auction-procures-138318-mw-of-generation-resources-as-work-continues-to-address-growing-electricity-demand/"
+"u": "https://insidelines.pjm.com/pjm-capacity-auction-procures-138318-mw-of-generation-resources-as-work-continues-to-address-growing-electricity-demand/",
+"type": "Grid operator"
 }
 ]
 },
@@ -291,25 +306,26 @@
 "c": 4,
 "x": 3,
 "tag": "",
-"note": "The most incentive-friendly large state: a sales tax exemption running 25 years, or up to 50 for investments above $750M. Good Jobs First estimates the Amazon New Carlisle package at roughly $8.2 to $8.3B, almost all of it the long-tail exemption value rather than named credits, against $13.8B Amazon says it has invested there. Local pushback is now substantial: the city of Elkhart adopted a moratorium through Dec 2027, Indianapolis and Marion County did the same in August 2026, and bans now cover 12 of Indiana's 92 counties. HB 1333 passed the House but died in Senate committee; its revenue idea was enacted separately as HEA 1210, letting a host community collect up to 1% of the sales tax the center does not pay.",
+"note": "Indiana offers a sales tax exemption for up to 25 years, or up to 50 years for qualifying investments above $750M, according to IEDC. The duration is conditional on the program requirements. Local pushback is now substantial: the city of Elkhart adopted a moratorium through Dec 2027, Indianapolis and Marion County did the same in August 2026, and bans now cover 12 of Indiana's 92 counties. HB 1333 passed the House but died in Senate committee; its revenue idea was enacted separately as HEA 1210, letting a host community collect up to 1% of the sales tax the center does not pay.",
 "mo": 4,
 "st": "Courting",
 "srcs": [
 {
 "t": "IEDC data center sales tax exemption overview",
-"u": "https://www.iedc.in.gov/indiana-advantages/investments/data-center-sales-tax-exemption/overview"
-},
-{
-"t": "Good Jobs First on Indiana's data center incentives",
-"u": "https://goodjobsfirst.org/data-center-opposition-supporters-react-to-indianas-data-center-incentives/"
+"u": "https://www.iedc.in.gov/indiana-advantages/investments/data-center-sales-tax-exemption/overview",
+"type": "Government record",
+"supports": "Program eligibility and maximum exemption duration; does not establish a dollar value for a particular subsidy package.",
+"reviewed": "2026-09-07"
 },
 {
 "t": "WFYI on the 2026 session's data center bills",
-"u": "https://www.wfyi.org/news/articles/data-center-legislation-indiana-general-assembly-2026"
+"u": "https://www.wfyi.org/news/articles/data-center-legislation-indiana-general-assembly-2026",
+"type": "Reporting"
 },
 {
 "t": "Elkhart council's data center moratorium",
-"u": "https://www.wndu.com/2026/08/28/elkhart-city-council-casts-unanimous-vote-moratorium-data-centers-battery-storage-facilities/"
+"u": "https://www.wndu.com/2026/08/28/elkhart-city-council-casts-unanimous-vote-moratorium-data-centers-battery-storage-facilities/",
+"type": "Reporting"
 }
 ]
 },
@@ -331,19 +347,23 @@
 "srcs": [
 {
 "t": "Woodbury County Resolution 14064",
-"u": "https://www.woodburycountyiowa.gov/supervisors/resolutions/14064/"
+"u": "https://www.woodburycountyiowa.gov/supervisors/resolutions/14064/",
+"type": "Government record"
 },
 {
 "t": "Iowa Public Radio on the Woodbury moratorium",
-"u": "https://www.iowapublicradio.org/ipr-news/2026-06-24/woodbury-county-approves-1-year-moratorium-data-centers"
+"u": "https://www.iowapublicradio.org/ipr-news/2026-06-24/woodbury-county-approves-1-year-moratorium-data-centers",
+"type": "Reporting"
 },
 {
 "t": "MidAmerican on data center contracts",
-"u": "https://www.midamericanenergy.com/articles/data-center-costs"
+"u": "https://www.midamericanenergy.com/articles/data-center-costs",
+"type": "Company statement"
 },
 {
 "t": "Business Record survey of Iowa data centers",
-"u": "https://www.businessrecord.com/growth-of-data-centers-in-iowa/"
+"u": "https://www.businessrecord.com/growth-of-data-centers-in-iowa/",
+"type": "Reporting"
 }
 ]
 },
@@ -397,19 +417,23 @@
 "srcs": [
 {
 "t": "LPSC Order U-37425 approving the Entergy units",
-"u": "https://lpscpubvalence.lpsc.louisiana.gov/portal/PSC/ViewFile?fileId=nDWn/juc2+A%3D"
+"u": "https://lpscpubvalence.lpsc.louisiana.gov/portal/PSC/ViewFile?fileId=nDWn/juc2+A%3D",
+"type": "Government record"
 },
 {
 "t": "Entergy Louisiana on the LPSC approval",
-"u": "https://www.entergy.com/news/entergy-louisiana-receives-lpsc-approval-for-major-infrastructure-investments-to-support-metas-data-center-and-improve-reliability"
+"u": "https://www.entergy.com/news/entergy-louisiana-receives-lpsc-approval-for-major-infrastructure-investments-to-support-metas-data-center-and-improve-reliability",
+"type": "Company statement"
 },
 {
 "t": "Meta on deepening its Richland Parish investment",
-"u": "https://datacenters.atmeta.com/2026/07/deepening-our-investment-in-richland-parish-louisiana/"
+"u": "https://datacenters.atmeta.com/2026/07/deepening-our-investment-in-richland-parish-louisiana/",
+"type": "Company statement"
 },
 {
 "t": "LPSC Docket U-37882, the 2026 application",
-"u": "https://lpscpubvalence.lpsc.louisiana.gov/portal/PSC/DocketDetails?docketId=32728"
+"u": "https://lpscpubvalence.lpsc.louisiana.gov/portal/PSC/DocketDetails?docketId=32728",
+"type": "Government record"
 }
 ]
 },
@@ -473,7 +497,7 @@
 "c": 5,
 "x": 3,
 "tag": "",
-"note": "Gov. Whitmer is the most pro-investment governor of the cycle (OpenAI Stargate 'The Barn' in Saline), with a 2024 exemption and a July 2026 Responsible Growth Pledge. But 35 local moratoriums are tracked, and DTE/Consumers generation is still catching up. Great Lakes water and a cold climate are strong.",
+"note": "Gov. Whitmer has supported datacenter investment (OpenAI Stargate 'The Barn' in Saline), with a 2024 exemption and a July 2026 Responsible Growth Pledge. DTE/Consumers generation is still catching up, and local permitting requires separate review. Great Lakes water and a cold climate are strong.",
 "mo": 4,
 "st": "Courting"
 },
@@ -511,19 +535,23 @@
 "srcs": [
 {
 "t": "Mississippi Development Authority on the $10B AWS deal",
-"u": "https://mississippi.org/news/amazon-web-services-to-invest-record-shattering-10-billion/"
+"u": "https://mississippi.org/news/amazon-web-services-to-invest-record-shattering-10-billion/",
+"type": "Government record"
 },
 {
 "t": "Amazon on its $25B Mississippi commitment",
-"u": "https://www.aboutamazon.com/news/company-news/amazon-25-billion-mississippi-data-centers"
+"u": "https://www.aboutamazon.com/news/company-news/amazon-25-billion-mississippi-data-centers",
+"type": "Company statement"
 },
 {
 "t": "Compass on its Lauderdale County campus",
-"u": "https://www.compassdatacenters.com/news/compass-10b-investment-lauderdale-county-mississippi/"
+"u": "https://www.compassdatacenters.com/news/compass-10b-investment-lauderdale-county-mississippi/",
+"type": "Company statement"
 },
 {
 "t": "EIA industrial electricity prices by state",
-"u": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_06_b"
+"u": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_06_b",
+"type": "Government record"
 }
 ]
 },
@@ -619,7 +647,7 @@
 "c": 3,
 "x": 4,
 "tag": "",
-"note": "The state froze its $250M AI data center incentive, then enacted the Data Center Fair Share Act (July 7, 2026) creating a separate rate class and requiring data centers to curtail before residents. 72 tracked local moratoriums, the most of any state. Strong NYC-adjacent connectivity.",
+"note": "The state froze its $250M AI data center incentive, then enacted the Data Center Fair Share Act (July 7, 2026) creating a separate rate class and requiring data centers to curtail before residents. Local restrictions require municipality-specific review. Strong NYC-adjacent connectivity.",
 "mo": 2,
 "st": "Restrictive"
 },
@@ -641,19 +669,23 @@
 "srcs": [
 {
 "t": "Meta's Los Lunas data center page",
-"u": "https://datacenters.atmeta.com/asset/los-lunas/"
+"u": "https://datacenters.atmeta.com/asset/los-lunas/",
+"type": "Company statement"
 },
 {
 "t": "Source NM on the proposed statewide moratorium",
-"u": "https://sourcenm.com/2026/07/02/new-mexico-lawmakers-announce-proposed-statewide-moratorium-on-data-centers/"
+"u": "https://sourcenm.com/2026/07/02/new-mexico-lawmakers-announce-proposed-statewide-moratorium-on-data-centers/",
+"type": "Reporting"
 },
 {
 "t": "Source NM on projected data center water use",
-"u": "https://sourcenm.com/2026/09/01/new-mexico-data-center-water-use-could-soar-in-coming-years-researcher-tells-state-lawmakers/"
+"u": "https://sourcenm.com/2026/09/01/new-mexico-data-center-water-use-could-soar-in-coming-years-researcher-tells-state-lawmakers/",
+"type": "Reporting"
 },
 {
 "t": "CNBC on grids best set for AI data centers",
-"u": "https://www.cnbc.com/2025/07/15/10-best-power-sources-us-grid-ai-data-center-top-states-for-business.html"
+"u": "https://www.cnbc.com/2025/07/15/10-best-power-sources-us-grid-ai-data-center-top-states-for-business.html",
+"type": "Reporting"
 }
 ]
 },
@@ -675,19 +707,23 @@
 "srcs": [
 {
 "t": "Executive Order 62 text",
-"u": "https://www.governor.ny.gov/executive-order/no-62-establishing-temporary-moratorium-data-centers-new-york-while-state-develops"
+"u": "https://www.governor.ny.gov/executive-order/no-62-establishing-temporary-moratorium-data-centers-new-york-while-state-develops",
+"type": "Government record"
 },
 {
 "t": "S10642 status (NY Senate)",
-"u": "https://www.nysenate.gov/legislation/bills/2025/S10642"
+"u": "https://www.nysenate.gov/legislation/bills/2025/S10642",
+"type": "Government record"
 },
 {
 "t": "ESD Community Investment Framework outline",
-"u": "https://esd.ny.gov/sites/default/files/media/document/CIF-Policy-Outline-071426.pdf"
+"u": "https://esd.ny.gov/sites/default/files/media/document/CIF-Policy-Outline-071426.pdf",
+"type": "Government record"
 },
 {
 "t": "Davis Wright Tremaine on EO 62",
-"u": "https://www.dwt.com/blogs/energy--environmental-law-blog/2026/07/ny-data-center-permitting-pause-executive-order-62"
+"u": "https://www.dwt.com/blogs/energy--environmental-law-blog/2026/07/ny-data-center-permitting-pause-executive-order-62",
+"type": "Legal analysis"
 }
 ]
 },
@@ -709,27 +745,33 @@
 "srcs": [
 {
 "t": "S257 / S.L. 2026-41 (NC General Assembly)",
-"u": "https://www.ncleg.gov/BillLookup/2025/S257"
+"u": "https://www.ncleg.gov/BillLookup/2025/S257",
+"type": "Government record"
 },
 {
 "t": "HB 56 / S.L. 2026-42 amending the effective date",
-"u": "https://www.ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-42.html"
+"u": "https://www.ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-42.html",
+"type": "Government record"
 },
 {
 "t": "NCDOR notice on the billing-period rule",
-"u": "https://www.ncdor.gov/taxes-forms/sales-and-use-tax/other-sales-and-use-tax-resources/important-notices-issued-sales-and-use-tax-division/important-notice-repeal-exemptions-electricity-used-datacenters"
+"u": "https://www.ncdor.gov/taxes-forms/sales-and-use-tax/other-sales-and-use-tax-resources/important-notices-issued-sales-and-use-tax-division/important-notice-repeal-exemptions-electricity-used-datacenters",
+"type": "Government record"
 },
 {
 "t": "EY tax alert on the electricity exemption repeal",
-"u": "https://taxnews.ey.com/news/2026-1662-north-carolina-repeals-sales-and-use-tax-exemption-for-electricity-used-at-qualifying-data-centers"
+"u": "https://taxnews.ey.com/news/2026-1662-north-carolina-repeals-sales-and-use-tax-exemption-for-electricity-used-at-qualifying-data-centers",
+"type": "Legal analysis"
 },
 {
 "t": "Bisnow on Charlotte's 150-day pause",
-"u": "https://www.bisnow.com/charlotte/news/data-center-community-relations/charlotte-approves-150-day-pause-data-center-development-134903"
+"u": "https://www.bisnow.com/charlotte/news/data-center-community-relations/charlotte-approves-150-day-pause-data-center-development-134903",
+"type": "Reporting"
 },
 {
 "t": "WFAE on Durham County's moratorium",
-"u": "https://www.wfae.org/2026-08-26/durham-county-data-center-moratorium"
+"u": "https://www.wfae.org/2026-08-26/durham-county-data-center-moratorium",
+"type": "Reporting"
 }
 ]
 },
@@ -751,19 +793,23 @@
 "srcs": [
 {
 "t": "EIA average retail price by state, 2024",
-"u": "https://www.eia.gov/electricity/sales_revenue_price/pdf/table_4.pdf"
+"u": "https://www.eia.gov/electricity/sales_revenue_price/pdf/table_4.pdf",
+"type": "Government record"
 },
 {
 "t": "Applied Digital's 400 MW CoreWeave lease at Ellendale",
-"u": "https://ir.applieddigital.com/news-events/press-releases/detail/128/applied-digital-finalizes-additional-150mw-lease-with"
+"u": "https://ir.applieddigital.com/news-events/press-releases/detail/128/applied-digital-finalizes-additional-150mw-lease-with",
+"type": "Company statement"
 },
 {
 "t": "Applied Digital energizes the first 100 MW building",
-"u": "https://ir.applieddigital.com/news-events/press-releases/detail/137/applied-digital-completes-phase-ii-ready-for-service-at"
+"u": "https://ir.applieddigital.com/news-events/press-releases/detail/137/applied-digital-completes-phase-ii-ready-for-service-at",
+"type": "Company statement"
 },
 {
 "t": "North Dakota Monitor on SB 2406 failing",
-"u": "https://northdakotamonitor.com/2026/09/03/data-center-nondisclosure-bill-dies-in-north-dakota-senate-vote/"
+"u": "https://northdakotamonitor.com/2026/09/03/data-center-nondisclosure-bill-dies-in-north-dakota-senate-vote/",
+"type": "Reporting"
 }
 ]
 },
@@ -779,29 +825,29 @@
 "c": 4,
 "x": 4,
 "tag": "Incentive pause",
-"note": "Columbus is a top emerging market and CNBC ranks Ohio No. 9 for power available to computing (SoftBank's 10 GW Piketon campus broke ground March 2026). Gov. DeWine paused new exemption approvals after the Tax Credit Authority's June 1, 2026 meeting pending a joint legislative committee study, and the release explicitly distinguishes that pause from a ban. HB 957, still only a proposal, would bar new exemptions from Oct 1, 2026. 35 local moratoriums are tracked and councils have begun rejecting site plans.",
+"note": "Columbus is a top emerging market and CNBC ranks Ohio No. 9 for power available to computing (SoftBank's 10 GW Piketon campus broke ground March 2026). Gov. DeWine paused new exemption approvals after the Tax Credit Authority's June 1, 2026 meeting pending a joint legislative committee study, and the release explicitly distinguishes that pause from a ban. HB 957, still only a proposal, would bar new exemptions from Oct 1, 2026. Local permitting requires separate review.",
 "mo": 4,
 "st": "Reviewing or paused",
 "srcs": [
 {
 "t": "DeWine pause, May 27, 2026 (reprinted release)",
-"u": "https://bgindependentmedia.org/dewine-pauses-tax-exemptions-for-data-new-centers/"
+"u": "https://bgindependentmedia.org/dewine-pauses-tax-exemptions-for-data-new-centers/",
+"type": "Reprinted release"
 },
 {
 "t": "HB 957 (Ohio House)",
-"u": "https://ohiohouse.gov/legislation/136/hb957"
-},
-{
-"t": "ElectricChoice moratorium tracker",
-"u": "https://www.electricchoice.com/datacenters/moratoriums/"
+"u": "https://ohiohouse.gov/legislation/136/hb957",
+"type": "Government record"
 },
 {
 "t": "Data Center Frontier on SoftBank Piketon",
-"u": "https://www.datacenterfrontier.com/machine-learning/article/55366132/softbanks-10-gw-ohio-campus-marks-a-turning-point-for-ai-infrastructure"
+"u": "https://www.datacenterfrontier.com/machine-learning/article/55366132/softbanks-10-gw-ohio-campus-marks-a-turning-point-for-ai-infrastructure",
+"type": "Reporting"
 },
 {
 "t": "CNBC Best States for AI Data Centers 2026",
-"u": "https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html"
+"u": "https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html",
+"type": "Reporting"
 }
 ]
 },
@@ -886,20 +932,26 @@
 "st": "Courting",
 "srcs": [
 {
-"t": "SC Code 12-36-2120 sales tax exemptions",
-"u": "https://law.justia.com/codes/south-carolina/title-12/chapter-36/section-12-36-2120/"
+"t": "South Carolina Legislature, § 12-36-2120(79)",
+"u": "https://www.scstatehouse.gov/code/t12c036.php",
+"type": "Government record",
+"supports": "Conditional exemptions for qualifying datacenter equipment and electricity; excludes certain non-computing uses.",
+"reviewed": "2026-09-07"
 },
 {
 "t": "WACH on Palmetto Sites funding and site count",
-"u": "https://wach.com/news/local/south-carolina-emerges-as-one-of-the-top-state-for-data-centers-local-skepticism-persists"
+"u": "https://wach.com/news/local/south-carolina-emerges-as-one-of-the-top-state-for-data-centers-local-skepticism-persists",
+"type": "Reporting"
 },
 {
 "t": "SC Daily Gazette on the V.C. Summer restart",
-"u": "https://scdailygazette.com/briefs/prep-work-underway-in-scs-nuclear-reboot-effort-potential-2-7b-payday-at-least-2-years-away/"
+"u": "https://scdailygazette.com/briefs/prep-work-underway-in-scs-nuclear-reboot-effort-potential-2-7b-payday-at-least-2-years-away/",
+"type": "Reporting"
 },
 {
 "t": "S.867 Data Center Development Act",
-"u": "https://www.scstatehouse.gov/sess126_2025-2026/bills/867.htm"
+"u": "https://www.scstatehouse.gov/sess126_2025-2026/bills/867.htm",
+"type": "Government record"
 }
 ]
 },
@@ -937,19 +989,23 @@
 "srcs": [
 {
 "t": "CNBC best states for AI data centers, 2026",
-"u": "https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html"
+"u": "https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html",
+"type": "Reporting"
 },
 {
 "t": "Tennessee ECD data center tax incentives",
-"u": "https://www.tn.gov/ecd/resources/openecd/openecd-tax-incentives.html"
+"u": "https://www.tn.gov/ecd/resources/openecd/openecd-tax-incentives.html",
+"type": "Government record"
 },
 {
 "t": "TN Revenue 2026 legislative summaries",
-"u": "https://www.tn.gov/revenue/tax-resources/legal-resources/legislative-summaries/2026-legislative-summaries-.html"
+"u": "https://www.tn.gov/revenue/tax-resources/legal-resources/legislative-summaries/2026-legislative-summaries-.html",
+"type": "Government record"
 },
 {
 "t": "NAACP suit over xAI Colossus 2 turbines",
-"u": "https://naacp.org/articles/naacp-sues-xai-illegal-pollution-data-center-power-plant"
+"u": "https://naacp.org/articles/naacp-sues-xai-illegal-pollution-data-center-power-plant",
+"type": "Advocacy statement"
 }
 ]
 },
@@ -971,23 +1027,28 @@
 "srcs": [
 {
 "t": "Governor Abbott, Aug 3, 2026 audit directive",
-"u": "https://gov.texas.gov/news/post/governor-abbott-directs-comprehensive-data-center-audit"
+"u": "https://gov.texas.gov/news/post/governor-abbott-directs-comprehensive-data-center-audit",
+"type": "Government record"
 },
 {
 "t": "ERCOT Market Notice M-A080326-01",
-"u": "https://www.ercot.com/services/comm/mkt_notices/M-A080326-01"
+"u": "https://www.ercot.com/services/comm/mkt_notices/M-A080326-01",
+"type": "Grid operator"
 },
 {
 "t": "Utility Dive on the audit and Batch Zero",
-"u": "https://www.utilitydive.com/news/ercot-texas-puc-data-center-audit/828472/"
+"u": "https://www.utilitydive.com/news/ercot-texas-puc-data-center-audit/828472/",
+"type": "Reporting"
 },
 {
 "t": "Holland & Knight on the exemption's legislative risk",
-"u": "https://www.hklaw.com/en/insights/publications/2026/07/texas-data-center-tax-exemption-faces-serious-legislative-risk"
+"u": "https://www.hklaw.com/en/insights/publications/2026/07/texas-data-center-tax-exemption-faces-serious-legislative-risk",
+"type": "Legal analysis"
 },
 {
 "t": "Inside Climate News project counts",
-"u": "https://insideclimatenews.org/news/25082026/texas-data-center-gas-projects/"
+"u": "https://insideclimatenews.org/news/25082026/texas-data-center-gas-projects/",
+"type": "Reporting"
 }
 ]
 },
@@ -1009,15 +1070,18 @@
 "srcs": [
 {
 "t": "Executive Order 2026-03 (PDF)",
-"u": "https://governor.utah.gov/wp-content/uploads/2026.05.29-EO-Higher-Bar-for-Data-Center-Development-1.pdf"
+"u": "https://governor.utah.gov/wp-content/uploads/2026.05.29-EO-Higher-Bar-for-Data-Center-Development-1.pdf",
+"type": "Government record"
 },
 {
 "t": "Box Elder County, Stratos referendum page",
-"u": "https://www.boxeldercountyut.gov/666/Stratos-Project-Referendum"
+"u": "https://www.boxeldercountyut.gov/666/Stratos-Project-Referendum",
+"type": "Government record"
 },
 {
 "t": "Utah News Dispatch on the referendum appeal",
-"u": "https://utahnewsdispatch.com/2026/06/04/stratos-data-center-referendum-group-appeal-to-a-judge/"
+"u": "https://utahnewsdispatch.com/2026/06/04/stratos-data-center-referendum-group-appeal-to-a-judge/",
+"type": "Reporting"
 }
 ]
 },
@@ -1055,27 +1119,33 @@
 "srcs": [
 {
 "t": "Enacted budget, consumption tax provision 3-5.24",
-"u": "https://budget.lis.virginia.gov/item/2026/2/HB30/Chapter/3/3-5.24/"
+"u": "https://budget.lis.virginia.gov/item/2026/2/HB30/Chapter/3/3-5.24/",
+"type": "Government record"
 },
 {
 "t": "Williams Mullen on the consumption tax",
-"u": "https://www.williamsmullen.com/insights/news/legal-news/virginia-budget-creates-new-electricity-consumption-tax-data-centers"
+"u": "https://www.williamsmullen.com/insights/news/legal-news/virginia-budget-creates-new-electricity-consumption-tax-data-centers",
+"type": "Legal analysis"
 },
 {
 "t": "HB 153, Chapter 567 text",
-"u": "https://lis.virginia.gov/bill-details/20261/HB153/text/CHAP0567"
+"u": "https://lis.virginia.gov/bill-details/20261/HB153/text/CHAP0567",
+"type": "Government record"
 },
 {
 "t": "Budget Item 366 #7c, Cooling Water Scarcity Areas",
-"u": "https://budget.lis.virginia.gov/amendment/2026/2/HB30/Introduced/CR/366/7c/"
+"u": "https://budget.lis.virginia.gov/amendment/2026/2/HB30/Introduced/CR/366/7c/",
+"type": "Government record"
 },
 {
 "t": "CBRE Northern Virginia market, H2 2025",
-"u": "https://www.cbre.com/insights/books/north-america-data-center-trends-h2-2025/northern-virginia-data-center-market"
+"u": "https://www.cbre.com/insights/books/north-america-data-center-trends-h2-2025/northern-virginia-data-center-market",
+"type": "Market research"
 },
 {
 "t": "Bloomberg, Dominion seven-year waits",
-"u": "https://www.bloomberg.com/news/articles/2024-08-29/data-centers-face-seven-year-wait-for-power-hookups-in-virginia"
+"u": "https://www.bloomberg.com/news/articles/2024-08-29/data-centers-face-seven-year-wait-for-power-hookups-in-virginia",
+"type": "Reporting"
 }
 ]
 },
