@@ -7,13 +7,13 @@ Live site: https://sonnetx.github.io/datacenter-map/
 ## What it does
 
 - Choropleth of composite suitability with adjustable weights across nine factors
-- Three lenses: Combined, Political will and plausibility, Physical fundamentals
+- Three lenses: Combined, Political outlook, Physical fundamentals
 - Scatter plotting the two lenses against each other, with median quadrants
 - Per-state breakdown, 2026 policy notes and posture label (Courting, Courting with conditions, Reviewing or paused, Restrictive, No active state posture)
 - Sortable 50-state table
 - Methodology and source list on the page
 
-Hatched states have a statewide 2026 action that changes the calculus: New York's EO 62 moratorium, Texas's interconnection pause, incentive pauses in Arizona, Illinois and Ohio, North Carolina's electricity exemption repeal, Virginia's consumption tax, Utah's stricter review order.
+Hatched states have a statewide 2026 action affecting development: New York's EO 62 moratorium, Texas's interconnection pause, incentive pauses in Arizona, Illinois and Ohio, North Carolina's electricity exemption repeal, Virginia's consumption tax, Utah's stricter review order.
 
 ## Scoring
 
@@ -33,7 +33,7 @@ Each state has eight sub-scores plus power price, all mapped to 0 to 100 (higher
 
 Lens weights: Political = policy 40, community 35, momentum 25. Physical = headroom 30, cost 25, water 20, hazard 15, climate 10.
 
-Only power cost is measured data; the rest are structured judgment calls grounded in the sources listed on the page. Treat the composite as a screening tool for which states to diligence, not a site decision.
+Only power cost is measured data; the rest are structured judgment calls grounded in the sources listed on the page. Treat the composite as a screening tool for which states to investigate, not a site decision.
 
 ## Updating
 
@@ -59,6 +59,6 @@ python3 build.py
 
 ## Data sources
 
-Full linked list on the page, under Methodology. An independent review of the sources, scoring and interaction design is in [review/](review/), along with the EIA price comparison and the recorded HTTP status of every cited link. Power prices were diffed against the EIA-861 historical state file (Total Electric Industry, 2024 industrial) on Sept 7, 2026 and all 50 match. The seven hatched statewide actions were checked against primary sources (executive order text, bill pages, ERCOT notices, enacted budgets) on the same date.
+Full linked list on the page, under Methodology. An independent review of the sources, scoring and interaction design is in [review/](review/), along with the EIA price comparison and the recorded HTTP status of every cited link. Power prices were diffed against the EIA-861 historical state file (Total Electric Industry, 2024 industrial) on Sept 7, 2026 and all 50 match. The eight hatched statewide actions were checked against primary sources (executive order text, bill pages, ERCOT notices, enacted budgets) on the same date.
 
 Summary: EIA-861; CNBC Top States for Business 2026; New York EO 62; Texas Governor directives (June 10 and Aug 3, 2026) and ERCOT notices; Ashurst Perkins Coie multistate executive action review; Williams Mullen and Bloomberg Tax (Virginia budget); Data Center Knowledge and EY (North Carolina); Construction Owners Club incentive update citing NCSL and Good Jobs First; Georgia PSC December 2025 order; ElectricChoice, datacenterbans.com and dcmap.us moratorium trackers; PoweredByWho and Aterio project counts; Quartz, Fortune and ABA on western water stress; Ascend Analytics and Utility Dive on interconnection queues.

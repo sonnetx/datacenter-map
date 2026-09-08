@@ -11,17 +11,19 @@
     --bg:#F2F4F6; --panel:#FFFFFF; --ink:#18212B; --muted:#5C6773; --rule:#D3DAE1; --rule-soft:#E6EAEE;
     --warn:#B5432A; --focus:#2456A6;
     --c0:#00204C; --c1:#31446B; --c2:#666970; --c3:#958F78; --c4:#C4B56C; --c5:#FFEA46;
-    /* one spacing scale: every gap on the page is a multiple of 4px */
+    /* shared spacing and text measure */
     --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px;
-    --pad-y:18px; --pad-x:20px;   /* every card uses this inset */
+    --pad-y:20px; --pad-x:20px;   /* shared card inset */
     --measure:660px;              /* every run of prose stops here */
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5}
   a{color:var(--focus)}
   button{font:inherit}
+  summary{cursor:pointer}
+  summary:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
   .wrap{max-width:1240px;margin:0 auto;padding:var(--s8) var(--s6) 56px}
-  header h1{font-weight:300;font-size:clamp(28px,3.6vw,40px);line-height:1.14;letter-spacing:-0.01em;margin:0 0 var(--s3);max-width:var(--measure)}
+  header h1{font-weight:300;font-size:clamp(28px,3.6vw,40px);line-height:1.14;letter-spacing:-0.01em;margin:0 0 var(--s4);max-width:var(--measure);text-wrap:balance}
   header p.lede{margin:0;max-width:var(--measure);color:var(--muted)}
   header .asof{margin-top:var(--s3);max-width:var(--measure);font-size:13px;line-height:1.55;color:var(--muted)}
   .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:var(--s6);margin-top:var(--s6);align-items:start}
@@ -35,7 +37,7 @@
   .state:focus{outline:none;stroke:var(--focus);stroke-width:2}
   .dim .state:not(.selected):not(:hover){opacity:.55}
   .hatch{pointer-events:none}
-  .lens{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 var(--s3)}
+  .lens{display:flex;gap:var(--s2);flex-wrap:wrap;margin:0 0 var(--s3)}
   .lens button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:5px 10px;font-size:13px;cursor:pointer;color:var(--ink)}
   .lens button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
   .lens button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
@@ -45,17 +47,17 @@
   .scatter svg{width:100%;height:auto;display:block}
   .scatter .dot{cursor:pointer}
   .scatter .dot:hover circle,.scatter .dot.selected circle{stroke:var(--ink);stroke-width:2}
-  .legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
-  .legend .lgnote{font-size:12.5px;max-width:60ch}
-  .ramp{width:180px;height:10px;border-radius:2px;background:linear-gradient(90deg,var(--c0),var(--c1),var(--c2),var(--c3),var(--c4),var(--c5))}
+  .legend{display:grid;gap:var(--s2);margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
+  .legend .lgnote{font-size:12px;max-width:var(--measure)}
+  .ramp{width:180px;min-width:60px;height:10px;border-radius:2px;background:linear-gradient(90deg,var(--c0),var(--c1),var(--c2),var(--c3),var(--c4),var(--c5))}
   .legend .key{display:flex;align-items:center;gap:8px}
-  .swatch{width:18px;height:12px;border:1px solid var(--rule)}
+  .swatch{width:18px;height:12px;flex:none;border:1px solid var(--rule);background:#C4B56C repeating-linear-gradient(45deg,#B5432A 0 1.5px,transparent 1.5px 6px)}
   .tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;padding:8px 10px;border-radius:4px;font-size:13px;line-height:1.35;max-width:240px;display:none;z-index:5}
   .tip b{font-weight:600}
   .tip .sc{font-size:20px;font-weight:300;display:block;margin:2px 0 2px}
   .tip .small{opacity:.8}
   aside .card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x)}
-  aside h2{font-size:15px;font-weight:600;margin:0 0 var(--s1);display:inline}
+  aside h2{font-size:15px;font-weight:600;margin:0;display:inline}
   /* on desktop the panel is always open and the summary is just a heading */
   #wpanel>summary{list-style:none;cursor:default}
   #wpanel>summary::-webkit-details-marker{display:none}
@@ -65,35 +67,46 @@
     #wpanel[open]>summary::after{content:"Hide"}
     #wpanel>summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
   }
-  aside p.hint{margin:0 0 var(--s3);font-size:13px;color:var(--muted)}
+  aside p.hint{margin:var(--s2) 0 var(--s3);font-size:13px;color:var(--muted)}
+  .view-note{margin:0 0 var(--s4);padding:var(--s2) var(--s3);background:var(--bg);border-radius:4px;font-size:12.5px;color:var(--muted)}
   .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:var(--s4)}
   .presets button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:5px 9px;font-size:13px;cursor:pointer;color:var(--ink)}
   .presets button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
   .presets button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-  .w{display:grid;grid-template-columns:1fr 34px;gap:var(--s2);align-items:center;margin:var(--s3) 0}
+  .w{display:grid;grid-template-columns:minmax(0,1fr) 42px;gap:var(--s2);align-items:center;margin:var(--s4) 0}
   .w label{font-size:13.5px;display:block}
   .w .sub{display:block;font-size:12px;color:var(--muted);line-height:1.3}
   .w input[type=range]{grid-column:1/2;width:100%;accent-color:var(--ink);margin:2px 0 0}
   .w .val{grid-column:2/3;grid-row:1/3;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
   .total{font-size:12px;color:var(--muted);margin-top:var(--s3)}
   .detail{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x);margin-top:var(--s6)}
-  .detail .top{display:flex;justify-content:space-between;gap:var(--s5);align-items:baseline}
+  .detail .top{display:flex;justify-content:space-between;gap:var(--s4);align-items:flex-start;flex-wrap:wrap}
   .detail .top>div:first-child{min-width:0;flex:1}
   .detail .score{flex:none}
-  .detail h2{font-weight:300;font-size:28px;margin:0;line-height:1.1}
+  .detail h2{font-weight:300;font-size:28px;margin:0;line-height:1.2}
   .detail .rank{color:var(--muted);font-size:14px;max-width:var(--measure);margin-top:var(--s1)}
   .detail .score{font-size:40px;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
   .detail .score small{font-size:14px;color:var(--muted);font-weight:400;margin-left:4px}
-  .chip{display:inline-block;border:1px solid var(--warn);color:var(--warn);border-radius:3px;padding:1px 7px;font-size:12.5px;margin-left:10px;vertical-align:middle}
-  .bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px var(--s8);margin:var(--s4) 0 var(--s1)}
-  .bar{display:grid;grid-template-columns:170px 1fr 34px 72px;align-items:center;gap:10px;font-size:13.5px}
-  .bar .c{text-align:right;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .chip{display:inline-block;border:1px solid var(--warn);color:var(--warn);border-radius:3px;padding:2px 7px;font-size:12.5px;margin-top:var(--s2)}
+  .detail .meta{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4);margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
+  .breakdown-hint{font-size:12.5px;color:var(--muted);margin:var(--s4) 0 var(--s2)}
+  .bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:var(--s4) var(--s8);margin:0 0 var(--s5)}
+  .bar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--s2) var(--s3);font-size:13px;min-width:0}
+  .bar .label{line-height:1.35}
+  .bar .c{text-align:right;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
   .bar.off{opacity:.5}
-  .bar .track{height:8px;background:var(--rule-soft);border-radius:2px;overflow:hidden}
+  .bar .track{grid-column:1;height:8px;background:var(--rule-soft);border-radius:2px;overflow:hidden}
   .bar .fill{height:100%;background:var(--ink)}
-  .bar .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .bar .n{text-align:right;font-size:12px;font-variant-numeric:tabular-nums;color:var(--muted)}
   .detail p.note{margin:var(--s3) 0 0;max-width:var(--measure)}
-  .detail p.srcs{margin:var(--s3) 0 0;max-width:var(--measure);font-size:12.5px;color:var(--muted);line-height:1.6}
+  .detail .srcs{margin:var(--s4) 0 0;padding-top:var(--s3);border-top:1px solid var(--rule-soft);max-width:var(--measure);font-size:12.5px;color:var(--muted);line-height:1.6}
+  .srcs summary{color:var(--focus);font-weight:500}
+  .srcs ul{padding-left:var(--s5);margin:var(--s2) 0 0}
+  .srcs li{margin:var(--s1) 0;overflow-wrap:anywhere}
+  .table-intro{margin:var(--s6) 0 var(--s3)}
+  .table-intro h2{font-size:17px;margin:0 0 var(--s1)}
+  .table-intro p{font-size:13px;color:var(--muted);margin:0;max-width:var(--measure)}
+  .table-intro+.tablecard{margin-top:0}
   .tablecard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--s2) 0 0;margin-top:var(--s6);overflow-x:auto}
   table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
   th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--rule-soft);white-space:nowrap}
@@ -119,21 +132,39 @@
   .meth{margin-top:var(--s10);max-width:var(--measure)}
   .meth h2{font-weight:600;font-size:17px;margin:0 0 var(--s2)}
   .meth h3{font-weight:600;font-size:14.5px;margin:var(--s5) 0 var(--s2)}
-  .meth p{margin:var(--s2) 0}
+  .meth p{margin:var(--s3) 0}
   .meth p,.meth li{color:#2B3540}
   .meth ul{padding-left:18px;margin:var(--s2) 0}
-  .meth li{margin:var(--s1) 0}
+  .meth li{margin:var(--s3) 0}
+  .meth .factor-list>li{padding-bottom:var(--s3);border-bottom:1px solid var(--rule-soft)}
+  .meth .factor-list p{margin:var(--s2) 0 0;font-size:13.5px;color:var(--muted)}
+  .meth .sources{margin-top:var(--s6)}
+  .meth .sources>summary{font-size:15px;font-weight:600}
   .meth .src li{font-size:13.5px}
   .meth .caveat{border-left:3px solid var(--warn);padding:10px 14px;background:#FFF7F4;margin:var(--s4) 0}
+  @media (max-width:600px){
+    .wrap{padding:var(--s6) var(--s4) var(--s8)}
+    :root{--pad-x:16px;--pad-y:16px}
+    .lens button,.presets button{min-height:40px}
+    .legend .key{gap:var(--s2);font-size:12px}
+    .legend>.key:first-child{display:grid;grid-template-columns:1fr 1fr}
+    .legend>.key:first-child .ramp{grid-column:1/-1;grid-row:1;width:100%}
+    .legend>.key:first-child span:last-child{text-align:right}
+    .detail .score{font-size:34px}
+    .detail .score small{display:block;margin:var(--s1) 0 0;text-align:right;font-size:12px}
+    .detail h2{font-size:26px}
+    .scatter{overflow-x:auto}
+    .scatter svg{min-width:560px}
+  }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
-  <h1>Where can you still build a large datacenter in the United States?</h1>
-  <p class="lede">State-level suitability for hyperscale and AI-training development, weighing power headroom, power cost, incentive policy, community and permitting friction, water, natural hazards, climate connectivity and buildout momentum. Switch lenses above the map, or move the weights, and the map, ranking and table recompute.</p>
-  <div class="asof">Composite as of September 7, 2026. Power prices are EIA 2024 annual industrial averages (latest full-year data). Hatched states have a statewide action in 2026 that changes the calculus.</div>
+  <h1>Compare states for your next datacenter</h1>
+  <p class="lede">Explore how power, policy and operating conditions compare across all 50 states. Choose a preset or adjust your priorities to build a shortlist for a hyperscale or AI training campus.</p>
+  <div class="asof">Updated September 7, 2026 · Power prices: EIA 2024 annual industrial averages. Scores combine one measured factor with eight analyst judgments.</div>
 </header>
 
 <div class="grid">
@@ -141,7 +172,7 @@
   <div class="mapcard">
     <div class="lens" id="lens">
       <button data-l="all" aria-pressed="true">Combined</button>
-      <button data-l="politics" aria-pressed="false">Political will and plausibility</button>
+      <button data-l="politics" aria-pressed="false">Political outlook</button>
       <button data-l="physical" aria-pressed="false">Physical fundamentals</button>
     </div>
     <svg class="map" viewBox="0 0 975 610" role="img" aria-label="Choropleth map of US states colored by datacenter siting suitability score">
@@ -156,10 +187,10 @@
     </svg>
     <div class="tip" id="tip"></div>
     <div class="legend">
-      <div class="key"><span>30 or below</span><div class="ramp"></div><span>80 or above</span></div>
-      <div class="key"><span class="lgnote">Color saturates at both ends, so states below 30 and above 80 share a shade. The scale is fixed, so shades mean the same thing across scenarios.</span></div>
-      <div class="key"><div class="swatch" style="background:url(#h) #C4B56C;background-image:repeating-linear-gradient(45deg,#B5432A 0 1.5px,transparent 1.5px 6px)"></div><span>Statewide 2026 pause, moratorium or tax change</span></div>
-      <div class="key"><span id="hint" style="font-size:12.5px">Hover for scores, click to pin a state.</span></div>
+      <div class="key"><span>Less favorable · ≤30</span><div class="ramp"></div><span>≥80 · More favorable</span></div>
+      <div class="lgnote">Fixed color scale across views. Scores below 30 or above 80 use the end colors.</div>
+      <div class="key"><div class="swatch"></div><span>2026 state policy change; select a state for details</span></div>
+      <div class="key"><span id="hint" style="font-size:12.5px">Select a state to see its scores and sources.</span></div>
     </div>
   </div>
 
@@ -168,14 +199,15 @@
 
   <aside>
     <details class="card" id="wpanel" open>
-      <summary><h2>Weights</h2></summary>
-      <p class="hint">What matters for your build. Defaults reflect an AI training campus where time-to-power dominates.</p>
+      <summary><h2>Your priorities</h2></summary>
+      <p class="hint">Start with a preset, then adjust what matters to your project. The AI campus preset gives power availability the most weight.</p>
       <div class="presets" id="presets">
         <button data-p="ai" aria-pressed="true">AI campus</button>
-        <button data-p="cost" aria-pressed="false">Cheapest to run</button>
-        <button data-p="safe" aria-pressed="false">Lowest risk</button>
+        <button data-p="cost" aria-pressed="false">Lower costs</button>
+        <button data-p="safe" aria-pressed="false">Lower risk</button>
         <button data-p="colo" aria-pressed="false">Connectivity first</button>
       </div>
+      <p class="view-note" id="view-note"></p>
       <div id="weights"></div>
       <div class="total" id="total"></div>
     </details>
@@ -183,12 +215,16 @@
 </div>
 
 <section class="scatter" id="scatter">
-  <h2>Physical fundamentals against political will and plausibility</h2>
-  <p>Each dot is a state. Right means cheap, available power with manageable water, hazard and climate. Up means the state government is courting the buildout, communities are not blocking it, and projects are actually landing. The lines are the medians. Top-right is where both stories agree, bottom-right has the physics but not the politics, and top-left has the welcome mat but not the power.</p>
-  <p>Both axes are fixed reference scores on their own published weight sets, so moving your sliders recolors the dots but never moves them. The vertical axis mixes three different things, since a state can be politically welcoming while still being slow and unpredictable to permit. A cost-allocation rule that shifts expense onto large loads is not by itself an unfavorable process.</p>
+  <h2>Power and location meet policy</h2>
+  <p>States farther right score better on power, water, hazards and cooling. States higher up score better on policy, permitting and buildout momentum. Dashed lines mark the median scores.</p>
+  <p>The axes use fixed weights. Your selected map view controls the dot colors, so adjusting Combined weights changes colors, not positions. Select a dot to inspect the state. On smaller screens, scroll across the chart.</p>
   <svg viewBox="0 0 900 520" role="img" aria-label="Scatter plot of states by physical fundamentals and political plausibility" id="scsvg"></svg>
 </section>
 
+<div class="table-intro">
+  <h2>Compare all 50 states</h2>
+  <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5; the overall and reference scores run from 0 to 100. Higher is more favorable, except for electricity prices.</p>
+</div>
 <div class="tablecard">
   <table id="tbl">
     <thead><tr id="thead"></tr></thead>
@@ -196,37 +232,45 @@
   </table>
 </div>
 
-<section class="meth">
+<section class="meth" id="methodology">
   <h2>How the score is built</h2>
-  <p>Each state gets eight sub-scores on a 0 to 100 scale. The composite is the weighted average using the sliders above. Higher always means more favorable for development.</p>
-  <ul>
-    <li><b>Power cost</b>: EIA-861 2024 average industrial retail price, the only measured factor on the page. 5.43¢/kWh (New Mexico) maps to 100 and 13¢ or more maps to 0, linearly. The 13¢ ceiling is an editorial assumption about where power cost stops discriminating between candidates, not a property of the EIA data. Seven states priced from 16.21¢ to 34.13¢ therefore all score 0 and are indistinguishable on this factor. This is an average-revenue benchmark, not a tariff quote. Large-load tariffs, PJM capacity charges and Virginia's new 1.1¢/kWh consumption tax sit on top of it, and the price shown is not adjusted for them. The 2024 vintage also drifts: Louisiana was second cheapest in 2024 but sixth by mid-2026, and Tennessee moved from 6.21¢ to about 6.8¢. Check the current EIA monthly table before relying on a narrow gap between two states.</li>
+  <p>Nine factors are mapped to a 0–100 scale and combined as a weighted average. Higher scores mean a closer fit to the selected priorities. Combined uses your weights; the other views use the fixed weights listed below.</p>
+  <ul class="factor-list">
+    <li><b>Power cost</b>: EIA-861 2024 average industrial retail price. The score falls linearly from 100 at 5.43¢/kWh to 0 at 13¢/kWh. Prices outside those limits receive the nearest endpoint score.
+      <p>The 13¢ cutoff is an editorial assumption. Seven states exceed it and receive the same score of 0. The prices are historical state averages; they do not estimate a project's current tariff, additional charges or taxes. Check current rates before relying on a small price difference.</p>
+    </li>
     <li><b>Power headroom</b>: judgment score (1 to 5) from utility queue reporting, ISO capacity outlooks and 2026 executive actions. Virginia (7-year waits for 100 MW at Dominion) and Texas (interconnections paused Aug 3, 2026 pending audit) score low; North Dakota, and the TVA and Southeast utilities that have approved generation, score high.</li>
     <li><b>Incentive and policy climate</b>: judgment score from whether a sales tax exemption exists and is stable in 2026, plus statewide pauses, repeals, consumption taxes and cost-allocation laws.</li>
     <li><b>Community and permitting friction</b>: judgment score from tracked local measures and recent site rejections. ElectricChoice recorded 321 moratoriums, bans and restrictions cumulatively since 2024, of which 261 were in force on Sept 1, 2026, with New Jersey, Ohio, Michigan and Georgia the most. Neither figure is a count of active local bans, since the cumulative total includes expired, repealed and struck-down measures.</li>
     <li><b>Water</b>: judgment score from basin stress, 2026 drought and shortage declarations (Colorado River Tier 1, record-low western snowpack), and state water-scarcity rules. Scored at state level, which is coarse; actual availability is a basin and utility question. <a href="https://www.wri.org/aqueduct">WRI Aqueduct</a> is the better instrument for a real shortlist.</li>
-    <li><b>Natural hazard</b>: judgment score aligned to the individual hazard components of the <a href="https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf">FEMA National Risk Index</a> (hurricane, tornado, wildfire, seismic). The composite National Risk Index score is deliberately not used, because it also folds in social vulnerability and community resilience, which are not siting constraints.</li>
+    <li><b>Natural hazard</b>: judgment score informed by the individual hazard components of the <a href="https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf">FEMA National Risk Index</a>, including hurricanes, tornadoes, wildfires and earthquakes. This factor focuses on physical hazards; FEMA's overall index also includes social vulnerability and community resilience.</li>
     <li><b>Climate for cooling</b>: judgment score from cooling degree days and humidity; colder and drier scores higher.</li>
     <li><b>Buildout momentum</b>: judgment score from tracked project counts (PoweredByWho, Aterio) and 2025 to 2026 hyperscale commitments. Texas, Virginia and Georgia lead; New England trails.</li>
     <li><b>Connectivity and ecosystem</b>: judgment score from operating datacenter counts, fiber and cable-landing density, and labor pool.</li>
   </ul>
-  <p>The two lenses are fixed weight sets: political will and plausibility is 40% incentives and policy, 35% community and permitting, 25% momentum; physical fundamentals is 30% power headroom, 25% power cost, 20% water, 15% natural hazard, 10% climate. The posture label (Courting, Courting with conditions, Reviewing or paused, Restrictive, No active state posture) summarizes each governor's and legislature's 2026 actions.</p>
-  <div class="caveat">There are nine factors. One is measured (power cost) and eight are structured judgment calls on a 1 to 5 scale. At the default weights, 80% of the composite comes from those judgments. They are grounded in the sources below, but reasonable analysts would move individual states a level either way, and one level is worth 25 factor points. Treat the composite as a screening tool for which states to diligence, not as a site decision. County and utility service territory matter more than state lines once you get to shortlisting.</div>
-  <p>Source coverage is uneven. States with a 2026 statewide action, and the states that rank highest by default, carry per-state citations in the detail panel. The rest rest on the general sources below, and those citations support the policy events described rather than each individual 1 to 5 rating. A rating of 4 rather than 3 is an analyst call, not a sourced measurement.</p>
+  <h3>Reference views</h3>
+  <ul>
+    <li><b>Political outlook</b>: policy 40%, community and permitting 35%, buildout momentum 25%.</li>
+    <li><b>Physical fundamentals</b>: power headroom 30%, power cost 25%, water 20%, natural hazard 15%, cooling climate 10%.</li>
+  </ul>
+  <p>State posture labels summarize 2026 government actions. A welcoming posture can still involve slow permitting or conditions on development.</p>
+  <div class="caveat">There are nine factors. One is measured (power cost) and eight are structured judgment calls on a 1 to 5 scale. At the default weights, 80% of the composite comes from those judgments. They are grounded in the sources below, but reasonable analysts would move individual states a level either way, and one level is worth 25 factor points. Treat the composite as a screening tool for which states to investigate, not as a site decision. County and utility service territory matter more than state lines once you get to shortlisting.</div>
+  <p>Source coverage is uneven. States with a 2026 statewide action, and the states that rank highest by default, carry per-state citations in the detail panel. Other states rely on the general sources below. Citations support the events described, but do not establish each individual rating. Choosing 4 rather than 3 remains an analyst judgment.</p>
   <h3>What the 1 to 5 levels mean</h3>
-  <p>Every judgment factor uses the same ladder, read in the direction of that factor. A level is a band, not a measurement, and the bands were applied by one analyst reading the sources below.</p>
+  <p>The analyst ratings use this general scale, interpreted for each factor. They describe broad conditions rather than measured project outcomes.</p>
   <ul>
     <li><b>5</b>: no meaningful constraint identified, and positive evidence that large projects are being served today.</li>
-    <li><b>4</b>: workable, with a known friction that has not stopped a project.</li>
-    <li><b>3</b>: real constraint that changes schedule, cost or siting, or genuinely mixed evidence.</li>
+    <li><b>4</b>: workable, with a known constraint that has not stopped a project.</li>
+    <li><b>3</b>: real constraint that changes schedule, cost or siting, or mixed evidence.</li>
     <li><b>2</b>: constraint that has already blocked or reversed specific projects.</li>
     <li><b>1</b>: a standing prohibition, or a shortage severe enough that a large project is not currently plausible.</li>
   </ul>
-  <p>One level is worth 25 points on a factor. At the default 25% headroom weight, moving one state's headroom by a single level moves its composite by about 6 points, which is enough to shift it several ranks. Treat gaps of a few points as noise.</p>
-  <p>Buildout momentum and connectivity and ecosystem overlap, since both reward places that already have datacenters, and momentum can reward a pipeline that is itself consuming the headroom scored elsewhere. Momentum is weighted at 5 by default for that reason. Raise it only if you specifically want to follow where capital is already going.</p>
-  <h3>Sources checked</h3>
+  <p>One level is worth 25 points on a factor. At the default 25% headroom weight, moving one state's headroom by a single level moves its composite by about 6 points, which is enough to shift it several ranks. Small score differences may change with reasonable adjustments to the ratings.</p>
+  <p>Buildout momentum overlaps with connectivity and ecosystem: both favor established markets. A growing pipeline can also use up available power. Momentum receives 5% of the default score; increase it if recent investment matters more to your project.</p>
+  <details class="sources">
+  <summary>Sources and references</summary>
   <ul class="src">
-    <li>U.S. Energy Information Administration, <a href="https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx">EIA-861 historical state data, 2010 onward</a> (Total Electric Industry sheet, 2024 industrial price). All 50 values on this page were diffed against that file on Sept 7, 2026.</li>
+    <li>U.S. Energy Information Administration, <a href="https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx">EIA-861 historical state data, 2010 onward</a> (Total Electric Industry sheet, 2024 industrial price). All 50 values on this page were compared with that file on Sept 7, 2026.</li>
     <li>CNBC, <a href="https://www.cnbc.com/2026/07/09/ohio-no-1-americas-top-states-for-business-rankings.html">America's Top States for Business 2026</a> and <a href="https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html">Best States for AI Data Centers</a> (July 9, 2026).</li>
     <li>Governor of New York, <a href="https://www.governor.ny.gov/executive-order/no-62-establishing-temporary-moratorium-data-centers-new-york-while-state-develops">Executive Order 62</a> (July 14, 2026); <a href="https://esd.ny.gov/sites/default/files/media/document/CIF-Policy-Outline-071426.pdf">ESD Community Investment Framework outline</a>; <a href="https://www.nysenate.gov/legislation/bills/2025/S10642">S10642</a>; <a href="https://www.dwt.com/blogs/energy--environmental-law-blog/2026/07/ny-data-center-permitting-pause-executive-order-62">Davis Wright Tremaine</a> and <a href="https://www.dlapiper.com/en-us/insights/publications/2026/07/new-york-state-legislature-passes-first-in-the-nation-data-center-moratorium">DLA Piper</a> alerts.</li>
     <li>Texas Governor's <a href="https://gov.texas.gov/news/post/governor-abbott-directs-comprehensive-data-center-audit">Aug 3, 2026 audit directive</a> and <a href="https://www.houstonpublicmedia.org/articles/news/energy-environment/2026/06/10/554138/data-center-texas-energy-grid-electricity-regulation-greg-abbott/">June 10 cost-allocation directive</a>; <a href="https://www.ercot.com/services/comm/mkt_notices/M-A080326-01">ERCOT Market Notice M-A080326-01</a>; <a href="https://www.utilitydive.com/news/ercot-texas-puc-data-center-audit/828472/">Utility Dive</a>, <a href="https://www.gibsondunn.com/what-governor-abbotts-data-center-audit-directive-means-for-ercot-and-the-batch-zero-study-process/">Gibson Dunn</a>, <a href="https://www.hklaw.com/en/insights/publications/2026/08/texas-gov-abbott-directs-data-center-audit">Holland &amp; Knight</a> and <a href="https://www.mcguirewoods.com/client-resources/alerts/2025/7/texas-senate-bill-6-significantly-expands-regulatory-oversight-over-large-loads-in-ercot/">McGuireWoods on SB 6</a>.</li>
@@ -244,6 +288,7 @@
     <li>Quartz, Fortune and the ABA Water Spring 2026 report on western water stress and data center consumption; Bureau of Reclamation 2026 Lake Mead shortage condition.</li>
     <li>Ascend Analytics, Utility Dive and Introl on PJM, ERCOT and MISO large-load queues; Construction Owners Club market-by-market power timelines.</li>
   </ul>
+  </details>
 </section>
 </div>
 
@@ -1535,10 +1580,10 @@ function bestWorst(s){
 function showTip(abbr,e){
   const s=BY[abbr], bw=bestWorst(s);
   const head = hasWeights()
-    ? `<span class="sc">${s.total.toFixed(0)} <span class="small" style="font-size:13px">rank ${s.rank} of 50${s.tied?", tied":""}</span></span>`
+    ? `<span class="sc">${s.total.toFixed(0)} <span class="small" style="font-size:13px">rank ${s.rank} of 50${s.tied?", similar scores":""}</span></span>`
     : `<span class="sc" style="font-size:15px">No score</span>`;
   const body = hasWeights()
-    ? `${s.st}<br>Physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}<br>Strongest of the factors you weighted: ${bw.best}<br>Weakest: ${bw.worst}`
+    ? `${s.st}<br>Physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}<br>Highest rated active factor: ${bw.best}<br>Lowest rated active factor: ${bw.worst}`
     : `${s.st}<br>Raise at least one priority to score this state.`;
   tip.innerHTML=`<b>${s.n}</b>${s.tag?` <span class="small">(${s.tag})</span>`:""}${head}<span class="small">${body}</span>`;
   tip.style.display="block";
@@ -1552,8 +1597,8 @@ function paint(){
   const scored=hasWeights();
   STATES.forEach(s=>{ paths[s.a].style.fill = scored ? color(s.total) : "#E6EAEE"; });
   document.getElementById("hint").textContent = scored
-    ? "Hover for scores, click to pin a state."
-    : "No priorities set, so no state is scored.";
+    ? "Select a state to see its scores and sources."
+    : "Choose a priority or preset to see scores.";
 }
 
 // --- weights UI ---
@@ -1574,12 +1619,15 @@ function syncSliders(){
     const share=tw>0 ? Math.round(weights[f.k]/tw*100) : 0;
     document.getElementById("v-"+f.k).textContent=tw>0?share+"%":"--";
     inp.setAttribute("aria-valuetext", tw>0
-      ? `${f.name}: ${share}% of your score`
+      ? `${f.name}: ${share}% of your Combined score`
       : `${f.name}: no priorities set`);
   });
   document.getElementById("total").textContent = tw>0
-    ? `Shares are of your current total (${tw} raw points), so they always add to 100%.`
-    : "Every priority is at zero. Raise at least one to get a score.";
+    ? `Percentages show each factor’s share of your Combined score. Rounded values may not add to 100%.`
+    : "Choose at least one priority or select a preset to calculate scores.";
+  document.getElementById("view-note").textContent = view==="all"
+    ? "Adjust a slider to update the Combined map and ranking."
+    : `Viewing ${viewLabel()}. These sliders edit Combined; return to that view to see your changes.`;
 }
 function setPressed(id){
   document.querySelectorAll("#presets button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.p===id ? "true":"false"));
@@ -1589,6 +1637,7 @@ function setLens(id){ document.querySelectorAll("#lens button").forEach(b=>b.set
 // the lens is a view, not an edit: switching to a lens and back restores the user's own weights
 document.querySelectorAll("#lens button").forEach(b=>b.addEventListener("click",()=>{ view=b.dataset.l; setLens(view); refresh(); }));
 function activeWeights(){ return view==="all" ? weights : LENSES[view]; }
+function viewLabel(){ return view==="all" ? "Combined" : view==="politics" ? "Political outlook" : "Physical fundamentals"; }
 
 // --- detail ---
 function select(abbr){
@@ -1601,34 +1650,34 @@ function select(abbr){
 function renderDetail(){
   const box=document.getElementById("detail");
   if(!hasWeights()){
-    box.innerHTML=`<div class="top"><h2>Choose at least one priority</h2></div><p class="note">Every weight is at zero, so there is nothing to rank on. Raise a slider, or pick a preset, and the map, scores and table come back.</p>`;
+    box.innerHTML=`<div class="top"><h2>Choose at least one priority</h2></div><p class="note">Increase a slider or choose a preset to compare states. Scores and rankings appear once at least one factor has a positive weight.</p>`;
     return;
   }
   if(!selected){
     const top=[...STATES].sort((a,b)=>a.rank-b.rank).slice(0,5).map(s=>s.n).join(", ");
-    box.innerHTML=`<div class="top"><h2>Pick a state</h2></div><p class="note">With the current weights the top five are ${top}. Click any state on the map or a row in the table to see how its score breaks down and what changed in 2026.</p>`;
+    box.innerHTML=`<div class="top"><h2>Explore a state</h2></div><p class="note">Leading states in ${viewLabel()}: ${top}.</p><p class="note">Select a state on the map, chart or table to see its score breakdown, policy notes and sources.</p>`;
     return;
   }
   const s=BY[selected];
   const W=activeWeights();
   const bars=FACTORS.map(f=>{
     const v=sub(s,f.k), c=contribution(s,f.k), off=(W[f.k]||0)===0;
-    const extra=f.k==="p"?` (${s.p.toFixed(2)}¢)`:"";
+    const extra=f.k==="p"?` (${s.p.toFixed(2)}¢/kWh)`:"";
     // the bar is the raw factor score; the number after it is the points this factor puts into the composite
-    return `<div class="bar${off?" off":""}"><span>${f.name}${extra}</span><div class="track"><div class="fill" style="width:${v}%"></div></div><span class="n">${v.toFixed(0)}</span><span class="c">${off?"not weighted":"+"+c.toFixed(1)+" pts"}</span></div>`;
+    return `<div class="bar${off?" off":""}"><span class="label">${f.name}${extra}</span><span class="c">${off?"Not weighted":"+"+c.toFixed(1)+" pts"}</span><div class="track" aria-hidden="true"><div class="fill" style="width:${v}%"></div></div><span class="n">${v.toFixed(0)}/100</span></div>`;
   }).join("");
   const srcs=(s.srcs&&s.srcs.length)
-    ?`<p class="srcs">Sources: ${s.srcs.map(r=>`<a href="${r.u}" target="_blank" rel="noopener">${r.t}</a>`).join(" · ")}</p>`
-    :`<p class="srcs">No per-state citations yet. This state's ratings rest on the general sources in the methodology below.</p>`;
-  const tie=s.tied?` Its score ties with at least one other state once rounded, so the ordering between them is not meaningful.`:"";
-  box.innerHTML=`<div class="top"><div><h2>${s.n}${s.tag?`<span class="chip">${s.tag}</span>`:""}</h2><div class="rank">Rank ${s.rank} of 50 with current weights.${tie} State posture: ${s.st}. Physical fundamentals ${s.phy.toFixed(0)}, political will and plausibility ${s.pol.toFixed(0)}.</div></div><div class="score">${s.total.toFixed(0)}<small>of 100</small></div></div><div class="bars">${bars}</div><p class="note">${s.note}</p>${srcs}`;
+    ?`<details class="srcs"><summary>State sources (${s.srcs.length})</summary><ul>${s.srcs.map(r=>`<li><a href="${r.u}" target="_blank" rel="noopener">${r.t}</a></li>`).join("")}</ul></details>`
+    :`<p class="srcs">State-specific citations have not been added. See the <a href="#methodology">general methodology and sources</a>.</p>`;
+  const tie=s.tied?` Another state has the same rounded score; small differences may not be meaningful.`:"";
+  box.innerHTML=`<div class="top"><div><h2>${s.n}</h2>${s.tag?`<span class="chip">${s.tag}</span>`:""}</div><div class="score">${s.total.toFixed(0)}<small>of 100</small></div></div><p class="rank">Rank ${s.rank} of 50 · ${viewLabel()}.${tie}</p><div class="meta"><span>State posture: ${s.st}</span><span>Physical: ${s.phy.toFixed(0)}/100</span><span>Political: ${s.pol.toFixed(0)}/100</span></div><p class="breakdown-hint">Bars show factor scores. Points show each factor's contribution to the overall score.</p><div class="bars">${bars}</div><p class="note">${s.note}</p>${srcs}`;
 }
 
 // --- table ---
 const COLS=[
   {k:"rank",label:"#"},{k:"n",label:"State"},{k:"total",label:"Score"},
   {k:"p",label:"¢/kWh"},{k:"pw",label:"Headroom"},{k:"po",label:"Policy"},{k:"op",label:"Community"},
-  {k:"w",label:"Water"},{k:"h",label:"Hazard"},{k:"c",label:"Climate"},{k:"x",label:"Fiber"},{k:"mo",label:"Momentum"},
+  {k:"w",label:"Water"},{k:"h",label:"Hazard"},{k:"c",label:"Climate"},{k:"x",label:"Connectivity"},{k:"mo",label:"Momentum"},
   {k:"phy",label:"Physical"},{k:"pol",label:"Political"}
 ];
 const thead=document.getElementById("thead");
@@ -1673,8 +1722,8 @@ function renderScatter(){
   let h=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="#D3DAE1"/><line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="#D3DAE1"/>`;
   h+=`<line x1="${xs(mx)}" y1="${T}" x2="${xs(mx)}" y2="${B}" stroke="#B5432A" stroke-dasharray="3 4" opacity=".6"/><line x1="${L}" y1="${ys(my)}" x2="${R}" y2="${ys(my)}" stroke="#B5432A" stroke-dasharray="3 4" opacity=".6"/>`;
   [0,25,50,75,100].forEach(v=>{h+=`<text x="${xs(v)}" y="${B+16}" font-size="11" text-anchor="middle" fill="#5C6773">${v}</text><text x="${L-8}" y="${ys(v)+4}" font-size="11" text-anchor="end" fill="#5C6773">${v}</text>`;});
-  h+=`<text x="${(L+R)/2}" y="${B+36}" font-size="12.5" text-anchor="middle" fill="#18212B">Physical fundamentals (power headroom, power cost, water, hazard, climate)</text>`;
-  h+=`<text transform="translate(14 ${(T+B)/2}) rotate(-90)" font-size="12.5" text-anchor="middle" fill="#18212B">Political will and plausibility (policy, community, momentum)</text>`;
+  h+=`<text x="${(L+R)/2}" y="${B+36}" font-size="12.5" text-anchor="middle" fill="#18212B">Physical fundamentals →</text>`;
+  h+=`<text transform="translate(14 ${(T+B)/2}) rotate(-90)" font-size="12.5" text-anchor="middle" fill="#18212B">Political outlook →</text>`;
   // label placement with collision avoidance
   const placed=[]; const LW=16, LH=11;
   const cands=[[8,4],[-24,4],[-8,-9],[-8,17],[8,-8],[8,16],[-24,-8],[-24,16],[8,28],[-8,-20]];
