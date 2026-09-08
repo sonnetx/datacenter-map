@@ -14,7 +14,7 @@
     /* shared spacing and text measure */
     --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px;
     --pad-y:20px; --pad-x:20px;   /* shared card inset */
-    --measure:660px;              /* every run of prose stops here */
+    --measure:660px;              /* reading width for detailed explanations */
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5}
@@ -23,9 +23,9 @@
   summary{cursor:pointer}
   summary:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
   .wrap{max-width:1240px;margin:0 auto;padding:var(--s8) var(--s6) 56px}
-  header h1{font-weight:300;font-size:clamp(28px,3.6vw,40px);line-height:1.14;letter-spacing:-0.01em;margin:0 0 var(--s4);max-width:var(--measure);text-wrap:balance}
-  header p.lede{margin:0;max-width:var(--measure);color:var(--muted)}
-  header .asof{margin-top:var(--s3);max-width:var(--measure);font-size:13px;line-height:1.55;color:var(--muted)}
+  header h1{font-weight:300;font-size:clamp(28px,3.6vw,40px);line-height:1.14;letter-spacing:-0.01em;margin:0 0 var(--s4)}
+  header p.lede{margin:0;color:var(--muted)}
+  header .asof{margin-top:var(--s3);font-size:13px;line-height:1.55;color:var(--muted)}
   .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:var(--s6);margin-top:var(--s6);align-items:start}
   .grid>.col{display:flex;flex-direction:column;gap:var(--s6);min-width:0}
   .grid>.col>.detail{margin-top:0}
