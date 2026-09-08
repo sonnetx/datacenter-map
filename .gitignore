@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# Local scratch: screenshots, captures and one-off checks.
+# The build output index.html is intentionally NOT ignored; GitHub Pages serves it.
+*.png
+*.jpg
+*.pdf
+*.log
+scratch/
+tmp/
+
+# Images meant for the repo (README screenshots and the like) go in assets/.
+!assets/**

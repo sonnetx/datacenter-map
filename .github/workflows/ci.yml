@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Data, model and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate state records
+        run: python3 tests/validate_data.py
+
+      - name: Run model tests
+        run: node --test tests/model.test.cjs
+
+      # index.html is checked in because GitHub Pages serves it directly, so a
+      # change to src/template.html or data/states.json that was never built
+      # would deploy nothing. Rebuild and fail if the result differs.
+      - name: Check index.html is up to date
+        run: |
+          python3 build.py
+          if ! git diff --quiet -- index.html; then
+            echo "::error::index.html is stale. Run 'python3 build.py' and commit the result."
+            git diff --stat -- index.html
+            exit 1
+          fi
+
+  browser:
+    name: Browser interaction
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install playwright
+          python3 -m playwright install --with-deps chromium
+
+      - name: Run browser tests
+        run: python3 tests/browser.py
