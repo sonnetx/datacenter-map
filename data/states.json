@@ -306,7 +306,7 @@
 "c": 4,
 "x": 3,
 "tag": "",
-"note": "Indiana offers a sales tax exemption for up to 25 years, or up to 50 years for qualifying investments above $750M, according to IEDC. The duration is conditional on the program requirements. Local pushback is now substantial: the city of Elkhart adopted a moratorium through Dec 2027, Indianapolis and Marion County did the same in August 2026, and bans now cover 12 of Indiana's 92 counties. HB 1333 passed the House but died in Senate committee; its revenue idea was enacted separately as HEA 1210, letting a host community collect up to 1% of the sales tax the center does not pay.",
+"note": "Indiana offers a sales tax exemption for up to 25 years, or up to 50 years for qualifying investments above $750M, according to IEDC. The duration is conditional on the program requirements. Local pushback is now substantial: the city of Elkhart voted 9-0 for a moratorium running until its impact review finishes or Dec 31, 2027, whichever comes first, Indianapolis and Marion County did the same in August 2026, and bans now cover 12 of Indiana's 92 counties. HB 1333 passed the House but died in Senate committee; its revenue idea was enacted separately as HEA 1210, letting a host community collect up to 1% of the sales tax the center does not pay.",
 "mo": 4,
 "st": "Courting",
 "srcs": [
@@ -323,8 +323,13 @@
 "type": "Reporting"
 },
 {
-"t": "Elkhart council's data center moratorium",
-"u": "https://www.wndu.com/2026/08/28/elkhart-city-council-casts-unanimous-vote-moratorium-data-centers-battery-storage-facilities/",
+"t": "WNDU on Elkhart's 9-0 data center moratorium vote",
+"u": "https://www.wndu.com/2026/08/28/elkhart-council-casts-unanimous-vote-moratorium-data-centers-battery-storage-facilities/",
+"type": "Reporting"
+},
+{
+"t": "ABC57 on the Elkhart moratorium to Dec 31, 2027",
+"u": "https://www.abc57.com/news/elkhart-city-council-to-go-forward-with-data-center-moratorium-after-unanimous-vote",
 "type": "Reporting"
 }
 ]

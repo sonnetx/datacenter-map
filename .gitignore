@@ -21,3 +21,6 @@ tmp/
 
 # Images meant for the repo (README screenshots and the like) go in assets/.
 !assets/**
+
+# Local launch materials: drafts, review notes and export scratch. Not published.
+publish/
