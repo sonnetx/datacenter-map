@@ -1,0 +1,282 @@
+{
+  "checked_on": "2026-09-07",
+  "scope": "47 unique URLs from per-state citations and the methodology source list; HTTP status is accessibility, not claim verification.",
+  "results": [
+    {
+      "url": "https://abc11.com/post/apex-nc-leaders-hold-public-hearing-proposed-data-center-moratorium/18885810/",
+      "status": 200,
+      "final_url": "https://abc11.com/post/apex-nc-leaders-hold-public-hearing-proposed-data-center-moratorium/18885810/",
+      "title": "Apex NC approves yearlong pause on data-center projects: 'Not interested' - ABC11 Raleigh-Durham"
+    },
+    {
+      "url": "https://bgindependentmedia.org/dewine-pauses-tax-exemptions-for-data-new-centers/",
+      "status": 200,
+      "final_url": "https://bgindependentmedia.org/dewine-pauses-tax-exemptions-for-data-new-centers/",
+      "title": "DeWine pauses tax exemptions for data new centers \u2013 BG Independent News"
+    },
+    {
+      "url": "https://budget.lis.virginia.gov/amendment/2026/2/HB30/Introduced/CR/366/7c/",
+      "status": 200,
+      "final_url": "https://budget.lis.virginia.gov/amendment/2026/2/HB30/Introduced/CR/366/7c/",
+      "title": "366#7c (DEQ) Data Center Cooling Water Scarcity Area Regulations. HB30 - Conference Report"
+    },
+    {
+      "url": "https://capitolnewsillinois.com/news/regulators-ok-comeds-plan-to-increase-deposit-costs-for-large-load-projects-like-data-centers/",
+      "status": 200,
+      "final_url": "https://capitolnewsillinois.com/news/regulators-ok-comeds-plan-to-increase-deposit-costs-for-large-load-projects-like-data-centers/",
+      "title": "Regulators OK ComEd\u2019s plan to increase deposit costs for large-load projects like data centers | Capitol News Illinois"
+    },
+    {
+      "url": "https://dcmap.us/",
+      "status": 200,
+      "final_url": "https://dcmap.us/",
+      "title": "US Data Center Map: 374.7 GW Buildout, 318.6 GW Pipeline"
+    },
+    {
+      "url": "https://dcmap.us/markets/phoenix/",
+      "status": 200,
+      "final_url": "https://dcmap.us/markets/phoenix/",
+      "title": "Phoenix Data Centers: 146 Sites, 10.5 GW"
+    },
+    {
+      "url": "https://esd.ny.gov/sites/default/files/media/document/CIF-Policy-Outline-071426.pdf",
+      "status": 200,
+      "final_url": "https://esd.ny.gov/sites/default/files/media/document/CIF-Policy-Outline-071426.pdf",
+      "title": null
+    },
+    {
+      "url": "https://gov-pritzker-newsroom.prezly.com/gov-pritzker-pauses-new-data-center-tax-incentives",
+      "status": 200,
+      "final_url": "https://gov-pritzker-newsroom.prezly.com/gov-pritzker-pauses-new-data-center-tax-incentives",
+      "title": "Gov. Pritzker Pauses New Data Center Tax Incentives"
+    },
+    {
+      "url": "https://gov.texas.gov/news/post/governor-abbott-directs-comprehensive-data-center-audit",
+      "status": 200,
+      "final_url": "https://gov.texas.gov/news/post/governor-abbott-directs-comprehensive-data-center-audit",
+      "title": "Governor Abbott Directs Comprehensive Data Center Audit | Office of the Texas Governor | Greg Abbott"
+    },
+    {
+      "url": "https://governor.utah.gov/wp-content/uploads/2026.05.29-EO-Higher-Bar-for-Data-Center-Development-1.pdf",
+      "status": 200,
+      "final_url": "https://governor.utah.gov/wp-content/uploads/2026.05.29-EO-Higher-Bar-for-Data-Center-Development-1.pdf",
+      "title": null
+    },
+    {
+      "url": "https://insideclimatenews.org/news/25082026/texas-data-center-gas-projects/",
+      "status": 403,
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://insidelines.pjm.com/pjm-capacity-auction-procures-138318-mw-of-generation-resources-as-work-continues-to-address-growing-electricity-demand/",
+      "status": 200,
+      "final_url": "https://insidelines.pjm.com/pjm-capacity-auction-procures-138318-mw-of-generation-resources-as-work-continues-to-address-growing-electricity-demand/",
+      "title": "PJM Capacity Auction Procures 138,318 MW of Generation Resources as Work Continues To Address Growing Electricity Demand | PJM Inside Lines"
+    },
+    {
+      "url": "https://lis.virginia.gov/bill-details/20261/HB153/text/CHAP0567",
+      "status": 200,
+      "final_url": "https://lis.virginia.gov/bill-details/20261/HB153/text/CHAP0567",
+      "title": "CHAP0567 - 2026 Regular Session | LIS"
+    },
+    {
+      "url": "https://ohiohouse.gov/legislation/136/hb957",
+      "status": 200,
+      "final_url": "https://ohiohouse.gov/legislation/136/hb957",
+      "title": "House Bill 957 | 136th General Assembly | Ohio House of Representatives"
+    },
+    {
+      "url": "https://taxnews.ey.com/news/2026-1662-north-carolina-repeals-sales-and-use-tax-exemption-for-electricity-used-at-qualifying-data-centers",
+      "status": 200,
+      "final_url": "https://taxnews.ey.com/news/2026-1662-north-carolina-repeals-sales-and-use-tax-exemption-for-electricity-used-at-qualifying-data-centers",
+      "title": "North Carolina repeals sales and use tax exemption for electricity used at qualifying data centers"
+    },
+    {
+      "url": "https://utahnewsdispatch.com/2026/06/04/stratos-data-center-referendum-group-appeal-to-a-judge/",
+      "status": 403,
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://www.ashurstperkinscoie.com/en/insights/the-rack-the-changing-landscape-for-data-centers-us/",
+      "status": 200,
+      "final_url": "https://www.ashurstperkinscoie.com/en/insights/the-rack-the-changing-landscape-for-data-centers-us/",
+      "title": "The changing landscape for data centers: US multistate executive actions enact sweeping regulatory guardrails"
+    },
+    {
+      "url": "https://www.azleg.gov/legtext/57leg/2R/summary/S.1861-4168ATT_ASENACTED.DOCX.htm",
+      "status": 200,
+      "final_url": "https://www.azleg.gov/legtext/57leg/2R/summary/S.1861-4168ATT_ASENACTED.DOCX.htm",
+      "title": "SB1861 - 572R - Senate Fact Sheet"
+    },
+    {
+      "url": "https://www.bisnow.com/charlotte/news/data-center-community-relations/charlotte-approves-150-day-pause-data-center-development-134903",
+      "status": 200,
+      "final_url": "https://www.bisnow.com/news/charlotte/data-center-community-relations/charlotte-approves-150-day-pause-data-center-development-134903",
+      "title": "Charlotte Approves 150-Day Pause On New Data Center Projects"
+    },
+    {
+      "url": "https://www.bloomberg.com/news/articles/2024-08-29/data-centers-face-seven-year-wait-for-power-hookups-in-virginia",
+      "status": 403,
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://www.boxeldercountyut.gov/666/Stratos-Project-Referendum",
+      "status": 200,
+      "final_url": "https://www.boxeldercountyut.gov/666/Stratos-Project-Referendum",
+      "title": "Stratos Project Referendum | Box Elder County, UT"
+    },
+    {
+      "url": "https://www.cap-az.com/cap-system/planning-and-processes/shortage-impacts/",
+      "status": 200,
+      "final_url": "https://www.cap-az.com/water/water-supply/colorado-river-operations-2/",
+      "title": "Central Arizona Project - Colorado River Shortage"
+    },
+    {
+      "url": "https://www.cbre.com/insights/books/north-america-data-center-trends-h2-2025/northern-virginia-data-center-market",
+      "status": 403,
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html",
+      "status": 200,
+      "final_url": "https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html",
+      "title": "Best states for AI data centers 2026"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/07/09/ohio-no-1-americas-top-states-for-business-rankings.html",
+      "status": 200,
+      "final_url": "https://www.cnbc.com/2026/07/09/ohio-no-1-americas-top-states-for-business-rankings.html",
+      "title": "Ohio is America's Top State for Business in 2026, its first No. 1 rank"
+    },
+    {
+      "url": "https://www.coopercenter.org/research/jlarc-report-data-centers-virginia",
+      "status": 200,
+      "final_url": "https://www.coopercenter.org/research/jlarc-report-data-centers-virginia",
+      "title": "JLARC Report: Data Centers in Virginia | Cooper Center"
+    },
+    {
+      "url": "https://www.datacenterfrontier.com/machine-learning/article/55366132/softbanks-10-gw-ohio-campus-marks-a-turning-point-for-ai-infrastructure",
+      "status": 200,
+      "final_url": "https://www.datacenterfrontier.com/machine-learning/article/55366132/softbanks-10-gw-ohio-campus-marks-a-turning-point-for-ai-infrastructure",
+      "title": "SoftBank\u2019s 10 GW Ohio Campus Marks a Turning Point for AI Infrastructure | Data Center Frontier"
+    },
+    {
+      "url": "https://www.datacenterknowledge.com/regulations/nc-ends-data-center-power-tax-break-keeps-capital-incentives",
+      "status": 200,
+      "final_url": "https://www.datacenterknowledge.com/regulations/nc-ends-data-center-power-tax-break-keeps-capital-incentives",
+      "title": "NC Ends Data Center Power Tax Break, Keeps Capital Incentives"
+    },
+    {
+      "url": "https://www.dlapiper.com/en-us/insights/publications/2026/07/new-york-state-legislature-passes-first-in-the-nation-data-center-moratorium",
+      "status": 429,
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "url": "https://www.dwt.com/blogs/energy--environmental-law-blog/2026/07/ny-data-center-permitting-pause-executive-order-62",
+      "status": 200,
+      "final_url": "https://www.dwt.com/blogs/energy--environmental-law-blog/2026/07/ny-data-center-permitting-pause-executive-order-62",
+      "title": "Key Takeaways from New York Data Center Permitting Pause Under Executive Order No. 62 | Davis Wright Tremaine"
+    },
+    {
+      "url": "https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx",
+      "status": 200,
+      "final_url": "https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx",
+      "title": null
+    },
+    {
+      "url": "https://www.electricchoice.com/datacenters/moratoriums/",
+      "status": 200,
+      "final_url": "https://www.electricchoice.com/datacenters/moratoriums/",
+      "title": "Data Center Moratoriums and Restrictions"
+    },
+    {
+      "url": "https://www.ercot.com/services/comm/mkt_notices/M-A080326-01",
+      "status": 200,
+      "final_url": "https://www.ercot.com/services/comm/mkt_notices/M-A080326-01",
+      "title": "Market Notice Details"
+    },
+    {
+      "url": "https://www.gibsondunn.com/what-governor-abbotts-data-center-audit-directive-means-for-ercot-and-the-batch-zero-study-process/",
+      "status": 200,
+      "final_url": "https://www.gibsondunn.com/what-governor-abbotts-data-center-audit-directive-means-for-ercot-and-the-batch-zero-study-process/",
+      "title": "What Governor Abbott\u2019s Data Center Audit Directive Means for ERCOT and the Batch Zero Study Process - Gibson Dunn"
+    },
+    {
+      "url": "https://www.governor.ny.gov/executive-order/no-62-establishing-temporary-moratorium-data-centers-new-york-while-state-develops",
+      "status": 200,
+      "final_url": "https://www.governor.ny.gov/executive-order/no-62-establishing-temporary-moratorium-data-centers-new-york-while-state-develops",
+      "title": "No 62: Establishing a Temporary Moratorium on Data Centers in New York While the State Develops Higher Standards for Data Center Development and Benefits Blueprint to Support Localities | Governor Kathy Hochul | New York State"
+    },
+    {
+      "url": "https://www.hklaw.com/en/insights/publications/2026/07/texas-data-center-tax-exemption-faces-serious-legislative-risk",
+      "status": 200,
+      "final_url": "https://www.hklaw.com/en/insights/publications/2026/07/texas-data-center-tax-exemption-faces-serious-legislative-risk",
+      "title": "Texas Data Center Tax Exemption Faces Serious Legislative Risk Ahead of 2027 Session | Insights | Holland & Knight"
+    },
+    {
+      "url": "https://www.hklaw.com/en/insights/publications/2026/08/texas-gov-abbott-directs-data-center-audit",
+      "status": 200,
+      "final_url": "https://www.hklaw.com/en/insights/publications/2026/08/texas-gov-abbott-directs-data-center-audit",
+      "title": "Texas Gov. Abbott Directs Data Center Audit; ERCOT Pauses Interconnection Process in Response | Insights | Holland & Knight"
+    },
+    {
+      "url": "https://www.hklaw.com/en/insights/publications/2026/08/virginia-preserves-data-center-tax-incentive",
+      "status": 200,
+      "final_url": "https://www.hklaw.com/en/insights/publications/2026/08/virginia-preserves-data-center-tax-incentive",
+      "title": "Virginia Preserves Data Center Tax Incentive, Adds New Electricity Consumption Tax | Insights | Holland & Knight"
+    },
+    {
+      "url": "https://www.houstonpublicmedia.org/articles/news/energy-environment/2026/06/10/554138/data-center-texas-energy-grid-electricity-regulation-greg-abbott/",
+      "status": 200,
+      "final_url": "https://www.houstonpublicmedia.org/articles/news/energy-environment/2026/06/10/554138/data-center-texas-energy-grid-electricity-regulation-greg-abbott/",
+      "title": "Gov. Greg Abbott calls for Texas energy regulators to rein in data centers \u2013 Houston Public Media"
+    },
+    {
+      "url": "https://www.kjzz.org/business/2026-07-14/agency-received-flood-of-applications-ahead-of-pause-on-arizona-data-center-tax-breaks",
+      "status": 200,
+      "final_url": "https://www.kjzz.org/business/2026-07-14/agency-received-flood-of-applications-ahead-of-pause-on-arizona-data-center-tax-breaks",
+      "title": "Agency received flood of applications ahead of pause on Arizona data center tax breaks"
+    },
+    {
+      "url": "https://www.mcguirewoods.com/client-resources/alerts/2025/7/texas-senate-bill-6-significantly-expands-regulatory-oversight-over-large-loads-in-ercot/",
+      "status": 200,
+      "final_url": "https://www.mcguirewoods.com/client-resources/alerts/2025/7/texas-senate-bill-6-significantly-expands-regulatory-oversight-over-large-loads-in-ercot/",
+      "title": "Texas Senate Bill 6 Significantly Expands Regulatory Oversight Over Large Loads in ERCOT - McGuireWoods"
+    },
+    {
+      "url": "https://www.ncleg.gov/BillLookup/2025/S257",
+      "status": 200,
+      "final_url": "https://www.ncleg.gov/BillLookup/2025/S257",
+      "title": "Senate Bill 257 / SL  2026-41 (2025-2026 Session) - North Carolina General Assembly"
+    },
+    {
+      "url": "https://www.nysenate.gov/legislation/bills/2025/S10642",
+      "status": 403,
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://www.sonorandesert.org/2026/08/06/data-centers-update/",
+      "status": 200,
+      "final_url": "https://www.sonorandesert.org/2026/08/26/data-centers-update/",
+      "title": "Data centers in the Sonoran Desert - Coalition for Sonoran Desert Protection"
+    },
+    {
+      "url": "https://www.utilitydive.com/news/ercot-texas-puc-data-center-audit/828472/",
+      "status": 200,
+      "final_url": "https://www.utilitydive.com/news/ercot-texas-puc-data-center-audit/828472/",
+      "title": "ERCOT aims to complete Texas governor\u2019s data center audit by December | Utility Dive"
+    },
+    {
+      "url": "https://www.wfae.org/2026-08-26/durham-county-data-center-moratorium",
+      "status": 200,
+      "final_url": "https://www.wfae.org/2026-08-26/durham-county-data-center-moratorium",
+      "title": "Durham County joins a growing list of areas that have paused data center development across NC | WFAE 90.7 - Charlotte's NPR News Source"
+    },
+    {
+      "url": "https://www.williamsmullen.com/insights/news/legal-news/virginia-budget-creates-new-electricity-consumption-tax-data-centers",
+      "status": 200,
+      "final_url": "https://www.williamsmullen.com/insights/news/legal-news/virginia-budget-creates-new-electricity-consumption-tax-data-centers",
+      "title": "Virginia Budget Creates New Electricity Consumption Tax for Data Centers | Williams Mullen"
+    }
+  ]
+}

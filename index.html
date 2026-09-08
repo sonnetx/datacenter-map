@@ -11,35 +11,42 @@
     --bg:#F2F4F6; --panel:#FFFFFF; --ink:#18212B; --muted:#5C6773; --rule:#D3DAE1; --rule-soft:#E6EAEE;
     --warn:#B5432A; --focus:#2456A6;
     --c0:#00204C; --c1:#31446B; --c2:#666970; --c3:#958F78; --c4:#C4B56C; --c5:#FFEA46;
+    /* one spacing scale: every gap on the page is a multiple of 4px */
+    --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px;
+    --pad-y:18px; --pad-x:20px;   /* every card uses this inset */
+    --measure:660px;              /* every run of prose stops here */
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5}
   a{color:var(--focus)}
   button{font:inherit}
-  .wrap{max-width:1240px;margin:0 auto;padding:28px 24px 56px}
-  header h1{font-weight:300;font-size:clamp(28px,3.6vw,40px);line-height:1.14;letter-spacing:-0.01em;margin:0 0 14px;max-width:18em}
-  header p.lede{margin:0;max-width:640px;color:var(--muted)}
-  header .asof{margin-top:10px;max-width:640px;font-size:13px;line-height:1.55;color:var(--muted)}
-  .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;margin-top:26px;align-items:start}
+  .wrap{max-width:1240px;margin:0 auto;padding:var(--s8) var(--s6) 56px}
+  header h1{font-weight:300;font-size:clamp(28px,3.6vw,40px);line-height:1.14;letter-spacing:-0.01em;margin:0 0 var(--s3);max-width:var(--measure)}
+  header p.lede{margin:0;max-width:var(--measure);color:var(--muted)}
+  header .asof{margin-top:var(--s3);max-width:var(--measure);font-size:13px;line-height:1.55;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:var(--s6);margin-top:var(--s6);align-items:start}
+  .grid>.col{display:flex;flex-direction:column;gap:var(--s6);min-width:0}
+  .grid>.col>.detail{margin-top:0}
   @media (max-width:900px){.grid{grid-template-columns:1fr}}
-  .mapcard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 14px 10px;position:relative}
+  .mapcard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x);position:relative}
   svg.map{width:100%;height:auto;display:block}
   .state{stroke:#F2F4F6;stroke-width:0.9;cursor:pointer;transition:opacity .12s}
   .state:hover,.state.selected{stroke:var(--ink);stroke-width:1.6}
   .state:focus{outline:none;stroke:var(--focus);stroke-width:2}
   .dim .state:not(.selected):not(:hover){opacity:.55}
   .hatch{pointer-events:none}
-  .lens{display:flex;gap:6px;flex-wrap:wrap;margin:0 4px 10px}
+  .lens{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 var(--s3)}
   .lens button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:5px 10px;font-size:13px;cursor:pointer;color:var(--ink)}
   .lens button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
   .lens button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-  .scatter{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:16px 18px 10px;margin-top:24px}
-  .scatter h2{font-weight:600;font-size:15px;margin:0 0 4px}
-  .scatter p{margin:0 0 8px;font-size:13.5px;color:var(--muted);max-width:80ch}
+  .scatter{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x);margin-top:var(--s6)}
+  .scatter h2{font-weight:600;font-size:15px;margin:0 0 var(--s1)}
+  .scatter p{margin:0 0 var(--s3);font-size:13.5px;color:var(--muted);max-width:var(--measure)}
   .scatter svg{width:100%;height:auto;display:block}
   .scatter .dot{cursor:pointer}
   .scatter .dot:hover circle,.scatter .dot.selected circle{stroke:var(--ink);stroke-width:2}
-  .legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:10px 4px 0;font-size:13px;color:var(--muted)}
+  .legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
+  .legend .lgnote{font-size:12.5px;max-width:60ch}
   .ramp{width:180px;height:10px;border-radius:2px;background:linear-gradient(90deg,var(--c0),var(--c1),var(--c2),var(--c3),var(--c4),var(--c5))}
   .legend .key{display:flex;align-items:center;gap:8px}
   .swatch{width:18px;height:12px;border:1px solid var(--rule)}
@@ -47,41 +54,61 @@
   .tip b{font-weight:600}
   .tip .sc{font-size:20px;font-weight:300;display:block;margin:2px 0 2px}
   .tip .small{opacity:.8}
-  aside .card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:16px}
-  aside h2{font-size:15px;font-weight:600;margin:0 0 4px}
-  aside p.hint{margin:0 0 12px;font-size:13px;color:var(--muted)}
-  .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  aside .card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x)}
+  aside h2{font-size:15px;font-weight:600;margin:0 0 var(--s1);display:inline}
+  /* on desktop the panel is always open and the summary is just a heading */
+  #wpanel>summary{list-style:none;cursor:default}
+  #wpanel>summary::-webkit-details-marker{display:none}
+  @media (max-width:900px){
+    #wpanel>summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:var(--s2)}
+    #wpanel>summary::after{content:"Show";font-size:13px;color:var(--focus)}
+    #wpanel[open]>summary::after{content:"Hide"}
+    #wpanel>summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  }
+  aside p.hint{margin:0 0 var(--s3);font-size:13px;color:var(--muted)}
+  .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:var(--s4)}
   .presets button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:5px 9px;font-size:13px;cursor:pointer;color:var(--ink)}
   .presets button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
   .presets button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-  .w{display:grid;grid-template-columns:1fr 34px;gap:8px;align-items:center;margin:9px 0}
+  .w{display:grid;grid-template-columns:1fr 34px;gap:var(--s2);align-items:center;margin:var(--s3) 0}
   .w label{font-size:13.5px;display:block}
   .w .sub{display:block;font-size:12px;color:var(--muted);line-height:1.3}
   .w input[type=range]{grid-column:1/2;width:100%;accent-color:var(--ink);margin:2px 0 0}
   .w .val{grid-column:2/3;grid-row:1/3;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
-  .total{font-size:12px;color:var(--muted);margin-top:8px}
-  .detail{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:18px 20px;margin-top:24px}
-  .detail .top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
+  .total{font-size:12px;color:var(--muted);margin-top:var(--s3)}
+  .detail{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x);margin-top:var(--s6)}
+  .detail .top{display:flex;justify-content:space-between;gap:var(--s5);align-items:baseline}
+  .detail .top>div:first-child{min-width:0;flex:1}
+  .detail .score{flex:none}
   .detail h2{font-weight:300;font-size:28px;margin:0;line-height:1.1}
-  .detail .rank{color:var(--muted);font-size:14px}
+  .detail .rank{color:var(--muted);font-size:14px;max-width:var(--measure);margin-top:var(--s1)}
   .detail .score{font-size:40px;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
   .detail .score small{font-size:14px;color:var(--muted);font-weight:400;margin-left:4px}
   .chip{display:inline-block;border:1px solid var(--warn);color:var(--warn);border-radius:3px;padding:1px 7px;font-size:12.5px;margin-left:10px;vertical-align:middle}
-  .bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px 28px;margin:16px 0 6px}
-  .bar{display:grid;grid-template-columns:140px 1fr 36px;align-items:center;gap:10px;font-size:13.5px}
+  .bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px var(--s8);margin:var(--s4) 0 var(--s1)}
+  .bar{display:grid;grid-template-columns:170px 1fr 34px 72px;align-items:center;gap:10px;font-size:13.5px}
+  .bar .c{text-align:right;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .bar.off{opacity:.5}
   .bar .track{height:8px;background:var(--rule-soft);border-radius:2px;overflow:hidden}
   .bar .fill{height:100%;background:var(--ink)}
   .bar .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
-  .detail p.note{margin:12px 0 0;max-width:80ch}
-  .detail p.srcs{margin:10px 0 0;max-width:80ch;font-size:12.5px;color:var(--muted);line-height:1.6}
-  .tablecard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:6px 0 0;margin-top:24px;overflow-x:auto}
+  .detail p.note{margin:var(--s3) 0 0;max-width:var(--measure)}
+  .detail p.srcs{margin:var(--s3) 0 0;max-width:var(--measure);font-size:12.5px;color:var(--muted);line-height:1.6}
+  .tablecard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--s2) 0 0;margin-top:var(--s6);overflow-x:auto}
   table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
   th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--rule-soft);white-space:nowrap}
-  th{font-weight:500;color:var(--muted);cursor:pointer;user-select:none;position:sticky;top:0;background:var(--panel)}
-  th:hover{color:var(--ink)}
+  td:first-child{padding-left:var(--pad-x)}
+  td:last-child{padding-right:var(--pad-x)}
+  th{font-weight:500;color:var(--muted);user-select:none;position:sticky;top:0;background:var(--panel);padding:0}
+  th .sortbtn{width:100%;border:0;background:none;color:inherit;font:inherit;font-weight:500;cursor:pointer;padding:7px 10px;text-align:inherit}
+  th:first-child .sortbtn{padding-left:var(--pad-x)}
+  th:last-child .sortbtn{padding-right:var(--pad-x)}
+  th .sortbtn:hover{color:var(--ink)}
+  th .sortbtn:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
   th.sorted{color:var(--ink)}
-  th.sorted::after{content:" ▾";font-size:11px}
-  th.sorted.asc::after{content:" ▴"}
+  th.sorted .sortbtn::after{content:" ▾";font-size:11px}
+  th.sorted.asc .sortbtn::after{content:" ▴"}
+  tbody tr:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
   td:nth-child(2),th:nth-child(2){text-align:left}
   td:first-child,th:first-child{text-align:right;color:var(--muted);width:36px}
   tbody tr{cursor:pointer}
@@ -89,14 +116,15 @@
   tbody tr.selected{background:#EEF2F6}
   td.tot{font-weight:600}
   td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:var(--warn);margin-left:6px;vertical-align:middle}
-  .meth{margin-top:32px;max-width:78ch}
-  .meth h2{font-weight:600;font-size:17px;margin:0 0 8px}
-  .meth h3{font-weight:600;font-size:14.5px;margin:18px 0 6px}
+  .meth{margin-top:var(--s10);max-width:var(--measure)}
+  .meth h2{font-weight:600;font-size:17px;margin:0 0 var(--s2)}
+  .meth h3{font-weight:600;font-size:14.5px;margin:var(--s5) 0 var(--s2)}
+  .meth p{margin:var(--s2) 0}
   .meth p,.meth li{color:#2B3540}
-  .meth ul{padding-left:18px;margin:6px 0}
-  .meth li{margin:3px 0}
+  .meth ul{padding-left:18px;margin:var(--s2) 0}
+  .meth li{margin:var(--s1) 0}
   .meth .src li{font-size:13.5px}
-  .meth .caveat{border-left:3px solid var(--warn);padding:8px 12px;background:#FFF7F4;margin:14px 0}
+  .meth .caveat{border-left:3px solid var(--warn);padding:10px 14px;background:#FFF7F4;margin:var(--s4) 0}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -109,6 +137,7 @@
 </header>
 
 <div class="grid">
+  <div class="col">
   <div class="mapcard">
     <div class="lens" id="lens">
       <button data-l="all" aria-pressed="true">Combined</button>
@@ -127,15 +156,19 @@
     </svg>
     <div class="tip" id="tip"></div>
     <div class="legend">
-      <div class="key"><span>Constrained</span><div class="ramp"></div><span>Favorable</span></div>
+      <div class="key"><span>30 or below</span><div class="ramp"></div><span>80 or above</span></div>
+      <div class="key"><span class="lgnote">Color saturates at both ends, so states below 30 and above 80 share a shade. The scale is fixed, so shades mean the same thing across scenarios.</span></div>
       <div class="key"><div class="swatch" style="background:url(#h) #C4B56C;background-image:repeating-linear-gradient(45deg,#B5432A 0 1.5px,transparent 1.5px 6px)"></div><span>Statewide 2026 pause, moratorium or tax change</span></div>
       <div class="key"><span id="hint" style="font-size:12.5px">Hover for scores, click to pin a state.</span></div>
     </div>
   </div>
 
+  <section class="detail" id="detail" aria-live="polite"></section>
+  </div>
+
   <aside>
-    <div class="card">
-      <h2>Weights</h2>
+    <details class="card" id="wpanel" open>
+      <summary><h2>Weights</h2></summary>
       <p class="hint">What matters for your build. Defaults reflect an AI training campus where time-to-power dominates.</p>
       <div class="presets" id="presets">
         <button data-p="ai" aria-pressed="true">AI campus</button>
@@ -145,15 +178,14 @@
       </div>
       <div id="weights"></div>
       <div class="total" id="total"></div>
-    </div>
+    </details>
   </aside>
 </div>
 
-<section class="detail" id="detail" aria-live="polite"></section>
-
 <section class="scatter" id="scatter">
   <h2>Physical fundamentals against political will and plausibility</h2>
-  <p>Each dot is a state. Right means cheap, available power with manageable water, hazard and climate. Up means the state government is courting the buildout, communities are not blocking it, and projects are actually landing. The lines are the medians. Top-right is where both stories agree; bottom-right has the physics but not the politics; top-left has the welcome mat but not the power.</p>
+  <p>Each dot is a state. Right means cheap, available power with manageable water, hazard and climate. Up means the state government is courting the buildout, communities are not blocking it, and projects are actually landing. The lines are the medians. Top-right is where both stories agree, bottom-right has the physics but not the politics, and top-left has the welcome mat but not the power.</p>
+  <p>Both axes are fixed reference scores on their own published weight sets, so moving your sliders recolors the dots but never moves them. The vertical axis mixes three different things, since a state can be politically welcoming while still being slow and unpredictable to permit. A cost-allocation rule that shifts expense onto large loads is not by itself an unfavorable process.</p>
   <svg viewBox="0 0 900 520" role="img" aria-label="Scatter plot of states by physical fundamentals and political plausibility" id="scsvg"></svg>
 </section>
 
@@ -168,18 +200,30 @@
   <h2>How the score is built</h2>
   <p>Each state gets eight sub-scores on a 0 to 100 scale. The composite is the weighted average using the sliders above. Higher always means more favorable for development.</p>
   <ul>
-    <li><b>Power cost</b>: EIA-861 2024 average industrial retail price. 5.43¢/kWh (New Mexico) maps to 100 and 13¢ or more maps to 0, linearly. This is an average-revenue benchmark, not a tariff quote; large-load tariffs, PJM capacity charges and Virginia's new 1.1¢/kWh consumption tax sit on top of it.</li>
+    <li><b>Power cost</b>: EIA-861 2024 average industrial retail price, the only measured factor on the page. 5.43¢/kWh (New Mexico) maps to 100 and 13¢ or more maps to 0, linearly. The 13¢ ceiling is an editorial assumption about where power cost stops discriminating between candidates, not a property of the EIA data. Seven states priced from 16.21¢ to 34.13¢ therefore all score 0 and are indistinguishable on this factor. This is an average-revenue benchmark, not a tariff quote. Large-load tariffs, PJM capacity charges and Virginia's new 1.1¢/kWh consumption tax sit on top of it, and the price shown is not adjusted for them. The 2024 vintage also drifts: Louisiana was second cheapest in 2024 but sixth by mid-2026, and Tennessee moved from 6.21¢ to about 6.8¢. Check the current EIA monthly table before relying on a narrow gap between two states.</li>
     <li><b>Power headroom</b>: judgment score (1 to 5) from utility queue reporting, ISO capacity outlooks and 2026 executive actions. Virginia (7-year waits for 100 MW at Dominion) and Texas (interconnections paused Aug 3, 2026 pending audit) score low; North Dakota, and the TVA and Southeast utilities that have approved generation, score high.</li>
     <li><b>Incentive and policy climate</b>: judgment score from whether a sales tax exemption exists and is stable in 2026, plus statewide pauses, repeals, consumption taxes and cost-allocation laws.</li>
-    <li><b>Community and permitting friction</b>: judgment score from tracked local moratoriums (ElectricChoice counted 321 across 32 states as of Sept 1, 2026, with New Jersey, Ohio, Michigan and Georgia the most) and recent site rejections.</li>
-    <li><b>Water</b>: judgment score from basin stress, 2026 drought and shortage declarations (Colorado River Tier 1, record-low western snowpack), and state water-scarcity rules.</li>
-    <li><b>Natural hazard</b>: judgment score aligned to FEMA National Risk Index patterns (hurricane, tornado, wildfire, seismic).</li>
+    <li><b>Community and permitting friction</b>: judgment score from tracked local measures and recent site rejections. ElectricChoice recorded 321 moratoriums, bans and restrictions cumulatively since 2024, of which 261 were in force on Sept 1, 2026, with New Jersey, Ohio, Michigan and Georgia the most. Neither figure is a count of active local bans, since the cumulative total includes expired, repealed and struck-down measures.</li>
+    <li><b>Water</b>: judgment score from basin stress, 2026 drought and shortage declarations (Colorado River Tier 1, record-low western snowpack), and state water-scarcity rules. Scored at state level, which is coarse; actual availability is a basin and utility question. <a href="https://www.wri.org/aqueduct">WRI Aqueduct</a> is the better instrument for a real shortlist.</li>
+    <li><b>Natural hazard</b>: judgment score aligned to the individual hazard components of the <a href="https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf">FEMA National Risk Index</a> (hurricane, tornado, wildfire, seismic). The composite National Risk Index score is deliberately not used, because it also folds in social vulnerability and community resilience, which are not siting constraints.</li>
     <li><b>Climate for cooling</b>: judgment score from cooling degree days and humidity; colder and drier scores higher.</li>
     <li><b>Buildout momentum</b>: judgment score from tracked project counts (PoweredByWho, Aterio) and 2025 to 2026 hyperscale commitments. Texas, Virginia and Georgia lead; New England trails.</li>
     <li><b>Connectivity and ecosystem</b>: judgment score from operating datacenter counts, fiber and cable-landing density, and labor pool.</li>
   </ul>
   <p>The two lenses are fixed weight sets: political will and plausibility is 40% incentives and policy, 35% community and permitting, 25% momentum; physical fundamentals is 30% power headroom, 25% power cost, 20% water, 15% natural hazard, 10% climate. The posture label (Courting, Courting with conditions, Reviewing or paused, Restrictive, No active state posture) summarizes each governor's and legislature's 2026 actions.</p>
-  <div class="caveat">Five of the eight factors are structured judgment calls, not measured data. They are grounded in the sources below and were checked state by state, but reasonable analysts would move individual states one notch either way. Treat the composite as a screening tool for which states to diligence, not as a site decision. County and utility service territory matter more than state lines once you get to shortlisting.</div>
+  <div class="caveat">There are nine factors. One is measured (power cost) and eight are structured judgment calls on a 1 to 5 scale. At the default weights, 80% of the composite comes from those judgments. They are grounded in the sources below, but reasonable analysts would move individual states a level either way, and one level is worth 25 factor points. Treat the composite as a screening tool for which states to diligence, not as a site decision. County and utility service territory matter more than state lines once you get to shortlisting.</div>
+  <p>Source coverage is uneven. States with a 2026 statewide action, and the states that rank highest by default, carry per-state citations in the detail panel. The rest rest on the general sources below, and those citations support the policy events described rather than each individual 1 to 5 rating. A rating of 4 rather than 3 is an analyst call, not a sourced measurement.</p>
+  <h3>What the 1 to 5 levels mean</h3>
+  <p>Every judgment factor uses the same ladder, read in the direction of that factor. A level is a band, not a measurement, and the bands were applied by one analyst reading the sources below.</p>
+  <ul>
+    <li><b>5</b>: no meaningful constraint identified, and positive evidence that large projects are being served today.</li>
+    <li><b>4</b>: workable, with a known friction that has not stopped a project.</li>
+    <li><b>3</b>: real constraint that changes schedule, cost or siting, or genuinely mixed evidence.</li>
+    <li><b>2</b>: constraint that has already blocked or reversed specific projects.</li>
+    <li><b>1</b>: a standing prohibition, or a shortage severe enough that a large project is not currently plausible.</li>
+  </ul>
+  <p>One level is worth 25 points on a factor. At the default 25% headroom weight, moving one state's headroom by a single level moves its composite by about 6 points, which is enough to shift it several ranks. Treat gaps of a few points as noise.</p>
+  <p>Buildout momentum and connectivity and ecosystem overlap, since both reward places that already have datacenters, and momentum can reward a pipeline that is itself consuming the headroom scored elsewhere. Momentum is weighted at 5 by default for that reason. Raise it only if you specifically want to follow where capital is already going.</p>
   <h3>Sources checked</h3>
   <ul class="src">
     <li>U.S. Energy Information Administration, <a href="https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx">EIA-861 historical state data, 2010 onward</a> (Total Electric Industry sheet, 2024 industrial price). All 50 values on this page were diffed against that file on Sept 7, 2026.</li>
@@ -254,7 +298,7 @@ const STATES = [
 "c": 1,
 "x": 4,
 "tag": "Incentive pause",
-"note": "Phoenix is a top-tier market with roughly 100 operating sites, but the 2026 budget (SB 1861, signed June 13) bars new data center sales tax exemption applications from July 1, 2026 through June 30, 2029; 113 applications rushed in during the last two weeks. The Colorado River Tier 1 shortage, in place since 2022, trims Arizona's supply about 18% again in 2026. Backlash is now regulatory: Tucson adopted data center rules Aug 5, Pima County imposed a 120-day moratorium Aug 11, and Pinal County denied the La Osa rezoning Aug 26, 2026.",
+"note": "Phoenix is a top-tier market with roughly 100 operating sites. The 2026 budget (SB 1861, signed June 13) bars new data center applications for the sales tax exemption from July 1, 2026 through June 30, 2029, and 113 applications rushed in during the last two weeks. Existing certifications are untouched, and the pause changes incentive eligibility rather than prohibiting construction. The Colorado River Tier 1 shortage, in place since 2022, trims Arizona's supply about 18% again in 2026. Backlash is now regulatory: Tucson adopted data center rules Aug 5, Pima County imposed a 120-day moratorium Aug 11, and Pinal County denied the La Osa rezoning Aug 26, 2026.",
 "mo": 4,
 "st": "Reviewing or paused",
 "srcs": [
@@ -286,15 +330,33 @@ const STATES = [
 "p": 6.61,
 "pw": 4,
 "po": 4,
-"op": 4,
+"op": 3,
 "w": 4,
 "h": 3,
 "c": 2,
 "x": 2,
 "tag": "",
-"note": "Low industrial rates, Entergy Arkansas has courted large loads, little organized opposition so far. Limited fiber depth and tornado exposure.",
+"note": "Low industrial rates and about $12B committed across four hyperscale campuses, including Google in West Memphis and Avaio in Little Rock, with the first expected to operate in 2027. Entergy Arkansas filed new large-load rate schedules with the PSC in February 2026. Organized local opposition has now emerged: more than 100 people packed a Conway city hall meeting over a proposed $1B campus advanced by a shell company for an unnamed client, and biweekly demonstrations followed. Six Senate resolutions that would have authorized data center legislation died at sine die in April 2026. Limited fiber depth and tornado exposure.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Talk Business on the Arkansas hyperscale buildout",
+"u": "https://talkbusiness.net/2026/02/hyperscale-data-centers-come-to-arkansas/"
+},
+{
+"t": "KARK on the Conway data center protest",
+"u": "https://www.kark.com/news/local-news/more-than-100-protestors-voice-concerns-at-conway-city-hall-meeting-over-proposed-data-center/"
+},
+{
+"t": "Arkansas Advocate on the data center debate",
+"u": "https://arkansasadvocate.com/2026/05/22/arkansas-explained-understanding-the-data-center-boom-and-debate/"
+},
+{
+"t": "Entergy Arkansas 2026 rate case",
+"u": "https://www.entergyarkansas.com/ratecase2026"
+}
+]
 },
 {
 "a": "CA",
@@ -420,9 +482,27 @@ const STATES = [
 "c": 5,
 "x": 2,
 "tag": "",
-"note": "Cheap hydro-heavy power, cool dry climate, sales tax exemption on server equipment, Meta's Kuna campus as anchor. Record-low 2026 snowpack is a water flag; fiber ecosystem is thin.",
+"note": "Hydro-heavy power that is cheap regionally rather than nationally (7.69¢/kWh in 2024, behind New Mexico and Washington), a cool dry climate, and Meta's $1.2B Kuna campus, which began serving traffic on Sept 4, 2026 using closed-loop cooling. The server equipment sales tax exemption still exists but HB 315 (2025) narrowed it after March 1, 2025 to entities meeting investment and job tests. Water is the flag: April 2026 snowpack was the lowest since records began in the 1930s and the state declared a drought emergency. Idaho Power has no data center tariff, pushing loads above 20 MW into special contracts. Fiber ecosystem is thin.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Idaho Code 63-3622VV server equipment exemption",
+"u": "https://legislature.idaho.gov/statutesrules/idstat/title63/t63ch36/sect63-3622vv/"
+},
+{
+"t": "Idaho Commerce on the data center exemption",
+"u": "https://commerce.idaho.gov/incentives/data-center-sales-tax-exemption/"
+},
+{
+"t": "Meta's $1.2bn Kuna data center goes live",
+"u": "https://www.datacenterdynamics.com/en/news/metas-12bn-data-center-in-kuna-idaho-goes-live/"
+},
+{
+"t": "Idaho Business Review on record-low snowpack",
+"u": "https://idahobusinessreview.com/2026/04/06/idaho-historic-snow-drought-lowest-snowpack/"
+}
+]
 },
 {
 "a": "IL",
@@ -436,7 +516,7 @@ const STATES = [
 "c": 4,
 "x": 5,
 "tag": "Incentive pause",
-"note": "Chicago is a top-five market, but ComEd's large-load queue holds 28 GW of requests against a 24 GW all-time peak, PJM's 2028/29 capacity auction cleared at the price cap, and Gov. Pritzker directed DCEO to stop signing new Data Center Investment Program agreements from July 1, 2026, with no end date set (his budget proposal framed it as two years). Great Lakes water is a strength.",
+"note": "Chicago is a top-five market, but ComEd's large-load queue holds 28 GW of requests against a 24 GW all-time peak, PJM's 2028/29 capacity auction cleared at the price cap, and Gov. Pritzker directed DCEO to stop signing new Data Center Investment Program agreements from July 1, 2026. Agreements signed before that date are honored, and no end date was set; the two-year figure came from his budget proposal. Great Lakes water is a strength.",
 "mo": 3,
 "st": "Reviewing or paused",
 "srcs": [
@@ -466,9 +546,27 @@ const STATES = [
 "c": 4,
 "x": 3,
 "tag": "",
-"note": "The most incentive-friendly large state: 50-year exemptions, an estimated $8.2B package to Amazon, and AEP/Duke territories delivering capacity faster than eastern PJM. Elkhart stopped accepting applications until Dec 2027, and HB 1333 would route revenue to host towns.",
+"note": "The most incentive-friendly large state: a sales tax exemption running 25 years, or up to 50 for investments above $750M. Good Jobs First estimates the Amazon New Carlisle package at roughly $8.2 to $8.3B, almost all of it the long-tail exemption value rather than named credits, against $13.8B Amazon says it has invested there. Local pushback is now substantial: the city of Elkhart adopted a moratorium through Dec 2027, Indianapolis and Marion County did the same in August 2026, and bans now cover 12 of Indiana's 92 counties. HB 1333 passed the House but died in Senate committee; its revenue idea was enacted separately as HEA 1210, letting a host community collect up to 1% of the sales tax the center does not pay.",
 "mo": 4,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "IEDC data center sales tax exemption overview",
+"u": "https://www.iedc.in.gov/indiana-advantages/investments/data-center-sales-tax-exemption/overview"
+},
+{
+"t": "Good Jobs First on Indiana's data center incentives",
+"u": "https://goodjobsfirst.org/data-center-opposition-supporters-react-to-indianas-data-center-incentives/"
+},
+{
+"t": "WFYI on the 2026 session's data center bills",
+"u": "https://www.wfyi.org/news/articles/data-center-legislation-indiana-general-assembly-2026"
+},
+{
+"t": "Elkhart council's data center moratorium",
+"u": "https://www.wndu.com/2026/08/28/elkhart-city-council-casts-unanimous-vote-moratorium-data-centers-battery-storage-facilities/"
+}
+]
 },
 {
 "a": "IA",
@@ -482,9 +580,27 @@ const STATES = [
 "c": 4,
 "x": 3,
 "tag": "",
-"note": "Abundant wind, MidAmerican has been receptive to large loads, established hyperscale presence (Microsoft, Meta, Google) around Des Moines. Woodbury County adopted a 12-month pause. Derecho and tornado exposure.",
+"note": "Abundant wind and an established hyperscale cluster: Microsoft in West Des Moines and Meta in Altoona, with Google's Iowa campus at Council Bluffs in the Omaha metro rather than the Des Moines area. MidAmerican markets to large loads and asks for ten-year contracts, though Iowa regulators treat the contract terms as confidential, so the terms cannot be checked against a posted tariff. Woodbury County adopted a 12-month pause in unincorporated areas in June 2026, joining similar measures in Johnson, Dubuque and Madison counties. Derecho and tornado exposure.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Woodbury County Resolution 14064",
+"u": "https://www.woodburycountyiowa.gov/supervisors/resolutions/14064/"
+},
+{
+"t": "Iowa Public Radio on the Woodbury moratorium",
+"u": "https://www.iowapublicradio.org/ipr-news/2026-06-24/woodbury-county-approves-1-year-moratorium-data-centers"
+},
+{
+"t": "MidAmerican on data center contracts",
+"u": "https://www.midamericanenergy.com/articles/data-center-costs"
+},
+{
+"t": "Business Record survey of Iowa data centers",
+"u": "https://www.businessrecord.com/growth-of-data-centers-in-iowa/"
+}
+]
 },
 {
 "a": "KS",
@@ -530,9 +646,27 @@ const STATES = [
 "c": 1,
 "x": 2,
 "tag": "",
-"note": "Second-cheapest industrial power in the country and Entergy won approval for new gas plants to serve Meta's Hyperion campus. Hurricane and flood exposure and a hot, humid climate are the trade-offs.",
+"note": "Second-cheapest industrial power in the 2024 EIA data at 5.61¢/kWh, though the rate rose about 7.5% year over year and sat sixth cheapest at 6.75¢ by mid-2026. The LPSC approved three combined-cycle units totaling about 2,262 MW for Meta's Hyperion campus in August 2025, two at Franklin Farms in Richland Parish and one at Waterford in St. Charles Parish. Meta now describes Hyperion as 5 GW of compute and more than $50B invested in the region. Entergy filed for seven more units in March 2026, about 7.5 GW across all ten, fast-tracked by the commission with a final vote due December 2026. Intervenors are pressing for a prudence review. Hurricane and flood exposure and a hot, humid climate are the trade-offs.",
 "mo": 4,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "LPSC Order U-37425 approving the Entergy units",
+"u": "https://lpscpubvalence.lpsc.louisiana.gov/portal/PSC/ViewFile?fileId=nDWn/juc2+A%3D"
+},
+{
+"t": "Entergy Louisiana on the LPSC approval",
+"u": "https://www.entergy.com/news/entergy-louisiana-receives-lpsc-approval-for-major-infrastructure-investments-to-support-metas-data-center-and-improve-reliability"
+},
+{
+"t": "Meta on deepening its Richland Parish investment",
+"u": "https://datacenters.atmeta.com/2026/07/deepening-our-investment-in-richland-parish-louisiana/"
+},
+{
+"t": "LPSC Docket U-37882, the 2026 application",
+"u": "https://lpscpubvalence.lpsc.louisiana.gov/portal/PSC/DocketDetails?docketId=32728"
+}
+]
 },
 {
 "a": "ME",
@@ -626,9 +760,27 @@ const STATES = [
 "c": 1,
 "x": 2,
 "tag": "",
-"note": "Very low power prices, aggressive incentives, AWS's $10B Madison County build and Compass in Meridian. Hot and humid; tornado exposure; thin fiber ecosystem.",
+"note": "Industrial power below the national average but mid-pack for the Southeast (7.66¢/kWh in mid-2026, against 6.44¢ in Oklahoma and 6.63¢ in Arkansas). Amazon's Madison County build was announced at $10B in 2024 and the statewide commitment has since grown to $25B and 2,000+ jobs, with another $12B added in April 2026. Compass is building eight halls in Meridian toward roughly 500 MW from Mississippi Power. Incentives came largely from a 2024 special session rather than a standing data center statute, and the law letting Entergy contract with Amazon outside normal PSC approval is now the subject of a ratepayer dispute. HB 1239 died in conference in 2025 and no data center incentive statute passed in 2026. Hot and humid, tornado exposure, thin fiber ecosystem.",
 "mo": 4,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Mississippi Development Authority on the $10B AWS deal",
+"u": "https://mississippi.org/news/amazon-web-services-to-invest-record-shattering-10-billion/"
+},
+{
+"t": "Amazon on its $25B Mississippi commitment",
+"u": "https://www.aboutamazon.com/news/company-news/amazon-25-billion-mississippi-data-centers"
+},
+{
+"t": "Compass on its Lauderdale County campus",
+"u": "https://www.compassdatacenters.com/news/compass-10b-investment-lauderdale-county-mississippi/"
+},
+{
+"t": "EIA industrial electricity prices by state",
+"u": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_06_b"
+}
+]
 },
 {
 "a": "MO",
@@ -738,9 +890,27 @@ const STATES = [
 "c": 3,
 "x": 2,
 "tag": "",
-"note": "Cheapest industrial electricity in the US (5.43¢/kWh in 2024) and on CNBC's best-grid list; Meta's Los Lunas campus anchors. Water stress and thin fiber are the limits.",
+"note": "Cheapest industrial electricity in the US (5.43¢/kWh in 2024) and second on CNBC's 2025 list of grids best positioned for AI load. Meta's Los Lunas campus anchors at ~3.8M sq ft, with roughly 500 adjacent acres bought in late 2025 and a further ~$800M expansion approved by the village in March 2026. Water is the live constraint and is tightening: Santa Fe County adopted an 18-month ban on July 1, 2026, legislators have said they will file a statewide moratorium in the 2027 session, and a researcher told lawmakers in September 2026 that state data center water use could rise from about 500 million to 23.6 billion gallons a year if every planned project is built. Fiber depth is thin.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Meta's Los Lunas data center page",
+"u": "https://datacenters.atmeta.com/asset/los-lunas/"
+},
+{
+"t": "Source NM on the proposed statewide moratorium",
+"u": "https://sourcenm.com/2026/07/02/new-mexico-lawmakers-announce-proposed-statewide-moratorium-on-data-centers/"
+},
+{
+"t": "Source NM on projected data center water use",
+"u": "https://sourcenm.com/2026/09/01/new-mexico-data-center-water-use-could-soar-in-coming-years-researcher-tells-state-lawmakers/"
+},
+{
+"t": "CNBC on grids best set for AI data centers",
+"u": "https://www.cnbc.com/2025/07/15/10-best-power-sources-us-grid-ai-data-center-top-states-for-business.html"
+}
+]
 },
 {
 "a": "NY",
@@ -754,7 +924,7 @@ const STATES = [
 "c": 4,
 "x": 4,
 "tag": "Statewide moratorium",
-"note": "Executive Order 62 (July 14, 2026) holds discretionary DEC permits for data centers of 50 MW or more in abeyance until the Generic Environmental Impact Statement is finished, framed as up to one year; the legislature's broader 20 MW bill (S10642) awaits delivery to the governor and action by Dec 31. ESD's Community Investment Framework proposes $1M per MW as a starting contribution. Excluded: applications deemed complete before July 14, and facilities primarily used for manufacturing, research, education or medical care.",
+"note": "Executive Order 62 (July 14, 2026) holds discretionary DEC permits for data centers of 50 MW or more in abeyance until the Generic Environmental Impact Statement is finished, framed as up to one year. It reaches state discretionary permits only, not local government approvals, and applications deemed complete before July 14 are exempt, as are facilities primarily used for manufacturing, research, education or medical care. The legislature's broader 20 MW bill (S10642) passed both houses but has not been delivered or signed, and awaits action by Dec 31. ESD's Community Investment Framework proposes $1M per MW as a starting point for negotiation, not a fixed levy.",
 "mo": 2,
 "st": "Restrictive",
 "srcs": [
@@ -788,13 +958,21 @@ const STATES = [
 "c": 2,
 "x": 3,
 "tag": "Exemption cut",
-"note": "The 2026 budget permanently repealed the sales tax exemption on data center electricity (effective Aug 6, 2026) while keeping equipment exemptions. Charlotte (150-day), Durham County (9-month) and Apex passed moratoriums. Duke Energy headroom is tightening.",
+"note": "The 2026 budget (S257, S.L. 2026-41) permanently repealed the sales tax exemption on data center electricity while keeping the equipment exemption. HB 56 amended the timing, and NCDOR reads it as the first billing period beginning on or after Aug 6, 2026, not a flat switch-on date. Charlotte (150-day), Durham County (9-month) and Apex (12-month) passed moratoriums. Duke Energy headroom is tightening.",
 "mo": 4,
 "st": "Courting, with conditions",
 "srcs": [
 {
 "t": "S257 / S.L. 2026-41 (NC General Assembly)",
 "u": "https://www.ncleg.gov/BillLookup/2025/S257"
+},
+{
+"t": "HB 56 / S.L. 2026-42 amending the effective date",
+"u": "https://www.ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-42.html"
+},
+{
+"t": "NCDOR notice on the billing-period rule",
+"u": "https://www.ncdor.gov/taxes-forms/sales-and-use-tax/other-sales-and-use-tax-resources/important-notices-issued-sales-and-use-tax-division/important-notice-repeal-exemptions-electricity-used-datacenters"
 },
 {
 "t": "EY tax alert on the electricity exemption repeal",
@@ -822,9 +1000,27 @@ const STATES = [
 "c": 5,
 "x": 1,
 "tag": "",
-"note": "Cheapest commercial power in the country, abundant gas and wind, receptive utilities, cold climate and low hazard exposure. Applied Digital's Ellendale campus proves scale is possible. Very thin fiber and labor pool.",
+"note": "Cheapest commercial power in the country (7.19¢/kWh in 2024), abundant gas and wind, receptive utilities, cold climate and low hazard exposure. Applied Digital's Ellendale campus, now Polaris Forge 1, is fully leased to CoreWeave across 400 MW of critical IT load and engineered to scale toward 1 GW; the first 100 MW building reached service in November 2025. A second campus, Polaris Forge 2 at Harwood, is a $3B, 280 MW build leased to Oracle. The sales tax exemption is intact and its cost rose from $15.3M in 2024 to over $65M in 2025. A bill to penalize developers using nondisclosure agreements with public officials (SB 2406) died in the Senate on Sept 3, 2026. Very thin fiber and labor pool.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "EIA average retail price by state, 2024",
+"u": "https://www.eia.gov/electricity/sales_revenue_price/pdf/table_4.pdf"
+},
+{
+"t": "Applied Digital's 400 MW CoreWeave lease at Ellendale",
+"u": "https://ir.applieddigital.com/news-events/press-releases/detail/128/applied-digital-finalizes-additional-150mw-lease-with"
+},
+{
+"t": "Applied Digital energizes the first 100 MW building",
+"u": "https://ir.applieddigital.com/news-events/press-releases/detail/137/applied-digital-completes-phase-ii-ready-for-service-at"
+},
+{
+"t": "North Dakota Monitor on SB 2406 failing",
+"u": "https://northdakotamonitor.com/2026/09/03/data-center-nondisclosure-bill-dies-in-north-dakota-senate-vote/"
+}
+]
 },
 {
 "a": "OH",
@@ -838,7 +1034,7 @@ const STATES = [
 "c": 4,
 "x": 4,
 "tag": "Incentive pause",
-"note": "Columbus is a top emerging market and CNBC ranks Ohio No. 9 for power available to computing (SoftBank's 10 GW Piketon campus broke ground March 2026). But Gov. DeWine paused new exemption approvals after the Tax Credit Authority's June 1, 2026 meeting pending a joint legislative committee study, HB 957 would bar new exemptions from Oct 1, 2026, 35 local moratoriums are tracked and councils have begun rejecting site plans.",
+"note": "Columbus is a top emerging market and CNBC ranks Ohio No. 9 for power available to computing (SoftBank's 10 GW Piketon campus broke ground March 2026). Gov. DeWine paused new exemption approvals after the Tax Credit Authority's June 1, 2026 meeting pending a joint legislative committee study, and the release explicitly distinguishes that pause from a ban. HB 957, still only a proposal, would bar new exemptions from Oct 1, 2026. 35 local moratoriums are tracked and councils have begun rejecting site plans.",
 "mo": 4,
 "st": "Reviewing or paused",
 "srcs": [
@@ -932,7 +1128,7 @@ const STATES = [
 "a": "SC",
 "n": "South Carolina",
 "p": 6.84,
-"pw": 4,
+"pw": 3,
 "po": 5,
 "op": 3,
 "w": 4,
@@ -940,9 +1136,27 @@ const STATES = [
 "c": 2,
 "x": 2,
 "tag": "",
-"note": "Exemption covers both equipment and electricity; Palmetto Sites readiness funding jumped to $80M in 2026 with 51 pre-vetted sites. Santee Cooper and Dominion SC have headroom and a VC Summer restart is under study. Hurricane exposure on the coast.",
+"note": "The exemption covers both equipment and electricity for qualifying facilities, and Palmetto Sites readiness funding rose more than 250% to $80M in 2026 with 51 certified sites. Generation is the constraint rather than the draw: 2026 reporting puts South Carolina behind on generating capacity and on power available for computing, even with competitive rates and good water. The V.C. Summer restart is a roughly two-year feasibility study under Brookfield, not available capacity. The Data Center Development Act (S.867) got a favorable committee report in April 2026 but has not passed. Hurricane exposure on the coast.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "SC Code 12-36-2120 sales tax exemptions",
+"u": "https://law.justia.com/codes/south-carolina/title-12/chapter-36/section-12-36-2120/"
+},
+{
+"t": "WACH on Palmetto Sites funding and site count",
+"u": "https://wach.com/news/local/south-carolina-emerges-as-one-of-the-top-state-for-data-centers-local-skepticism-persists"
+},
+{
+"t": "SC Daily Gazette on the V.C. Summer restart",
+"u": "https://scdailygazette.com/briefs/prep-work-underway-in-scs-nuclear-reboot-effort-potential-2-7b-payday-at-least-2-years-away/"
+},
+{
+"t": "S.867 Data Center Development Act",
+"u": "https://www.scstatehouse.gov/sess126_2025-2026/bills/867.htm"
+}
+]
 },
 {
 "a": "SD",
@@ -972,9 +1186,27 @@ const STATES = [
 "c": 3,
 "x": 3,
 "tag": "",
-"note": "TVA power at 6.21¢/kWh, CNBC's top water availability score, incentives intact, Oak Ridge and Nashville ecosystems, xAI's Memphis campus (with a contested gas turbine fight). Tornado exposure.",
+"note": "Industrial power at 6.21¢/kWh in the 2024 EIA data, which is a state average rather than a TVA tariff and had risen to about 6.8¢ by mid-2026 after a 4.5% TVA base increase. Tennessee scored in CNBC's top band for water availability and finished 9th overall in 2026. The data center exemption and the 1.5% reduced electricity rate survived the 2026 session unchanged. Public Chapter 961 (May 2026) is a cost-allocation law, barring utilities from absorbing infrastructure costs for centers over 50 MW and letting those centers self-generate. Oak Ridge and Nashville ecosystems. xAI's Memphis campus is here, though the live 2026 turbine litigation concerns Colossus 2 across the line in Southaven, Mississippi. Tornado exposure.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "CNBC best states for AI data centers, 2026",
+"u": "https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html"
+},
+{
+"t": "Tennessee ECD data center tax incentives",
+"u": "https://www.tn.gov/ecd/resources/openecd/openecd-tax-incentives.html"
+},
+{
+"t": "TN Revenue 2026 legislative summaries",
+"u": "https://www.tn.gov/revenue/tax-resources/legal-resources/legislative-summaries/2026-legislative-summaries-.html"
+},
+{
+"t": "NAACP suit over xAI Colossus 2 turbines",
+"u": "https://naacp.org/articles/naacp-sues-xai-illegal-pollution-data-center-power-plant"
+}
+]
 },
 {
 "a": "TX",
@@ -988,7 +1220,7 @@ const STATES = [
 "c": 2,
 "x": 5,
 "tag": "Interconnection pause",
-"note": "The largest pipeline in the country (roughly 1,000 projects under construction or planned) and Dallas is the second-largest market. But Gov. Abbott's Aug 3, 2026 directive paused all pending data center interconnections until each project passes a PUCT/ERCOT audit, due Dec 10; ERCOT was weighing ~474 GW of large-load requests (about 90% data centers) and halted Batch Zero classifications. SB 6 already allows curtailment of 75 MW+ loads. The sales tax exemption survives until at least the 2027 session. Water is strained statewide.",
+"note": "The largest pipeline in the country (roughly 1,000 projects under construction or planned) and Dallas is the second-largest market. Gov. Abbott's Aug 3, 2026 directive paused pending data center interconnections until each project passes a PUCT/ERCOT audit, with a report targeted for Dec 10. That pause runs through ERCOT's process, so it does not reach the El Paso, Panhandle and East Texas areas outside ERCOT, and the December target is an audit milestone, not a date when power becomes available. ERCOT was weighing ~474 GW of large-load requests (about 90% data centers) and halted Batch Zero classifications. SB 6 already allows curtailment of 75 MW+ loads. The sales tax exemption survives until at least the 2027 session. Water is strained statewide.",
 "mo": 5,
 "st": "Courting, with conditions",
 "srcs": [
@@ -1026,7 +1258,7 @@ const STATES = [
 "c": 4,
 "x": 3,
 "tag": "Stricter review",
-"note": "Executive Order 2026-03 (May 29) directs executive-branch agencies to apply a 'higher bar' to large data center review, requiring that water consumption not increase and that Great Salt Lake impacts be weighed, after the 9 GW Stratos proposal in Box Elder County triggered a referendum campaign now in district court. Dry, cool climate and Salt Lake City connectivity remain positives.",
+"note": "Executive Order 2026-03 (May 29) is a review framework rather than a moratorium. It directs executive-branch agencies, excluding higher education, the State Board of Education, the Attorney General, Auditor, Treasurer, Legislature and Judiciary, to apply a higher bar to large data center review, requiring that water consumption not increase and that Great Salt Lake impacts be weighed. It followed the 9 GW Stratos proposal in Box Elder County, whose referendum campaign is now in district court. Dry, cool climate and Salt Lake City connectivity remain positives.",
 "mo": 3,
 "st": "Reviewing or paused",
 "srcs": [
@@ -1072,10 +1304,14 @@ const STATES = [
 "c": 3,
 "x": 5,
 "tag": "Consumption tax",
-"note": "Still the world's largest market (Northern Virginia ~13% of global capacity, 0.2% vacancy, all 2026 deliveries pre-committed) but the hardest place to get power: Dominion has quoted 7-year waits for 100 MW since 2024, had ~54 GW under contract by July 2026 and ~70 GW of requests in queue. The 2026 budget left the sales tax exemption in place through 2035 but added a $0.011/kWh electricity consumption tax from July 1, 2026 (collections above $600M/yr refunded, sunsets June 2028), HB 153 requires site assessments before local zoning approvals for 100 MW+ projects, and DEQ must define Cooling Water Scarcity Areas by July 2027.",
+"note": "Still the world's largest market (Northern Virginia ~13% of global capacity, 0.5% colocation vacancy and a majority of 2026 capacity already committed, per CBRE H2 2025) but the hardest place to get power: Dominion has quoted 7-year waits for 100 MW since 2024, had ~54 GW under contract by July 2026 and ~70 GW of requests in queue. The 2026 budget left the sales tax exemption in place through 2035 but added a $0.011/kWh electricity consumption tax from July 1, 2026 to July 1, 2028, with revenue above $600M a year refunded. HB 153 requires a site assessment before local rezoning or special-use approval for 100 MW+ projects, and DEQ must define Cooling Water Scarcity Areas by July 2027. The price shown is the unadjusted 2024 EIA average and does not include the new consumption tax.",
 "mo": 5,
 "st": "Courting, with conditions",
 "srcs": [
+{
+"t": "Enacted budget, consumption tax provision 3-5.24",
+"u": "https://budget.lis.virginia.gov/item/2026/2/HB30/Chapter/3/3-5.24/"
+},
 {
 "t": "Williams Mullen on the consumption tax",
 "u": "https://www.williamsmullen.com/insights/news/legal-news/virginia-budget-creates-new-electricity-consumption-tax-data-centers"
@@ -1187,7 +1423,8 @@ const PRESETS = {
   safe: {pw:15,p:10,po:15,op:15,w:15,h:20,c:5,x:5,mo:0},
   colo: {pw:15,p:15,po:10,op:10,w:5,h:10,c:5,x:25,mo:5}
 };
-let weights = {...PRESETS.ai};
+let weights = {...PRESETS.ai};   // the user's own scenario, only the sliders and presets change it
+let view = "all";                // which lens is being viewed; "all" means the user's scenario
 let selected = null;
 let sortKey = "total", sortAsc = false;
 
@@ -1198,15 +1435,30 @@ function sub(s,k){
   if(k==="p"){ return Math.max(0,Math.min(1,(13-s.p)/(13-5.43)))*100; }
   return (s[k]-1)/4*100;
 }
-function lensScore(s,W){ const tw=Object.values(W).reduce((a,b)=>a+b,0)||1; let t=0; FACTORS.forEach(f=>{t+=(W[f.k]||0)*sub(s,f.k);}); return t/tw; }
+function totalWeight(W){ return Object.values(W).reduce((a,b)=>a+b,0); }
+function lensScore(s,W){ const tw=totalWeight(W); if(tw<=0) return null; let t=0; FACTORS.forEach(f=>{t+=(W[f.k]||0)*sub(s,f.k);}); return t/tw; }
+// share of the composite that a factor actually contributes, in points
+function contribution(s,k){ const W=activeWeights(), tw=totalWeight(W); if(tw<=0) return 0; return (W[k]||0)*sub(s,k)/tw; }
+function hasWeights(){ return totalWeight(activeWeights())>0; }
 function compute(){
   STATES.forEach(s=>{
-    s.total = lensScore(s,weights);
+    s.total = lensScore(s,activeWeights());
     s.pol = lensScore(s,LENSES.politics);
     s.phy = lensScore(s,LENSES.physical);
   });
+  if(!hasWeights()){ STATES.forEach(s=>s.rank=null); return; }
+  // rank with honest ties: equal scores share a rank, and the next rank skips
   const sorted=[...STATES].sort((a,b)=>b.total-a.total);
-  sorted.forEach((s,i)=>s.rank=i+1);
+  let lastVal=null, lastRank=0;
+  sorted.forEach((s,i)=>{
+    const v=Math.round(s.total*100)/100;
+    if(lastVal!==null && v===lastVal){ s.rank=lastRank; }
+    else { s.rank=i+1; lastRank=i+1; lastVal=v; }
+  });
+  // states sharing a rank after rounding to whole points are flagged as too close to separate
+  const byShown={};
+  STATES.forEach(s=>{ const k=s.total.toFixed(0); (byShown[k]=byShown[k]||[]).push(s); });
+  STATES.forEach(s=>{ s.tied = byShown[s.total.toFixed(0)].length>1; });
 }
 
 // cividis-like ramp
@@ -1272,14 +1524,23 @@ TOPO.objects.states.geometries.forEach(g=>{
   p.addEventListener("blur",()=>tip.style.display="none");
 });
 
+// only factors you actually weighted can be a strength or a drag on your score
 function bestWorst(s){
-  const arr=FACTORS.map(f=>({f,v:sub(s,f.k)}));
+  const W=activeWeights();
+  const arr=FACTORS.filter(f=>(W[f.k]||0)>0).map(f=>({f,v:sub(s,f.k)}));
+  if(!arr.length) return null;
   arr.sort((a,b)=>b.v-a.v);
   return {best:arr[0].f.name.toLowerCase(), worst:arr[arr.length-1].f.name.toLowerCase()};
 }
 function showTip(abbr,e){
   const s=BY[abbr], bw=bestWorst(s);
-  tip.innerHTML=`<b>${s.n}</b>${s.tag?` <span class="small">(${s.tag})</span>`:""}<span class="sc">${s.total.toFixed(0)} <span class="small" style="font-size:13px">rank ${s.rank} of 50</span></span><span class="small">${s.st}<br>Physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}<br>Strongest: ${bw.best}<br>Weakest: ${bw.worst}</span>`;
+  const head = hasWeights()
+    ? `<span class="sc">${s.total.toFixed(0)} <span class="small" style="font-size:13px">rank ${s.rank} of 50${s.tied?", tied":""}</span></span>`
+    : `<span class="sc" style="font-size:15px">No score</span>`;
+  const body = hasWeights()
+    ? `${s.st}<br>Physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}<br>Strongest of the factors you weighted: ${bw.best}<br>Weakest: ${bw.worst}`
+    : `${s.st}<br>Raise at least one priority to score this state.`;
+  tip.innerHTML=`<b>${s.n}</b>${s.tag?` <span class="small">(${s.tag})</span>`:""}${head}<span class="small">${body}</span>`;
   tip.style.display="block";
   const r=mapcard.getBoundingClientRect();
   let x=e.clientX-r.left+14, y=e.clientY-r.top+14;
@@ -1288,7 +1549,11 @@ function showTip(abbr,e){
   tip.style.left=x+"px"; tip.style.top=y+"px";
 }
 function paint(){
-  STATES.forEach(s=>{ paths[s.a].style.fill=color(s.total); });
+  const scored=hasWeights();
+  STATES.forEach(s=>{ paths[s.a].style.fill = scored ? color(s.total) : "#E6EAEE"; });
+  document.getElementById("hint").textContent = scored
+    ? "Hover for scores, click to pin a state."
+    : "No priorities set, so no state is scored.";
 }
 
 // --- weights UI ---
@@ -1298,19 +1563,32 @@ FACTORS.forEach(f=>{
   d.innerHTML=`<label for="w-${f.k}">${f.name}<span class="sub">${f.sub}</span></label><span class="val" id="v-${f.k}"></span><input type="range" id="w-${f.k}" min="0" max="40" step="5">`;
   wbox.appendChild(d);
   const inp=d.querySelector("input");
-  inp.addEventListener("input",()=>{ weights[f.k]=+inp.value; setPressed(null); setLens(null); refresh(); });
+  inp.addEventListener("input",()=>{ weights[f.k]=+inp.value; setPressed(null); refresh(); });
 });
 function syncSliders(){
-  FACTORS.forEach(f=>{ document.getElementById("w-"+f.k).value=weights[f.k]; document.getElementById("v-"+f.k).textContent=weights[f.k]; });
-  const tw=Object.values(weights).reduce((a,b)=>a+b,0);
-  document.getElementById("total").textContent=`Weights sum to ${tw}; the score is normalized so the total does not need to be 100.`;
+  const tw=totalWeight(weights);
+  FACTORS.forEach(f=>{
+    const inp=document.getElementById("w-"+f.k);
+    inp.value=weights[f.k];
+    // effective share, so the number means something next to the other sliders
+    const share=tw>0 ? Math.round(weights[f.k]/tw*100) : 0;
+    document.getElementById("v-"+f.k).textContent=tw>0?share+"%":"--";
+    inp.setAttribute("aria-valuetext", tw>0
+      ? `${f.name}: ${share}% of your score`
+      : `${f.name}: no priorities set`);
+  });
+  document.getElementById("total").textContent = tw>0
+    ? `Shares are of your current total (${tw} raw points), so they always add to 100%.`
+    : "Every priority is at zero. Raise at least one to get a score.";
 }
 function setPressed(id){
   document.querySelectorAll("#presets button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.p===id ? "true":"false"));
 }
-document.querySelectorAll("#presets button").forEach(b=>b.addEventListener("click",()=>{ weights={...PRESETS[b.dataset.p]}; setPressed(b.dataset.p); setLens("all"); refresh(); }));
+document.querySelectorAll("#presets button").forEach(b=>b.addEventListener("click",()=>{ weights={...PRESETS[b.dataset.p]}; setPressed(b.dataset.p); view="all"; setLens("all"); refresh(); }));
 function setLens(id){ document.querySelectorAll("#lens button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.l===id?"true":"false")); }
-document.querySelectorAll("#lens button").forEach(b=>b.addEventListener("click",()=>{ weights={...LENSES[b.dataset.l]}; setLens(b.dataset.l); setPressed(b.dataset.l==="all"?"ai":null); refresh(); }));
+// the lens is a view, not an edit: switching to a lens and back restores the user's own weights
+document.querySelectorAll("#lens button").forEach(b=>b.addEventListener("click",()=>{ view=b.dataset.l; setLens(view); refresh(); }));
+function activeWeights(){ return view==="all" ? weights : LENSES[view]; }
 
 // --- detail ---
 function select(abbr){
@@ -1322,15 +1600,28 @@ function select(abbr){
 }
 function renderDetail(){
   const box=document.getElementById("detail");
+  if(!hasWeights()){
+    box.innerHTML=`<div class="top"><h2>Choose at least one priority</h2></div><p class="note">Every weight is at zero, so there is nothing to rank on. Raise a slider, or pick a preset, and the map, scores and table come back.</p>`;
+    return;
+  }
   if(!selected){
     const top=[...STATES].sort((a,b)=>a.rank-b.rank).slice(0,5).map(s=>s.n).join(", ");
     box.innerHTML=`<div class="top"><h2>Pick a state</h2></div><p class="note">With the current weights the top five are ${top}. Click any state on the map or a row in the table to see how its score breaks down and what changed in 2026.</p>`;
     return;
   }
   const s=BY[selected];
-  const bars=FACTORS.map(f=>{const v=sub(s,f.k);const extra=f.k==="p"?` (${s.p.toFixed(2)}¢)`:"";return `<div class="bar"><span>${f.name}${extra}</span><div class="track"><div class="fill" style="width:${v}%"></div></div><span class="n">${v.toFixed(0)}</span></div>`;}).join("");
-  const srcs=(s.srcs&&s.srcs.length)?`<p class="srcs">Sources: ${s.srcs.map(r=>`<a href="${r.u}" target="_blank" rel="noopener">${r.t}</a>`).join(" · ")}</p>`:"";
-  box.innerHTML=`<div class="top"><div><h2>${s.n}${s.tag?`<span class="chip">${s.tag}</span>`:""}</h2><div class="rank">Rank ${s.rank} of 50 with current weights. State posture: ${s.st}. Physical fundamentals ${s.phy.toFixed(0)}, political will and plausibility ${s.pol.toFixed(0)}.</div></div><div class="score">${s.total.toFixed(0)}<small>of 100</small></div></div><div class="bars">${bars}</div><p class="note">${s.note}</p>${srcs}`;
+  const W=activeWeights();
+  const bars=FACTORS.map(f=>{
+    const v=sub(s,f.k), c=contribution(s,f.k), off=(W[f.k]||0)===0;
+    const extra=f.k==="p"?` (${s.p.toFixed(2)}¢)`:"";
+    // the bar is the raw factor score; the number after it is the points this factor puts into the composite
+    return `<div class="bar${off?" off":""}"><span>${f.name}${extra}</span><div class="track"><div class="fill" style="width:${v}%"></div></div><span class="n">${v.toFixed(0)}</span><span class="c">${off?"not weighted":"+"+c.toFixed(1)+" pts"}</span></div>`;
+  }).join("");
+  const srcs=(s.srcs&&s.srcs.length)
+    ?`<p class="srcs">Sources: ${s.srcs.map(r=>`<a href="${r.u}" target="_blank" rel="noopener">${r.t}</a>`).join(" · ")}</p>`
+    :`<p class="srcs">No per-state citations yet. This state's ratings rest on the general sources in the methodology below.</p>`;
+  const tie=s.tied?` Its score ties with at least one other state once rounded, so the ordering between them is not meaningful.`:"";
+  box.innerHTML=`<div class="top"><div><h2>${s.n}${s.tag?`<span class="chip">${s.tag}</span>`:""}</h2><div class="rank">Rank ${s.rank} of 50 with current weights.${tie} State posture: ${s.st}. Physical fundamentals ${s.phy.toFixed(0)}, political will and plausibility ${s.pol.toFixed(0)}.</div></div><div class="score">${s.total.toFixed(0)}<small>of 100</small></div></div><div class="bars">${bars}</div><p class="note">${s.note}</p>${srcs}`;
 }
 
 // --- table ---
@@ -1342,21 +1633,36 @@ const COLS=[
 ];
 const thead=document.getElementById("thead");
 COLS.forEach(c=>{
-  const th=document.createElement("th"); th.textContent=c.label; th.dataset.k=c.k;
-  th.title=c.k==="n"?"":"Click to sort";
-  th.addEventListener("click",()=>{ if(sortKey===c.k){sortAsc=!sortAsc;} else {sortKey=c.k; sortAsc=(c.k==="n"||c.k==="p"||c.k==="rank");} renderTable(); });
+  const th=document.createElement("th"); th.dataset.k=c.k; th.scope="col";
+  // a real button so the header is reachable and operable from the keyboard
+  const btn=document.createElement("button"); btn.type="button"; btn.className="sortbtn"; btn.textContent=c.label;
+  th.appendChild(btn);
+  const doSort=()=>{ if(sortKey===c.k){sortAsc=!sortAsc;} else {sortKey=c.k; sortAsc=(c.k==="n"||c.k==="p"||c.k==="rank");} renderTable(); };
+  btn.addEventListener("click",doSort);
   thead.appendChild(th);
 });
 function renderTable(){
-  document.querySelectorAll("#thead th").forEach(th=>{ th.classList.toggle("sorted",th.dataset.k===sortKey); th.classList.toggle("asc",th.dataset.k===sortKey&&sortAsc); });
+  document.querySelectorAll("#thead th").forEach(th=>{
+    const on=th.dataset.k===sortKey;
+    th.classList.toggle("sorted",on); th.classList.toggle("asc",on&&sortAsc);
+    th.setAttribute("aria-sort", on ? (sortAsc?"ascending":"descending") : "none");
+    const b=th.querySelector("button");
+    b.setAttribute("aria-label", `${b.textContent}, ${on?(sortAsc?"sorted ascending":"sorted descending"):"not sorted"}. Activate to sort.`);
+  });
+  const scored=hasWeights();
   const rows=[...STATES].sort((a,b)=>{
     let va=a[sortKey], vb=b[sortKey];
+    if(va===null||va===undefined) va=-1; if(vb===null||vb===undefined) vb=-1;
     if(typeof va==="string") return sortAsc? va.localeCompare(vb) : vb.localeCompare(va);
     return sortAsc? va-vb : vb-va;
   });
+  const dash=v=>scored?v:"--";
   const tb=document.getElementById("tbody");
-  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" class="${s.a===selected?"selected":""}"><td>${s.rank}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${s.total.toFixed(0)}</td><td>${s.p.toFixed(2)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${s.mo}</td><td>${s.phy.toFixed(0)}</td><td>${s.pol.toFixed(0)}</td></tr>`).join("");
-  tb.querySelectorAll("tr").forEach(tr=>tr.addEventListener("click",()=>select(tr.dataset.a)));
+  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${s.mo}</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
+  tb.querySelectorAll("tr").forEach(tr=>{
+    tr.addEventListener("click",()=>select(tr.dataset.a));
+    tr.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select(tr.dataset.a);} });
+  });
 }
 
 function median(a){const b=[...a].sort((x,y)=>x-y);const m=b.length>>1;return b.length%2?b[m]:(b[m-1]+b[m])/2;}
@@ -1382,12 +1688,21 @@ function renderScatter(){
     placed.push(best[2]); p.lx=p.x+best[0]; p.ly=p.y+best[1];
   });
   pts.forEach(p=>{const s=p.s;
-    h+=`<g class="dot ${s.a===selected?"selected":""}" data-a="${s.a}"><circle cx="${p.x}" cy="${p.y}" r="6" fill="${color(s.total)}" stroke="#fff" stroke-width="1.2"/><text x="${p.lx}" y="${p.ly}" font-size="10.5" fill="#18212B" style="paint-order:stroke;stroke:#fff;stroke-width:2.5px">${s.a}</text><title>${s.n}: physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}. ${s.st}.</title></g>`;
+    h+=`<g class="dot ${s.a===selected?"selected":""}" data-a="${s.a}" tabindex="0" role="button" aria-label="${s.n}: physical fundamentals ${s.phy.toFixed(0)}, political will ${s.pol.toFixed(0)}. ${s.st}. Activate to select."><circle cx="${p.x}" cy="${p.y}" r="6" fill="${color(s.total)}" stroke="#fff" stroke-width="1.2"/><text x="${p.lx}" y="${p.ly}" font-size="10.5" fill="#18212B" style="paint-order:stroke;stroke:#fff;stroke-width:2.5px">${s.a}</text><title>${s.n}: physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}. ${s.st}.</title></g>`;
   });
   svg.innerHTML=h;
-  svg.querySelectorAll(".dot").forEach(g=>g.addEventListener("click",()=>select(g.dataset.a)));
+  svg.querySelectorAll(".dot").forEach(g=>{
+    g.addEventListener("click",()=>select(g.dataset.a));
+    g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select(g.dataset.a);} });
+  });
 }
 function refresh(){ compute(); syncSliders(); paint(); renderDetail(); renderTable(); renderScatter(); }
+// on a phone the priorities panel starts collapsed so the map and results stay reachable
+(function(){
+  const mq=window.matchMedia("(max-width:900px)"), panel=document.getElementById("wpanel");
+  if(mq.matches) panel.removeAttribute("open");
+  mq.addEventListener("change",e=>{ if(e.matches) panel.removeAttribute("open"); else panel.setAttribute("open",""); });
+})();
 refresh();
 </script>
 <script data-goatcounter="https://sonnetx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>

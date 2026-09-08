@@ -59,6 +59,6 @@ python3 build.py
 
 ## Data sources
 
-Full linked list on the page, under Methodology. Power prices were diffed against the EIA-861 historical state file (Total Electric Industry, 2024 industrial) on Sept 7, 2026 and all 50 match. The seven hatched statewide actions were checked against primary sources (executive order text, bill pages, ERCOT notices, enacted budgets) on the same date.
+Full linked list on the page, under Methodology. An independent review of the sources, scoring and interaction design is in [review/](review/), along with the EIA price comparison and the recorded HTTP status of every cited link. Power prices were diffed against the EIA-861 historical state file (Total Electric Industry, 2024 industrial) on Sept 7, 2026 and all 50 match. The seven hatched statewide actions were checked against primary sources (executive order text, bill pages, ERCOT notices, enacted budgets) on the same date.
 
 Summary: EIA-861; CNBC Top States for Business 2026; New York EO 62; Texas Governor directives (June 10 and Aug 3, 2026) and ERCOT notices; Ashurst Perkins Coie multistate executive action review; Williams Mullen and Bloomberg Tax (Virginia budget); Data Center Knowledge and EY (North Carolina); Construction Owners Club incentive update citing NCSL and Good Jobs First; Georgia PSC December 2025 order; ElectricChoice, datacenterbans.com and dcmap.us moratorium trackers; PoweredByWho and Aterio project counts; Quartz, Fortune and ABA on western water stress; Ascend Analytics and Utility Dive on interconnection queues.

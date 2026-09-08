@@ -43,7 +43,7 @@
 "c": 1,
 "x": 4,
 "tag": "Incentive pause",
-"note": "Phoenix is a top-tier market with roughly 100 operating sites, but the 2026 budget (SB 1861, signed June 13) bars new data center sales tax exemption applications from July 1, 2026 through June 30, 2029; 113 applications rushed in during the last two weeks. The Colorado River Tier 1 shortage, in place since 2022, trims Arizona's supply about 18% again in 2026. Backlash is now regulatory: Tucson adopted data center rules Aug 5, Pima County imposed a 120-day moratorium Aug 11, and Pinal County denied the La Osa rezoning Aug 26, 2026.",
+"note": "Phoenix is a top-tier market with roughly 100 operating sites. The 2026 budget (SB 1861, signed June 13) bars new data center applications for the sales tax exemption from July 1, 2026 through June 30, 2029, and 113 applications rushed in during the last two weeks. Existing certifications are untouched, and the pause changes incentive eligibility rather than prohibiting construction. The Colorado River Tier 1 shortage, in place since 2022, trims Arizona's supply about 18% again in 2026. Backlash is now regulatory: Tucson adopted data center rules Aug 5, Pima County imposed a 120-day moratorium Aug 11, and Pinal County denied the La Osa rezoning Aug 26, 2026.",
 "mo": 4,
 "st": "Reviewing or paused",
 "srcs": [
@@ -75,15 +75,33 @@
 "p": 6.61,
 "pw": 4,
 "po": 4,
-"op": 4,
+"op": 3,
 "w": 4,
 "h": 3,
 "c": 2,
 "x": 2,
 "tag": "",
-"note": "Low industrial rates, Entergy Arkansas has courted large loads, little organized opposition so far. Limited fiber depth and tornado exposure.",
+"note": "Low industrial rates and about $12B committed across four hyperscale campuses, including Google in West Memphis and Avaio in Little Rock, with the first expected to operate in 2027. Entergy Arkansas filed new large-load rate schedules with the PSC in February 2026. Organized local opposition has now emerged: more than 100 people packed a Conway city hall meeting over a proposed $1B campus advanced by a shell company for an unnamed client, and biweekly demonstrations followed. Six Senate resolutions that would have authorized data center legislation died at sine die in April 2026. Limited fiber depth and tornado exposure.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Talk Business on the Arkansas hyperscale buildout",
+"u": "https://talkbusiness.net/2026/02/hyperscale-data-centers-come-to-arkansas/"
+},
+{
+"t": "KARK on the Conway data center protest",
+"u": "https://www.kark.com/news/local-news/more-than-100-protestors-voice-concerns-at-conway-city-hall-meeting-over-proposed-data-center/"
+},
+{
+"t": "Arkansas Advocate on the data center debate",
+"u": "https://arkansasadvocate.com/2026/05/22/arkansas-explained-understanding-the-data-center-boom-and-debate/"
+},
+{
+"t": "Entergy Arkansas 2026 rate case",
+"u": "https://www.entergyarkansas.com/ratecase2026"
+}
+]
 },
 {
 "a": "CA",
@@ -209,9 +227,27 @@
 "c": 5,
 "x": 2,
 "tag": "",
-"note": "Cheap hydro-heavy power, cool dry climate, sales tax exemption on server equipment, Meta's Kuna campus as anchor. Record-low 2026 snowpack is a water flag; fiber ecosystem is thin.",
+"note": "Hydro-heavy power that is cheap regionally rather than nationally (7.69¢/kWh in 2024, behind New Mexico and Washington), a cool dry climate, and Meta's $1.2B Kuna campus, which began serving traffic on Sept 4, 2026 using closed-loop cooling. The server equipment sales tax exemption still exists but HB 315 (2025) narrowed it after March 1, 2025 to entities meeting investment and job tests. Water is the flag: April 2026 snowpack was the lowest since records began in the 1930s and the state declared a drought emergency. Idaho Power has no data center tariff, pushing loads above 20 MW into special contracts. Fiber ecosystem is thin.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Idaho Code 63-3622VV server equipment exemption",
+"u": "https://legislature.idaho.gov/statutesrules/idstat/title63/t63ch36/sect63-3622vv/"
+},
+{
+"t": "Idaho Commerce on the data center exemption",
+"u": "https://commerce.idaho.gov/incentives/data-center-sales-tax-exemption/"
+},
+{
+"t": "Meta's $1.2bn Kuna data center goes live",
+"u": "https://www.datacenterdynamics.com/en/news/metas-12bn-data-center-in-kuna-idaho-goes-live/"
+},
+{
+"t": "Idaho Business Review on record-low snowpack",
+"u": "https://idahobusinessreview.com/2026/04/06/idaho-historic-snow-drought-lowest-snowpack/"
+}
+]
 },
 {
 "a": "IL",
@@ -225,7 +261,7 @@
 "c": 4,
 "x": 5,
 "tag": "Incentive pause",
-"note": "Chicago is a top-five market, but ComEd's large-load queue holds 28 GW of requests against a 24 GW all-time peak, PJM's 2028/29 capacity auction cleared at the price cap, and Gov. Pritzker directed DCEO to stop signing new Data Center Investment Program agreements from July 1, 2026, with no end date set (his budget proposal framed it as two years). Great Lakes water is a strength.",
+"note": "Chicago is a top-five market, but ComEd's large-load queue holds 28 GW of requests against a 24 GW all-time peak, PJM's 2028/29 capacity auction cleared at the price cap, and Gov. Pritzker directed DCEO to stop signing new Data Center Investment Program agreements from July 1, 2026. Agreements signed before that date are honored, and no end date was set; the two-year figure came from his budget proposal. Great Lakes water is a strength.",
 "mo": 3,
 "st": "Reviewing or paused",
 "srcs": [
@@ -255,9 +291,27 @@
 "c": 4,
 "x": 3,
 "tag": "",
-"note": "The most incentive-friendly large state: 50-year exemptions, an estimated $8.2B package to Amazon, and AEP/Duke territories delivering capacity faster than eastern PJM. Elkhart stopped accepting applications until Dec 2027, and HB 1333 would route revenue to host towns.",
+"note": "The most incentive-friendly large state: a sales tax exemption running 25 years, or up to 50 for investments above $750M. Good Jobs First estimates the Amazon New Carlisle package at roughly $8.2 to $8.3B, almost all of it the long-tail exemption value rather than named credits, against $13.8B Amazon says it has invested there. Local pushback is now substantial: the city of Elkhart adopted a moratorium through Dec 2027, Indianapolis and Marion County did the same in August 2026, and bans now cover 12 of Indiana's 92 counties. HB 1333 passed the House but died in Senate committee; its revenue idea was enacted separately as HEA 1210, letting a host community collect up to 1% of the sales tax the center does not pay.",
 "mo": 4,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "IEDC data center sales tax exemption overview",
+"u": "https://www.iedc.in.gov/indiana-advantages/investments/data-center-sales-tax-exemption/overview"
+},
+{
+"t": "Good Jobs First on Indiana's data center incentives",
+"u": "https://goodjobsfirst.org/data-center-opposition-supporters-react-to-indianas-data-center-incentives/"
+},
+{
+"t": "WFYI on the 2026 session's data center bills",
+"u": "https://www.wfyi.org/news/articles/data-center-legislation-indiana-general-assembly-2026"
+},
+{
+"t": "Elkhart council's data center moratorium",
+"u": "https://www.wndu.com/2026/08/28/elkhart-city-council-casts-unanimous-vote-moratorium-data-centers-battery-storage-facilities/"
+}
+]
 },
 {
 "a": "IA",
@@ -271,9 +325,27 @@
 "c": 4,
 "x": 3,
 "tag": "",
-"note": "Abundant wind, MidAmerican has been receptive to large loads, established hyperscale presence (Microsoft, Meta, Google) around Des Moines. Woodbury County adopted a 12-month pause. Derecho and tornado exposure.",
+"note": "Abundant wind and an established hyperscale cluster: Microsoft in West Des Moines and Meta in Altoona, with Google's Iowa campus at Council Bluffs in the Omaha metro rather than the Des Moines area. MidAmerican markets to large loads and asks for ten-year contracts, though Iowa regulators treat the contract terms as confidential, so the terms cannot be checked against a posted tariff. Woodbury County adopted a 12-month pause in unincorporated areas in June 2026, joining similar measures in Johnson, Dubuque and Madison counties. Derecho and tornado exposure.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Woodbury County Resolution 14064",
+"u": "https://www.woodburycountyiowa.gov/supervisors/resolutions/14064/"
+},
+{
+"t": "Iowa Public Radio on the Woodbury moratorium",
+"u": "https://www.iowapublicradio.org/ipr-news/2026-06-24/woodbury-county-approves-1-year-moratorium-data-centers"
+},
+{
+"t": "MidAmerican on data center contracts",
+"u": "https://www.midamericanenergy.com/articles/data-center-costs"
+},
+{
+"t": "Business Record survey of Iowa data centers",
+"u": "https://www.businessrecord.com/growth-of-data-centers-in-iowa/"
+}
+]
 },
 {
 "a": "KS",
@@ -319,9 +391,27 @@
 "c": 1,
 "x": 2,
 "tag": "",
-"note": "Second-cheapest industrial power in the country and Entergy won approval for new gas plants to serve Meta's Hyperion campus. Hurricane and flood exposure and a hot, humid climate are the trade-offs.",
+"note": "Second-cheapest industrial power in the 2024 EIA data at 5.61¢/kWh, though the rate rose about 7.5% year over year and sat sixth cheapest at 6.75¢ by mid-2026. The LPSC approved three combined-cycle units totaling about 2,262 MW for Meta's Hyperion campus in August 2025, two at Franklin Farms in Richland Parish and one at Waterford in St. Charles Parish. Meta now describes Hyperion as 5 GW of compute and more than $50B invested in the region. Entergy filed for seven more units in March 2026, about 7.5 GW across all ten, fast-tracked by the commission with a final vote due December 2026. Intervenors are pressing for a prudence review. Hurricane and flood exposure and a hot, humid climate are the trade-offs.",
 "mo": 4,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "LPSC Order U-37425 approving the Entergy units",
+"u": "https://lpscpubvalence.lpsc.louisiana.gov/portal/PSC/ViewFile?fileId=nDWn/juc2+A%3D"
+},
+{
+"t": "Entergy Louisiana on the LPSC approval",
+"u": "https://www.entergy.com/news/entergy-louisiana-receives-lpsc-approval-for-major-infrastructure-investments-to-support-metas-data-center-and-improve-reliability"
+},
+{
+"t": "Meta on deepening its Richland Parish investment",
+"u": "https://datacenters.atmeta.com/2026/07/deepening-our-investment-in-richland-parish-louisiana/"
+},
+{
+"t": "LPSC Docket U-37882, the 2026 application",
+"u": "https://lpscpubvalence.lpsc.louisiana.gov/portal/PSC/DocketDetails?docketId=32728"
+}
+]
 },
 {
 "a": "ME",
@@ -415,9 +505,27 @@
 "c": 1,
 "x": 2,
 "tag": "",
-"note": "Very low power prices, aggressive incentives, AWS's $10B Madison County build and Compass in Meridian. Hot and humid; tornado exposure; thin fiber ecosystem.",
+"note": "Industrial power below the national average but mid-pack for the Southeast (7.66¢/kWh in mid-2026, against 6.44¢ in Oklahoma and 6.63¢ in Arkansas). Amazon's Madison County build was announced at $10B in 2024 and the statewide commitment has since grown to $25B and 2,000+ jobs, with another $12B added in April 2026. Compass is building eight halls in Meridian toward roughly 500 MW from Mississippi Power. Incentives came largely from a 2024 special session rather than a standing data center statute, and the law letting Entergy contract with Amazon outside normal PSC approval is now the subject of a ratepayer dispute. HB 1239 died in conference in 2025 and no data center incentive statute passed in 2026. Hot and humid, tornado exposure, thin fiber ecosystem.",
 "mo": 4,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Mississippi Development Authority on the $10B AWS deal",
+"u": "https://mississippi.org/news/amazon-web-services-to-invest-record-shattering-10-billion/"
+},
+{
+"t": "Amazon on its $25B Mississippi commitment",
+"u": "https://www.aboutamazon.com/news/company-news/amazon-25-billion-mississippi-data-centers"
+},
+{
+"t": "Compass on its Lauderdale County campus",
+"u": "https://www.compassdatacenters.com/news/compass-10b-investment-lauderdale-county-mississippi/"
+},
+{
+"t": "EIA industrial electricity prices by state",
+"u": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_06_b"
+}
+]
 },
 {
 "a": "MO",
@@ -527,9 +635,27 @@
 "c": 3,
 "x": 2,
 "tag": "",
-"note": "Cheapest industrial electricity in the US (5.43¢/kWh in 2024) and on CNBC's best-grid list; Meta's Los Lunas campus anchors. Water stress and thin fiber are the limits.",
+"note": "Cheapest industrial electricity in the US (5.43¢/kWh in 2024) and second on CNBC's 2025 list of grids best positioned for AI load. Meta's Los Lunas campus anchors at ~3.8M sq ft, with roughly 500 adjacent acres bought in late 2025 and a further ~$800M expansion approved by the village in March 2026. Water is the live constraint and is tightening: Santa Fe County adopted an 18-month ban on July 1, 2026, legislators have said they will file a statewide moratorium in the 2027 session, and a researcher told lawmakers in September 2026 that state data center water use could rise from about 500 million to 23.6 billion gallons a year if every planned project is built. Fiber depth is thin.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "Meta's Los Lunas data center page",
+"u": "https://datacenters.atmeta.com/asset/los-lunas/"
+},
+{
+"t": "Source NM on the proposed statewide moratorium",
+"u": "https://sourcenm.com/2026/07/02/new-mexico-lawmakers-announce-proposed-statewide-moratorium-on-data-centers/"
+},
+{
+"t": "Source NM on projected data center water use",
+"u": "https://sourcenm.com/2026/09/01/new-mexico-data-center-water-use-could-soar-in-coming-years-researcher-tells-state-lawmakers/"
+},
+{
+"t": "CNBC on grids best set for AI data centers",
+"u": "https://www.cnbc.com/2025/07/15/10-best-power-sources-us-grid-ai-data-center-top-states-for-business.html"
+}
+]
 },
 {
 "a": "NY",
@@ -543,7 +669,7 @@
 "c": 4,
 "x": 4,
 "tag": "Statewide moratorium",
-"note": "Executive Order 62 (July 14, 2026) holds discretionary DEC permits for data centers of 50 MW or more in abeyance until the Generic Environmental Impact Statement is finished, framed as up to one year; the legislature's broader 20 MW bill (S10642) awaits delivery to the governor and action by Dec 31. ESD's Community Investment Framework proposes $1M per MW as a starting contribution. Excluded: applications deemed complete before July 14, and facilities primarily used for manufacturing, research, education or medical care.",
+"note": "Executive Order 62 (July 14, 2026) holds discretionary DEC permits for data centers of 50 MW or more in abeyance until the Generic Environmental Impact Statement is finished, framed as up to one year. It reaches state discretionary permits only, not local government approvals, and applications deemed complete before July 14 are exempt, as are facilities primarily used for manufacturing, research, education or medical care. The legislature's broader 20 MW bill (S10642) passed both houses but has not been delivered or signed, and awaits action by Dec 31. ESD's Community Investment Framework proposes $1M per MW as a starting point for negotiation, not a fixed levy.",
 "mo": 2,
 "st": "Restrictive",
 "srcs": [
@@ -577,13 +703,21 @@
 "c": 2,
 "x": 3,
 "tag": "Exemption cut",
-"note": "The 2026 budget permanently repealed the sales tax exemption on data center electricity (effective Aug 6, 2026) while keeping equipment exemptions. Charlotte (150-day), Durham County (9-month) and Apex passed moratoriums. Duke Energy headroom is tightening.",
+"note": "The 2026 budget (S257, S.L. 2026-41) permanently repealed the sales tax exemption on data center electricity while keeping the equipment exemption. HB 56 amended the timing, and NCDOR reads it as the first billing period beginning on or after Aug 6, 2026, not a flat switch-on date. Charlotte (150-day), Durham County (9-month) and Apex (12-month) passed moratoriums. Duke Energy headroom is tightening.",
 "mo": 4,
 "st": "Courting, with conditions",
 "srcs": [
 {
 "t": "S257 / S.L. 2026-41 (NC General Assembly)",
 "u": "https://www.ncleg.gov/BillLookup/2025/S257"
+},
+{
+"t": "HB 56 / S.L. 2026-42 amending the effective date",
+"u": "https://www.ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-42.html"
+},
+{
+"t": "NCDOR notice on the billing-period rule",
+"u": "https://www.ncdor.gov/taxes-forms/sales-and-use-tax/other-sales-and-use-tax-resources/important-notices-issued-sales-and-use-tax-division/important-notice-repeal-exemptions-electricity-used-datacenters"
 },
 {
 "t": "EY tax alert on the electricity exemption repeal",
@@ -611,9 +745,27 @@
 "c": 5,
 "x": 1,
 "tag": "",
-"note": "Cheapest commercial power in the country, abundant gas and wind, receptive utilities, cold climate and low hazard exposure. Applied Digital's Ellendale campus proves scale is possible. Very thin fiber and labor pool.",
+"note": "Cheapest commercial power in the country (7.19¢/kWh in 2024), abundant gas and wind, receptive utilities, cold climate and low hazard exposure. Applied Digital's Ellendale campus, now Polaris Forge 1, is fully leased to CoreWeave across 400 MW of critical IT load and engineered to scale toward 1 GW; the first 100 MW building reached service in November 2025. A second campus, Polaris Forge 2 at Harwood, is a $3B, 280 MW build leased to Oracle. The sales tax exemption is intact and its cost rose from $15.3M in 2024 to over $65M in 2025. A bill to penalize developers using nondisclosure agreements with public officials (SB 2406) died in the Senate on Sept 3, 2026. Very thin fiber and labor pool.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "EIA average retail price by state, 2024",
+"u": "https://www.eia.gov/electricity/sales_revenue_price/pdf/table_4.pdf"
+},
+{
+"t": "Applied Digital's 400 MW CoreWeave lease at Ellendale",
+"u": "https://ir.applieddigital.com/news-events/press-releases/detail/128/applied-digital-finalizes-additional-150mw-lease-with"
+},
+{
+"t": "Applied Digital energizes the first 100 MW building",
+"u": "https://ir.applieddigital.com/news-events/press-releases/detail/137/applied-digital-completes-phase-ii-ready-for-service-at"
+},
+{
+"t": "North Dakota Monitor on SB 2406 failing",
+"u": "https://northdakotamonitor.com/2026/09/03/data-center-nondisclosure-bill-dies-in-north-dakota-senate-vote/"
+}
+]
 },
 {
 "a": "OH",
@@ -627,7 +779,7 @@
 "c": 4,
 "x": 4,
 "tag": "Incentive pause",
-"note": "Columbus is a top emerging market and CNBC ranks Ohio No. 9 for power available to computing (SoftBank's 10 GW Piketon campus broke ground March 2026). But Gov. DeWine paused new exemption approvals after the Tax Credit Authority's June 1, 2026 meeting pending a joint legislative committee study, HB 957 would bar new exemptions from Oct 1, 2026, 35 local moratoriums are tracked and councils have begun rejecting site plans.",
+"note": "Columbus is a top emerging market and CNBC ranks Ohio No. 9 for power available to computing (SoftBank's 10 GW Piketon campus broke ground March 2026). Gov. DeWine paused new exemption approvals after the Tax Credit Authority's June 1, 2026 meeting pending a joint legislative committee study, and the release explicitly distinguishes that pause from a ban. HB 957, still only a proposal, would bar new exemptions from Oct 1, 2026. 35 local moratoriums are tracked and councils have begun rejecting site plans.",
 "mo": 4,
 "st": "Reviewing or paused",
 "srcs": [
@@ -721,7 +873,7 @@
 "a": "SC",
 "n": "South Carolina",
 "p": 6.84,
-"pw": 4,
+"pw": 3,
 "po": 5,
 "op": 3,
 "w": 4,
@@ -729,9 +881,27 @@
 "c": 2,
 "x": 2,
 "tag": "",
-"note": "Exemption covers both equipment and electricity; Palmetto Sites readiness funding jumped to $80M in 2026 with 51 pre-vetted sites. Santee Cooper and Dominion SC have headroom and a VC Summer restart is under study. Hurricane exposure on the coast.",
+"note": "The exemption covers both equipment and electricity for qualifying facilities, and Palmetto Sites readiness funding rose more than 250% to $80M in 2026 with 51 certified sites. Generation is the constraint rather than the draw: 2026 reporting puts South Carolina behind on generating capacity and on power available for computing, even with competitive rates and good water. The V.C. Summer restart is a roughly two-year feasibility study under Brookfield, not available capacity. The Data Center Development Act (S.867) got a favorable committee report in April 2026 but has not passed. Hurricane exposure on the coast.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "SC Code 12-36-2120 sales tax exemptions",
+"u": "https://law.justia.com/codes/south-carolina/title-12/chapter-36/section-12-36-2120/"
+},
+{
+"t": "WACH on Palmetto Sites funding and site count",
+"u": "https://wach.com/news/local/south-carolina-emerges-as-one-of-the-top-state-for-data-centers-local-skepticism-persists"
+},
+{
+"t": "SC Daily Gazette on the V.C. Summer restart",
+"u": "https://scdailygazette.com/briefs/prep-work-underway-in-scs-nuclear-reboot-effort-potential-2-7b-payday-at-least-2-years-away/"
+},
+{
+"t": "S.867 Data Center Development Act",
+"u": "https://www.scstatehouse.gov/sess126_2025-2026/bills/867.htm"
+}
+]
 },
 {
 "a": "SD",
@@ -761,9 +931,27 @@
 "c": 3,
 "x": 3,
 "tag": "",
-"note": "TVA power at 6.21¢/kWh, CNBC's top water availability score, incentives intact, Oak Ridge and Nashville ecosystems, xAI's Memphis campus (with a contested gas turbine fight). Tornado exposure.",
+"note": "Industrial power at 6.21¢/kWh in the 2024 EIA data, which is a state average rather than a TVA tariff and had risen to about 6.8¢ by mid-2026 after a 4.5% TVA base increase. Tennessee scored in CNBC's top band for water availability and finished 9th overall in 2026. The data center exemption and the 1.5% reduced electricity rate survived the 2026 session unchanged. Public Chapter 961 (May 2026) is a cost-allocation law, barring utilities from absorbing infrastructure costs for centers over 50 MW and letting those centers self-generate. Oak Ridge and Nashville ecosystems. xAI's Memphis campus is here, though the live 2026 turbine litigation concerns Colossus 2 across the line in Southaven, Mississippi. Tornado exposure.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"srcs": [
+{
+"t": "CNBC best states for AI data centers, 2026",
+"u": "https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html"
+},
+{
+"t": "Tennessee ECD data center tax incentives",
+"u": "https://www.tn.gov/ecd/resources/openecd/openecd-tax-incentives.html"
+},
+{
+"t": "TN Revenue 2026 legislative summaries",
+"u": "https://www.tn.gov/revenue/tax-resources/legal-resources/legislative-summaries/2026-legislative-summaries-.html"
+},
+{
+"t": "NAACP suit over xAI Colossus 2 turbines",
+"u": "https://naacp.org/articles/naacp-sues-xai-illegal-pollution-data-center-power-plant"
+}
+]
 },
 {
 "a": "TX",
@@ -777,7 +965,7 @@
 "c": 2,
 "x": 5,
 "tag": "Interconnection pause",
-"note": "The largest pipeline in the country (roughly 1,000 projects under construction or planned) and Dallas is the second-largest market. But Gov. Abbott's Aug 3, 2026 directive paused all pending data center interconnections until each project passes a PUCT/ERCOT audit, due Dec 10; ERCOT was weighing ~474 GW of large-load requests (about 90% data centers) and halted Batch Zero classifications. SB 6 already allows curtailment of 75 MW+ loads. The sales tax exemption survives until at least the 2027 session. Water is strained statewide.",
+"note": "The largest pipeline in the country (roughly 1,000 projects under construction or planned) and Dallas is the second-largest market. Gov. Abbott's Aug 3, 2026 directive paused pending data center interconnections until each project passes a PUCT/ERCOT audit, with a report targeted for Dec 10. That pause runs through ERCOT's process, so it does not reach the El Paso, Panhandle and East Texas areas outside ERCOT, and the December target is an audit milestone, not a date when power becomes available. ERCOT was weighing ~474 GW of large-load requests (about 90% data centers) and halted Batch Zero classifications. SB 6 already allows curtailment of 75 MW+ loads. The sales tax exemption survives until at least the 2027 session. Water is strained statewide.",
 "mo": 5,
 "st": "Courting, with conditions",
 "srcs": [
@@ -815,7 +1003,7 @@
 "c": 4,
 "x": 3,
 "tag": "Stricter review",
-"note": "Executive Order 2026-03 (May 29) directs executive-branch agencies to apply a 'higher bar' to large data center review, requiring that water consumption not increase and that Great Salt Lake impacts be weighed, after the 9 GW Stratos proposal in Box Elder County triggered a referendum campaign now in district court. Dry, cool climate and Salt Lake City connectivity remain positives.",
+"note": "Executive Order 2026-03 (May 29) is a review framework rather than a moratorium. It directs executive-branch agencies, excluding higher education, the State Board of Education, the Attorney General, Auditor, Treasurer, Legislature and Judiciary, to apply a higher bar to large data center review, requiring that water consumption not increase and that Great Salt Lake impacts be weighed. It followed the 9 GW Stratos proposal in Box Elder County, whose referendum campaign is now in district court. Dry, cool climate and Salt Lake City connectivity remain positives.",
 "mo": 3,
 "st": "Reviewing or paused",
 "srcs": [
@@ -861,10 +1049,14 @@
 "c": 3,
 "x": 5,
 "tag": "Consumption tax",
-"note": "Still the world's largest market (Northern Virginia ~13% of global capacity, 0.2% vacancy, all 2026 deliveries pre-committed) but the hardest place to get power: Dominion has quoted 7-year waits for 100 MW since 2024, had ~54 GW under contract by July 2026 and ~70 GW of requests in queue. The 2026 budget left the sales tax exemption in place through 2035 but added a $0.011/kWh electricity consumption tax from July 1, 2026 (collections above $600M/yr refunded, sunsets June 2028), HB 153 requires site assessments before local zoning approvals for 100 MW+ projects, and DEQ must define Cooling Water Scarcity Areas by July 2027.",
+"note": "Still the world's largest market (Northern Virginia ~13% of global capacity, 0.5% colocation vacancy and a majority of 2026 capacity already committed, per CBRE H2 2025) but the hardest place to get power: Dominion has quoted 7-year waits for 100 MW since 2024, had ~54 GW under contract by July 2026 and ~70 GW of requests in queue. The 2026 budget left the sales tax exemption in place through 2035 but added a $0.011/kWh electricity consumption tax from July 1, 2026 to July 1, 2028, with revenue above $600M a year refunded. HB 153 requires a site assessment before local rezoning or special-use approval for 100 MW+ projects, and DEQ must define Cooling Water Scarcity Areas by July 2027. The price shown is the unadjusted 2024 EIA average and does not include the new consumption tax.",
 "mo": 5,
 "st": "Courting, with conditions",
 "srcs": [
+{
+"t": "Enacted budget, consumption tax provision 3-5.24",
+"u": "https://budget.lis.virginia.gov/item/2026/2/HB30/Chapter/3/3-5.24/"
+},
 {
 "t": "Williams Mullen on the consumption tax",
 "u": "https://www.williamsmullen.com/insights/news/legal-news/virginia-budget-creates-new-electricity-consumption-tax-data-centers"
