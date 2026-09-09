@@ -46,6 +46,9 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
                 page.locator('#tab-'+tab).click()
                 assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),(width,state,tab)
                 assert page.locator('#state-dialog').evaluate('(e)=>e.scrollWidth<=e.clientWidth+1'),(width,state,tab,'dialog overflow')
+                # The tab strip absorbs its own overflow rather than widening
+                # the dialog, so every tab stays reachable on a narrow screen.
+                assert page.locator('#tab-'+tab).evaluate('(e)=>e.getBoundingClientRect().width>0'),(width,tab)
         print('Responsive profiles passed',width)
     page.keyboard.press('Escape')
     page.locator('#w-pw').fill('40')

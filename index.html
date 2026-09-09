@@ -114,8 +114,16 @@
   .close-btn{font:inherit;background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:7px 12px;cursor:pointer;color:var(--ink)}
   .profile-picker{display:flex;align-items:center;gap:var(--s3);margin-top:var(--s3);font-size:13px;color:var(--muted)}
   .profile-picker select{flex:1;min-width:0}
-  .profile-tabs{display:flex;gap:var(--s2);margin-top:var(--s4)}
-  .profile-tabs button{flex:1;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:13px;padding:8px;cursor:pointer}
+  /* Four single-word tabs cannot shrink below their longest word, so they are
+     tightened on narrow screens and the strip scrolls if a font still overruns
+     it. Without that the whole dialog scrolls sideways at 320px. */
+  .profile-tabs{display:flex;gap:var(--s2);margin-top:var(--s4);overflow-x:auto;scrollbar-width:none}
+  .profile-tabs::-webkit-scrollbar{display:none}
+  .profile-tabs button{flex:1 1 auto;white-space:nowrap;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:13px;padding:8px;cursor:pointer}
+  @media (max-width:420px){
+    .profile-tabs{gap:var(--s1)}
+    .profile-tabs button{font-size:12px;padding:8px 2px}
+  }
   .profile-tabs button[aria-selected="true"]{border-bottom-color:var(--focus);color:var(--focus);font-weight:600}
   .drawer .detail{margin:0;border:0;border-radius:0;padding:var(--s5)}
   .drawer h3{font-size:14px;margin:var(--s5) 0 var(--s2)}
