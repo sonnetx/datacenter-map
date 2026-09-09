@@ -131,6 +131,8 @@ CI runs the validator, the model tests, a browser pass and a staleness check on 
 
 Corrections to state records are the most useful contribution, especially citations for the 32 states that do not yet have any. A good pull request cites a primary source, says what the source establishes, and adjusts the rating only when the evidence contradicts it. Ratings are analyst judgments and reasonable people move them a level either way, so explain the reasoning in the description rather than only changing the number.
 
+Fork the repository, push your work to a branch there and open a pull request. Nobody pushes to `main` directly. A pull request lands once CI is green, review comments are resolved and the maintainer has approved it, and pushing a new commit clears an earlier approval. CI on a pull request from a fork waits for a maintainer to start it, so a run that sits pending is normal rather than broken.
+
 ## License
 
 Code is MIT. The state records and written analysis are CC BY 4.0. Third-party map geometry and libraries keep their own terms. See [LICENSE](LICENSE).
