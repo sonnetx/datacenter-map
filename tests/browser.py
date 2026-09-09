@@ -1,3 +1,4 @@
+import json
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -22,6 +23,11 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     assert page.locator('#panel-scores').is_visible()
     assert page.locator('#detail .bar').count()==8
     page.keyboard.press('ArrowRight')
+    assert page.locator('#panel-reception').is_visible()
+    # Four axes, and the panel says plainly that none of it is scored.
+    assert page.locator('#panel-reception .axes li').count()==4
+    assert 'contribute no points' in page.locator('#panel-reception').inner_text()
+    page.keyboard.press('ArrowRight')
     assert page.locator('#panel-sources').is_visible()
     assert page.locator('#panel-sources .source-list a').count()>0
     page.keyboard.press('Escape')
@@ -36,7 +42,7 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
         page.set_viewport_size({'width':width,'height':900})
         for state in ['VA','NC','ND','NH','RI','AK']:
             page.locator('#profile-state').select_option(state)
-            for tab in ['overview','scores','sources']:
+            for tab in ['overview','scores','reception','sources']:
                 page.locator('#tab-'+tab).click()
                 assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),(width,state,tab)
                 assert page.locator('#state-dialog').evaluate('(e)=>e.scrollWidth<=e.clientWidth+1'),(width,state,tab,'dialog overflow')
@@ -69,6 +75,34 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     assert page.evaluate('priceScale.high===35 && rankMode==="fit" && weights.pw===10')
     page.locator('th[data-k=n] button').click()
     assert page.locator('#tbody tr').first.get_attribute('data-a')=='AL'
+    # Sorting on a context column orders states without disturbing fit or rank.
+    ranks=page.evaluate('Object.fromEntries(STATES.map(s=>[s.a,s.rank]))')
+    pb_col=page.evaluate('[...document.querySelectorAll("#thead th")].findIndex(t=>t.dataset.k==="pb")+1')
+    page.locator('th[data-k=pb] button').click()
+    assert page.locator(f'#tbody tr:first-child td:nth-child({pb_col})').inner_text()=='High'
+    page.locator('th[data-k=rules] button').click()
+    assert page.evaluate('Object.fromEntries(STATES.map(s=>[s.a,s.rank]))')==ranks
+    # With no request endpoint configured the download stands on its own rather
+    # than showing a form that would post nowhere.
+    assert page.locator('#dp-form').evaluate('(e)=>e.hidden && getComputedStyle(e).display==="none"')
+    assert page.locator('#dp-links').is_visible()
+    with page.expect_download() as caught:
+        page.locator('#dp-links button[data-format=csv]').click()
+    csv=Path(caught.value.path()).read_text()
+    header,*body=[line for line in csv.splitlines() if line]
+    assert len(body)==50,len(body)
+    assert header.startswith('postal,state,')
+    for column in ['pushback','rule_water','rule_power_cost','rule_siting_zoning','rule_tax_incentives']:
+        assert column in header.split(','),column
+    assert body[0].startswith('AK,Alaska,')
+    with page.expect_download() as caught:
+        page.locator('#dp-links button[data-format=json]').click()
+    exported=json.loads(Path(caught.value.path()).read_text())
+    assert len(exported)==50
+    # The export is the authored record, not the fields compute() derives.
+    assert set(exported[0])<= {'a','n','p','pw','po','op','w','h','c','x','mo','st','tag','note','rr','srcs'}
+    assert set(exported[0]['rr'])=={'pb','wt','pg','zn','tx','n'}
+
     page.set_viewport_size({'width':390,'height':844})
     page.reload()
     assert not page.locator('#wpanel').evaluate('(e)=>e.open')

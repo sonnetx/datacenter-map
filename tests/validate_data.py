@@ -68,6 +68,28 @@ SOURCE_TYPES = {
     "Reprinted release",
 }
 
+# Reception and regulation. Context only: nothing in "rr" feeds the score or
+# the ranking. It records how a state has received datacenter development and
+# how much datacenter-specific rule there is to clear, which are separate
+# questions from whether a site scores well.
+PUSHBACK = {"Low", "Moderate", "High"}
+
+# The four regulatory axes. Each runs -1 to 3 on a single friction scale:
+#   -1  a state rule that eases entry or preempts ordinary review
+#    0  no datacenter-specific rule in force
+#    1  disclosure, reporting or study requirement in force
+#    2  binding conditions in force
+#    3  a pause, moratorium or prohibition in force
+# Pending bills score 0. Only what is in force counts, and the prose says what
+# is pending.
+AXES = {
+    "wt": "water",
+    "pg": "power and ratepayer cost",
+    "zn": "siting and zoning",
+    "tx": "tax incentives",
+}
+AXIS_RANGE = (-1, 3)
+
 SOURCE_REQUIRED = {"t", "u", "type"}
 SOURCE_OPTIONAL = {"supports", "reviewed"}
 
@@ -109,6 +131,37 @@ def check_source(where, i, rec):
             fail(at, f"'{field}' is present but empty")
 
 
+def check_rr(where, rr):
+    at = f"{where} 'rr'"
+    if not isinstance(rr, dict):
+        fail(at, "must be an object")
+        return
+    expected = {"pb", "n"} | set(AXES)
+    missing = expected - set(rr)
+    if missing:
+        fail(at, f"missing {', '.join(sorted(missing))}")
+    unknown = set(rr) - expected
+    if unknown:
+        fail(at, f"unexpected field {', '.join(sorted(unknown))}")
+
+    pb = rr.get("pb")
+    if pb not in PUSHBACK:
+        fail(at, f"'pb' is {pb!r}, not one of: {', '.join(sorted(PUSHBACK))}")
+
+    for field, label in AXES.items():
+        v = rr.get(field)
+        if isinstance(v, bool) or not isinstance(v, int):
+            fail(at, f"'{field}' ({label}) must be an integer {AXIS_RANGE[0]} to {AXIS_RANGE[1]}, got {v!r}")
+        elif not AXIS_RANGE[0] <= v <= AXIS_RANGE[1]:
+            fail(at, f"'{field}' ({label}) is {v}, outside {AXIS_RANGE[0]} to {AXIS_RANGE[1]}")
+
+    note = rr.get("n")
+    if not isinstance(note, str) or not note.strip():
+        fail(at, "'n' must be non-empty prose describing what is in force")
+    elif re.search(r"\s{2,}", note):
+        fail(at, "'n' contains a double space")
+
+
 def main():
     try:
         states = json.loads(DATA.read_text())
@@ -136,7 +189,12 @@ def main():
             if field not in s:
                 fail(where, f"missing '{field}' ({SCALARS.get(field) or RATINGS.get(field)})")
 
-        unknown = set(s) - set(SCALARS) - set(RATINGS) - {"srcs"}
+        if "rr" not in s:
+            fail(where, "missing 'rr' (reception and regulation record)")
+        else:
+            check_rr(where, s["rr"])
+
+        unknown = set(s) - set(SCALARS) - set(RATINGS) - {"srcs", "rr"}
         if unknown:
             fail(where, f"unexpected field {', '.join(sorted(unknown))}")
 
@@ -219,7 +277,14 @@ def main():
 
     cited = sum(1 for s in states if s.get("srcs"))
     links = sum(len(s.get("srcs") or []) for s in states)
+    pushback = {level: sum(1 for s in states if s["rr"]["pb"] == level) for level in sorted(PUSHBACK)}
+    ruled = sum(1 for s in states if any(s["rr"][k] > 0 for k in AXES))
     print(f"data/states.json ok: 50 states, {cited} with citations, {links} source links")
+    print(
+        "  reception: "
+        + ", ".join(f"{n} {level.lower()}" for level, n in pushback.items())
+        + f"; {ruled} states with a datacenter-specific rule in force"
+    )
     return 0
 
 

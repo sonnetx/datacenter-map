@@ -153,6 +153,25 @@
   .chip{display:inline-block;border:1px solid var(--warn);color:var(--warn);border-radius:3px;padding:2px 7px;font-size:12.5px;margin-top:var(--s2)}
   .detail .meta{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4);margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
   .breakdown-hint{font-size:12.5px;color:var(--muted);margin:var(--s4) 0 var(--s2)}
+  /* Reception and regulation. Deliberately unlike the score bars: nothing here
+     is weighted or ranked, so it should not read as another set of points. */
+  .reception{display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;padding:var(--s3);background:var(--bg);border-left:3px solid var(--muted);margin:var(--s3) 0 var(--s4)}
+  .reception[data-level="High"]{border-left-color:var(--warn)}
+  .reception b{font-size:15px;font-weight:500}
+  .reception span{font-size:12.5px;color:var(--muted)}
+  .axes{list-style:none;margin:0;padding:0;display:grid;gap:var(--s1)}
+  .axes li{display:grid;grid-template-columns:minmax(0,7.5rem) auto minmax(0,1fr);align-items:center;gap:var(--s3);font-size:13px;padding:var(--s2) 0;border-bottom:1px solid var(--rule-soft)}
+  .axes li:last-child{border-bottom:0}
+  .axes .axis-name{color:var(--muted)}
+  .axes .axis-state{overflow-wrap:anywhere}
+  /* Four ticks, filled up to the friction level, so the axes stay comparable
+     at a glance without implying a measured quantity. */
+  .ticks{display:flex;gap:3px}
+  .ticks i{width:12px;height:6px;border-radius:1px;background:var(--rule-soft)}
+  .ticks i.on{background:var(--muted)}
+  .ticks i.on.hot{background:var(--warn)}
+  .ticks i.eased{background:var(--focus)}
+  @media (max-width:420px){.axes li{grid-template-columns:1fr auto;gap:var(--s1) var(--s3)}.axes .axis-state{grid-column:1/-1}}
   .bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:var(--s4) var(--s8);margin:0 0 var(--s5)}
   .bar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--s2) var(--s3);font-size:13px;min-width:0}
   .bar .label{line-height:1.35}
@@ -205,6 +224,26 @@
   .meth .sources>summary{font-size:15px;font-weight:600}
   .meth .src li{font-size:13.5px}
   .meth .caveat{border-left:3px solid var(--warn);padding:10px 14px;background:#FFF7F4;margin:var(--s4) 0}
+  .datapack{margin-top:var(--s10);max-width:var(--measure);background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x)}
+  .datapack h2{font-weight:600;font-size:17px;margin:0 0 var(--s2)}
+  .datapack p{margin:var(--s3) 0;color:#2B3540}
+  .datapack .fine{font-size:12.5px;color:var(--muted)}
+  .dp-form{display:grid;gap:var(--s3);margin:var(--s4) 0 0}
+  /* these set display, so they have to restore [hidden] themselves */
+  .dp-form[hidden],.dp-links[hidden]{display:none}
+  .dp-form label{display:grid;gap:var(--s1);font-size:13px}
+  .dp-form input,.dp-form textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:8px;width:100%}
+  .dp-form textarea{min-height:64px;resize:vertical}
+  .dp-form .row{display:grid;gap:var(--s3);grid-template-columns:1fr 1fr}
+  @media (max-width:520px){.dp-form .row{grid-template-columns:1fr}}
+  .dp-form button{font:inherit;background:var(--ink);color:#fff;border:1px solid var(--ink);border-radius:4px;padding:9px 16px;cursor:pointer;justify-self:start}
+  .dp-form button[disabled]{opacity:.6;cursor:progress}
+  .dp-msg{font-size:13px;margin:var(--s3) 0 0}
+  .dp-msg[data-tone="error"]{color:var(--warn)}
+  .dp-links{display:flex;gap:var(--s3);flex-wrap:wrap;margin:var(--s3) 0 0}
+  .dp-links button{font:inherit;background:var(--panel);color:var(--focus);border:1px solid var(--rule);border-radius:4px;padding:8px 14px;cursor:pointer}
+  .site-foot{margin:var(--s10) 0 var(--s6);padding-top:var(--s4);border-top:1px solid var(--rule);font-size:13px;color:var(--muted);display:flex;gap:var(--s2) var(--s5);flex-wrap:wrap;justify-content:space-between}
+  .site-foot p{margin:0}
   @media (max-width:600px){
     .wrap{padding:var(--s6) var(--s4) var(--s8)}
     :root{--pad-x:16px;--pad-y:16px}
@@ -299,6 +338,7 @@
     <div class="profile-tabs" role="tablist" aria-label="State profile sections">
       <button id="tab-overview" role="tab" data-panel="overview" aria-selected="true" aria-controls="panel-overview">Overview</button>
       <button id="tab-scores" role="tab" data-panel="scores" aria-selected="false" aria-controls="panel-scores" tabindex="-1">Scores</button>
+      <button id="tab-reception" role="tab" data-panel="reception" aria-selected="false" aria-controls="panel-reception" tabindex="-1">Reception</button>
       <button id="tab-sources" role="tab" data-panel="sources" aria-selected="false" aria-controls="panel-sources" tabindex="-1">Sources</button>
     </div>
   </div>
@@ -314,7 +354,8 @@
 
 <div class="table-intro">
   <h2>Compare all 50 states</h2>
-  <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5; fit and reference scores run from 0 to 100. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
+  <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5, and fit and reference scores run from 0 to 100. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
+  <p>Pushback and rules in force describe how a state has received development and how much datacenter-specific rule there is to clear. Both are context and neither changes fit or rank. Open a state and read the Reception tab for what the rules actually say.</p>
 </div>
 <div class="tablecard">
   <table id="tbl">
@@ -325,7 +366,7 @@
 
 <section class="meth" id="methodology">
   <h2>How this comparison works</h2>
-  <p>This is an exploratory model, not a prediction of project approval. It reports three things separately: weighted fit, modeled delivery concerns, and sensitivity to uncertain ratings.</p>
+  <p>This is an exploratory model, not a prediction of project approval. It reports weighted fit, modeled delivery concerns and sensitivity to uncertain ratings separately, and carries a fourth reading alongside them that is never scored: how a state has received datacenter development and what rules it has put in force.</p>
   <h3>1. Weighted fit</h3>
   <p>Balanced starts with equal importance for eight factors: power headroom, power cost, incentives and policy, community and permitting, water, natural hazards, cooling climate, and connectivity. Each contributes 12.5% initially. Presets and sliders change those shares.</p>
   <p><b>Fit = sum of each factor's score × its share.</b> Seven factors retain provisional analyst ratings on a 1–5 scale, mapped to 0, 25, 50, 75 and 100. These equal steps are a modeling assumption, not measured differences. Momentum is shown only as context: existing development can signal an ecosystem, but can also consume power capacity.</p>
@@ -336,6 +377,11 @@
   <h3>3. Sensitivity</h3>
   <p>Each profile's Scores tab shows the best and worst rank obtained by changing one of that state's judgment ratings by one level, within 1–5. Other ratings and states stay fixed. This is a limited sensitivity test, not a confidence interval or probability. It does not capture correlated errors or simultaneous changes across states.</p>
   <p>Exact score ties within the selected ranking rule share a rank. Setting every weight to zero removes fit scores and ranks while keeping facts and sources available.</p>
+  <h3>Reception and regulation</h3>
+  <p>Each profile's Reception tab answers two questions this score deliberately leaves out. How has a state received datacenter development, and how much datacenter-specific rule is there to clear? Nothing in that tab contributes points or changes a rank, and the same data appears in the table as a pushback column and a count of rules in force.</p>
+  <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. Local action counts here. The four rule axes stay strictly statewide and cover water, power and ratepayer cost, siting and zoning, and tax incentives.</p>
+  <p>Each axis reports what is in force: no datacenter-specific rule, a disclosure or reporting duty, binding conditions, or a pause or prohibition. A separate reading marks a state rule that eases entry, such as a preemption of ordinary review. A pending bill counts as no rule however far it has travelled, and the prose names what is pending, so a state can show four zeroes while its legislature is busy. These readings are provisional analyst judgments like the 1–5 factors and have not been individually validated against original records.</p>
+  <p>Read the two together rather than as one verdict. A state can be easy to build in and still face heavy local opposition, or carry detailed rules and still welcome development. Neither reading is an endorsement or a criticism of a state's choices.</p>
   <h3>Reference views</h3>
   <p>Political outlook weights policy and permitting equally. Physical fundamentals weights power headroom 30%, price 25%, water 20%, hazards 15% and climate 10%. These reference weights stay fixed. Editing a priority returns to Combined; changing the cost scale also affects the physical reference score.</p>
   <div class="source-principles">
@@ -357,11 +403,37 @@
       <li><a href="https://www.ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-42.html">North Carolina HB 56</a> and <a href="https://www.ncdor.gov/taxes-forms/sales-and-use-tax/other-sales-and-use-tax-resources/important-notices-issued-sales-and-use-tax-division/important-notice-repeal-exemptions-electricity-used-datacenters">NCDOR implementation notice</a>: the electricity-exemption billing-period rule.</li>
       <li><a href="https://www.iedc.in.gov/indiana-advantages/investments/data-center-sales-tax-exemption/overview">Indiana IEDC exemption program</a>: eligibility and maximum duration, not a project-specific subsidy valuation.</li>
       <li><a href="https://www.scstatehouse.gov/code/t12c036.php">South Carolina Code § 12-36-2120(79)</a>: conditional datacenter equipment and electricity exemptions.</li>
+      <li><a href="https://www.afslaw.com/perspectives/alerts/state-regulation-data-centers-2026-shifting-landscape">ArentFox Schiff's 2026 state regulation survey</a> and <a href="https://www.multistate.us/resources/state-data-center-policy-101">MultiState's state data center policy guide</a>: background for the reception and regulation readings. Both are legal and government-affairs summaries; the readings here have not been checked state by state against the underlying statutes.</li>
       <li><a href="https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf">FEMA National Risk Index documentation</a> and <a href="https://www.wri.org/aqueduct">WRI Aqueduct</a>: background for further hazard and water research. This app has not calculated its state ratings directly from these datasets.</li>
     </ul>
   </details>
   <p>Model version 2 · Evidence review September 7, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
 </section>
+
+<section class="datapack" id="dataset">
+  <h2>Get the dataset</h2>
+  <p>Everything behind this page is one table: 50 states, the measured electricity price, the eight judgment ratings, the posture and momentum labels, the reception and regulation record, and every citation. The CSV carries one row per state, and the JSON is the exact file the site is built from.</p>
+  <p class="fine" id="dp-fine">The data is openly licensed and also sits in the <a href="https://github.com/sonnetx/datacenter-map">public repository</a>. Please cite it as Sonnet Xu, US datacenter comparison, 2026.</p>
+  <form class="dp-form" id="dp-form" hidden>
+    <div class="row">
+      <label>Name <input type="text" name="name" required autocomplete="name"></label>
+      <label>Email <input type="email" name="email" required autocomplete="email"></label>
+    </div>
+    <label>Organization <input type="text" name="organization" required autocomplete="organization"></label>
+    <label>What are you using it for? <textarea name="purpose" required></textarea></label>
+    <button type="submit">Send and download</button>
+  </form>
+  <p class="dp-msg" id="dp-msg" role="status"></p>
+  <div class="dp-links" id="dp-links">
+    <button type="button" data-format="csv">Download CSV</button>
+    <button type="button" data-format="json">Download JSON</button>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <p>Built by <a href="https://sonnetx.github.io/">Sonnet Xu</a> · <a href="https://github.com/sonnetx/datacenter-map">Source and data on GitHub</a></p>
+  <p>An independent research project. Not affiliated with any operator, utility or agency.</p>
+</footer>
 </div>
 
 <script>__TOPOJSON_LIB__</script>
@@ -667,6 +739,44 @@ function select(abbr){
   if(!profileDialog.open) profileDialog.showModal();
   profileDialog.scrollTop=0;
 }
+// --- reception and regulation (context only, never scored) ---
+const RR_AXES=[
+  {k:"wt",name:"Water",scale:"rule"},{k:"pg",name:"Power and cost",scale:"rule"},
+  {k:"zn",name:"Siting and zoning",scale:"rule"},{k:"tx",name:"Tax incentives",scale:"tax"}
+];
+// One friction scale across all four axes, worded for each. Only rules
+// actually in force count; a pending bill sits at 0 and is described in the
+// prose instead.
+const RR_LEVELS={
+  rule:{"-1":"State rule eases entry","0":"No datacenter-specific rule","1":"Disclosure or reporting","2":"Binding conditions","3":"Pause or prohibition"},
+  tax:{"-1":"Incentive widened","0":"Incentive unrestricted or none offered","1":"Conditional eligibility","2":"Narrowed or paused","3":"Repealed or barred"}
+};
+const RR_PUSHBACK={
+  Low:"No organized opposition or local restriction on record.",
+  Moderate:"Local restrictions or contested proceedings in some jurisdictions.",
+  High:"Multiple local bans, a statewide restriction that cleared a chamber, or a referendum."
+};
+function ticks(level){
+  // -1 reads as a single mark in the link color: eased, not restricted.
+  if(level<0) return '<span class="ticks" aria-hidden="true"><i class="eased"></i><i></i><i></i></span>';
+  let h="";
+  for(let i=1;i<=3;i++) h+=`<i class="${i<=level?"on"+(level>=3?" hot":""):""}"></i>`;
+  return `<span class="ticks" aria-hidden="true">${h}</span>`;
+}
+function renderReception(s){
+  const rr=s.rr;
+  const rows=RR_AXES.map(a=>{
+    const level=rr[a.k], label=RR_LEVELS[a.scale][String(level)];
+    return `<li><span class="axis-name">${a.name}</span>${ticks(level)}<span class="axis-state">${label}</span></li>`;
+  }).join("");
+  return `
+    <h3>How the state has received development</h3>
+    <div class="reception" data-level="${rr.pb}"><b>${rr.pb} pushback</b><span>${RR_PUSHBACK[rr.pb]}</span></div>
+    <h3>Datacenter-specific rules in force</h3>
+    <ul class="axes">${rows}</ul>
+    <p class="note">${rr.n}</p>
+    <p class="evidence-note">Reception and rules are provisional analyst readings on the same basis as the 1–5 factors, and they contribute no points and change no ranking. The four axes count only what is in force; pending bills read as no rule and appear in the prose. A state can be easy to build in and still face heavy local opposition, or carry detailed rules and still welcome development, so read the two together rather than as a single verdict.</p>`;
+}
 function renderDetail(){
   if(!selected) return;
   const s=BY[selected], scored=hasWeights(), W=activeWeights();
@@ -687,7 +797,10 @@ function renderDetail(){
       <div class="fact"><p>2024 industrial electricity price</p><strong>${s.p.toFixed(2)}¢/kWh</strong><a href="${EIA_SOURCE.u}" target="_blank" rel="noopener">EIA measured benchmark ↗</a></div>
       <h3>Analyst summary</h3><p class="note">${s.note}</p>
       <p class="evidence-note">${sources.length?"References are listed in Sources, with their type and scope. The summary and individual ratings have not been fully verified against original records.":"No state-specific references are recorded. The summary and judgment ratings need supporting evidence; only the EIA price has been checked."}</p>
-      <div class="meta"><span>State posture: ${s.st}</span><span>Momentum: ${s.mo}/5 · context only</span></div>
+      <div class="meta"><span>State posture: ${s.st}</span><span>Momentum: ${s.mo}/5 · context only</span><span>Reception: ${s.rr.pb} pushback · context only</span></div>
+    </section>
+    <section id="panel-reception" role="tabpanel" aria-labelledby="tab-reception" tabindex="0" hidden>
+      ${renderReception(s)}
     </section>
     <section id="panel-scores" role="tabpanel" aria-labelledby="tab-scores" tabindex="0" hidden>
       <p class="breakdown-hint">Bars show factor values. Points show the contribution under ${viewLabel()} weights. Momentum is excluded.</p>
@@ -707,6 +820,7 @@ const COLS=[
   {k:"rank",label:"#"},{k:"n",label:"State"},{k:"total",label:"Fit"},
   {k:"p",label:"¢/kWh"},{k:"pw",label:"Headroom"},{k:"po",label:"Policy"},{k:"op",label:"Community"},
   {k:"w",label:"Water"},{k:"h",label:"Hazard"},{k:"c",label:"Climate"},{k:"x",label:"Connectivity"},{k:"delivery",label:"Delivery concerns"},
+  {k:"pb",label:"Pushback"},{k:"rules",label:"Rules in force"},
   {k:"phy",label:"Physical"},{k:"pol",label:"Political"}
 ];
 const thead=document.getElementById("thead");
@@ -719,6 +833,16 @@ COLS.forEach(c=>{
   btn.addEventListener("click",doSort);
   thead.appendChild(th);
 });
+const PB_ORDER={Low:0,Moderate:1,High:2};
+// How many of the four axes carry a rule that is actually in force. An eased
+// axis (-1) is not a rule to clear, so it does not count.
+const ruleCount=s=>RR_AXES.filter(a=>s.rr[a.k]>0).length;
+function sortValue(s,key){
+  if(key==="delivery") return deliveryTier(s);
+  if(key==="pb") return PB_ORDER[s.rr.pb];
+  if(key==="rules") return ruleCount(s);
+  return s[key];
+}
 function renderTable(){
   document.querySelectorAll("#thead th").forEach(th=>{
     const on=th.dataset.k===sortKey;
@@ -729,14 +853,14 @@ function renderTable(){
   });
   const scored=hasWeights();
   const rows=[...STATES].sort((a,b)=>{
-    let va=sortKey==="delivery"?deliveryTier(a):a[sortKey], vb=sortKey==="delivery"?deliveryTier(b):b[sortKey];
+    let va=sortValue(a,sortKey), vb=sortValue(b,sortKey);
     if(va===null||va===undefined) va=-1; if(vb===null||vb===undefined) vb=-1;
     if(typeof va==="string") return sortAsc? va.localeCompare(vb) : vb.localeCompare(va);
     return sortAsc? va-vb : vb-va;
   });
   const dash=v=>scored?v:"--";
   const tb=document.getElementById("tbody");
-  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
+  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
   tb.querySelectorAll("tr").forEach(tr=>{
     tr.addEventListener("click",()=>select(tr.dataset.a));
     tr.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select(tr.dataset.a);} });
@@ -782,6 +906,80 @@ function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); rende
   mq.addEventListener("change",e=>{ if(e.matches) panel.removeAttribute("open"); else panel.setAttribute("open",""); });
 })();
 refresh();
+
+// --- dataset release ---
+// Paste a form endpoint that accepts a POST and emails the submission (a
+// Formspree form URL, for example). While this is empty the section offers the
+// download on its own rather than showing a form that goes nowhere.
+const DATA_REQUEST_ENDPOINT = "";
+(function(){
+  const form=document.getElementById("dp-form"), msg=document.getElementById("dp-msg"), links=document.getElementById("dp-links");
+  const gated=Boolean(DATA_REQUEST_ENDPOINT);
+  const stamp=new Date().toISOString().slice(0,10);
+
+  // One row per state, with the reception record flattened alongside the
+  // ratings so the CSV stands on its own.
+  const COLUMNS=[
+    ["postal",s=>s.a],["state",s=>s.n],
+    ["industrial_price_cents_kwh_2024",s=>s.p],
+    ["power_headroom_1_5",s=>s.pw],["incentives_policy_1_5",s=>s.po],
+    ["community_permitting_1_5",s=>s.op],["water_1_5",s=>s.w],
+    ["natural_hazard_1_5",s=>s.h],["climate_cooling_1_5",s=>s.c],
+    ["connectivity_1_5",s=>s.x],["momentum_1_5",s=>s.mo],
+    ["state_posture",s=>s.st],["action_tag_2026",s=>s.tag],
+    ["pushback",s=>s.rr.pb],
+    ["rule_water",s=>s.rr.wt],["rule_power_cost",s=>s.rr.pg],
+    ["rule_siting_zoning",s=>s.rr.zn],["rule_tax_incentives",s=>s.rr.tx],
+    ["rules_in_force_count",s=>ruleCount(s)],
+    ["reception_note",s=>s.rr.n],["analyst_note",s=>s.note],
+    ["source_urls",s=>(s.srcs||[]).map(x=>x.u).join(" | ")]
+  ];
+  const cell=v=>{ const t=String(v??""); return /[",\n]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t; };
+  const byPostal=()=>[...STATES].sort((a,b)=>a.a.localeCompare(b.a));
+  const toCSV=()=>[COLUMNS.map(c=>c[0]).join(",")]
+    .concat(byPostal().map(s=>COLUMNS.map(c=>cell(c[1](s))).join(",")))
+    .join("\n")+"\n";
+  // Ship the record as authored, without the fields compute() adds at runtime.
+  const AUTHORED=["a","n","p","pw","po","op","w","h","c","x","mo","st","tag","note","rr","srcs"];
+  const toJSON=()=>JSON.stringify(byPostal().map(s=>Object.fromEntries(
+    AUTHORED.filter(k=>s[k]!==undefined).map(k=>[k,s[k]]))),null,1)+"\n";
+
+  function download(format){
+    const csv=format==="csv";
+    const blob=new Blob([csv?toCSV():toJSON()],{type:(csv?"text/csv":"application/json")+";charset=utf-8"});
+    const url=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=url; a.download=`us-datacenter-conditions-${stamp}.${format}`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),0);
+  }
+  links.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>download(b.dataset.format)));
+
+  if(!gated) return;
+  form.hidden=false; links.hidden=true;
+  // Say what the form is for only once it exists, and be straight about the
+  // fact that it guards nothing: the same data is a click away on GitHub.
+  document.getElementById("dp-fine").insertAdjacentHTML("beforeend",
+    " The form is a request to introduce yourself rather than a condition of access, since the same file is in that repository. Telling me who you are and what you are using it for is what tells me which parts to keep current. Addresses are not verified.");
+  form.addEventListener("submit",async e=>{
+    e.preventDefault();
+    const button=form.querySelector("button");
+    button.disabled=true; msg.removeAttribute("data-tone"); msg.textContent="Sending…";
+    try{
+      const body=new FormData(form);
+      body.append("dataset",`us-datacenter-conditions-${stamp}`);
+      const res=await fetch(DATA_REQUEST_ENDPOINT,{method:"POST",body,headers:{Accept:"application/json"}});
+      if(!res.ok) throw new Error(res.status);
+      form.hidden=true; links.hidden=false;
+      msg.textContent="Thank you. Your download is ready below.";
+    }catch(err){
+      // The data is public either way, so a failed send must not block access.
+      button.disabled=false;
+      links.hidden=false;
+      msg.setAttribute("data-tone","error");
+      msg.textContent="That did not send, which is my problem rather than yours. The download is below, and the same data is in the GitHub repository.";
+    }
+  });
+})();
 </script>
 <script data-goatcounter="https://sonnetx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

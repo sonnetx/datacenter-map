@@ -5,7 +5,7 @@ An interactive map for exploring state-level conditions for hyperscale and AI tr
 ## Interface
 
 - Find a state above the map, select a leading candidate, or use the map, scatter plot or table.
-- State profiles open in a side panel with Overview, Scores and Sources tabs. Profiles support keyboard navigation and close with Escape.
+- State profiles open in a side panel with Overview, Scores, Reception and Sources tabs. Profiles support keyboard navigation and close with Escape.
 - Choose Balanced, Build sooner, Lower costs, Lower risk or Connectivity first, then adjust relative priorities. Effective percentage shares update automatically.
 - Switch between Combined, Political outlook and Physical fundamentals without losing custom priorities. Editing a slider returns to Combined.
 - Priorities collapse above the map on mobile. Wide charts and tables scroll within their containers.
@@ -75,9 +75,36 @@ Each entry in `data/states.json` uses short keys. `tests/validate_data.py` enfor
 | `st` | Posture label. One of Courting, Courting with conditions, Reviewing or paused, Restrictive, No active state posture. |
 | `tag` | Short label for a 2026 statewide action, or an empty string. A non-empty tag requires `srcs`. |
 | `note` | Prose shown in the state profile. |
+| `rr` | Reception and regulation. Context only, contributes no points. |
 | `srcs` | Optional list of citations. |
 
 Ratings run 1 to 5 with higher being more favorable, including for hazard and water, where a high score means low risk. A citation is `{"t": title, "u": https url, "type": publisher role}`, with optional `supports` and `reviewed` describing what a checked document actually establishes. Titles cap at 60 characters so they fit the profile panel. Permitted `type` values are listed in the validator.
+
+## Reception and regulation
+
+The `rr` record answers two questions the fit score deliberately does not. How has a state received datacenter development, and how much datacenter-specific rule is there to clear? Neither feeds the score, the ranking or the delivery signal, and `tests/model.test.cjs` asserts that the whole record can be stripped from the dataset without moving a single number. The profile's Reception tab shows it, and the comparison table carries a pushback column and a count of rules in force.
+
+`rr.pb` records reception as Low, Moderate or High pushback. Low means no organized opposition or local restriction on record. Moderate means local restrictions or contested proceedings in some jurisdictions. High means multiple local bans, a statewide restriction that cleared a chamber, or a referendum. Local action counts here rather than on the rule axes, which stay strictly statewide.
+
+`rr.wt`, `rr.pg`, `rr.zn` and `rr.tx` cover water, power and ratepayer cost, siting and zoning, and tax incentives. Each runs on one scale.
+
+| Value | Meaning | For `tx` |
+|---|---|---|
+| -1 | A state rule eases entry or preempts ordinary review | Incentive widened |
+| 0 | No datacenter-specific rule in force | Incentive unrestricted, or none offered |
+| 1 | Disclosure, reporting or study requirement in force | Conditional eligibility |
+| 2 | Binding conditions in force | Narrowed or paused |
+| 3 | A pause, moratorium or prohibition in force | Repealed or barred |
+
+Only what is in force counts. A pending bill sits at 0 no matter how far it has travelled, and `rr.n` says what is pending. Keeping proposals out of the numbers is what stops the axes from tracking legislative noise, and it is why a state can show four zeroes while its legislature is busy. `rr.n` is one to three sentences naming the statutes, executive orders and local actions behind the row.
+
+These readings are provisional analyst judgments on the same footing as the seven 1-5 factors, and they have not been individually validated against original records.
+
+## Releasing the data
+
+The page offers the dataset as CSV, one row per state with the `rr` record flattened, and as JSON matching `data/states.json`. Both are generated in the browser from the loaded data, so they cannot drift from what the page shows.
+
+`DATA_REQUEST_ENDPOINT` near the bottom of `src/template.html` controls whether a short form comes first. Leave it empty and the download stands alone. Set it to a form endpoint that accepts a POST and emails the submission, such as a Formspree form URL, and visitors give a name, email, organization and intended use before the download appears. A failed send still hands over the file: the data is openly licensed and sits in this repository, so the form asks who is using it rather than restricting access, and the page says so.
 
 ## Working on it
 

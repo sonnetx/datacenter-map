@@ -13,7 +13,15 @@
 "tag": "",
 "note": "Cheap power and TVA in the north, Alabama Power elsewhere; receptive utilities. Hot, humid climate and tornado exposure. First local moratoriums (Anniston, Westover) adopted Aug 2026.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is in force. SB 270, which would require cost-recovery terms in utility contracts with loads of 150 MW or more, is pending. Anniston and Westover adopted local moratoriums in August 2026."
+}
 },
 {
 "a": "AK",
@@ -29,7 +37,15 @@
 "tag": "",
 "note": "Free cooling and water, but an isolated grid, very high power prices, seismic risk and almost no fiber ecosystem.",
 "mo": 1,
-"st": "No active state posture"
+"st": "No active state posture",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state legislation is recorded. Siting runs through ordinary utility and land use review."
+}
 },
 {
 "a": "AZ",
@@ -71,7 +87,15 @@
 "supports": "Approved direction to develop a 120-day moratorium resolution for unincorporated Pima County. This agenda record does not establish the effective date of a final resolution.",
 "reviewed": "2026-09-07"
 }
-]
+],
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 2,
+"n": "SB 1861 (June 2026) bars new sales tax exemption applications from July 2026 through June 2029 without restricting construction, and existing certifications are untouched. HB 2756, which would direct cost-of-service review of very high load factor contracts, is pending. Pima County directed a 120-day moratorium for unincorporated areas in August 2026."
+}
 },
 {
 "a": "AR",
@@ -109,7 +133,15 @@
 "u": "https://www.entergyarkansas.com/ratecase2026",
 "type": "Company statement"
 }
-]
+],
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No data center statute passed, and six Senate resolutions that would have authorized one died at sine die in April 2026. Entergy Arkansas filed large-load rate schedules with the PSC in February 2026, which is a filing rather than an approved tariff. Organized opposition has formed in Conway."
+}
 },
 {
 "a": "CA",
@@ -125,7 +157,15 @@
 "tag": "",
 "note": "Unmatched connectivity but the highest industrial power price in the lower 48, transformer shortages leaving built facilities unpowered, and the first voter-approved citywide ban (Monterey Park, June 2026) plus a Coachella Valley restriction bloc. Seismic and wildfire risk.",
 "mo": 3,
-"st": "Restrictive"
+"st": "Restrictive",
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is in force. SB 886, which would create a tariff regime for facilities of 25 MW or more with onsite storage and demand response duties, and SB 887 on expedited review are both pending. Monterey Park voters approved the first citywide ban in June 2026, and a restriction bloc has formed in the Coachella Valley."
+}
 },
 {
 "a": "CO",
@@ -141,7 +181,15 @@
 "tag": "",
 "note": "Denver is a solid secondary market with cool, dry air. Xcel capacity is tight, Colorado River basin water stress is severe, and hail and wildfire losses are high.",
 "mo": 2,
-"st": "No active state posture"
+"st": "No active state posture",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state legislation is recorded. Colorado River basin water stress is managed through general allocation rules rather than any rule aimed at data centers."
+}
 },
 {
 "a": "CT",
@@ -157,7 +205,15 @@
 "tag": "",
 "note": "ISO-NE power is scarce and expensive; Groton enacted a local moratorium. Low natural hazard exposure is the main upside.",
 "mo": 1,
-"st": "No active state posture"
+"st": "No active state posture",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is recorded. Groton enacted a local moratorium."
+}
 },
 {
 "a": "DE",
@@ -173,7 +229,15 @@
 "tag": "",
 "note": "PJM capacity pricing at the cap flows into Delmarva bills; Dover is weighing an 18-month pause and Harrington rejected a data center ordinance in Aug 2026.",
 "mo": 2,
-"st": "Reviewing or paused"
+"st": "Reviewing or paused",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is recorded. Dover is weighing an 18-month pause and Harrington rejected a data center ordinance in August 2026."
+}
 },
 {
 "a": "FL",
@@ -189,7 +253,15 @@
 "tag": "",
 "note": "Miami is a key interconnection hub for Latin America and FPL is building generation, but the 2026 Hyperscale Data Center Act raised the exemption threshold to 100 MW and at least eight counties adopted one-year moratoriums in mid-2026. Hurricane exposure is the worst in the country.",
 "mo": 3,
-"st": "Courting, with conditions"
+"st": "Courting, with conditions",
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 1,
+"n": "The 2026 Hyperscale Data Center Act raised the sales tax exemption threshold to 100 MW, narrowing eligibility rather than restricting construction. At least eight counties adopted one-year moratoriums in mid-2026."
+}
 },
 {
 "a": "GA",
@@ -205,7 +277,15 @@
 "tag": "",
 "note": "Atlanta is a top-tier growth market. Georgia PSC approved 9,885 MW of new Georgia Power generation in Dec 2025 mostly for large loads; the large-load pipeline reached ~69 GW. The sales tax exemption survived a repeal push and runs through 2032, but local permitting must be checked for the specific project location.",
 "mo": 5,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "The sales tax exemption survived a repeal push and runs through 2032. SB 476, which would have eliminated most state tax credits, passed the Senate in February 2026 without becoming law, and the broader HB 1059 failed in committee. Camden County adopted a nine-month local moratorium."
+}
 },
 {
 "a": "HI",
@@ -221,7 +301,15 @@
 "tag": "",
 "note": "By far the highest power price in the US and an island grid; not a development target.",
 "mo": 1,
-"st": "No active state posture"
+"st": "No active state posture",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state legislation is recorded. The island grid rather than policy is the binding constraint."
+}
 },
 {
 "a": "ID",
@@ -259,7 +347,15 @@
 "u": "https://idahobusinessreview.com/2026/04/06/idaho-historic-snow-drought-lowest-snowpack/",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 1,
+"n": "HB 315 (2025) narrowed the server equipment sales tax exemption to entities meeting investment and job tests. Idaho Power has no data center tariff, so loads above 20 MW are handled through special contracts rather than a posted rate."
+}
 },
 {
 "a": "IL",
@@ -292,7 +388,15 @@
 "u": "https://insidelines.pjm.com/pjm-capacity-auction-procures-138318-mw-of-generation-resources-as-work-continues-to-address-growing-electricity-demand/",
 "type": "Grid operator"
 }
-]
+],
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 2,
+"n": "The governor directed DCEO to stop signing new Data Center Investment Program agreements from July 1, 2026. Agreements signed before that date are honored and no end date was set. The Illinois POWER Act (SB 4016 / HB 5513), covering cost allocation, water transparency and impact assessment for facilities of 50 MW or more, is pending, and Commerce Commission energy reporting rules are in rulemaking."
+}
 },
 {
 "a": "IN",
@@ -332,7 +436,15 @@
 "u": "https://www.abc57.com/news/elkhart-city-council-to-go-forward-with-data-center-moratorium-after-unanimous-vote",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 1,
+"n": "HEA 1210 (March 2026) lets a host community collect up to 1% of the sales tax a data center does not pay, attaching a revenue-sharing condition to the exemption. HB 1333 passed the House and died in Senate committee. Local bans now cover 12 of Indiana's 92 counties, including Elkhart and Marion County."
+}
 },
 {
 "a": "IA",
@@ -370,7 +482,15 @@
 "u": "https://www.businessrecord.com/growth-of-data-centers-in-iowa/",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is recorded. MidAmerican negotiates ten-year contracts with large loads and regulators treat the terms as confidential, so they cannot be checked against a posted tariff. Woodbury, Johnson, Dubuque and Madison counties adopted pauses."
+}
 },
 {
 "a": "KS",
@@ -386,7 +506,15 @@
 "tag": "",
 "note": "Evergy has spare capacity and the state offers incentives; Kansas City metro gives some ecosystem. Tornado and hail losses are high and western water is stressed.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is recorded. Incentives run through general economic development programs."
+}
 },
 {
 "a": "KY",
@@ -402,7 +530,15 @@
 "tag": "",
 "note": "Second-cheapest industrial power east of the Mississippi, LG&E/KU and TVA territory, incentives intact. Modest fiber depth; flood and tornado exposure.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is recorded and incentives remain intact."
+}
 },
 {
 "a": "LA",
@@ -440,7 +576,15 @@
 "u": "https://lpscpubvalence.lpsc.louisiana.gov/portal/PSC/DocketDetails?docketId=32728",
 "type": "Government record"
 }
-]
+],
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific restriction is in force. The LPSC approved about 2,262 MW of generation for Meta's Hyperion campus in August 2025 and fast-tracked Entergy's March 2026 filing for roughly 7.5 GW across ten units, with a final vote due December 2026. Intervenors are pressing for a prudence review."
+}
 },
 {
 "a": "ME",
@@ -456,7 +600,15 @@
 "tag": "",
 "note": "The legislature passed the first statewide moratorium (LD 307); Gov. Mills vetoed it April 24, 2026 and the override failed, but LD 713 stripped incentive eligibility and the Jay mill project was halted in June. Bangor and Eastport have local bans.",
 "mo": 1,
-"st": "Restrictive"
+"st": "Restrictive",
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 3,
+"n": "The legislature passed the first statewide moratorium (LD 307); the governor vetoed it on April 24, 2026 and the override failed. LD 713 stripped datacenter incentive eligibility, the Jay mill project was halted in June, and Bangor and Eastport have local bans."
+}
 },
 {
 "a": "MD",
@@ -472,7 +624,15 @@
 "tag": "",
 "note": "Frederick County spillover from Northern Virginia, but PJM constraints, above-average power prices, a Baltimore moratorium and a proposed statewide pause (HB 120).",
 "mo": 2,
-"st": "Reviewing or paused"
+"st": "Reviewing or paused",
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 2,
+"zn": 0,
+"tx": 0,
+"n": "A 2025 law set rate negotiation rules for large customers, and Public Service Commission cost-allocation proceedings are underway. HB 120, a construction moratorium pending co-location rules, and SB 596 on demand response for customers of 25 MW or more are both pending. Baltimore enacted a one-year local moratorium."
+}
 },
 {
 "a": "MA",
@@ -488,7 +648,15 @@
 "tag": "",
 "note": "Expensive ISO-NE power with little headroom; no state incentive program. Cool climate and low hazard exposure.",
 "mo": 1,
-"st": "No active state posture"
+"st": "No active state posture",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute and no state incentive program are recorded."
+}
 },
 {
 "a": "MI",
@@ -504,7 +672,15 @@
 "tag": "",
 "note": "Gov. Whitmer has supported datacenter investment (OpenAI Stargate 'The Barn' in Saline), with a 2024 exemption and a July 2026 Responsible Growth Pledge. DTE/Consumers generation is still catching up, and local permitting requires separate review. Great Lakes water and a cold climate are strong.",
 "mo": 4,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "The 2024 sales tax exemption remains in force and the July 2026 Responsible Growth Pledge is voluntary rather than binding. No statewide water, siting or ratepayer rule specific to data centers is recorded, so local permitting carries the review."
+}
 },
 {
 "a": "MN",
@@ -520,7 +696,15 @@
 "tag": "",
 "note": "Cold climate and abundant water; Meta (Rosemount) and Microsoft (Becker) anchor the market. The 2025 law kept the equipment exemption but ended the electricity exemption and added fees; Xcel capacity is the constraint.",
 "mo": 3,
-"st": "Courting, with conditions"
+"st": "Courting, with conditions",
+"rr": {
+"pb": "Moderate",
+"wt": 2,
+"pg": 0,
+"zn": 0,
+"tx": 2,
+"n": "Minnesota established a separate water permitting requirement for data centers, one of the few state water rules aimed specifically at the sector. The 2025 law kept the equipment exemption, ended the electricity exemption and added fees."
+}
 },
 {
 "a": "MS",
@@ -558,7 +742,15 @@
 "u": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_06_b",
 "type": "Government record"
 }
-]
+],
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": -1,
+"zn": 0,
+"tx": 0,
+"n": "A state law lets Entergy contract with Amazon outside normal PSC approval, easing entry relative to ordinary review, and it is now the subject of a ratepayer dispute. Incentives came largely from a 2024 special session rather than a standing statute; HB 1239 died in conference in 2025 and no incentive statute passed in 2026."
+}
 },
 {
 "a": "MO",
@@ -574,7 +766,15 @@
 "tag": "",
 "note": "Kansas City and St. Louis offer connectivity; incentives available. Peculiar enacted a local ban and Ameren/Evergy headroom is moderate.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is recorded. Peculiar enacted a local ban."
+}
 },
 {
 "a": "MT",
@@ -590,7 +790,15 @@
 "tag": "",
 "note": "CNBC's grid analysis puts Montana among the ten best-positioned states on price and reliability; cold climate helps PUE. The grid is small, fiber is sparse, wildfire and drought are the physical risks.",
 "mo": 2,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state legislation is recorded."
+}
 },
 {
 "a": "NE",
@@ -606,7 +814,15 @@
 "tag": "",
 "note": "Public power (OPPD/NPPD) has been receptive; Google, Meta and Microsoft cluster around Omaha. Second-cheapest residential power nationally. Tornado exposure.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is recorded. The public power districts have contracted with large loads directly."
+}
 },
 {
 "a": "NV",
@@ -622,7 +838,15 @@
 "tag": "",
 "note": "Reno and Las Vegas have established campuses and partial tax abatements, but Lake Mead sits at ~32% and Reno's water use is contested. Low seismic and storm losses.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is recorded and partial tax abatements remain available. Water use in the Reno area is contested through general allocation rather than a datacenter rule."
+}
 },
 {
 "a": "NH",
@@ -638,7 +862,15 @@
 "tag": "",
 "note": "Expensive New England power and no headroom; otherwise a low-risk cold-climate location.",
 "mo": 1,
-"st": "No active state posture"
+"st": "No active state posture",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state legislation is recorded."
+}
 },
 {
 "a": "NJ",
@@ -654,7 +886,15 @@
 "tag": "",
 "note": "The state froze its $250M AI data center incentive, then enacted the Data Center Fair Share Act (July 7, 2026) creating a separate rate class and requiring data centers to curtail before residents. Local restrictions require municipality-specific review. Strong NYC-adjacent connectivity.",
 "mo": 2,
-"st": "Restrictive"
+"st": "Restrictive",
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 2,
+"zn": 0,
+"tx": 2,
+"n": "The Data Center Fair Share Act (July 7, 2026) creates a separate ratepayer class for large data centers, requires them to cover their own grid infrastructure costs and requires them to curtail before residential customers. The state also froze its $250M AI data center incentive. Local restrictions require municipality-specific review."
+}
 },
 {
 "a": "NM",
@@ -692,7 +932,15 @@
 "u": "https://www.cnbc.com/2025/07/15/10-best-power-sources-us-grid-ai-data-center-top-states-for-business.html",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state statute is in force, and legislators have said they will file a statewide moratorium in the 2027 session. Santa Fe County adopted an 18-month ban on July 1, 2026. A researcher told lawmakers in September 2026 that state data center water use could rise from about 500 million to 23.6 billion gallons a year if every planned project is built."
+}
 },
 {
 "a": "NY",
@@ -730,7 +978,15 @@
 "u": "https://www.dwt.com/blogs/energy--environmental-law-blog/2026/07/ny-data-center-permitting-pause-executive-order-62",
 "type": "Legal analysis"
 }
-]
+],
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 0,
+"zn": 3,
+"tx": 0,
+"n": "Executive Order 62 (July 14, 2026) holds discretionary DEC permits for data centers of 50 MW or more in abeyance until a Generic Environmental Impact Statement is finished, framed as up to one year. It reaches state discretionary permits only, not local approvals, and exempts applications deemed complete before July 14. The legislature's broader 20 MW bill (S10642) passed both houses but has not been delivered or signed."
+}
 },
 {
 "a": "NC",
@@ -778,7 +1034,15 @@
 "u": "https://www.wfae.org/2026-08-26/durham-county-data-center-moratorium",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 2,
+"n": "The 2026 budget (S257, S.L. 2026-41) permanently repealed the sales tax exemption on data center electricity while keeping the equipment exemption, which NCDOR reads as effective for the first billing period beginning on or after August 6, 2026. Charlotte, Durham County and Apex passed moratoriums."
+}
 },
 {
 "a": "ND",
@@ -816,7 +1080,15 @@
 "u": "https://northdakotamonitor.com/2026/09/03/data-center-nondisclosure-bill-dies-in-north-dakota-senate-vote/",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "The sales tax exemption is intact and its cost rose from $15.3M in 2024 to over $65M in 2025. SB 2406, which would have penalized developers using nondisclosure agreements with public officials, died in the Senate on September 3, 2026."
+}
 },
 {
 "a": "OH",
@@ -854,7 +1126,15 @@
 "u": "https://www.cnbc.com/2026/07/09/best-states-for-ai-data-centers.html",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "High",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 2,
+"n": "The governor paused new exemption approvals after the Tax Credit Authority's June 1, 2026 meeting, pending a joint legislative committee study, and the release distinguishes that pause from a ban. HB 957, still a proposal, would bar new exemptions from October 1, 2026, and a statewide ballot measure to restrict facilities of 25 MW or more was collecting signatures."
+}
 },
 {
 "a": "OK",
@@ -870,7 +1150,15 @@
 "tag": "",
 "note": "Third-cheapest industrial power and Google's Pryor campus; HB 2992 (effective July 1, 2026) requires large loads to fund their own grid costs. SB 1488 statewide moratorium and HB 4424 property tax rollback were proposed but not enacted; Oklahoma City passed a local pause. Tornado alley.",
 "mo": 3,
-"st": "Courting, with conditions"
+"st": "Courting, with conditions",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 2,
+"zn": 0,
+"tx": 0,
+"n": "HB 2992, the Data Center Consumer Ratepayer Protection Act, took effect July 1, 2026 and requires electric suppliers to set separate terms and tariffs for large loads so they fund their own grid costs. SB 1488, a moratorium on facilities of 100 MW or more through 2029, and HB 4424 on property tax were proposed but not enacted. Oklahoma City passed a local pause."
+}
 },
 {
 "a": "OR",
@@ -886,7 +1174,15 @@
 "tag": "",
 "note": "Hillsboro's cable landings and Prineville/The Dalles campuses are mature, but BPA transmission and PGE capacity are constrained and the 2025 POWER Act shifts costs onto large loads. Cascadia seismic risk; cool climate is ideal for cooling.",
 "mo": 3,
-"st": "Courting, with conditions"
+"st": "Courting, with conditions",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 2,
+"zn": 0,
+"tx": 0,
+"n": "The 2025 POWER Act (HB 3546) creates a separate rate class for facilities using 20 MW or more and requires ten-year power purchase agreements, shifting infrastructure costs onto large loads."
+}
 },
 {
 "a": "PA",
@@ -902,7 +1198,15 @@
 "tag": "",
 "note": "Second-highest power supply available for computing per CNBC, nuclear restarts and new gas, and Amazon's $20B commitment. Shapiro's GRID Standards (May 2026) make the sales tax exemption conditional on clean-firm generation, LEED Gold and 50 jobs at 125% of average wage. PJM capacity costs and many township-level fights.",
 "mo": 4,
-"st": "Courting, with conditions"
+"st": "Courting, with conditions",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 1,
+"n": "The GRID Standards (May 2026) make the sales tax exemption conditional on clean-firm generation, LEED Gold certification and 50 jobs at 125% of the average wage. Township-level siting fights are frequent."
+}
 },
 {
 "a": "RI",
@@ -918,7 +1222,15 @@
 "tag": "",
 "note": "Among the most expensive power in the lower 48 with no headroom.",
 "mo": 1,
-"st": "No active state posture"
+"st": "No active state posture",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "No datacenter-specific state legislation is recorded."
+}
 },
 {
 "a": "SC",
@@ -958,7 +1270,15 @@
 "u": "https://www.scstatehouse.gov/sess126_2025-2026/bills/867.htm",
 "type": "Government record"
 }
-]
+],
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 2,
+"zn": 0,
+"tx": 0,
+"n": "A 2025 law set rate negotiation rules for large customers. The exemption covers both equipment and electricity for qualifying facilities. The Data Center Development Act (S.867) got a favorable committee report in April 2026 but has not passed."
+}
 },
 {
 "a": "SD",
@@ -974,7 +1294,15 @@
 "tag": "",
 "note": "On CNBC's best-grid list, but SB 135 / HB 1038 (2026) add disclosure and cost-allocation rules using a 10 MW threshold, and there is no dedicated incentive. Sparse fiber.",
 "mo": 2,
-"st": "Courting, with conditions"
+"st": "Courting, with conditions",
+"rr": {
+"pb": "Moderate",
+"wt": 1,
+"pg": 2,
+"zn": 1,
+"tx": 0,
+"n": "SB 135 and HB 1038 (2026) add standardized energy and water reporting to the Public Utilities Commission, cost-allocation protections at a 10 MW threshold, and language clarifying local authority to regulate data centers. There is no dedicated state incentive. SB 232, a one-year moratorium, stalled."
+}
 },
 {
 "a": "TN",
@@ -1012,7 +1340,15 @@
 "u": "https://naacp.org/articles/naacp-sues-xai-illegal-pollution-data-center-power-plant",
 "type": "Advocacy statement"
 }
-]
+],
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 2,
+"zn": 0,
+"tx": 0,
+"n": "Public Chapter 961 (May 2026) bars utilities from absorbing infrastructure costs for centers over 50 MW and lets those centers self-generate. The data center exemption and the 1.5% reduced electricity rate survived the 2026 session unchanged."
+}
 },
 {
 "a": "TX",
@@ -1055,7 +1391,15 @@
 "u": "https://insideclimatenews.org/news/25082026/texas-data-center-gas-projects/",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 3,
+"zn": 0,
+"tx": 0,
+"n": "SB 6 (2025) requires large loads of 75 MW or more to fund interconnection studies and upgrades and allows curtailment during grid stress. A governor's directive of August 3, 2026 paused pending data center interconnections until each project passes a PUCT/ERCOT audit, with a report targeted for December 10. The pause runs through ERCOT, so it does not reach El Paso, the Panhandle or East Texas."
+}
 },
 {
 "a": "UT",
@@ -1088,7 +1432,15 @@
 "u": "https://utahnewsdispatch.com/2026/06/04/stratos-data-center-referendum-group-appeal-to-a-judge/",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "High",
+"wt": 2,
+"pg": 0,
+"zn": 2,
+"tx": 0,
+"n": "Executive Order 2026-03 (May 29, 2026) is a review framework rather than a moratorium. It directs executive-branch agencies to apply a higher bar to large data center review, requiring that water consumption not increase and that Great Salt Lake impacts be weighed. It followed the 9 GW Stratos proposal in Box Elder County, whose referendum campaign is in district court."
+}
 },
 {
 "a": "VT",
@@ -1104,7 +1456,15 @@
 "tag": "",
 "note": "Gov. Scott vetoed H.727's restrictions (May 28, 2026) and the override failed, but the grid is tiny and power is expensive. Lowest natural hazard exposure in the country.",
 "mo": 1,
-"st": "No active state posture"
+"st": "No active state posture",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "The governor vetoed H.727's restrictions on May 28, 2026 and the override failed, so no datacenter-specific statute is in force. S.205, which would halt AI data center construction through July 2030, is pending."
+}
 },
 {
 "a": "VA",
@@ -1152,7 +1512,15 @@
 "u": "https://www.bloomberg.com/news/articles/2024-08-29/data-centers-face-seven-year-wait-for-power-hookups-in-virginia",
 "type": "Reporting"
 }
-]
+],
+"rr": {
+"pb": "High",
+"wt": 2,
+"pg": 2,
+"zn": 2,
+"tx": 1,
+"n": "The most complete package in force. HB 1393 prevents residential cost-shifting for projects of 25 MW or more, HB 496 requires water withdrawal and consumptive use reporting to DEQ, SB 553 makes localities address water supply impacts in rezonings, and HB 153 requires a site assessment before local rezoning or special-use approval for projects of 100 MW or more, with a 500-foot residential setback. The sales tax exemption runs through 2035, but a $0.011/kWh consumption tax applies from July 2026 to July 2028 and DEQ must define Cooling Water Scarcity Areas by July 2027."
+}
 },
 {
 "a": "WA",
@@ -1168,7 +1536,15 @@
 "tag": "",
 "note": "Cheap hydro and a cool climate put Washington atop CNBC's grid ranking; Quincy and Seattle are established markets. Grant County PUD is effectively full and BPA transmission is the bottleneck; the exemption is limited to rural counties; Snohomish County paused applications through Dec 2026.",
 "mo": 3,
-"st": "Courting, with conditions"
+"st": "Courting, with conditions",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 1,
+"n": "The sales tax exemption is limited to rural counties. HB 2515, which would set clean energy, cost-shifting and demand response standards for large loads, is pending. Snohomish County paused applications through December 2026."
+}
 },
 {
 "a": "WV",
@@ -1184,7 +1560,15 @@
 "tag": "",
 "note": "HB 2014 (2025) created a certified microgrid district program letting data centers self-supply from coal or gas; Berkeley County is a Northern Virginia spillover. Rural opposition (Tucker County) is emerging; fiber is thin.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": -1,
+"tx": 0,
+"n": "HB 2014 (2025) created a certified microgrid district program letting data centers self-supply from coal or gas, easing siting and power supply relative to ordinary review. Rural opposition has emerged in Tucker County."
+}
 },
 {
 "a": "WI",
@@ -1200,7 +1584,15 @@
 "tag": "",
 "note": "Microsoft (Mount Pleasant) and Meta (Beaver Dam) anchor a fast-growing market with a 2023 exemption and Great Lakes water. We Energies' gas buildout is contested and Port Washington-style local fights are frequent.",
 "mo": 4,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Moderate",
+"wt": 0,
+"pg": 0,
+"zn": 0,
+"tx": 0,
+"n": "The 2023 sales tax exemption remains in force and no datacenter-specific water, siting or ratepayer statute is recorded. We Energies' gas buildout is contested and local siting fights are frequent."
+}
 },
 {
 "a": "WY",
@@ -1216,6 +1608,14 @@
 "tag": "",
 "note": "Gov. Gordon's EO 2026-03 ('Data Centers the Wyoming Way', June 3) explicitly keeps the state open for investment while making developers pay for new power; Cheyenne hosts a 1.8 GW Crusoe/Tallgrass campus. Cold, cheap, low-hazard, but very thin fiber and labor.",
 "mo": 3,
-"st": "Courting"
+"st": "Courting",
+"rr": {
+"pb": "Low",
+"wt": 0,
+"pg": 2,
+"zn": 0,
+"tx": 0,
+"n": "Executive Order 2026-03, 'Data Centers the Wyoming Way' (June 3, 2026), keeps the state open for investment while requiring developers to pay for new power. No datacenter-specific water or siting restriction is recorded."
+}
 }
 ]

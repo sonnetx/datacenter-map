@@ -40,6 +40,20 @@ test('momentum does not influence fit or political outlook', () => {
   assert.equal(run('BY.A.rank===1 && BY.B.rank===1 && BY.A.tied && BY.B.tied'), true);
 });
 
+test('reception and regulation contribute nothing to fit, rank or the reference views', () => {
+  const open = {pb:'Low',wt:0,pg:0,zn:0,tx:0,n:'Nothing in force.'};
+  const closed = {pb:'High',wt:3,pg:3,zn:3,tx:3,n:'Restrictions in force.'};
+  const run = model([{...neutral,a:'A',rr:open},{...neutral,a:'B',rr:closed}]);
+  assert.equal(run('BY.A.total===BY.B.total && BY.A.phy===BY.B.phy && BY.A.pol===BY.B.pol'), true);
+  assert.equal(run('BY.A.rank===1 && BY.B.rank===1 && BY.A.tied && BY.B.tied'), true);
+  assert.equal(run('deliveryTier(BY.A)===deliveryTier(BY.B)'), true);
+  // The real dataset scores identically with the whole record stripped out.
+  // Arrays cross a vm realm boundary, so compare serialized output.
+  const scores = 'JSON.stringify(STATES.map(s=>[s.a,s.total,s.rank,s.phy,s.pol]))';
+  const withRR = model(), without = model(data.map(({rr, ...rest}) => rest));
+  assert.equal(without(scores), withRR(scores));
+});
+
 test('delivery first prevents strong other factors from offsetting a delivery concern', () => {
   const run = model([{...neutral,a:'A',p:5,pw:1,po:5,w:5,h:5,c:5,x:5},{...neutral,a:'B'}]);
   assert.equal(run('BY.A.rank'), 1);
