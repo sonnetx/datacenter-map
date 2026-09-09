@@ -4,20 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>US datacenter siting suitability, September 2026</title>
-<meta name="description" content="Compare all 50 US states for hyperscale and AI datacenter siting. Set your own priorities across power cost, headroom, policy, permitting and water, and the ranking rebuilds. One measured factor, seven provisional analyst ratings, sources on every flagged state.">
+<meta name="description" content="Compare hyperscale and AI datacenter siting conditions across 50 US states using one measured factor and seven provisional analyst ratings.">
 <link rel="canonical" href="https://sonnetx.github.io/datacenter-map/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sonnetx.github.io/datacenter-map/">
 <meta property="og:site_name" content="US datacenter siting suitability">
-<meta property="og:title" content="Where can you still build a large datacenter?">
-<meta property="og:description" content="All 50 states scored on power, policy, water and permitting. Set your own priorities and the ranking rebuilds.">
+<meta property="og:title" content="US datacenter siting conditions, 2026">
+<meta property="og:description" content="Compare 50 states using adjustable weights for power, policy, water and permitting. Ratings are provisional.">
 <meta property="og:image" content="https://sonnetx.github.io/datacenter-map/assets/social-card.png">
 <meta property="og:image:width" content="3200">
 <meta property="og:image:height" content="1800">
 <meta property="og:image:alt" content="Choropleth map of the 50 US states shaded by datacenter siting fit, with eight states hatched to mark a 2026 policy change.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Where can you still build a large datacenter?">
-<meta name="twitter:description" content="All 50 states scored on power, policy, water and permitting. Set your own priorities and the ranking rebuilds.">
+<meta name="twitter:title" content="US datacenter siting conditions, 2026">
+<meta name="twitter:description" content="Compare 50 states using adjustable weights for power, policy, water and permitting. Ratings are provisional.">
 <meta name="twitter:image" content="https://sonnetx.github.io/datacenter-map/assets/social-card.png">
 <meta name="twitter:image:alt" content="Choropleth map of the 50 US states shaded by datacenter siting fit, with eight states hatched to mark a 2026 policy change.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -219,27 +219,24 @@
   tbody tr.selected{background:#EEF2F6}
   td.tot{font-weight:600}
   td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:var(--warn);margin-left:6px;vertical-align:middle}
-  .meth{margin-top:var(--s10);max-width:var(--measure)}
-  .meth h2{font-weight:600;font-size:17px;margin:0 0 var(--s2)}
-  .meth h3{font-weight:600;font-size:14.5px;margin:var(--s5) 0 var(--s2)}
-  .meth p{margin:var(--s3) 0}
-  .meth p,.meth li{color:#2B3540}
-  .meth ul{padding-left:18px;margin:var(--s2) 0}
-  .meth li{margin:var(--s3) 0}
-  .meth .factor-list>li{padding-bottom:var(--s3);border-bottom:1px solid var(--rule-soft)}
-  .meth .factor-list p{margin:var(--s2) 0 0;font-size:13.5px;color:var(--muted)}
-  .meth .sources{margin-top:var(--s6)}
-  .meth .sources>summary{font-size:15px;font-weight:600}
-  .meth .src li{font-size:13.5px}
-  .meth .caveat{border-left:3px solid var(--warn);padding:10px 14px;background:#FFF7F4;margin:var(--s4) 0}
-  .datapack{margin-top:var(--s10);max-width:var(--measure);background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x)}
-  .datapack h2{font-weight:600;font-size:17px;margin:0 0 var(--s2)}
-  .datapack p{margin:var(--s3) 0;color:#2B3540}
-  .datapack .fine{font-size:12.5px;color:var(--muted)}
+  /* A shared reading column for methodology, downloads and attribution. */
+  .meth,.datapack,.site-foot{max-width:760px;margin-left:auto;margin-right:auto}
+  .meth,.datapack{margin-top:var(--s10);padding-top:var(--s6);border-top:1px solid var(--rule);font-size:14px;line-height:1.65}
+  .meth h2,.datapack h2{font-weight:600;font-size:20px;line-height:1.3;margin:0 0 var(--s4)}
+  .meth h3{font-weight:600;font-size:15px;line-height:1.4;margin:var(--s8) 0 var(--s2)}
+  .meth p,.datapack p{margin:0 0 var(--s3);color:#2B3540}
+  .meth b{font-weight:500}
+  .meth .source-principles{background:none;padding:0;border:0;border-radius:0}
+  .meth .sources{margin:var(--s6) 0;padding:var(--s4) 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .meth .sources>summary{font-size:14px;font-weight:500;color:var(--focus)}
+  .meth .src{padding-left:var(--s5);margin:var(--s4) 0 0}
+  .meth .src li{padding-left:var(--s1);margin:0 0 var(--s3);font-size:13px;overflow-wrap:anywhere}
+  .meth .src li:last-child{margin-bottom:0}
+  .meth .method-note,.datapack .fine{font-size:12.5px;color:var(--muted)}
   .dp-links{display:flex;gap:var(--s3);flex-wrap:wrap;margin:var(--s4) 0 0}
   .dp-links button{font:inherit;background:var(--panel);color:var(--focus);border:1px solid var(--rule);border-radius:4px;padding:8px 14px;cursor:pointer}
-  .site-foot{margin:var(--s10) 0 var(--s6);padding-top:var(--s4);border-top:1px solid var(--rule);font-size:13px;color:var(--muted);display:flex;gap:var(--s2) var(--s5);flex-wrap:wrap;justify-content:space-between}
-  .site-foot p{margin:0}
+  .site-foot{margin-top:var(--s10);margin-bottom:var(--s6);padding-top:var(--s4);border-top:1px solid var(--rule);font-size:12.5px;line-height:1.6;color:var(--muted)}
+  .site-foot p{margin:0 0 var(--s2)}
   @media (max-width:600px){
     .wrap{padding:var(--s6) var(--s4) var(--s8)}
     :root{--pad-x:16px;--pad-y:16px}
@@ -260,8 +257,8 @@
 <body>
 <div class="wrap">
 <header>
-  <h1>Compare states for your next datacenter</h1>
-  <p class="lede">Explore how power, policy and operating conditions compare across all 50 states. Choose a preset or adjust your priorities to build a shortlist for a hyperscale or AI training campus.</p>
+  <h1>US datacenter siting conditions</h1>
+  <p class="lede">Compare power, policy and operating conditions across 50 states. Adjust factor weights to examine relative suitability for hyperscale and AI training facilities.</p>
   <div class="asof">Updated September 7, 2026 · Power prices: EIA 2024 annual industrial averages. Fit combines one measured factor with seven provisional analyst ratings.</div>
 </header>
 
@@ -342,7 +339,7 @@
 </dialog>
 
 <section class="scatter" id="scatter">
-  <h2>Power and location meet policy</h2>
+  <h2>Physical and policy conditions</h2>
   <p>States farther right score better on power, water, hazards and cooling. States higher up score better on policy and permitting. Dashed lines mark the median scores.</p>
   <p>The axes use reference weights; dot colors show fit in the selected view. Priority sliders change colors, while power cost assumptions also affect horizontal positions. Select a dot for its profile. Scroll across the chart on small screens.</p>
   <svg viewBox="0 0 900 520" role="img" aria-label="Scatter plot of states by physical fundamentals and political plausibility" id="scsvg"></svg>
@@ -351,7 +348,7 @@
 <div class="table-intro">
   <h2>Compare all 50 states</h2>
   <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5, and fit and reference scores run from 0 to 100. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
-  <p>Pushback and rules in force describe how a state has received development and how much datacenter-specific rule there is to clear. Both are context and neither changes fit or rank. Open a state and read the Reception tab for what the rules actually say.</p>
+  <p>Pushback describes public opposition; rules in force summarize statewide regulation. Neither affects fit or rank. The Reception tab provides details.</p>
 </div>
 <div class="tablecard">
   <table id="tbl">
@@ -362,22 +359,22 @@
 
 <section class="meth" id="methodology">
   <h2>How this comparison works</h2>
-  <p>This is an exploratory model, not a prediction of project approval. It reports weighted fit, modeled delivery concerns and sensitivity to uncertain ratings separately, and carries a fourth reading alongside them that is never scored: how a state has received datacenter development and what rules it has put in force.</p>
-  <h3>1. Weighted fit</h3>
+  <p>This exploratory model reports weighted suitability, delivery concerns and rating sensitivity. Public response and regulation are reported separately and do not affect scores. The model does not predict project approval.</p>
+  <h3>Weighted fit</h3>
   <p>Balanced starts with equal importance for eight factors: power headroom, power cost, incentives and policy, community and permitting, water, natural hazards, cooling climate, and connectivity. Each contributes 12.5% initially. Presets and sliders change those shares.</p>
   <p><b>Fit = sum of each factor's score × its share.</b> Seven factors retain provisional analyst ratings on a 1–5 scale, mapped to 0, 25, 50, 75 and 100. These equal steps are a modeling assumption, not measured differences. Momentum is shown only as context: existing development can signal an ecosystem, but can also consume power capacity.</p>
   <p>Power price is the one measured factor. By default, the cost score declines linearly from 100 at 5¢/kWh to 0 at 35¢/kWh, with scores capped at those endpoints. These limits distinguish all prices in the current dataset. Change them under Power cost assumptions to test your preferences. They are not forecasts or tariffs.</p>
-  <h3>2. Delivery concerns</h3>
+  <h3>Delivery concerns</h3>
   <p>The lower of power headroom and community/permitting determines the modeled concern level: a rating of 1 means major concerns, 2 means elevated concerns, and 3–5 means lower concerns. Lower concerns do not establish available power or permit eligibility.</p>
   <p><b>Weighted fit</b> permits trade-offs and is the default. <b>Delivery first</b> ranks lower-concern states ahead of elevated- and major-concern states, then compares fit within each group. Cheap power therefore cannot offset a worse delivery group in that mode. The grouping still relies on provisional ratings, not verified connection timelines.</p>
-  <h3>3. Sensitivity</h3>
+  <h3>Sensitivity</h3>
   <p>Each profile's Scores tab shows the best and worst rank obtained by changing one of that state's judgment ratings by one level, within 1–5. Other ratings and states stay fixed. This is a limited sensitivity test, not a confidence interval or probability. It does not capture correlated errors or simultaneous changes across states.</p>
   <p>Exact score ties within the selected ranking rule share a rank. Setting every weight to zero removes fit scores and ranks while keeping facts and sources available.</p>
   <h3>Reception and regulation</h3>
-  <p>Each profile's Reception tab answers two questions this score deliberately leaves out. How has a state received datacenter development, and how much datacenter-specific rule is there to clear? Nothing in that tab contributes points or changes a rank, and the same data appears in the table as a pushback column and a count of rules in force.</p>
+  <p>The Reception tab reports public response and statewide regulation. The table summarizes opposition and the number of regulatory categories with requirements in force. Neither affects scores or rankings.</p>
   <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. Local action counts here. The four rule axes stay strictly statewide and cover water, power and ratepayer cost, siting and zoning, and tax incentives.</p>
-  <p>Each axis reports what is in force: no datacenter-specific rule, a disclosure or reporting duty, binding conditions, or a pause or prohibition. A separate reading marks a state rule that eases entry, such as a preemption of ordinary review. A pending bill counts as no rule however far it has travelled, and the prose names what is pending, so a state can show four zeroes while its legislature is busy. These readings are provisional analyst judgments like the 1–5 factors and have not been individually validated against original records.</p>
-  <p>Read the two together rather than as one verdict. A state can be easy to build in and still face heavy local opposition, or carry detailed rules and still welcome development. Neither reading is an endorsement or a criticism of a state's choices.</p>
+  <p>The four axes classify statewide rules in force: entry facilitation, no specific rule, disclosure or reporting, binding conditions, and pause or prohibition. Pending bills are described in the notes and do not affect these classifications. Tax incentives use corresponding eligibility categories. Classifications are provisional and have not been individually verified against original records.</p>
+  <p>Public opposition and regulatory requirements are distinct: substantial opposition may coexist with permissive rules, and detailed regulation may coexist with support for development.</p>
   <h3>Reference views</h3>
   <p>Political outlook weights policy and permitting equally. Physical fundamentals weights power headroom 30%, price 25%, water 20%, hazards 15% and climate 10%. These reference weights stay fixed. Editing a priority returns to Combined; changing the cost scale also affects the physical reference score.</p>
   <div class="source-principles">
@@ -403,13 +400,13 @@
       <li><a href="https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf">FEMA National Risk Index documentation</a> and <a href="https://www.wri.org/aqueduct">WRI Aqueduct</a>: background for further hazard and water research. This app has not calculated its state ratings directly from these datasets.</li>
     </ul>
   </details>
-  <p>Model version 2 · Evidence review September 7, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
+  <p class="method-note">Model version 2 · Evidence review September 7, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
 </section>
 
 <section class="datapack" id="dataset">
-  <h2>Get the dataset</h2>
-  <p>Everything behind this page is one table: 50 states, the measured electricity price, the eight judgment ratings, the posture and momentum labels, the reception and regulation record, and every citation. The CSV carries one row per state, and the JSON is the exact file the site is built from.</p>
-  <p class="fine">Openly licensed under CC BY 4.0, and also in the <a href="https://github.com/sonnetx/datacenter-map">public repository</a>. Please cite it as Sonnet Xu, US datacenter comparison, 2026. No sign-up, and nothing to fill in.</p>
+  <h2>Download the dataset</h2>
+  <p>The dataset covers 50 states: electricity prices, seven scored analyst ratings, momentum, policy posture, reception and regulation, and citations. CSV provides one row per state; JSON preserves the source structure.</p>
+  <p class="fine">Openly licensed under CC BY 4.0, and also in the <a href="https://github.com/sonnetx/datacenter-map">public repository</a>. Suggested citation: Sonnet Xu, US datacenter comparison, 2026. No registration required.</p>
   <div class="dp-links" id="dp-links">
     <button type="button" data-format="csv">Download CSV</button>
     <button type="button" data-format="json">Download JSON</button>
@@ -756,12 +753,12 @@ function renderReception(s){
     return `<li><span class="axis-name">${a.name}</span>${ticks(level)}<span class="axis-state">${label}</span></li>`;
   }).join("");
   return `
-    <h3>How the state has received development</h3>
+    <h3>Public response to development</h3>
     <div class="reception" data-level="${rr.pb}"><b>${rr.pb} pushback</b><span>${RR_PUSHBACK[rr.pb]}</span></div>
     <h3>Datacenter-specific rules in force</h3>
     <ul class="axes">${rows}</ul>
     <p class="note">${rr.n}</p>
-    <p class="evidence-note">Reception and rules are provisional analyst readings on the same basis as the 1–5 factors, and they contribute no points and change no ranking. The four axes count only what is in force; pending bills read as no rule and appear in the prose. A state can be easy to build in and still face heavy local opposition, or carry detailed rules and still welcome development, so read the two together rather than as a single verdict.</p>`;
+    <p class="evidence-note">Reception and regulation are provisional analyst assessments. They contribute no points and do not affect rankings. Regulatory axes record statewide rules in force; notes describe pending bills. Public opposition and regulatory requirements are distinct.</p>`;
 }
 function renderDetail(){
   if(!selected) return;

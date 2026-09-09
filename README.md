@@ -47,8 +47,8 @@ See the [model and source change record](review/2026-09-07-model-v2.md), [initia
 
 | Path | Role |
 |---|---|
-| `src/template.html` | The whole interface and model. Styles, markup and scoring code live here. |
-| `data/states.json` | The 50 state records. Ratings, prose and citations. |
+| `src/template.html` | Interface styles, markup and scoring model. |
+| `data/states.json` | Ratings, summaries and citations for 50 states. |
 | `src/states-albers-10m.json`, `src/topojson-client.min.js` | Map geometry and the projection helper, inlined at build time. |
 | `build.py` | Substitutes the data and geometry into the template and writes `index.html`. |
 | `index.html` | Build output, checked in because GitHub Pages serves it directly. Never edit by hand. |
@@ -57,7 +57,7 @@ See the [model and source change record](review/2026-09-07-model-v2.md), [initia
 
 ## State record schema
 
-Each entry in `data/states.json` uses short keys. `tests/validate_data.py` enforces all of this and names the offending state and field.
+`tests/validate_data.py` validates the following fields and reports errors by state and field.
 
 | Key | Meaning |
 |---|---|
@@ -82,35 +82,31 @@ Ratings run 1 to 5 with higher being more favorable, including for hazard and wa
 
 ## Reception and regulation
 
-The `rr` record answers two questions the fit score deliberately does not. How has a state received datacenter development, and how much datacenter-specific rule is there to clear? Neither feeds the score, the ranking or the delivery signal, and `tests/model.test.cjs` asserts that the whole record can be stripped from the dataset without moving a single number. The profile's Reception tab shows it, and the comparison table carries a pushback column and a count of rules in force.
+The `rr` record describes public response and statewide regulation. It does not affect fit, rankings or delivery concerns; model tests verify this independence. The Reception tab displays the record. The comparison table reports pushback and the number of regulatory categories with requirements in force.
 
-`rr.pb` records reception as Low, Moderate or High pushback. Low means no organized opposition or local restriction on record. Moderate means local restrictions or contested proceedings in some jurisdictions. High means multiple local bans, a statewide restriction that cleared a chamber, or a referendum. Local action counts here rather than on the rule axes, which stay strictly statewide.
+`rr.pb` classifies pushback as Low (no recorded organized opposition or local restriction), Moderate (local restrictions or contested proceedings in some jurisdictions), or High (multiple local bans, a statewide restriction passed by one chamber, or a referendum). Local actions inform pushback; regulatory axes cover statewide measures only.
 
-`rr.wt`, `rr.pg`, `rr.zn` and `rr.tx` cover water, power and ratepayer cost, siting and zoning, and tax incentives. Each runs on one scale.
+`rr.wt`, `rr.pg`, `rr.zn` and `rr.tx` describe water, power and ratepayer costs, siting and zoning, and tax incentives.
 
-| Value | Meaning | For `tx` |
+| Value | Rule in force | Tax incentive status (`tx`) |
 |---|---|---|
-| -1 | A state rule eases entry or preempts ordinary review | Incentive widened |
-| 0 | No datacenter-specific rule in force | Incentive unrestricted, or none offered |
-| 1 | Disclosure, reporting or study requirement in force | Conditional eligibility |
-| 2 | Binding conditions in force | Narrowed or paused |
-| 3 | A pause, moratorium or prohibition in force | Repealed or barred |
+| -1 | Facilitates entry or preempts ordinary review | Expanded |
+| 0 | No datacenter-specific rule | Unrestricted or unavailable |
+| 1 | Disclosure, reporting or study requirement | Conditional eligibility |
+| 2 | Binding conditions | Narrowed or paused |
+| 3 | Pause, moratorium or prohibition | Repealed or barred |
 
-Only what is in force counts. A pending bill sits at 0 no matter how far it has travelled, and `rr.n` says what is pending. Keeping proposals out of the numbers is what stops the axes from tracking legislative noise, and it is why a state can show four zeroes while its legislature is busy. `rr.n` is one to three sentences naming the statutes, executive orders and local actions behind the row.
+Pending bills do not affect these values. `rr.n` summarizes relevant statutes, executive orders, proposals and local actions in one to three sentences. Classifications are provisional analyst judgments and have not been individually verified against original records.
 
-These readings are provisional analyst judgments on the same footing as the seven 1-5 factors, and they have not been individually validated against original records.
+## Data downloads
 
-## Releasing the data
+The page exports CSV with one row per state and flattened `rr` fields, or JSON matching `data/states.json`. Both use the loaded dataset.
 
-The page offers the dataset as CSV, one row per state with the `rr` record flattened, and as JSON matching `data/states.json`. Both are generated in the browser from the loaded data, so they cannot drift from what the page shows.
+Downloads require no registration. GoatCounter records CSV and JSON download events.
 
-The download asks for nothing. A sign-up form would gate nothing anyway, since `data/states.json` is in this repository and the whole dataset is inlined in `index.html`, so it would only add friction for the people honest enough to fill it in.
+## Development
 
-Clicks are counted through the same GoatCounter that measures page views, as the events `dataset-download-csv` and `dataset-download-json`. That records that a download happened and nothing about who. Counting is wrapped so that a blocked, slow or absent counter cannot stop the file being handed over, and the browser tests cover both cases.
-
-## Working on it
-
-Install nothing for the core loop. You need Python 3 and Node 22 or newer.
+Core validation and builds require Python 3 and Node 22 or newer.
 
 ```sh
 python3 tests/validate_data.py      # check state records before anything else
@@ -118,22 +114,22 @@ python3 build.py                    # regenerate index.html
 node --test tests/model.test.cjs    # scoring tests, run against the real model
 ```
 
-The model tests extract the scoring code straight out of `src/template.html` and run it under `node:vm`, so there is no second copy of the model to drift. Browser tests need Playwright and Chromium:
+Model tests execute scoring code from `src/template.html` in `node:vm`. Browser tests require Playwright and Chromium:
 
 ```sh
 python3 -m pip install playwright && python3 -m playwright install chromium
 python3 tests/browser.py
 ```
 
-Two things catch people out. Editing `src/template.html` or `data/states.json` without running `build.py` changes nothing that visitors see, since Pages serves the checked-in `index.html`. And adding a `tag` to a state without adding `srcs` fails validation on purpose, because a flagged policy action is the claim readers are most likely to check.
+Run `build.py` after editing the template or dataset: GitHub Pages serves the committed `index.html`. Each non-empty state `tag` requires `srcs` to support the recorded policy action.
 
 CI runs the validator, the model tests, a browser pass and a staleness check on `index.html` for every pull request.
 
 ## Contributing
 
-Corrections to state records are the most useful contribution, especially citations for the 32 states that do not yet have any. A good pull request cites a primary source, says what the source establishes, and adjusts the rating only when the evidence contradicts it. Ratings are analyst judgments and reasonable people move them a level either way, so explain the reasoning in the description rather than only changing the number.
+Corrections should cite primary sources, identify the claims they support, and explain any rating changes. State summaries and analyst ratings require further validation.
 
-Fork the repository, push your work to a branch there and open a pull request. Nobody pushes to `main` directly. A pull request lands once CI is green, review comments are resolved and the maintainer has approved it, and pushing a new commit clears an earlier approval. CI on a pull request from a fork waits for a maintainer to start it, so a run that sits pending is normal rather than broken.
+Fork the repository and submit a pull request. Changes to `main` require passing CI, resolved review comments and maintainer approval. New commits invalidate prior approval. CI for forked pull requests requires a maintainer to initiate the run.
 
 ## License
 
