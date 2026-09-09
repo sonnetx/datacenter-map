@@ -85,10 +85,13 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     assert page.locator(f'#tbody tr:first-child td:nth-child({pb_col})').inner_text()=='High'
     page.locator('th[data-k=rules] button').click()
     assert page.evaluate('Object.fromEntries(STATES.map(s=>[s.a,s.rank]))')==ranks
-    # With no request endpoint configured the download stands on its own rather
-    # than showing a form that would post nowhere.
-    assert page.locator('#dp-form').evaluate('(e)=>e.hidden && getComputedStyle(e).display==="none"')
+    # The dataset is CC BY and in the repository, so the download asks nothing
+    # of the visitor. Any form here would be a regression.
+    assert page.locator('#dataset form, #dataset input, #dataset textarea').count()==0
     assert page.locator('#dp-links').is_visible()
+    # Counting runs through GoatCounter, which is blocked in this run. A failed
+    # or absent counter must not stop the file being handed over.
+    assert page.evaluate('window.goatcounter===undefined')
     with page.expect_download() as caught:
         page.locator('#dp-links button[data-format=csv]').click()
     csv=Path(caught.value.path()).read_text()
@@ -105,6 +108,13 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     # The export is the authored record, not the fields compute() derives.
     assert set(exported[0])<= {'a','n','p','pw','po','op','w','h','c','x','mo','st','tag','note','rr','srcs'}
     assert set(exported[0]['rr'])=={'pb','wt','pg','zn','tx','n'}
+    # With a counter present the download records that it happened, and nothing
+    # identifying about who asked for it.
+    page.evaluate('window.goatcounter={counted:[],count(o){this.counted.push(o)}}')
+    with page.expect_download():
+        page.locator('#dp-links button[data-format=csv]').click()
+    counted=page.evaluate('window.goatcounter.counted')
+    assert counted==[{'path':'dataset-download-csv','title':'Dataset download (CSV)','event':True}],counted
 
     page.set_viewport_size({'width':390,'height':844})
     page.reload()

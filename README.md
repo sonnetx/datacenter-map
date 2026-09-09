@@ -104,7 +104,9 @@ These readings are provisional analyst judgments on the same footing as the seve
 
 The page offers the dataset as CSV, one row per state with the `rr` record flattened, and as JSON matching `data/states.json`. Both are generated in the browser from the loaded data, so they cannot drift from what the page shows.
 
-`DATA_REQUEST_ENDPOINT` near the bottom of `src/template.html` controls whether a short form comes first. Leave it empty and the download stands alone. Set it to a form endpoint that accepts a POST and emails the submission, such as a Formspree form URL, and visitors give a name, email, organization and intended use before the download appears. A failed send still hands over the file: the data is openly licensed and sits in this repository, so the form asks who is using it rather than restricting access, and the page says so.
+The download asks for nothing. A sign-up form would gate nothing anyway, since `data/states.json` is in this repository and the whole dataset is inlined in `index.html`, so it would only add friction for the people honest enough to fill it in.
+
+Clicks are counted through the same GoatCounter that measures page views, as the events `dataset-download-csv` and `dataset-download-json`. That records that a download happened and nothing about who. Counting is wrapped so that a blocked, slow or absent counter cannot stop the file being handed over, and the browser tests cover both cases.
 
 ## Working on it
 

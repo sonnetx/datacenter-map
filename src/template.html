@@ -236,19 +236,7 @@
   .datapack h2{font-weight:600;font-size:17px;margin:0 0 var(--s2)}
   .datapack p{margin:var(--s3) 0;color:#2B3540}
   .datapack .fine{font-size:12.5px;color:var(--muted)}
-  .dp-form{display:grid;gap:var(--s3);margin:var(--s4) 0 0}
-  /* these set display, so they have to restore [hidden] themselves */
-  .dp-form[hidden],.dp-links[hidden]{display:none}
-  .dp-form label{display:grid;gap:var(--s1);font-size:13px}
-  .dp-form input,.dp-form textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:8px;width:100%}
-  .dp-form textarea{min-height:64px;resize:vertical}
-  .dp-form .row{display:grid;gap:var(--s3);grid-template-columns:1fr 1fr}
-  @media (max-width:520px){.dp-form .row{grid-template-columns:1fr}}
-  .dp-form button{font:inherit;background:var(--ink);color:#fff;border:1px solid var(--ink);border-radius:4px;padding:9px 16px;cursor:pointer;justify-self:start}
-  .dp-form button[disabled]{opacity:.6;cursor:progress}
-  .dp-msg{font-size:13px;margin:var(--s3) 0 0}
-  .dp-msg[data-tone="error"]{color:var(--warn)}
-  .dp-links{display:flex;gap:var(--s3);flex-wrap:wrap;margin:var(--s3) 0 0}
+  .dp-links{display:flex;gap:var(--s3);flex-wrap:wrap;margin:var(--s4) 0 0}
   .dp-links button{font:inherit;background:var(--panel);color:var(--focus);border:1px solid var(--rule);border-radius:4px;padding:8px 14px;cursor:pointer}
   .site-foot{margin:var(--s10) 0 var(--s6);padding-top:var(--s4);border-top:1px solid var(--rule);font-size:13px;color:var(--muted);display:flex;gap:var(--s2) var(--s5);flex-wrap:wrap;justify-content:space-between}
   .site-foot p{margin:0}
@@ -421,17 +409,7 @@
 <section class="datapack" id="dataset">
   <h2>Get the dataset</h2>
   <p>Everything behind this page is one table: 50 states, the measured electricity price, the eight judgment ratings, the posture and momentum labels, the reception and regulation record, and every citation. The CSV carries one row per state, and the JSON is the exact file the site is built from.</p>
-  <p class="fine" id="dp-fine">The data is openly licensed and also sits in the <a href="https://github.com/sonnetx/datacenter-map">public repository</a>. Please cite it as Sonnet Xu, US datacenter comparison, 2026.</p>
-  <form class="dp-form" id="dp-form" hidden>
-    <div class="row">
-      <label>Name <input type="text" name="name" required autocomplete="name"></label>
-      <label>Email <input type="email" name="email" required autocomplete="email"></label>
-    </div>
-    <label>Organization <input type="text" name="organization" required autocomplete="organization"></label>
-    <label>What are you using it for? <textarea name="purpose" required></textarea></label>
-    <button type="submit">Send and download</button>
-  </form>
-  <p class="dp-msg" id="dp-msg" role="status"></p>
+  <p class="fine">Openly licensed under CC BY 4.0, and also in the <a href="https://github.com/sonnetx/datacenter-map">public repository</a>. Please cite it as Sonnet Xu, US datacenter comparison, 2026. No sign-up, and nothing to fill in.</p>
   <div class="dp-links" id="dp-links">
     <button type="button" data-format="csv">Download CSV</button>
     <button type="button" data-format="json">Download JSON</button>
@@ -916,13 +894,11 @@ function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); rende
 refresh();
 
 // --- dataset release ---
-// Paste a form endpoint that accepts a POST and emails the submission (a
-// Formspree form URL, for example). While this is empty the section offers the
-// download on its own rather than showing a form that goes nowhere.
-const DATA_REQUEST_ENDPOINT = "";
+// The dataset is CC BY and already in the public repository, so the download
+// asks for nothing. Counting is left to the same GoatCounter that measures
+// page views, which records that a download happened and nothing about who.
 (function(){
-  const form=document.getElementById("dp-form"), msg=document.getElementById("dp-msg"), links=document.getElementById("dp-links");
-  const gated=Boolean(DATA_REQUEST_ENDPOINT);
+  const links=document.getElementById("dp-links");
   const stamp=new Date().toISOString().slice(0,10);
 
   // One row per state, with the reception record flattened alongside the
@@ -960,33 +936,17 @@ const DATA_REQUEST_ENDPOINT = "";
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),0);
   }
-  links.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>download(b.dataset.format)));
-
-  if(!gated) return;
-  form.hidden=false; links.hidden=true;
-  // Say what the form is for only once it exists, and be straight about the
-  // fact that it guards nothing: the same data is a click away on GitHub.
-  document.getElementById("dp-fine").insertAdjacentHTML("beforeend",
-    " The form is a request to introduce yourself rather than a condition of access, since the same file is in that repository. Telling me who you are and what you are using it for is what tells me which parts to keep current. Addresses are not verified.");
-  form.addEventListener("submit",async e=>{
-    e.preventDefault();
-    const button=form.querySelector("button");
-    button.disabled=true; msg.removeAttribute("data-tone"); msg.textContent="Sending…";
+  // Blocked, still loading, or the visitor declined it: counting a download
+  // must never be the reason one fails.
+  function count(format){
     try{
-      const body=new FormData(form);
-      body.append("dataset",`us-datacenter-conditions-${stamp}`);
-      const res=await fetch(DATA_REQUEST_ENDPOINT,{method:"POST",body,headers:{Accept:"application/json"}});
-      if(!res.ok) throw new Error(res.status);
-      form.hidden=true; links.hidden=false;
-      msg.textContent="Thank you. Your download is ready below.";
-    }catch(err){
-      // The data is public either way, so a failed send must not block access.
-      button.disabled=false;
-      links.hidden=false;
-      msg.setAttribute("data-tone","error");
-      msg.textContent="That did not send, which is my problem rather than yours. The download is below, and the same data is in the GitHub repository.";
-    }
-  });
+      window.goatcounter?.count?.({path:"dataset-download-"+format,title:"Dataset download ("+format.toUpperCase()+")",event:true});
+    }catch(err){}
+  }
+  links.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+    download(b.dataset.format);
+    count(b.dataset.format);
+  }));
 })();
 </script>
 <script data-goatcounter="https://sonnetx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
