@@ -24,3 +24,6 @@ tmp/
 
 # Local launch materials: drafts, review notes and export scratch. Not published.
 publish/
+
+# Local agent worktrees and settings
+.claude/

@@ -5,6 +5,8 @@ An interactive map for exploring state-level conditions for hyperscale and AI tr
 ## Interface
 
 - Find a state above the map, select a leading candidate, or use the map, scatter plot or table.
+- The map card holds twelve figures of the same 50 states, one at a time. Choose one from the row of buttons, or leave it rotating every eight seconds. Rotation stops for good the first time you click, key or scroll inside the card, and never starts when the browser asks for reduced motion.
+- Every figure that can answer the priority sliders does. Relief, cartogram, prices, profiles, ranks, flow, uncertainty and count all re-read your weights; spread, glyphs and screens are fixed by construction and their notes say so. Each figure names what it hides as well as what it shows.
 - State profiles open in a side panel with Overview, Scores, Reception and Sources tabs. Profiles support keyboard navigation and close with Escape.
 - Choose Balanced, Build sooner, Lower costs, Lower risk or Connectivity first, then adjust relative priorities. Effective percentage shares update automatically.
 - Switch between Combined, Political outlook and Physical fundamentals without losing custom priorities. Editing a slider returns to Combined.
@@ -47,7 +49,7 @@ See the [model and source change record](review/2026-09-07-model-v2.md), [initia
 
 | Path | Role |
 |---|---|
-| `src/template.html` | Interface styles, markup and scoring model. |
+| `src/template.html` | Interface styles, markup, scoring model and the twelve figures. |
 | `data/states.json` | Ratings, summaries and citations for 50 states. |
 | `src/states-albers-10m.json`, `src/topojson-client.min.js` | Map geometry and the projection helper, inlined at build time. |
 | `build.py` | Substitutes the data and geometry into the template and writes `index.html`. |
