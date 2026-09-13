@@ -1,3 +1,5 @@
+import csv as csv_module
+import io
 import json
 from playwright.sync_api import sync_playwright
 from pathlib import Path
@@ -115,6 +117,32 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
         page.locator('#dp-links button[data-format=csv]').click()
     counted=page.evaluate('window.goatcounter.counted')
     assert counted==[{'path':'dataset-download-csv','title':'Dataset download (CSV)','event':True}],counted
+
+    # Shortlisting filters the comparison without redefining national ranks.
+    assert page.locator('#rotate-btn').get_attribute('aria-pressed')=='false'
+    page.locator('#shortlist-only').check()
+    assert 'Your shortlist is empty' in page.locator('#tbody').inner_text()
+    assert page.locator('#export-comparison').is_disabled()
+    for state in ['VA','AZ']:
+        page.locator('#shortlist-picker').select_option(state)
+    assert page.locator('#tbody tr[data-a]').count()==2
+    assert page.evaluate('Object.fromEntries(STATES.map(s=>[s.a,s.rank]))')==ranks
+    with page.expect_download() as caught:
+        page.locator('#export-comparison').click()
+    comparison=list(csv_module.DictReader(io.StringIO(Path(caught.value.path()).read_text())))
+    assert {s['postal'] for s in comparison}=={'VA','AZ'}
+    assert all(abs(sum(float(v) for k,v in s.items() if k.startswith('weight_share_'))-1)<1e-9 for s in comparison)
+    assert all(s['model_version']=='2' and s['price_anchor_high']=='35' for s in comparison)
+    page.locator('#state-picker').select_option('VA')
+    assert page.locator('#save-state').get_attribute('aria-pressed')=='true'
+    page.locator('#save-state').click()
+    assert page.locator('#save-state').get_attribute('aria-pressed')=='false'
+    page.keyboard.press('Escape')
+    assert page.locator('#tbody tr[data-a]').count()==1
+    page.locator('[data-remove=AZ]').click()
+    assert page.locator('#export-comparison').is_disabled()
+    page.locator('#shortlist-only').uncheck()
+    assert page.locator('#tbody tr[data-a]').count()==50
 
     page.set_viewport_size({'width':390,'height':844})
     page.reload()

@@ -4,8 +4,9 @@ An interactive map for exploring state-level conditions for hyperscale and AI tr
 
 ## Interface
 
+- Save states from their profiles or the comparison toolbar, filter the table to your shortlist, and export the displayed comparison with active weights, national ranks, sensitivity ranges and price assumptions. Shortlists last for the current page visit.
 - Find a state above the map, select a leading candidate, or use the map, scatter plot or table.
-- The map card holds twelve figures of the same 50 states, one at a time. Choose one from the row of buttons, or leave it rotating every eight seconds. Rotation stops for good the first time you click, key or scroll inside the card, and never starts when the browser asks for reduced motion.
+- The map card holds twelve figures of the same 50 states, one at a time. Choose one from the row of buttons, or explicitly play a tour that advances every eight seconds. The map stays still by default. Rotation stops for good the first time you click, key or scroll inside the card, and never starts when the browser asks for reduced motion.
 - Every figure that can answer the priority sliders does. Relief, cartogram, prices, profiles, ranks, flow, uncertainty and count all re-read your weights; spread, glyphs and screens are fixed by construction and their notes say so. Each figure names what it hides as well as what it shows.
 - State profiles open in a side panel with Overview, Scores, Reception and Sources tabs. Profiles support keyboard navigation and close with Escape.
 - Choose Balanced, Build sooner, Lower costs, Lower risk or Connectivity first, then adjust relative priorities. Effective percentage shares update automatically.

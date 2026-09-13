@@ -193,6 +193,13 @@
   .srcs summary{color:var(--focus);font-weight:500}
   .srcs ul{padding-left:var(--s5);margin:var(--s2) 0 0}
   .srcs li{margin:var(--s1) 0;overflow-wrap:anywhere}
+  .workflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:24px;padding:20px;background:var(--panel);border:1px solid var(--rule);border-radius:6px}
+  .workflow b{font-size:14px}.workflow p{font-size:13px;color:var(--muted);margin:6px 0 0}
+  .shortlist-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:16px;background:var(--panel);border:1px solid var(--rule);border-radius:6px}
+  .shortlist-tools label{font-size:13px}.shortlist-tools p{width:100%;margin:0;font-size:12px;color:var(--muted)}
+  #shortlist-chips{display:flex;flex-wrap:wrap;gap:8px;width:100%}#shortlist-chips:empty{display:none}
+  .shortlist-tools+.tablecard{margin-top:12px}
+  @media(max-width:600px){.workflow{grid-template-columns:1fr;gap:12px}}
   .table-intro{margin:var(--s6) 0 var(--s3)}
   .table-intro h2{font-size:17px;margin:0 0 var(--s1)}
   .table-intro p{font-size:13px;color:var(--muted);margin:0;max-width:var(--measure)}
@@ -293,9 +300,14 @@
 <div class="wrap">
 <header>
   <h1>US datacenter siting conditions</h1>
-  <p class="lede">Compare power, policy and operating conditions across 50 states. Adjust factor weights to examine relative suitability for hyperscale and AI training facilities.</p>
+  <p class="lede">Build a state shortlist for your next datacenter project. Compare power, policy and operating conditions for hyperscale and AI training facilities, then identify what to verify locally.</p>
   <div class="asof">Updated September 7, 2026 · Power prices: EIA 2024 annual industrial averages. Fit combines one measured factor with seven provisional analyst ratings.</div>
 </header>
+<section class="workflow" aria-label="Start your comparison">
+  <div><b>1. Set your priorities</b><p>Choose a preset, then adjust the factors that matter to your project.</p></div>
+  <div><b>2. Build a shortlist</b><p>Open state profiles, save candidates, and compare their tradeoffs <a href="#comparison">in the table</a>.</p></div>
+  <div><b>3. Verify the site</b><p>Use the shortlist to scope utility, permitting and water diligence. State fit does not establish site readiness.</p></div>
+</section>
 
 <div class="grid">
   <div class="col">
@@ -389,10 +401,18 @@
   <svg viewBox="0 0 900 520" role="img" aria-label="Scatter plot of states by physical fundamentals and political plausibility" id="scsvg"></svg>
 </section>
 
-<div class="table-intro">
+<div class="table-intro" id="comparison">
   <h2>Compare all 50 states</h2>
   <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5, and fit and reference scores run from 0 to 100. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
   <p>Pushback describes public opposition; rules in force summarize statewide regulation. Neither affects fit or rank. The Reception tab provides details.</p>
+</div>
+<div class="shortlist-tools">
+  <label for="shortlist-picker">Add a state <select id="shortlist-picker"><option value="">Choose a state…</option></select></label>
+  <label><input type="checkbox" id="shortlist-only"> Show shortlist only</label>
+  <button type="button" class="close-btn" id="export-comparison">Export comparison CSV</button>
+  <p id="shortlist-status" role="status"></p>
+  <div id="shortlist-chips" aria-label="Saved states"></div>
+  <p>Saved for this visit. Ranks stay relative to all 50 states. Export includes the displayed states, active weights and model assumptions.</p>
 </div>
 <div class="tablecard">
   <table id="tbl">
@@ -496,6 +516,7 @@ let view = "all", rankMode = "fit";
 let priceScale = {low:5,high:35};
 let selected = null, profilePanel = "overview";
 let sortKey = "rank", sortAsc = true;
+const shortlist = new Set();
 
 const NAME2ABBR = {}; STATES.forEach(s=>NAME2ABBR[s.n]=s.a);
 const BY = {}; STATES.forEach(s=>BY[s.a]=s);
@@ -818,10 +839,15 @@ function renderDetail(){
   const sensitivity=scored?`<p class="sensitivity"><b>One-rating sensitivity: rank ${s.rankMin}–${s.rankMax}.</b> This changes one of this state's analyst ratings by one level at a time, holding all other states fixed. It is not a confidence interval.</p>`:"";
   document.getElementById("detail").innerHTML=`
     <div class="top"><div><h2>${s.n}</h2>${s.tag?`<span class="chip">${s.tag}</span>`:""}</div><div class="score">${scored?s.total.toFixed(0):"—"}<small>fit / 100</small></div></div>
+    <button type="button" class="close-btn" id="save-state" aria-pressed="${shortlist.has(s.a)}" onclick="toggleShortlist(selected)">${shortlist.has(s.a)?"Remove from shortlist":"Add to shortlist"}</button>
     <p class="rank">${scored?`Rank ${s.rank} of 50${s.tied?" (tied)":""} · ${rankMode==="delivery"?"Delivery first":"Weighted fit"} · ${viewLabel()}`:"Set a priority to calculate fit. Facts and sources remain available."}</p>
     <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">
       <div class="delivery-status" data-tier="${deliveryTier(s)}"><b>${deliveryLabel(s)}</b><p>Power headroom ${s.pw}/5 · Community and permitting ${s.op}/5. These are analyst ratings, not a confirmed power allocation or permit decision.</p></div>
       <div class="fact"><p>2024 industrial electricity price</p><strong>${s.p.toFixed(2)}¢/kWh</strong><a href="${EIA_SOURCE.u}" target="_blank" rel="noopener">EIA measured benchmark ↗</a></div>
+      <details class="diligence"><summary>What to verify before advancing ${s.n}</summary>
+        <ul><li>Utility: available MW at the proposed substation, energization date, upgrade costs and the applicable tariff.</li><li>Local authority: parcel zoning, permit sequence, hearing requirements and current restrictions.</li><li>Water provider: supply allocation, cooling design and discharge requirements.</li><li>Project team: site hazards, fiber routes and incentive eligibility for this project.</li></ul>
+        <p class="evidence-note">Record project-specific answers alongside the state evidence in the Sources tab.</p>
+      </details>
       <h3>Analyst summary</h3><p class="note">${s.note}</p>
       <p class="evidence-note">${sources.length?"References are listed in Sources, with their type and scope. The summary and individual ratings have not been fully verified against original records.":"No state-specific references are recorded. The summary and judgment ratings need supporting evidence; only the EIA price has been checked."}</p>
       <div class="meta"><span>State posture: ${s.st}</span><span>Momentum: ${s.mo}/5 · context only</span><span>Reception: ${s.rr.pb} pushback · context only</span></div>
@@ -879,20 +905,50 @@ function renderTable(){
     b.setAttribute("aria-label", `${b.textContent}, ${on?(sortAsc?"sorted ascending":"sorted descending"):"not sorted"}. Activate to sort.`);
   });
   const scored=hasWeights();
-  const rows=[...STATES].sort((a,b)=>{
+  const rows=STATES.filter(s=>!document.getElementById("shortlist-only").checked || shortlist.has(s.a)).sort((a,b)=>{
     let va=sortValue(a,sortKey), vb=sortValue(b,sortKey);
     if(va===null||va===undefined) va=-1; if(vb===null||vb===undefined) vb=-1;
     if(typeof va==="string") return sortAsc? va.localeCompare(vb) : vb.localeCompare(va);
     return sortAsc? va-vb : vb-va;
   });
+  document.getElementById("shortlist-status").textContent=`${shortlist.size} saved · ${rows.length} states shown`;
+  document.getElementById("export-comparison").disabled=rows.length===0;
   const dash=v=>scored?v:"--";
   const tb=document.getElementById("tbody");
   tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
-  tb.querySelectorAll("tr").forEach(tr=>{
+  if(!rows.length) tb.innerHTML=`<tr><td colspan="16">Your shortlist is empty. Add a state above or from a state profile to start comparing.</td></tr>`;
+  tb.querySelectorAll("tr[data-a]").forEach(tr=>{
     tr.addEventListener("click",()=>select(tr.dataset.a));
     tr.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select(tr.dataset.a);} });
   });
 }
+
+function toggleShortlist(abbr){
+  if(!BY[abbr]) return;
+  if(shortlist.has(abbr)) shortlist.delete(abbr); else shortlist.add(abbr);
+  document.getElementById("shortlist-chips").innerHTML=[...shortlist].map(a=>`<button type="button" class="candidate" data-remove="${a}" aria-label="Remove ${BY[a].n} from shortlist">${BY[a].n} ×</button>`).join("");
+  document.querySelectorAll("[data-remove]").forEach(b=>b.addEventListener("click",()=>toggleShortlist(b.dataset.remove)));
+  renderTable(); renderDetail();
+}
+const shortlistPicker=document.getElementById("shortlist-picker");
+[...STATES].sort((a,b)=>a.n.localeCompare(b.n)).forEach(s=>shortlistPicker.add(new Option(s.n,s.a)));
+shortlistPicker.addEventListener("change",()=>{
+  if(shortlistPicker.value && !shortlist.has(shortlistPicker.value)) toggleShortlist(shortlistPicker.value);
+  shortlistPicker.value="";
+});
+document.getElementById("shortlist-only").addEventListener("change",renderTable);
+document.getElementById("export-comparison").addEventListener("click",()=>{
+  const W=activeWeights(), tw=totalWeight(W);
+  const columns=["state","postal","rank_of_50","fit_0_100","delivery_concern","rating_sensitivity_rank_min","rating_sensitivity_rank_max","industrial_price_cents_kwh_2024","view","ranking_rule","model_version","price_anchor_low","price_anchor_high",...FACTORS.map(f=>"weight_share_"+f.k),"evidence_limit"];
+  const rows=[...document.querySelectorAll("#tbody tr[data-a]")].map(tr=>BY[tr.dataset.a]).map(s=>[
+    s.n,s.a,s.rank,s.total,deliveryLabel(s),s.rankMin,s.rankMax,s.p,view,rankMode,MODEL_VERSION,priceScale.low,priceScale.high,...FACTORS.map(f=>tw?(W[f.k]||0)/tw:0),"EIA 2024 state average; seven provisional analyst ratings. Not site readiness or a utility tariff."
+  ]);
+  const cell=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+  const blob=new Blob([[columns,...rows].map(r=>r.map(cell).join(",")).join("\r\n")+"\r\n"],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob), link=document.createElement("a");
+  link.href=url;link.download="datacenter-comparison.csv";document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),0);
+});
 
 function median(a){const b=[...a].sort((x,y)=>x-y);const m=b.length>>1;return b.length%2?b[m]:(b[m-1]+b[m])/2;}
 function renderScatter(){
@@ -1526,7 +1582,7 @@ function drawScreens(host){
 /* ------------------------------------------------------------------ registry */
 const VIEWS=[
   {id:"map",label:"Map",tall:false,
-   note:"<b>Choropleth.</b> Weighted fit shaded onto the states themselves. <span class='hides'>Hides that area is not importance: Montana is enormous and largely irrelevant here, New Jersey is invisible and carries real load.</span>"},
+   note:"<b>Choropleth.</b> Weighted fit shaded onto the states themselves. <span class='hides'>Hides that area is not importance: large states occupy more space, while small states can be difficult to select. Use Find a state to open any profile.</span>"},
   {id:"relief",label:"Relief",draw:drawRelief,
    note:"<b>Prism map, after Tufte.</b> The same fit as height, which the eye reads without a legend. <span class='hides'>Hides whatever stands behind Texas. Occlusion here is lost data, not a rendering artifact.</span>"},
   {id:"cartogram",label:"Cartogram",draw:drawCartogram,
@@ -1542,7 +1598,7 @@ const VIEWS=[
   {id:"flow",label:"Flow",draw:drawFlow,wide:true,
    note:"<b>Alluvial, after Sankey.</b> Fifty states from posture through delivery concern to fit tercile. Posture and deliverability are close to independent. <span class='hides'>Hides identity: fifty states enter and fifty anonymous units leave.</span>"},
   {id:"uncertainty",label:"Uncertainty",draw:drawUncertainty,tall:true,wide:true,
-   note:"<b>Hypothetical outcome plot.</b> Four hundred random variations on your priorities. The moving dot is one draw; the strips are the whole distribution. Only the states that hold still are ones the model is confident about. <span class='hides'>Hides that the ratings themselves are uncertain, which is the larger of the two problems and is not modeled at all.</span>"},
+   note:"<b>Hypothetical outcome plot.</b> Four hundred random variations on your priorities. The moving dot is one draw; the strips are the whole distribution. Stable ranks indicate less sensitivity to these weight variations, not greater certainty about the underlying evidence. <span class='hides'>Hides that the ratings themselves are uncertain, which is the larger of the two problems and is not modeled at all.</span>"},
   {id:"count",label:"Count",draw:drawCount,tall:true,wide:true,
    note:"<b>Isotype, after Neurath.</b> One mark per state, grouped by posture; hatched marks carry a 2026 statewide action. <span class='hides'>Hides magnitude of every kind: a state with four campuses and a state with none are one mark each.</span>"},
   {id:"glyphs",label:"Glyphs",draw:drawGlyphs,tall:true,
@@ -1626,7 +1682,7 @@ function requestDraw(){
 }
 
 setView("map");
-if(!matchMedia("(prefers-reduced-motion: reduce)").matches) setRotating(true);
+// Keep the comparison stable until the reader explicitly plays the figures.
 let resizeTimer=null;
 window.addEventListener("resize",()=>{
   clearTimeout(resizeTimer);
