@@ -193,6 +193,9 @@
   .srcs summary{color:var(--focus);font-weight:500}
   .srcs ul{padding-left:var(--s5);margin:var(--s2) 0 0}
   .srcs li{margin:var(--s1) 0;overflow-wrap:anywhere}
+  .demand-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:20px 0}
+  .demand-stats dt{font-size:13px;color:var(--muted)}.demand-stats dd{font-size:28px;margin:4px 0 0;font-variant-numeric:tabular-nums}
+  @media(max-width:600px){.demand-stats{grid-template-columns:1fr}}
   .workflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:24px;padding:20px;background:var(--panel);border:1px solid var(--rule);border-radius:6px}
   .workflow b{font-size:14px}.workflow p{font-size:13px;color:var(--muted);margin:6px 0 0}
   .shortlist-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:16px;background:var(--panel);border:1px solid var(--rule);border-radius:6px}
@@ -420,6 +423,19 @@
     <tbody id="tbody"></tbody>
   </table>
 </div>
+
+<section class="meth" id="demand-context" aria-labelledby="demand-heading">
+  <h2 id="demand-heading">Power demand: context for your shortlist</h2>
+  <p>EIA’s September 9, 2026 outlook forecasts growing US electricity sales, driven by datacenter development and manufacturing. These national forecasts provide context for utility diligence; they do not measure spare capacity in a state.</p>
+  <dl class="demand-stats">
+    <div><dt>2026 electricity sales forecast</dt><dd>4,135 TWh</dd></div>
+    <div><dt>2027 electricity sales forecast</dt><dd>4,211 TWh</dd></div>
+    <div><dt>Commercial share of 2026 sales growth</dt><dd>63%</dd></div>
+  </dl>
+  <p>The commercial sector includes more than datacenters. TWh means billion kilowatt-hours. All figures are forecasts, not observed demand or datacenter-only consumption, and contribute no points to state fit.</p>
+  <p><b>Use in diligence:</b> ask the serving utility how its load forecast affects your proposed connection date and upgrade requirements.</p>
+  <p>Source: <a href="https://www.eia.gov/outlooks/steo/report/elec_coal_renew.php" target="_blank" rel="noopener">EIA Short-Term Energy Outlook, September 9, 2026</a> · Checked September 13, 2026. The source page updates monthly; figures here retain the September release.</p>
+</section>
 
 <section class="meth" id="methodology">
   <h2>How this comparison works</h2>

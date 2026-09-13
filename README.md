@@ -40,6 +40,8 @@ Reference weights: Political outlook = policy 50%, permitting 50%. Physical fund
 
 ## Evidence
 
+A separate power-demand context section records EIA’s September 9, 2026 national electricity-sales forecasts for 2026 and 2027 and the commercial sector’s share of 2026 sales growth. These dated forecasts do not affect state ratings or rankings. See [the source review](review/2026-09-13-demand-context.md).
+
 All 50 electricity prices matched the EIA-861 historical workbook's 2024 industrial data, Total Electric Industry sheet. These are historical state averages, not datacenter tariffs. Seven analyst factors remain provisional and have not been individually validated against original records.
 
 State citations carry `type`, with optional `supports` and `reviewed` fields explaining a checked document's scope. Source type identifies the publisher's role, not a credibility rating. Company announcements are self-reported; advocacy statements describe their publisher's position. References to policy events do not establish numerical ratings.
