@@ -77,16 +77,51 @@ test('zero weights remove scores and ranks, while reference views remain defined
   assert.equal(run('STATES.every(s=>s.total===null && s.rank===null && s.rankMin===null && s.rankMax===null && Number.isFinite(s.phy))'), true);
 });
 
-test('all presets and views yield bounded scores, ranks and sensitivity', () => {
+test('all presets, sizes and views yield bounded scores, ranks and sensitivity', () => {
   const run = model();
-  assert.equal(run(`Object.keys(PRESETS).every(preset=>{
-    weights={...PRESETS[preset]};
-    return ['all','politics','physical'].every(lens=>{
-      view=lens;
-      return ['fit','delivery'].every(mode=>{
-        rankMode=mode;compute();
-        return STATES.every(s=>s.total>=0 && s.total<=100 && s.rankMin>=1 && s.rankMax<=50 && s.rankMin<=s.rank && s.rank<=s.rankMax);
+  assert.equal(run(`Object.keys(SIZES).every(z=>{
+    size=z;
+    return Object.keys(PRESETS).concat(['size']).every(preset=>{
+      weights={...(preset==='size'?SIZES[z].weights:PRESETS[preset])};
+      return ['all','politics','physical'].every(lens=>{
+        view=lens;
+        return ['fit','delivery'].every(mode=>{
+          rankMode=mode;compute();
+          return STATES.every(s=>s.total>=0 && s.total<=100 && s.rankMin>=1 && s.rankMax<=50 && s.rankMin<=s.rank && s.rank<=s.rankMax);
+        });
       });
     });
   })`), true);
+});
+
+test('hyperscale is the default size and reproduces the version 2 delivery rule', () => {
+  const run = model();
+  assert.equal(run('size'), 'hyper');
+  assert.equal(run('JSON.stringify([1,2,3,4,5].map(pw=>deliveryTier({pw,op:3})))'), '[2,1,0,0,0]');
+  assert.equal(run('JSON.stringify([1,2,3].map(op=>deliveryTier({pw:5,op})))'), '[2,1,0]');
+  // The worse of the two factors sets the level.
+  assert.equal(run('deliveryTier({pw:5,op:1})'), 2);
+});
+
+test('size floors move the delivery thresholds without touching ratings or fit', () => {
+  const run = model();
+  run('size="gw";compute()');
+  assert.equal(run('JSON.stringify([2,3,4,5].map(pw=>deliveryTier({pw,op:5})))'), '[2,1,0,0]');
+  assert.equal(run('JSON.stringify([1,2,3].map(op=>deliveryTier({pw:5,op})))'), '[2,1,0]');
+  run('size="micro";compute()');
+  assert.equal(run('JSON.stringify([1,2,3].map(pw=>deliveryTier({pw,op:5})))'), '[1,0,0]');
+  assert.equal(run('STATES.every(s=>deliveryTier(s)<2)'), true);
+  // Fit is a function of weights alone; size only changes the grouping.
+  const fit = 'JSON.stringify(STATES.map(s=>[s.a,s.total]))';
+  const before = run(fit);
+  run('size="gw";compute()');
+  assert.equal(run(fit), before);
+});
+
+test('every size profile and preset uses slider steps and each profile sums to 100', () => {
+  const run = model();
+  assert.equal(run('Object.values(SIZES).every(z=>FACTORS.every(f=>Number.isInteger(z.weights[f.k]/5) && z.weights[f.k]>=0 && z.weights[f.k]<=40) && totalWeight(z.weights)===100)'), true);
+  assert.equal(run('Object.values(PRESETS).every(P=>FACTORS.every(f=>Number.isInteger(P[f.k]/5) && P[f.k]>=0 && P[f.k]<=40))'), true);
+  assert.equal(run('Object.values(SIZES).every(z=>z.floors.pw>=2 && z.floors.pw<=5 && z.floors.op>=2 && z.floors.op<=5)'), true);
+  assert.equal(run('SIZES.gw.weights.pw'), 35);
 });

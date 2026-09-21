@@ -98,6 +98,27 @@
   .presets button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:5px 9px;font-size:13px;cursor:pointer;color:var(--ink)}
   .presets button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
   .presets button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  /* Project size: one of four bands. Each button carries its MW range so the
+     band reads as a scale, not a brand of customer. */
+  .sizes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:var(--s2)}
+  .sizes button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:6px 9px;font-size:13px;line-height:1.3;cursor:pointer;color:var(--ink);text-align:left;display:grid;gap:1px;min-width:0}
+  .sizes button small{font-size:11px;color:var(--muted)}
+  .sizes button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .sizes button[aria-pressed="true"] small{color:#D3DAE1}
+  .sizes button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  .model-actions{display:flex;flex-wrap:wrap;gap:0 var(--s4);align-items:center}
+  .model-actions .reset-btn:disabled{color:var(--muted);cursor:default}
+  /* Top and bottom five: a compact tier list under the figure legend. */
+  .tiers{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2) var(--s4);border-top:1px solid var(--rule-soft);margin-top:var(--s3);padding-top:var(--s3);font-size:12.5px;min-width:0}
+  .tiers .tiers-head,.tiers .fine{grid-column:1/-1;margin:0;font-size:12px;color:var(--muted)}
+  .tiers .tiers-head{font-weight:600;color:var(--ink)}
+  .tiers h3{margin:0 0 var(--s1);font-size:12.5px;color:var(--muted);font-weight:600}
+  .tiers ol{margin:0;padding-left:1.8em}
+  .tiers li{color:var(--muted);font-variant-numeric:tabular-nums}
+  .tiers .tier-item{font:inherit;background:none;border:0;padding:2px 0;color:var(--ink);cursor:pointer;display:flex;gap:6px;width:100%;text-align:left;overflow-wrap:anywhere}
+  .tiers .tier-item:hover{color:var(--focus)}
+  .tiers .tier-item span{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+  @media (max-width:420px){.tiers{grid-template-columns:1fr}}
   .w{display:grid;grid-template-columns:minmax(0,1fr) 42px;gap:4px var(--s2);align-items:center;margin:var(--s3) 0}
   .w label{font-size:13.5px;display:block}
   .w .sub{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
@@ -307,7 +328,7 @@
   <div class="asof">Updated September 7, 2026 · Power prices: EIA 2024 annual industrial averages. Fit combines one measured factor with seven provisional analyst ratings.</div>
 </header>
 <section class="workflow" aria-label="Start your comparison">
-  <div><b>1. Set your priorities</b><p>Choose a preset, then adjust the factors that matter to your project.</p></div>
+  <div><b>1. Describe your project</b><p>Choose a size band and a priority preset, then adjust the factors that matter to your project.</p></div>
   <div><b>2. Build a shortlist</b><p>Open state profiles, save candidates, and compare their tradeoffs <a href="#comparison">in the table</a>.</p></div>
   <div><b>3. Verify the site</b><p>Use the shortlist to scope utility, permitting and water diligence. State fit does not establish site readiness.</p></div>
 </section>
@@ -350,14 +371,23 @@
       <div class="key" id="legend-hatch"><div class="swatch"></div><span>2026 state policy change; select a state for details</span></div>
       <div class="key"><span id="hint" style="font-size:12.5px">Select a state to see its scores and sources.</span></div>
     </div>
+    <div class="tiers" id="tiers" aria-label="Top and bottom five states in the current ranking"></div>
   </div>
 
   </div>
 
   <aside>
     <details class="card" id="wpanel" open>
-      <summary><h2>Your priorities</h2></summary>
-      <p class="hint">Choose a starting point, then adjust each factor's importance.</p>
+      <summary><h2>Your project</h2></summary>
+      <p class="hint">1. Project size. Loads a starting weight profile and sets the headroom and permitting a project of that scale needs.</p>
+      <div class="sizes" id="sizes" role="group" aria-label="Project size">
+        <button data-z="micro" aria-pressed="false">Edge or micro<small>under 5 MW</small></button>
+        <button data-z="colo" aria-pressed="false">Enterprise or colocation<small>5 to 50 MW</small></button>
+        <button data-z="hyper" aria-pressed="true">Hyperscale<small>50 to 300 MW</small></button>
+        <button data-z="gw" aria-pressed="false">Gigawatt campus<small>300 MW and up</small></button>
+      </div>
+      <p class="model-hint" id="size-note"></p>
+      <p class="hint">2. Priorities. Choose a starting point, then adjust each factor's importance.</p>
       <div class="presets" id="presets">
         <button data-p="balanced" aria-pressed="true">Balanced</button>
         <button data-p="ai" aria-pressed="false">Build sooner</button>
@@ -378,7 +408,12 @@
         <p id="price-error" role="status"></p>
       </details>
       <div class="total" id="total"></div>
-      <button class="reset-btn" id="reset-model" type="button">Reset comparison</button>
+      <div class="model-actions">
+        <button class="reset-btn" id="reset-model" type="button">Reset comparison</button>
+        <button class="reset-btn" id="copy-link" type="button">Copy scenario link</button>
+        <button class="reset-btn" id="share-card" type="button">Download share image</button>
+      </div>
+      <p class="model-hint" id="link-status" role="status"></p>
     </details>
   </aside>
 </div>
@@ -444,12 +479,17 @@
   <p>Balanced starts with equal importance for eight factors: power headroom, power cost, incentives and policy, community and permitting, water, natural hazards, cooling climate, and connectivity. Each contributes 12.5% initially. Presets and sliders change those shares.</p>
   <p><b>Fit = sum of each factor's score × its share.</b> Seven factors retain provisional analyst ratings on a 1–5 scale, mapped to 0, 25, 50, 75 and 100. These equal steps are a modeling assumption, not measured differences. Momentum is shown only as context: existing development can signal an ecosystem, but can also consume power capacity.</p>
   <p>Power price is the one measured factor. By default, the cost score declines linearly from 100 at 5¢/kWh to 0 at 35¢/kWh, with scores capped at those endpoints. These limits distinguish all prices in the current dataset. Change them under Power cost assumptions to test your preferences. They are not forecasts or tariffs.</p>
+  <h3>Project size</h3>
+  <p>Four size bands describe the project: edge or micro (under 5 MW), enterprise or colocation (5 to 50 MW), hyperscale (50 to 300 MW) and gigawatt campus (300 MW and up). Choosing a band loads a starting weight profile, which the presets and sliders then adjust. Edge starts from connectivity 40%, hazard 15%, cost 15%, climate 10%, permitting 10%, headroom 5%, policy 5%. Enterprise matches Connectivity first. Hyperscale starts from headroom 25%, cost 20%, policy 15%, permitting 15%, water 10%, hazard 5%, climate 5%, connectivity 5%. Gigawatt starts from headroom 35%, cost 25%, permitting 20%, policy 10%, water 5%, hazard 5%, with climate and connectivity at zero.</p>
+  <p>Size also sets the headroom and permitting ratings a project needs before its delivery concerns read as lower: edge needs 2 and 2, enterprise 3 and 2, hyperscale 3 and 3, gigawatt 4 and 3. These thresholds are analyst judgments about scale, not measured capacity, and a state's ratings do not change with size. The page opens on hyperscale with Balanced weights.</p>
   <h3>Delivery concerns</h3>
-  <p>The lower of power headroom and community/permitting determines the modeled concern level: a rating of 1 means major concerns, 2 means elevated concerns, and 3–5 means lower concerns. Lower concerns do not establish available power or permit eligibility.</p>
+  <p>Power headroom and community/permitting are each compared with the size threshold. A rating at or above the threshold means lower concerns, one level below means elevated concerns, and two or more below means major concerns. The worse of the two factors sets the state's level. For hyperscale that is the original rule: a rating of 1 means major, 2 elevated, 3–5 lower. Lower concerns do not establish available power or permit eligibility.</p>
   <p><b>Weighted fit</b> permits trade-offs and is the default. <b>Delivery first</b> ranks lower-concern states ahead of elevated- and major-concern states, then compares fit within each group. Cheap power therefore cannot offset a worse delivery group in that mode. The grouping still relies on provisional ratings, not verified connection timelines.</p>
   <h3>Sensitivity</h3>
   <p>Each profile's Scores tab shows the best and worst rank obtained by changing one of that state's judgment ratings by one level, within 1–5. Other ratings and states stay fixed. This is a limited sensitivity test, not a confidence interval or probability. It does not capture correlated errors or simultaneous changes across states.</p>
   <p>Exact score ties within the selected ranking rule share a rank. Setting every weight to zero removes fit scores and ranks while keeping facts and sources available.</p>
+  <h3>Sharing a scenario</h3>
+  <p>The page address records the size, priorities, ranking rule, price anchors, figure and shortlist, each omitted when it is at its default. Copy scenario link copies that address. Download share image draws a 1200 by 675 pixel card of the five leading states and the priority shares for the current scenario. Both describe this model's output, not a site decision.</p>
   <h3>Reception and regulation</h3>
   <p>The Reception tab reports public response and statewide regulation. The table summarizes opposition and the number of regulatory categories with requirements in force. Neither affects scores or rankings.</p>
   <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. Local action counts here. The four rule axes stay strictly statewide and cover water, power and ratepayer cost, siting and zoning, and tax incentives.</p>
@@ -2151,6 +2191,17 @@ const PRESETS = {
   safe: {pw:15,p:10,po:15,op:15,w:15,h:20,c:5,x:5},
   colo: {pw:15,p:15,po:10,op:10,w:5,h:10,c:5,x:30}
 };
+// Project size. Each band loads a starting weight profile and sets the
+// headroom and permitting ratings a project of that scale needs before its
+// delivery concerns read as lower. Hyperscale reproduces the version 2 rule
+// exactly (1 major, 2 elevated, 3 to 5 lower), so it is the default.
+const SIZES = {
+  micro: {label:"Edge or micro", mw:"under 5 MW", floors:{pw:2,op:2}, weights:{pw:5,p:15,po:5,op:10,w:0,h:15,c:10,x:40}},
+  colo:  {label:"Enterprise or colocation", mw:"5 to 50 MW", floors:{pw:3,op:2}, weights:{pw:15,p:15,po:10,op:10,w:5,h:10,c:5,x:30}},
+  hyper: {label:"Hyperscale", mw:"50 to 300 MW", floors:{pw:3,op:3}, weights:{pw:25,p:20,po:15,op:15,w:10,h:5,c:5,x:5}},
+  gw:    {label:"Gigawatt campus", mw:"300 MW and up", floors:{pw:4,op:3}, weights:{pw:35,p:25,po:10,op:20,w:5,h:5,c:0,x:0}}
+};
+let size = "hyper";
 let weights = {...PRESETS.balanced};
 let view = "all", rankMode = "fit";
 let priceScale = {low:5,high:35};
@@ -2170,8 +2221,13 @@ function lensScore(s,W){ const tw=totalWeight(W); if(tw<=0) return null; let t=0
 // share of the composite that a factor actually contributes, in points
 function contribution(s,k){ const W=activeWeights(), tw=totalWeight(W); if(tw<=0) return 0; return (W[k]||0)*sub(s,k)/tw; }
 function hasWeights(){ return totalWeight(activeWeights())>0; }
-function deliveryTier(s){ return Math.min(s.pw,s.op)<=1 ? 2 : Math.min(s.pw,s.op)<=2 ? 1 : 0; }
+// A rating at or above the size's floor is lower concern, one level under it
+// is elevated, two or more under is major. The worse of the two factors wins.
+function factorTier(rating,floor){ return rating>=floor ? 0 : rating===floor-1 ? 1 : 2; }
+function deliveryTier(s){ const f=SIZES[size].floors; return Math.max(factorTier(s.pw,f.pw),factorTier(s.op,f.op)); }
 function deliveryLabel(s){ return ["Lower modeled concerns","Elevated modeled concerns","Major modeled concerns"][deliveryTier(s)]; }
+function sizeLabel(){ return SIZES[size].label; }
+function deliveryContext(){ return `for a ${sizeLabel().toLowerCase()} (${SIZES[size].mw})`; }
 function compareFit(a,b){
   if(rankMode==="delivery" && deliveryTier(a)!==deliveryTier(b)) return deliveryTier(a)-deliveryTier(b);
   const delta=b.total-a.total;
@@ -2281,7 +2337,7 @@ function showTip(abbr,e){
     ? `<span class="sc">${s.total.toFixed(0)} <span class="small" style="font-size:13px">rank ${s.rank} of 50${s.tied?", tied":""}</span></span>`
     : `<span class="sc" style="font-size:15px">No score</span>`;
   const body = hasWeights()
-    ? `${deliveryLabel(s)}<br>One-rating sensitivity: rank ${s.rankMin}–${s.rankMax}<br>Highest rated factor: ${bw.best}<br>Lowest rated factor: ${bw.worst}`
+    ? `${deliveryLabel(s)} ${deliveryContext()}<br>One-rating sensitivity: rank ${s.rankMin}–${s.rankMax}<br>Highest rated factor: ${bw.best}<br>Lowest rated factor: ${bw.worst}`
     : `${s.st}<br>Raise at least one priority to score this state.`;
   tip.innerHTML=`<b>${s.n}</b>${s.tag?` <span class="small">(${s.tag})</span>`:""}${head}<span class="small">${body}</span>`;
   tip.style.display="block";
@@ -2309,12 +2365,16 @@ FACTORS.forEach(f=>{
   d.innerHTML=`<label title="${f.sub}" for="w-${f.k}">${f.name}<span class="sub">${f.sub}</span></label><span class="val" id="v-${f.k}"></span><input type="range" id="w-${f.k}" min="0" max="40" step="5">`;
   wbox.appendChild(d);
   const inp=d.querySelector("input");
-  inp.addEventListener("input",()=>{ weights[f.k]=+inp.value; view="all"; setLens("all"); setPressed(null); refresh(); });
+  inp.addEventListener("input",()=>{ weights[f.k]=+inp.value; view="all"; setLens("all"); setPressed(presetMatching(weights)); refresh(); });
 });
 function syncSliders(){
+  const Z=SIZES[size], F=Z.floors;
   document.getElementById("rank-explanation").textContent=rankMode==="fit"
     ? "Ranks by your weighted fit. Delivery concerns remain a separate signal."
-    : "Groups states by modeled delivery concerns first, then ranks by fit within each group. A rating of 1 is major; 2 is elevated; 3–5 is lower concern.";
+    : `Groups states by modeled delivery concerns for a ${Z.label.toLowerCase()} first, then ranks by fit within each group. Headroom below ${F.pw} or permitting below ${F.op} is elevated; two levels below is major.`;
+  document.getElementById("size-note").textContent=`${Z.label} (${Z.mw}) starts from headroom ${Z.weights.pw}%, cost ${Z.weights.p}%, permitting ${Z.weights.op}%. Lower delivery concern needs headroom ${F.pw} and permitting ${F.op} of 5.`;
+  document.getElementById("legend-rampnote").textContent=`Color shows weighted fit on a fixed 0–100 scale. Delivery concerns, judged for a ${Z.label.toLowerCase()}, are shown separately in each profile.`;
+  document.getElementById("share-card").disabled=!hasWeights();
   const tw=totalWeight(weights);
   FACTORS.forEach(f=>{
     const inp=document.getElementById("w-"+f.k);
@@ -2336,12 +2396,19 @@ function syncSliders(){
 function setPressed(id){
   document.querySelectorAll("#presets button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.p===id ? "true":"false"));
 }
+// the pressed preset is inferred from the weights, so it stays honest when a
+// reader drags the sliders back onto one
+function presetMatching(W){ return Object.keys(PRESETS).find(k=>FACTORS.every(f=>PRESETS[k][f.k]===(W[f.k]||0)))||null; }
 document.querySelectorAll("#presets button").forEach(b=>b.addEventListener("click",()=>{ weights={...PRESETS[b.dataset.p]}; setPressed(b.dataset.p); view="all"; setLens("all"); refresh(); }));
+function setSize(id){ document.querySelectorAll("#sizes button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.z===id?"true":"false")); }
+// a size loads its weight profile; presets and sliders then adjust from there
+document.querySelectorAll("#sizes button").forEach(b=>b.addEventListener("click",()=>{ size=b.dataset.z; weights={...SIZES[size].weights}; setSize(size); setPressed(presetMatching(weights)); view="all"; setLens("all"); refresh(); }));
 function setLens(id){ document.querySelectorAll("#lens button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.l===id?"true":"false")); }
 // the lens is a view, not an edit: switching to a lens and back restores the user's own weights
 document.querySelectorAll("#lens button").forEach(b=>b.addEventListener("click",()=>{ view=b.dataset.l; setLens(view); refresh(); }));
 function activeWeights(){ return view==="all" ? weights : LENSES[view]; }
 function viewLabel(){ return view==="all" ? "Combined" : view==="politics" ? "Political outlook" : "Physical fundamentals"; }
+function rankModeLabel(){ return rankMode==="delivery" ? "Delivery first" : "Weighted fit"; }
 
 document.getElementById("rank-mode").addEventListener("change",e=>{
   rankMode=e.target.value;sortKey="rank";sortAsc=true;refresh();
@@ -2358,10 +2425,76 @@ for(const id of ["price-low","price-high"]){
 }
 
 document.getElementById("reset-model").addEventListener("click",()=>{
-  weights={...PRESETS.balanced};view="all";rankMode="fit";priceScale={low:5,high:35};sortKey="rank";sortAsc=true;
+  size="hyper";weights={...PRESETS.balanced};view="all";rankMode="fit";priceScale={low:5,high:35};sortKey="rank";sortAsc=true;
   document.getElementById("rank-mode").value="fit";
   for(const [id,value] of [["price-low",5],["price-high",35]]){const input=document.getElementById(id);input.value=value;input.removeAttribute("aria-invalid");}
-  document.getElementById("price-error").textContent="";setPressed("balanced");setLens("all");refresh();
+  document.getElementById("price-error").textContent="";document.getElementById("link-status").textContent="";
+  setSize("hyper");setPressed("balanced");setLens("all");refresh();
+});
+
+// --- scenario URL ---
+// Every setting that changes the ranking lives in the query string, omitted
+// when it equals its default, so a pristine page keeps a clean address and a
+// copied link reproduces the scenario exactly. Nothing is stored elsewhere.
+let urlReady=false, urlTimer=null;
+const DEFAULT_SCALE={low:5,high:35};
+function weightsKey(W){ return FACTORS.map(f=>W[f.k]||0).join("."); }
+// with no size in the address the page starts from Balanced; with one, from
+// that size's profile. Encoding and decoding share this rule.
+function baseWeights(z){ return z==="hyper" ? PRESETS.balanced : SIZES[z].weights; }
+function encodeURLState(){
+  const parts=[];
+  if(size!=="hyper") parts.push("z="+size);
+  if(weightsKey(weights)!==weightsKey(baseWeights(size))) parts.push("w="+weightsKey(weights));
+  if(view!=="all") parts.push("v="+view);
+  if(rankMode!=="fit") parts.push("r="+rankMode);
+  if(priceScale.low!==DEFAULT_SCALE.low||priceScale.high!==DEFAULT_SCALE.high) parts.push("c="+priceScale.low+"-"+priceScale.high);
+  const fig=FIGS.active(); if(fig!=="map") parts.push("f="+fig);
+  if(shortlist.size) parts.push("s="+[...shortlist].join(","));
+  return parts.join("&");
+}
+function writeURL(){
+  if(!urlReady) return;
+  const q=encodeURLState();
+  try{ history.replaceState(null,"",location.pathname+(q?"?"+q:"")+location.hash); }catch(err){}
+}
+function scheduleURL(){ clearTimeout(urlTimer); urlTimer=setTimeout(writeURL,150); }
+// Malformed values are dropped one at a time and can never throw: a bad link
+// still opens the page with everything else it asked for.
+function readURLState(){
+  let figure=null;
+  try{
+    const q=new URLSearchParams(location.search);
+    const z=q.get("z");
+    if(z && SIZES[z]){ size=z; weights={...SIZES[z].weights}; }
+    const w=q.get("w"); let parsed=null;
+    if(w){
+      const t=w.split(".");
+      if(t.length===FACTORS.length && t.every(x=>/^\d{1,2}$/.test(x))){
+        parsed={}; FACTORS.forEach((f,i)=>{ parsed[f.k]=Math.max(0,Math.min(40,Math.round(+t[i]/5)*5)); });
+      }
+    }
+    if(parsed) weights=parsed;
+    else if(q.get("p") && PRESETS[q.get("p")]) weights={...PRESETS[q.get("p")]};
+    const v=q.get("v"); if(v==="politics"||v==="physical") view=v;
+    if(q.get("r")==="delivery") rankMode="delivery";
+    const c=(q.get("c")||"").match(/^(\d+(?:\.\d+)?)-(\d+(?:\.\d+)?)$/);
+    if(c){ const low=Math.round(+c[1]*2)/2, high=Math.round(+c[2]*2)/2; if(low>=0&&high<=100&&high>low) priceScale={low,high}; }
+    (q.get("s")||"").split(",").map(x=>x.trim().toUpperCase()).filter(x=>BY[x]).forEach(x=>shortlist.add(x));
+    figure=q.get("f");
+  }catch(err){}
+  setSize(size); setPressed(presetMatching(weights)); setLens(view);
+  document.getElementById("rank-mode").value=rankMode;
+  document.getElementById("price-low").value=priceScale.low; document.getElementById("price-high").value=priceScale.high;
+  renderShortlistChips();
+  return figure;
+}
+document.getElementById("copy-link").addEventListener("click",()=>{
+  writeURL();
+  const status=document.getElementById("link-status");
+  const done=()=>{ status.textContent="Link copied. It reproduces the size, priorities, ranking rule, price anchors, figure and shortlist."; };
+  const fail=()=>{ status.textContent="Copy the address bar to share this scenario. It already holds every setting."; };
+  try{ (navigator.clipboard ? navigator.clipboard.writeText(location.href) : Promise.reject()).then(done,fail); }catch(err){ fail(); }
 });
 
 // --- state profiles ---
@@ -2410,11 +2543,24 @@ profileDialog.addEventListener("click",e=>{
   const r=profileDialog.getBoundingClientRect();
   if(e.target===profileDialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)) profileDialog.close();
 });
+function rankedStates(){ return [...STATES].sort((a,b)=>a.rank-b.rank||a.n.localeCompare(b.n)); }
 function renderCandidates(){
   const box=document.getElementById("candidates");
   if(!hasWeights()){box.textContent="Choose a priority or preset to rank states.";return;}
-  const top=[...STATES].sort((a,b)=>a.rank-b.rank||a.n.localeCompare(b.n)).slice(0,5);
-  box.innerHTML=`<span>Leading states · ${rankMode==="delivery"?"delivery first":"weighted fit"}</span>`+top.map(s=>`<button class="candidate" data-a="${s.a}" aria-pressed="${s.a===selected}" aria-label="Open ${s.n}, rank ${s.rank}, fit ${s.total.toFixed(0)}">${s.n}<span>${s.total.toFixed(0)}</span></button>`).join("");
+  const top=rankedStates().slice(0,5);
+  box.innerHTML=`<span>Leading states · ${rankModeLabel().toLowerCase()}</span>`+top.map(s=>`<button class="candidate" data-a="${s.a}" aria-pressed="${s.a===selected}" aria-label="Open ${s.n}, rank ${s.rank}, fit ${s.total.toFixed(0)}">${s.n}<span>${s.total.toFixed(0)}</span></button>`).join("");
+  box.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>select(b.dataset.a)));
+}
+// Top and bottom five under the current size and ranking rule. Ties keep their
+// shared rank number rather than being counted off 1 to 5.
+function renderTiers(){
+  const box=document.getElementById("tiers");
+  if(!hasWeights()){ box.innerHTML='<p class="fine">Choose a priority or preset to rank states.</p>'; return; }
+  const all=rankedStates();
+  const col=(title,list)=>`<div><h3>${title}</h3><ol>${list.map(s=>`<li value="${s.rank}"><button type="button" class="tier-item" data-a="${s.a}" aria-label="Open ${s.n}, rank ${s.rank}, fit ${s.total.toFixed(0)}">${s.n}<span>${s.total.toFixed(0)}</span></button></li>`).join("")}</ol></div>`;
+  box.innerHTML=`<p class="tiers-head">Top and bottom five · ${sizeLabel()} · ${rankModeLabel().toLowerCase()} · ${viewLabel()}</p>`
+    +col("Top five",all.slice(0,5))+col("Bottom five",all.slice(-5))
+    +`<p class="fine">Seven of eight factors are provisional analyst ratings. Equal scores share a rank number. Fit does not establish site readiness.</p>`;
   box.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>select(b.dataset.a)));
 }
 function select(abbr){
@@ -2480,9 +2626,9 @@ function renderDetail(){
   document.getElementById("detail").innerHTML=`
     <div class="top"><div><h2>${s.n}</h2>${s.tag?`<span class="chip">${s.tag}</span>`:""}</div><div class="score">${scored?s.total.toFixed(0):"—"}<small>fit / 100</small></div></div>
     <button type="button" class="close-btn" id="save-state" aria-pressed="${shortlist.has(s.a)}" onclick="toggleShortlist(selected)">${shortlist.has(s.a)?"Remove from shortlist":"Add to shortlist"}</button>
-    <p class="rank">${scored?`Rank ${s.rank} of 50${s.tied?" (tied)":""} · ${rankMode==="delivery"?"Delivery first":"Weighted fit"} · ${viewLabel()}`:"Set a priority to calculate fit. Facts and sources remain available."}</p>
+    <p class="rank">${scored?`Rank ${s.rank} of 50${s.tied?" (tied)":""} · ${rankModeLabel()} · ${viewLabel()} · ${sizeLabel()}`:"Set a priority to calculate fit. Facts and sources remain available."}</p>
     <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">
-      <div class="delivery-status" data-tier="${deliveryTier(s)}"><b>${deliveryLabel(s)}</b><p>Power headroom ${s.pw}/5 · Community and permitting ${s.op}/5. These are analyst ratings, not a confirmed power allocation or permit decision.</p></div>
+      <div class="delivery-status" data-tier="${deliveryTier(s)}"><b>${deliveryLabel(s)} ${deliveryContext()}</b><p>Power headroom ${s.pw}/5 · Community and permitting ${s.op}/5. Lower concern at this size needs headroom ${SIZES[size].floors.pw} and permitting ${SIZES[size].floors.op}. These are analyst ratings, not a confirmed power allocation or permit decision.</p></div>
       <div class="fact"><p>2024 industrial electricity price</p><strong>${s.p.toFixed(2)}¢/kWh</strong><a href="${EIA_SOURCE.u}" target="_blank" rel="noopener">EIA measured benchmark ↗</a></div>
       <details class="diligence"><summary>What to verify before advancing ${s.n}</summary>
         <ul><li>Utility: available MW at the proposed substation, energization date, upgrade costs and the applicable tariff.</li><li>Local authority: parcel zoning, permit sequence, hearing requirements and current restrictions.</li><li>Water provider: supply allocation, cooling design and discharge requirements.</li><li>Project team: site hazards, fiber routes and incentive eligibility for this project.</li></ul>
@@ -2498,7 +2644,7 @@ function renderDetail(){
     <section id="panel-scores" role="tabpanel" aria-labelledby="tab-scores" tabindex="0" hidden>
       <p class="breakdown-hint">Bars show factor values. Points show the contribution under ${viewLabel()} weights. Momentum is excluded.</p>
       ${sensitivity}<div class="bars">${bars}</div>
-      <p class="evidence-note">Seven factors use provisional 1–5 judgments. Higher fit does not establish that a project can connect or obtain permits. ${rankMode==="delivery"?"Delivery-first rankings group states by the lower of headroom and permitting before comparing fit.":"Weighted-fit rankings allow trade-offs between factors. Review delivery concerns separately."}</p>
+      <p class="evidence-note">Seven factors use provisional 1–5 judgments. Higher fit does not establish that a project can connect or obtain permits. ${rankMode==="delivery"?`Delivery-first rankings group states by headroom and permitting against the ${sizeLabel().toLowerCase()} thresholds before comparing fit.`:"Weighted-fit rankings allow trade-offs between factors. Review delivery concerns separately."}</p>
     </section>
     <section id="panel-sources" role="tabpanel" aria-labelledby="tab-sources" tabindex="0" hidden>
       <h3>Evidence and its limits</h3><p class="evidence-note">Source type describes who published the material, not a credibility score. A source can support a policy event without validating a 1–5 rating. Company and advocacy statements represent the publisher's own account.</p>
@@ -2566,9 +2712,12 @@ function renderTable(){
 function toggleShortlist(abbr){
   if(!BY[abbr]) return;
   if(shortlist.has(abbr)) shortlist.delete(abbr); else shortlist.add(abbr);
+  renderShortlistChips();
+  renderTable(); renderDetail(); scheduleURL();
+}
+function renderShortlistChips(){
   document.getElementById("shortlist-chips").innerHTML=[...shortlist].map(a=>`<button type="button" class="candidate" data-remove="${a}" aria-label="Remove ${BY[a].n} from shortlist">${BY[a].n} ×</button>`).join("");
   document.querySelectorAll("[data-remove]").forEach(b=>b.addEventListener("click",()=>toggleShortlist(b.dataset.remove)));
-  renderTable(); renderDetail();
 }
 const shortlistPicker=document.getElementById("shortlist-picker");
 [...STATES].sort((a,b)=>a.n.localeCompare(b.n)).forEach(s=>shortlistPicker.add(new Option(s.n,s.a)));
@@ -2579,9 +2728,9 @@ shortlistPicker.addEventListener("change",()=>{
 document.getElementById("shortlist-only").addEventListener("change",renderTable);
 document.getElementById("export-comparison").addEventListener("click",()=>{
   const W=activeWeights(), tw=totalWeight(W);
-  const columns=["state","postal","rank_of_50","fit_0_100","delivery_concern","rating_sensitivity_rank_min","rating_sensitivity_rank_max","industrial_price_cents_kwh_2024","view","ranking_rule","model_version","price_anchor_low","price_anchor_high",...FACTORS.map(f=>"weight_share_"+f.k),"evidence_limit"];
+  const columns=["state","postal","rank_of_50","fit_0_100","delivery_concern","project_size","rating_sensitivity_rank_min","rating_sensitivity_rank_max","industrial_price_cents_kwh_2024","view","ranking_rule","model_version","price_anchor_low","price_anchor_high",...FACTORS.map(f=>"weight_share_"+f.k),"evidence_limit"];
   const rows=[...document.querySelectorAll("#tbody tr[data-a]")].map(tr=>BY[tr.dataset.a]).map(s=>[
-    s.n,s.a,s.rank,s.total,deliveryLabel(s),s.rankMin,s.rankMax,s.p,view,rankMode,MODEL_VERSION,priceScale.low,priceScale.high,...FACTORS.map(f=>tw?(W[f.k]||0)/tw:0),"EIA 2024 state average; seven provisional analyst ratings. Not site readiness or a utility tariff."
+    s.n,s.a,s.rank,s.total,deliveryLabel(s),size,s.rankMin,s.rankMax,s.p,view,rankMode,MODEL_VERSION,priceScale.low,priceScale.high,...FACTORS.map(f=>tw?(W[f.k]||0)/tw:0),"EIA 2024 state average; seven provisional analyst ratings. Not site readiness or a utility tariff."
   ]);
   const cell=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
   const blob=new Blob([[columns,...rows].map(r=>r.map(cell).join(",")).join("\r\n")+"\r\n"],{type:"text/csv;charset=utf-8"});
@@ -2589,6 +2738,59 @@ document.getElementById("export-comparison").addEventListener("click",()=>{
   link.href=url;link.download="datacenter-comparison.csv";document.body.appendChild(link);link.click();link.remove();
   setTimeout(()=>URL.revokeObjectURL(url),0);
 });
+
+// --- share card ---
+// A 1200 by 675 image of the current scenario, drawn on a canvas so it needs
+// no server and carries the address back to the page. Counting a download
+// must never be the reason one fails, so the counter is guarded.
+const EVIDENCE_REVIEW="September 7, 2026";
+const CARD_FONT='"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+function countEvent(path,title){ try{ window.goatcounter?.count?.({path,title,event:true}); }catch(err){} }
+function drawShareCard(){
+  const W=1200,H=675, cv=document.createElement("canvas"); cv.width=W; cv.height=H;
+  const ctx=cv.getContext("2d"), INK="#18212B", MUTED="#5C6773";
+  const font=(px,wt)=>{ ctx.font=`${wt||400} ${px}px ${CARD_FONT}`; };
+  const text=(t,x,y,px,wt,fill,align)=>{ font(px,wt); ctx.fillStyle=fill||INK; ctx.textAlign=align||"left"; ctx.fillText(t,x,y); };
+  ctx.fillStyle="#FFFFFF"; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle="#B5432A"; ctx.fillRect(0,0,12,H);
+  ctx.textBaseline="alphabetic";
+  const Z=SIZES[size];
+  text("US datacenter comparison, 2026",60,86,42,600);
+  text(`${Z.label} (${Z.mw}) · ${viewLabel()} · ${rankModeLabel()}`,60,124,23,400,MUTED);
+  text(`Model version ${MODEL_VERSION} · evidence review ${EVIDENCE_REVIEW} · EIA 2024 industrial prices`,60,154,16,400,MUTED);
+  rankedStates().slice(0,5).forEach((s,i)=>{
+    const y=222+i*80;
+    ctx.fillStyle=color(s.total); ctx.fillRect(60,y-32,40,40);
+    text(`#${s.rank}${s.tied?" tied":""}`,118,y-6,17,400,MUTED);
+    text(s.n,190,y,30,600);
+    text(s.total.toFixed(0),720,y,30,600,INK,"right");
+    text(deliveryLabel(s),190,y+24,15,400,MUTED);
+  });
+  const Wt=activeWeights(), tw=totalWeight(Wt), x0=800;
+  const shares=FACTORS.map(f=>tw>0?(Wt[f.k]||0)/tw*100:0), maxShare=Math.max(1,...shares);
+  text("Priority shares",x0,200,19,600);
+  FACTORS.forEach((f,i)=>{
+    const y=236+i*28, share=shares[i], bw=Math.round(share/maxShare*170);
+    text(f.name.replace(" and ecosystem","").replace("Incentives and policy","Policy").replace("Community and permitting","Permitting").replace("Climate for cooling","Climate").replace("Natural hazard","Hazard").replace("Power headroom","Headroom").replace("Power cost","Cost"),x0,y,14,400,MUTED);
+    ctx.fillStyle=share>0?INK:"#E6EAEE"; ctx.fillRect(x0+110,y-12,Math.max(bw,3),14);
+    text(share>0?share.toFixed(0)+"%":"0%",x0+340,y,14,400,MUTED,"right");
+  });
+  text("sonnetx.github.io/datacenter-map",60,632,18,600);
+  text("One measured price and seven provisional analyst ratings. Not site readiness.",1140,632,15,400,MUTED,"right");
+  return cv;
+}
+function downloadShareCard(){
+  if(!hasWeights()) return;
+  drawShareCard().toBlob(blob=>{
+    if(!blob) return;
+    const url=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=url; a.download=`datacenter-scenario-${new Date().toISOString().slice(0,10)}.png`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),0);
+  },"image/png");
+  countEvent("share-card-png","Share card (PNG)");
+}
+document.getElementById("share-card").addEventListener("click",downloadShareCard);
 
 function median(a){const b=[...a].sort((x,y)=>x-y);const m=b.length>>1;return b.length%2?b[m]:(b[m-1]+b[m])/2;}
 function renderScatter(){
@@ -3263,7 +3465,7 @@ VIEWS.forEach(v=>{
   const b=document.createElement("button");
   b.type="button"; b.textContent=v.label; b.dataset.v=v.id;
   b.setAttribute("aria-pressed",String(v.id===active));
-  b.addEventListener("click",()=>{ setView(v.id); });
+  b.addEventListener("click",()=>{ setView(v.id); scheduleURL(); });
   viewbar.appendChild(b);
 });
 function currentView(){ return VIEWS.find(v=>v.id===active)||VIEWS[0]; }
@@ -3273,6 +3475,7 @@ function drawActive(){
   if(v.id!=="uncertainty") stopHop();
 }
 function setView(id){
+  if(!VIEWS.some(v=>v.id===id)) return;
   if(id!==active) stopHop();
   active=id;
   VIEWS.forEach(v=>{
@@ -3328,17 +3531,23 @@ window.addEventListener("resize",()=>{
   clearTimeout(resizeTimer);
   resizeTimer=setTimeout(()=>{ if(currentView().id==="relief") drawActive(); },200);
 });
-return {draw:requestDraw,setView};
+return {draw:requestDraw,setView,active:()=>active,has:id=>VIEWS.some(v=>v.id===id)};
 })();
 
-function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); renderDetail(); renderTable(); renderScatter(); FIGS.draw(); }
+function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); renderTiers(); renderDetail(); renderTable(); renderScatter(); FIGS.draw(); scheduleURL(); }
 // on a phone the priorities panel starts collapsed so the map and results stay reachable
 (function(){
   const mq=window.matchMedia("(max-width:900px)"), panel=document.getElementById("wpanel");
   if(mq.matches) panel.removeAttribute("open");
   mq.addEventListener("change",e=>{ if(e.matches) panel.removeAttribute("open"); else panel.setAttribute("open",""); });
 })();
+// Read the address first, score, then show the requested figure (figures read
+// scores, so they cannot be drawn before the first compute), then normalize
+// the address so a copied link is canonical.
+const initialFigure=readURLState();
 refresh();
+if(initialFigure && FIGS.has(initialFigure)) FIGS.setView(initialFigure);
+urlReady=true; writeURL();
 
 // --- dataset release ---
 // The dataset is CC BY and already in the public repository, so the download
