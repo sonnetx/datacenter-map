@@ -144,6 +144,77 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     page.locator('#shortlist-only').uncheck()
     assert page.locator('#tbody tr[data-a]').count()==50
 
+    # Project size loads a weight profile and moves the delivery floors; the
+    # presets then adjust from there without touching the size.
+    page.locator('[data-z=gw]').click()
+    assert page.evaluate('size')=='gw' and page.evaluate('weights.pw')==35
+    assert page.locator('#presets [aria-pressed=true]').count()==0
+    assert page.evaluate('STATES.some(s=>s.pw===3 && s.op>=3 && deliveryTier(s)===1)')
+    assert 'gigawatt campus' in page.locator('#size-note').inner_text().lower()
+    page.locator('[data-p=balanced]').click()
+    assert page.evaluate('size')=='gw' and page.evaluate('weights.pw')==10
+    page.locator('[data-z=colo]').click()
+    assert page.locator('#presets [aria-pressed=true]').inner_text()=='Connectivity first'
+    page.locator('#w-x').fill('35');page.locator('#w-x').dispatch_event('input')
+    assert page.locator('#presets [aria-pressed=true]').count()==0
+    page.locator('#w-x').fill('30');page.locator('#w-x').dispatch_event('input')
+    assert page.locator('#presets [aria-pressed=true]').inner_text()=='Connectivity first'
+    page.locator('#reset-model').click()
+    assert page.evaluate('size==="hyper" && weights.pw===10')
+    assert page.locator('#sizes [aria-pressed=true]').inner_text().startswith('Hyperscale')
+
+    # The tiers card lists the extremes of the current ranking, with ties
+    # keeping their shared rank number.
+    assert page.locator('#tiers li').count()==10
+    assert page.locator('#tiers li').first.get_attribute('value')=='1'
+    assert page.locator('#tiers li .tier-item').first.get_attribute('data-a')==page.evaluate('rankedStates()[0].a')
+    page.locator('#rank-mode').select_option('delivery')
+    assert page.evaluate('deliveryTier(BY[document.querySelector("#tiers .tier-item").dataset.a])')==0
+    page.locator('#rank-mode').select_option('fit')
+
+    # The share image is a real PNG, counted like a dataset download, and
+    # unavailable when nothing is weighted.
+    with page.expect_download() as caught:
+        page.locator('#share-card').click()
+    assert caught.value.suggested_filename.endswith('.png')
+    assert Path(caught.value.path()).read_bytes()[:8]==b'\x89PNG\r\n\x1a\n'
+    assert page.evaluate('window.goatcounter.counted.at(-1)')=={'path':'share-card-png','title':'Share card (PNG)','event':True}
+    for inp in page.locator('#weights input').all():
+        inp.fill('0');inp.dispatch_event('input')
+    assert page.locator('#share-card').is_disabled()
+    assert page.locator('#tiers li').count()==0
+    page.locator('#reset-model').click()
+
+    # The address reproduces a scenario, drops what is at its default, and
+    # survives garbage without a script error.
+    uri=(ROOT / 'index.html').as_uri()
+    page.goto(uri+'?z=gw&w=35.25.10.20.5.5.0.0&v=physical&r=delivery&c=6-30&f=ranks&s=VA,AZ')
+    assert page.evaluate('size')=='gw' and page.evaluate('weights.pw')==35 and page.evaluate('view')=='physical'
+    assert page.locator('#rank-mode').input_value()=='delivery'
+    assert page.evaluate('priceScale.high')==30 and page.locator('#price-high').input_value()=='30'
+    assert page.evaluate('FIGS.active()')=='ranks'
+    assert page.locator('#shortlist-chips button').count()==2
+    assert page.locator('#sizes [aria-pressed=true]').inner_text().startswith('Gigawatt')
+    # w equals the gw profile, so the normalized address drops it.
+    assert page.evaluate('location.search')=='?z=gw&v=physical&r=delivery&c=6-30&f=ranks&s=VA,AZ'
+    page.locator('#copy-link').click()
+    # The clipboard call settles asynchronously, and headless Chromium may
+    # deny it; either way the status line has to say something.
+    page.wait_for_function('document.getElementById("link-status").textContent.length>0')
+    page.locator('#reset-model').click()
+    # The address is rewritten on a short debounce; Reset restores the model
+    # and keeps the figure and the shortlist.
+    page.wait_for_function('location.search==="?f=ranks&s=VA,AZ"')
+    page.locator('#w-pw').fill('40');page.locator('#w-pw').dispatch_event('input')
+    page.wait_for_function('new URLSearchParams(location.search).get("w")==="40.10.10.10.10.10.10.10"')
+    page.goto(uri+'?z=huge&w=abc&v=nope&r=maybe&c=9&f=zzz&s=XX,va&p=colo')
+    assert page.evaluate('size')=='hyper' and page.evaluate('weights.x')==30
+    assert page.evaluate('view')=='all' and page.evaluate('FIGS.active()')=='map'
+    assert page.evaluate('[...shortlist]')==['VA']
+    assert page.evaluate('location.search')=='?w=15.15.10.10.5.10.5.30&s=VA'
+    page.goto(uri)
+    assert page.evaluate('location.search')==''
+
     page.set_viewport_size({'width':390,'height':844})
     page.reload()
     assert not page.locator('#wpanel').evaluate('(e)=>e.open')

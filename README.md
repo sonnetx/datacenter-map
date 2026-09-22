@@ -9,8 +9,11 @@ An interactive map for exploring state-level conditions for hyperscale and AI tr
 - The map card holds twelve figures of the same 50 states, one at a time. Choose one from the row of buttons, or explicitly play a tour that advances every eight seconds. The map stays still by default. Rotation stops for good the first time you click, key or scroll inside the card, and never starts when the browser asks for reduced motion.
 - Every figure that can answer the priority sliders does. Relief, cartogram, prices, profiles, ranks, flow, uncertainty and count all re-read your weights; spread, glyphs and screens are fixed by construction and their notes say so. Each figure names what it hides as well as what it shows.
 - State profiles open in a side panel with Overview, Scores, Reception and Sources tabs. Profiles support keyboard navigation and close with Escape.
-- Choose Balanced, Build sooner, Lower costs, Lower risk or Connectivity first, then adjust relative priorities. Effective percentage shares update automatically.
+- Choose a project size (edge or micro, enterprise or colocation, hyperscale, gigawatt campus). The size loads a starting weight profile and sets the headroom and permitting thresholds behind delivery concerns. The page opens on hyperscale with Balanced weights.
+- Choose Balanced, Build sooner, Lower costs, Lower risk or Connectivity first, then adjust relative priorities. Effective percentage shares update automatically. The pressed preset is inferred from the weights, so sliding back onto a preset re-presses it.
 - Switch between Combined, Political outlook and Physical fundamentals without losing custom priorities. Editing a slider returns to Combined.
+- The address records the scenario: `z` size, `w` eight weights in factor order, `v` view, `r` ranking rule, `c` price anchors as `low-high`, `f` figure and `s` shortlist postal codes, each omitted at its default. `p` names a preset and is read only when `w` is absent. Copy scenario link copies the address. Reset restores the model but keeps the shortlist.
+- Download share image saves a 1200 by 675 PNG of the five leading states and the priority shares for the current scenario. A top and bottom five card under the figure legend lists the extremes of the current ranking.
 - Priorities collapse above the map on mobile. Wide charts and tables scroll within their containers.
 
 Hatching identifies a recorded 2026 statewide policy action. Its scope differs by state; consult the profile and original record.
@@ -32,7 +35,16 @@ Balanced is the default: each of eight factors receives 12.5%. Fit is the weight
 
 Analyst ratings map to 0, 25, 50, 75 and 100. Equal steps are an assumption, not measured differences. Momentum remains context and contributes no points.
 
-Delivery concerns use the lower of headroom and permitting: 1 = major, 2 = elevated, 3–5 = lower. Default ranking compares fit; optional Delivery first compares concern groups before fit. These groups are model judgments, not confirmed connection timelines or permitting eligibility.
+### Project size
+
+| Band | Range | Starting weights (pw, p, po, op, w, h, c, x) | Floors (headroom, permitting) |
+|---|---|---|---|
+| Edge or micro | under 5 MW | 5, 15, 5, 10, 0, 15, 10, 40 | 2, 2 |
+| Enterprise or colocation | 5 to 50 MW | 15, 15, 10, 10, 5, 10, 5, 30 | 3, 2 |
+| Hyperscale (default) | 50 to 300 MW | 25, 20, 15, 15, 10, 5, 5, 5 | 3, 3 |
+| Gigawatt campus | 300 MW and up | 35, 25, 10, 20, 5, 5, 0, 0 | 4, 3 |
+
+Delivery concerns compare headroom and permitting with the size floors. At or above the floor is lower, one level below is elevated, two or more below is major, and the worse factor sets the level. Hyperscale reproduces the original rule (1 = major, 2 = elevated, 3–5 = lower), so the default output is unchanged. Floors are analyst judgments about scale, not measured capacity; state ratings do not change with size. Default ranking compares fit; optional Delivery first compares concern groups before fit. These groups are model judgments, not confirmed connection timelines or permitting eligibility. See [the project size record](review/2026-09-20-project-size.md).
 
 Each profile reports the rank range obtained by moving one active analyst rating one level at a time, holding other states fixed. Delivery first also varies headroom and permitting when their fit weights are zero. This limited sensitivity test is not a confidence interval. Exact ties share ranks; all-zero weights remove scores and ranks.
 
