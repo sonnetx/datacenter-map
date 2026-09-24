@@ -257,6 +257,12 @@ def main():
         elif re.search(r"\s{2,}", note):
             fail(where, "'note' contains a double space")
 
+        # The page writes these fields into innerHTML and attributes without
+        # escaping, so markup characters would inject or break the profile.
+        for field, v in (("n", name), ("tag", tag), ("note", note), ("rr.n", (s.get("rr") or {}).get("n"))):
+            if isinstance(v, str) and re.search(r'[<>"]', v):
+                fail(where, f"'{field}' contains <, > or a double quote, which the page renders as markup")
+
         srcs = s.get("srcs")
         if srcs is not None:
             if not isinstance(srcs, list) or not srcs:
