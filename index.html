@@ -355,7 +355,7 @@
     </div>
     <div class="viewport" id="viewport">
     <div class="viewpane" data-v="map">
-    <svg class="map" viewBox="0 0 975 610" role="img" aria-label="Choropleth map of US states colored by datacenter siting suitability score">
+    <svg class="map" viewBox="0 0 975 610" role="group" aria-label="Choropleth map of US states colored by datacenter siting suitability score">
       <defs>
         <pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)">
           <line x1="0" y1="0" x2="0" y2="7" stroke="#B5432A" stroke-width="1.6" opacity=".85"/>
@@ -446,7 +446,7 @@
   <h2>Physical and policy conditions</h2>
   <p>States farther right score better on power, water, hazards and cooling. States higher up score better on policy and permitting. Dashed lines mark the median scores.</p>
   <p>The axes use reference weights; dot colors show fit in the selected view. Priority sliders change colors, while power cost assumptions also affect horizontal positions. Select a dot for its profile. Scroll across the chart on small screens.</p>
-  <svg viewBox="0 0 900 520" role="img" aria-label="Scatter plot of states by physical fundamentals and political plausibility" id="scsvg"></svg>
+  <svg viewBox="0 0 900 520" role="group" aria-label="Scatter plot of states by physical fundamentals and political plausibility" id="scsvg"></svg>
 </section>
 
 <div class="table-intro" id="comparison">
@@ -2556,11 +2556,13 @@ document.getElementById("rank-mode").addEventListener("change",e=>{
 for(const id of ["price-low","price-high"]){
   document.getElementById(id).addEventListener("change",()=>{
     const lowInput=document.getElementById("price-low"),highInput=document.getElementById("price-high");
-    const low=lowInput.valueAsNumber,high=highInput.valueAsNumber;
+    // round to the 0.5 step the scenario link decodes, so a copied link
+    // reproduces the typed anchors
+    const low=Math.round(lowInput.valueAsNumber*2)/2,high=Math.round(highInput.valueAsNumber*2)/2;
     const valid=Number.isFinite(low)&&Number.isFinite(high)&&low>=0&&high<=100&&high>low;
     lowInput.setAttribute("aria-invalid",String(!valid));highInput.setAttribute("aria-invalid",String(!valid));
     document.getElementById("price-error").textContent=valid?"":"Enter a lower price below the upper price, between 0 and 100¢. The last valid scale is still in use.";
-    if(valid){priceScale={low,high};refresh();}
+    if(valid){lowInput.value=low;highInput.value=high;priceScale={low,high};refresh();}
   });
 }
 
@@ -2856,8 +2858,10 @@ function renderTable(){
 function toggleShortlist(abbr){
   if(!BY[abbr]) return;
   if(shortlist.has(abbr)) shortlist.delete(abbr); else shortlist.add(abbr);
+  const refocus=document.activeElement?.id==="save-state";
   renderShortlistChips();
   renderTable(); renderDetail(); scheduleURL();
+  if(refocus) document.getElementById("save-state")?.focus();
 }
 function renderShortlistChips(){
   document.getElementById("shortlist-chips").innerHTML=[...shortlist].map(a=>`<button type="button" class="candidate" data-remove="${a}" aria-label="Remove ${BY[a].n} from shortlist">${BY[a].n} ×</button>`).join("");
@@ -3639,7 +3643,7 @@ function setView(id){
 
 /* --- rotation ---------------------------------------------------------
    Auto-advance is opt-in on a reduced-motion setting and stops permanently
-   on the first real interaction with the card, since a figure that changes
+   on the first real interaction with the page, since a figure that changes
    under a reader mid-comparison is worse than one that never moved. */
 function setRotating(on){
   rotating=on && !stopped;
@@ -3654,7 +3658,7 @@ function setRotating(on){
 }
 rotateBtn.addEventListener("click",()=>{ stopped=false; setRotating(!rotating); });
 ["pointerdown","keydown","wheel"].forEach(ev=>{
-  mapcardEl.addEventListener(ev,e=>{
+  document.addEventListener(ev,e=>{
     if(rotateBtn.contains(e.target)) return;
     if(!rotating) return;
     stopped=true; setRotating(false);
@@ -3719,7 +3723,7 @@ urlReady=true; writeURL();
     ["reception_note",s=>s.rr.n],["analyst_note",s=>s.note],
     ["source_urls",s=>(s.srcs||[]).map(x=>x.u).join(" | ")]
   ];
-  const cell=v=>{ const t=String(v??""); return /[",\n]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t; };
+  const cell=v=>{ const t=String(v??""); return /[",\r\n]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t; };
   const byPostal=()=>[...STATES].sort((a,b)=>a.a.localeCompare(b.a));
   const toCSV=()=>[COLUMNS.map(c=>c[0]).join(",")]
     .concat(byPostal().map(s=>COLUMNS.map(c=>cell(c[1](s))).join(",")))
