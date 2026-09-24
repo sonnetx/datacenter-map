@@ -106,6 +106,10 @@
   .sizes button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
   .sizes button[aria-pressed="true"] small{color:#D3DAE1}
   .sizes button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  .sizes button[data-z="solar"]{grid-column:1/-1}
+  .workload{margin:0 0 var(--s3)}
+  .workload[hidden]{display:none}
+  .workload button{font-size:12px;padding:4px 8px}
   .model-actions{display:flex;flex-wrap:wrap;gap:0 var(--s4);align-items:center}
   .model-actions .reset-btn:disabled{color:var(--muted);cursor:default}
   /* Top and bottom five: a compact tier list under the figure legend. */
@@ -325,7 +329,7 @@
 <header>
   <h1>US datacenter siting conditions</h1>
   <p class="lede">Build a state shortlist for your next datacenter project. Compare power, policy and operating conditions for hyperscale and AI training facilities, then identify what to verify locally.</p>
-  <div class="asof">Updated September 7, 2026 · Power prices: EIA 2024 annual industrial averages. Fit combines one measured factor with seven provisional analyst ratings.</div>
+  <div class="asof">Updated September 23, 2026 · Power prices: EIA 2024 annual industrial averages · Solar: NASA POWER 2001–2020 climatology. Fit combines two measured factors with seven provisional analyst ratings.</div>
 </header>
 <section class="workflow" aria-label="Start your comparison">
   <div><b>1. Describe your project</b><p>Choose a size band and a priority preset, then adjust the factors that matter to your project.</p></div>
@@ -385,8 +389,14 @@
         <button data-z="colo" aria-pressed="false">Enterprise or colocation<small>5 to 50 MW</small></button>
         <button data-z="hyper" aria-pressed="true">Hyperscale<small>50 to 300 MW</small></button>
         <button data-z="gw" aria-pressed="false">Gigawatt campus<small>300 MW and up</small></button>
+        <button data-z="solar" aria-pressed="false">Off-grid solar and battery<small>self-powered, any size</small></button>
       </div>
       <p class="model-hint" id="size-note"></p>
+      <div class="lens workload" id="workload" role="group" aria-label="Workload" hidden>
+        <button data-wl="batch" aria-pressed="false">Batch inference</button>
+        <button data-wl="realtime" aria-pressed="false">Real-time serving</button>
+        <button data-wl="training" aria-pressed="false">Distributed training</button>
+      </div>
       <p class="hint">2. Priorities. Choose a starting point, then adjust each factor's importance.</p>
       <div class="presets" id="presets">
         <button data-p="balanced" aria-pressed="true">Balanced</button>
@@ -476,12 +486,14 @@
   <h2>How this comparison works</h2>
   <p>This exploratory model reports weighted suitability, delivery concerns and rating sensitivity. Public response and regulation are reported separately and do not affect scores. The model does not predict project approval.</p>
   <h3>Weighted fit</h3>
-  <p>Balanced starts with equal importance for eight factors: power headroom, power cost, incentives and policy, community and permitting, water, natural hazards, cooling climate, and connectivity. Each contributes 12.5% initially. Presets and sliders change those shares.</p>
+  <p>Balanced starts with equal importance for the eight grid-siting factors: power headroom, power cost, incentives and policy, community and permitting, water, natural hazards, cooling climate, and connectivity. Each contributes 12.5% initially. The ninth factor, winter solar resource, starts at zero because a grid-connected project buys power rather than generating it. Presets and sliders change those shares.</p>
   <p><b>Fit = sum of each factor's score × its share.</b> Seven factors retain provisional analyst ratings on a 1–5 scale, mapped to 0, 25, 50, 75 and 100. These equal steps are a modeling assumption, not measured differences. Momentum is shown only as context: existing development can signal an ecosystem, but can also consume power capacity.</p>
-  <p>Power price is the one measured factor. By default, the cost score declines linearly from 100 at 5¢/kWh to 0 at 35¢/kWh, with scores capped at those endpoints. These limits distinguish all prices in the current dataset. Change them under Power cost assumptions to test your preferences. They are not forecasts or tariffs.</p>
+  <p>Power price and winter solar resource are the two measured factors. By default, the cost score declines linearly from 100 at 5¢/kWh to 0 at 35¢/kWh, with scores capped at those endpoints. These limits distinguish all prices in the current dataset. Change them under Power cost assumptions to test your preferences. They are not forecasts or tariffs.</p>
+  <p>Winter solar resource is the December mean all-sky irradiance from NASA POWER's 2001–2020 climatology, read at each state's 2020 Census center of population, in kWh per square metre per day. December sizes an off-grid array and battery, so it stands in for the year. The score rises linearly from 0 at 1.0 to 100 at 4.0 kWh/m²/day, which spans the December values from Washington and Vermont near 1 to Hawaii near 4. One grid cell of about half a degree per state is a coarse proxy: a state's sunniest and cloudiest sites can differ by a third or more, and the value says nothing about land, interconnection or permitting for a solar array.</p>
   <h3>Project size</h3>
   <p>Four size bands describe the project: edge or micro (under 5 MW), enterprise or colocation (5 to 50 MW), hyperscale (50 to 300 MW) and gigawatt campus (300 MW and up). Choosing a band loads a starting weight profile, which the presets and sliders then adjust. Edge starts from connectivity 40%, hazard 15%, cost 15%, climate 10%, permitting 10%, headroom 5%, policy 5%. Enterprise matches Connectivity first. Hyperscale starts from headroom 25%, cost 20%, policy 15%, permitting 15%, water 10%, hazard 5%, climate 5%, connectivity 5%. Gigawatt starts from headroom 35%, cost 25%, permitting 20%, policy 10%, water 5%, hazard 5%, with climate and connectivity at zero.</p>
   <p>Size also sets the headroom and permitting ratings a project needs before its delivery concerns read as lower: edge needs 2 and 2, enterprise 3 and 2, hyperscale 3 and 3, gigawatt 4 and 3. These thresholds are analyst judgments about scale, not measured capacity, and a state's ratings do not change with size. The page opens on hyperscale with Balanced weights.</p>
+  <p>A fifth band, off-grid solar and battery, describes a self-powered unit of any size. It starts from winter solar resource 35%, community and permitting 20%, natural hazard 15%, cooling climate 15%, connectivity 10% and incentives 5%, with power cost, headroom and water at zero, since the unit buys no grid electricity, joins no interconnection queue and is usually air cooled. Only permitting can raise its delivery concern, at 3 of 5. Three workload buttons move the connectivity weight alone: batch inference 10, real-time serving 25, distributed training 40, on the same relative scale as the sliders. Battery autonomy, land cost, local maintenance capacity and physical security are site questions with no state-level public source and are not modeled.</p>
   <h3>Delivery concerns</h3>
   <p>Power headroom and community/permitting are each compared with the size threshold. A rating at or above the threshold means lower concerns, one level below means elevated concerns, and two or more below means major concerns. The worse of the two factors sets the state's level. For hyperscale that is the original rule: a rating of 1 means major, 2 elevated, 3–5 lower. Lower concerns do not establish available power or permit eligibility.</p>
   <p><b>Weighted fit</b> permits trade-offs and is the default. <b>Delivery first</b> ranks lower-concern states ahead of elevated- and major-concern states, then compares fit within each group. Cheap power therefore cannot offset a worse delivery group in that mode. The grouping still relies on provisional ratings, not verified connection timelines.</p>
@@ -499,7 +511,7 @@
   <p>Political outlook weights policy and permitting equally. Physical fundamentals weights power headroom 30%, price 25%, water 20%, hazards 15% and climate 10%. These reference weights stay fixed. Editing a priority returns to Combined; changing the cost scale also affects the physical reference score.</p>
   <div class="source-principles">
     <h3>What the evidence establishes</h3>
-    <p>All 50 historical electricity prices were compared with EIA's 2024 industrial data. The seven judgment factors have not been individually validated. A state citation can support a policy event without proving its numerical rating.</p>
+    <p>All 50 historical electricity prices were compared with EIA's 2024 industrial data. Solar irradiance comes from NASA POWER at one point per state, with eight states spot-checked against NREL's solar resource service. The seven judgment factors have not been individually validated. A state citation can support a policy event without proving its numerical rating.</p>
     <p>State profiles distinguish government records, grid publications, reporting, legal analysis, market research, company statements and advocacy statements. Company plans are self-reported; an advocacy organization's account of a lawsuit is not a court finding. A bill or agenda item is not automatically an enacted restriction.</p>
     <p>Commercial tracker totals and references without identifiable documents have been removed from the displayed source list. Some unsupported counts and subsidy estimates have also been removed from state summaries. Remaining summaries and ratings are provisional and still need a claim-by-claim review.</p>
   </div>
@@ -520,12 +532,12 @@
       <li><a href="https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf">FEMA National Risk Index documentation</a> and <a href="https://www.wri.org/aqueduct">WRI Aqueduct</a>: background for further hazard and water research. This app has not calculated its state ratings directly from these datasets.</li>
     </ul>
   </details>
-  <p class="method-note">Model version 2 · Evidence review September 7, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
+  <p class="method-note">Model version 3 · Evidence review September 7, 2026 · Solar factor and off-grid band added September 23, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
 </section>
 
 <section class="datapack" id="dataset">
   <h2>Download the dataset</h2>
-  <p>The dataset covers 50 states: electricity prices, seven scored analyst ratings, momentum, policy posture, reception and regulation, and citations. CSV provides one row per state; JSON preserves the source structure.</p>
+  <p>The dataset covers 50 states: electricity prices, December and annual solar irradiance, seven scored analyst ratings, momentum, policy posture, reception and regulation, and citations. CSV provides one row per state; JSON preserves the source structure.</p>
   <p class="fine">Openly licensed under CC BY 4.0, and also in the <a href="https://github.com/sonnetx/datacenter-map">public repository</a>. Suggested citation: Sonnet Xu, US datacenter comparison, 2026. No registration required.</p>
   <div class="dp-links" id="dp-links">
     <button type="button" data-format="csv">Download CSV</button>
@@ -552,30 +564,47 @@ const FACTORS = [
   {k:"w",  name:"Water", sub:"basin stress, drought, scarcity rules"},
   {k:"h",  name:"Natural hazard", sub:"hurricane, tornado, seismic, wildfire"},
   {k:"c",  name:"Climate for cooling", sub:"cooling degree days, humidity"},
-  {k:"x",  name:"Connectivity and ecosystem", sub:"fiber, existing market, labor"}
+  {k:"x",  name:"Connectivity and ecosystem", sub:"fiber, existing market, labor"},
+  {k:"sr", name:"Winter solar resource", sub:"December mean irradiance, NASA POWER 2001-2020"}
 ];
 // Versioned, explicit assumptions. No inferred delivery dates or probability scores.
-const MODEL_VERSION = "2";
+// Version 3 adds the measured winter solar factor. Every grid-connected preset
+// and band weights it at zero, so version 2 output is unchanged unless a
+// reader raises it or chooses the off-grid band.
+const MODEL_VERSION = "3";
+// The two measured factors. Their anchors are preferences on a measured scale;
+// the other seven factors are 1-to-5 analyst ratings.
+const MEASURED = new Set(["p","sr"]);
+const SOLAR_SCALE = {low:1.0, high:4.0}; // December kWh per square metre per day; 0 and 100 points
 const LENSES = {
-  politics: {pw:0,p:0,po:50,op:50,w:0,h:0,c:0,x:0},
-  physical: {pw:30,p:25,po:0,op:0,w:20,h:15,c:10,x:0}
+  politics: {pw:0,p:0,po:50,op:50,w:0,h:0,c:0,x:0,sr:0},
+  physical: {pw:30,p:25,po:0,op:0,w:20,h:15,c:10,x:0,sr:0}
 };
 const PRESETS = {
-  balanced: {pw:10,p:10,po:10,op:10,w:10,h:10,c:10,x:10},
-  ai:   {pw:30,p:20,po:10,op:15,w:10,h:5,c:5,x:5},
-  cost: {pw:15,p:35,po:15,op:5,w:5,h:5,c:15,x:5},
-  safe: {pw:15,p:10,po:15,op:15,w:15,h:20,c:5,x:5},
-  colo: {pw:15,p:15,po:10,op:10,w:5,h:10,c:5,x:30}
+  balanced: {pw:10,p:10,po:10,op:10,w:10,h:10,c:10,x:10,sr:0},
+  ai:   {pw:30,p:20,po:10,op:15,w:10,h:5,c:5,x:5,sr:0},
+  cost: {pw:15,p:35,po:15,op:5,w:5,h:5,c:15,x:5,sr:0},
+  safe: {pw:15,p:10,po:15,op:15,w:15,h:20,c:5,x:5,sr:0},
+  colo: {pw:15,p:15,po:10,op:10,w:5,h:10,c:5,x:30,sr:0}
 };
 // Project size. Each band loads a starting weight profile and sets the
 // headroom and permitting ratings a project of that scale needs before its
 // delivery concerns read as lower. Hyperscale reproduces the version 2 rule
-// exactly (1 major, 2 elevated, 3 to 5 lower), so it is the default.
+// exactly (1 major, 2 elevated, 3 to 5 lower), so it is the default. The
+// off-grid band buys no grid power and joins no queue, so price and headroom
+// carry nothing and only permitting can raise a delivery concern.
 const SIZES = {
-  micro: {label:"Edge or micro", mw:"under 5 MW", floors:{pw:2,op:2}, weights:{pw:5,p:15,po:5,op:10,w:0,h:15,c:10,x:40}},
-  colo:  {label:"Enterprise or colocation", mw:"5 to 50 MW", floors:{pw:3,op:2}, weights:{pw:15,p:15,po:10,op:10,w:5,h:10,c:5,x:30}},
-  hyper: {label:"Hyperscale", mw:"50 to 300 MW", floors:{pw:3,op:3}, weights:{pw:25,p:20,po:15,op:15,w:10,h:5,c:5,x:5}},
-  gw:    {label:"Gigawatt campus", mw:"300 MW and up", floors:{pw:4,op:3}, weights:{pw:35,p:25,po:10,op:20,w:5,h:5,c:0,x:0}}
+  micro: {label:"Edge or micro", noun:"an edge or micro site", mw:"under 5 MW", floors:{pw:2,op:2}, weights:{pw:5,p:15,po:5,op:10,w:0,h:15,c:10,x:40,sr:0}},
+  colo:  {label:"Enterprise or colocation", noun:"an enterprise or colocation project", mw:"5 to 50 MW", floors:{pw:3,op:2}, weights:{pw:15,p:15,po:10,op:10,w:5,h:10,c:5,x:30,sr:0}},
+  hyper: {label:"Hyperscale", noun:"a hyperscale project", mw:"50 to 300 MW", floors:{pw:3,op:3}, weights:{pw:25,p:20,po:15,op:15,w:10,h:5,c:5,x:5,sr:0}},
+  gw:    {label:"Gigawatt campus", noun:"a gigawatt campus", mw:"300 MW and up", floors:{pw:4,op:3}, weights:{pw:35,p:25,po:10,op:20,w:5,h:5,c:0,x:0,sr:0}},
+  solar: {label:"Off-grid solar and battery", noun:"an off-grid solar and battery unit", mw:"self-powered, any size", floors:{pw:1,op:3}, weights:{pw:0,p:0,po:5,op:20,w:0,h:15,c:15,x:10,sr:35}}
+};
+// Workload variants for the off-grid band: only the connectivity weight moves.
+const WORKLOADS = {
+  batch: {label:"Batch inference", x:10},
+  realtime: {label:"Real-time serving", x:25},
+  training: {label:"Distributed training", x:40}
 };
 let size = "hyper";
 let weights = {...PRESETS.balanced};
@@ -590,12 +619,14 @@ const BY = {}; STATES.forEach(s=>BY[s.a]=s);
 
 function sub(s,k){
   if(k==="p"){ return Math.max(0,Math.min(1,(priceScale.high-s.p)/(priceScale.high-priceScale.low)))*100; }
+  if(k==="sr"){ return Math.max(0,Math.min(1,(s.sr-SOLAR_SCALE.low)/(SOLAR_SCALE.high-SOLAR_SCALE.low)))*100; }
   return (s[k]-1)/4*100;
 }
 function totalWeight(W){ return Object.values(W).reduce((a,b)=>a+b,0); }
-function lensScore(s,W){ const tw=totalWeight(W); if(tw<=0) return null; let t=0; FACTORS.forEach(f=>{t+=(W[f.k]||0)*sub(s,f.k);}); return t/tw; }
+// an unweighted factor contributes nothing even if its value is missing
+function lensScore(s,W){ const tw=totalWeight(W); if(tw<=0) return null; let t=0; FACTORS.forEach(f=>{const w=W[f.k]||0; if(w>0) t+=w*sub(s,f.k);}); return t/tw; }
 // share of the composite that a factor actually contributes, in points
-function contribution(s,k){ const W=activeWeights(), tw=totalWeight(W); if(tw<=0) return 0; return (W[k]||0)*sub(s,k)/tw; }
+function contribution(s,k){ const W=activeWeights(), tw=totalWeight(W), w=W[k]||0; if(tw<=0||w<=0) return 0; return w*sub(s,k)/tw; }
 function hasWeights(){ return totalWeight(activeWeights())>0; }
 // A rating at or above the size's floor is lower concern, one level under it
 // is elevated, two or more under is major. The worse of the two factors wins.
@@ -603,7 +634,7 @@ function factorTier(rating,floor){ return rating>=floor ? 0 : rating===floor-1 ?
 function deliveryTier(s){ const f=SIZES[size].floors; return Math.max(factorTier(s.pw,f.pw),factorTier(s.op,f.op)); }
 function deliveryLabel(s){ return ["Lower modeled concerns","Elevated modeled concerns","Major modeled concerns"][deliveryTier(s)]; }
 function sizeLabel(){ return SIZES[size].label; }
-function deliveryContext(){ return `for a ${sizeLabel().toLowerCase()} (${SIZES[size].mw})`; }
+function deliveryContext(){ return `for ${SIZES[size].noun} (${SIZES[size].mw})`; }
 function compareFit(a,b){
   if(rankMode==="delivery" && deliveryTier(a)!==deliveryTier(b)) return deliveryTier(a)-deliveryTier(b);
   const delta=b.total-a.total;
@@ -623,7 +654,7 @@ function compute(){
     s.tied=STATES.some(other=>other.a!==s.a && other.rank===s.rank);
     // One rating in this state changes at a time; every other state is held fixed.
     const ranks=[s.rank];
-    FACTORS.filter(f=>f.k!=="p" && ((activeWeights()[f.k]||0)>0 || (rankMode==="delivery" && ["pw","op"].includes(f.k)))).forEach(f=>{
+    FACTORS.filter(f=>!MEASURED.has(f.k) && ((activeWeights()[f.k]||0)>0 || (rankMode==="delivery" && ["pw","op"].includes(f.k)))).forEach(f=>{
       [-1,1].forEach(delta=>{
         const value=s[f.k]+delta;
         if(value<1||value>5) return;
@@ -744,12 +775,19 @@ FACTORS.forEach(f=>{
   inp.addEventListener("input",()=>{ weights[f.k]=+inp.value; view="all"; setLens("all"); setPressed(presetMatching(weights)); refresh(); });
 });
 function syncSliders(){
-  const Z=SIZES[size], F=Z.floors;
+  const Z=SIZES[size], F=Z.floors, offGrid=F.pw<=1;
   document.getElementById("rank-explanation").textContent=rankMode==="fit"
     ? "Ranks by your weighted fit. Delivery concerns remain a separate signal."
-    : `Groups states by modeled delivery concerns for a ${Z.label.toLowerCase()} first, then ranks by fit within each group. Headroom below ${F.pw} or permitting below ${F.op} is elevated; two levels below is major.`;
-  document.getElementById("size-note").textContent=`${Z.label} (${Z.mw}) starts from headroom ${Z.weights.pw}%, cost ${Z.weights.p}%, permitting ${Z.weights.op}%. Lower delivery concern needs headroom ${F.pw} and permitting ${F.op} of 5.`;
-  document.getElementById("legend-rampnote").textContent=`Color shows weighted fit on a fixed 0–100 scale. Delivery concerns, judged for a ${Z.label.toLowerCase()}, are shown separately in each profile.`;
+    : offGrid
+      ? `Groups states by modeled delivery concerns for ${Z.noun} first, then ranks by fit within each group. Only permitting counts: below ${F.op} is elevated, two levels below is major.`
+      : `Groups states by modeled delivery concerns for ${Z.noun} first, then ranks by fit within each group. Headroom below ${F.pw} or permitting below ${F.op} is elevated; two levels below is major.`;
+  const lead=FACTORS.map(f=>({f,w:Z.weights[f.k]||0})).filter(d=>d.w>0).sort((a,b)=>b.w-a.w).slice(0,3).map(d=>`${d.f.name.toLowerCase()} ${d.w}%`).join(", ");
+  document.getElementById("size-note").textContent=`${Z.label} (${Z.mw}) starts from ${lead}. `+(offGrid
+    ? `Lower delivery concern needs permitting ${F.op} of 5; grid headroom is not required.`
+    : `Lower delivery concern needs headroom ${F.pw} and permitting ${F.op} of 5.`);
+  const wl=document.getElementById("workload"); wl.hidden = size!=="solar";
+  wl.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed", String(size==="solar" && WORKLOADS[b.dataset.wl].x===weights.x)));
+  document.getElementById("legend-rampnote").textContent=`Color shows weighted fit on a fixed 0–100 scale. Delivery concerns, judged for ${Z.noun}, are shown separately in each profile.`;
   document.getElementById("share-card").disabled=!hasWeights();
   const tw=totalWeight(weights);
   FACTORS.forEach(f=>{
@@ -779,6 +817,8 @@ document.querySelectorAll("#presets button").forEach(b=>b.addEventListener("clic
 function setSize(id){ document.querySelectorAll("#sizes button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.z===id?"true":"false")); }
 // a size loads its weight profile; presets and sliders then adjust from there
 document.querySelectorAll("#sizes button").forEach(b=>b.addEventListener("click",()=>{ size=b.dataset.z; weights={...SIZES[size].weights}; setSize(size); setPressed(presetMatching(weights)); view="all"; setLens("all"); refresh(); }));
+// a workload only moves the connectivity weight; the other shares rescale
+document.querySelectorAll("#workload button").forEach(b=>b.addEventListener("click",()=>{ weights.x=WORKLOADS[b.dataset.wl].x; setPressed(presetMatching(weights)); view="all"; setLens("all"); refresh(); }));
 function setLens(id){ document.querySelectorAll("#lens button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.l===id?"true":"false")); }
 // the lens is a view, not an edit: switching to a lens and back restores the user's own weights
 document.querySelectorAll("#lens button").forEach(b=>b.addEventListener("click",()=>{ view=b.dataset.l; setLens(view); refresh(); }));
@@ -846,6 +886,8 @@ function readURLState(){
     const w=q.get("w"); let parsed=null;
     if(w){
       const t=w.split(".");
+      // version 2 links carried eight weights; the solar factor reads as zero
+      if(t.length===FACTORS.length-1) t.push("0");
       if(t.length===FACTORS.length && t.every(x=>/^\d{1,2}$/.test(x))){
         parsed={}; FACTORS.forEach((f,i)=>{ parsed[f.k]=Math.max(0,Math.min(40,Math.round(+t[i]/5)*5)); });
       }
@@ -886,6 +928,7 @@ const sourceNotes={
   "Reprinted release":"A reproduction of a government statement, hosted by a news publisher."
 };
 const EIA_SOURCE={t:"EIA-861: 2024 industrial electricity prices",u:"https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx",type:"Government dataset",supports:"The state's historical industrial average. Matched to the Total Electric Industry sheet; not a datacenter tariff.",reviewed:"2026-09-07"};
+const SOLAR_SOURCE={t:"NASA POWER: 2001–2020 solar climatology",u:"https://power.larc.nasa.gov/",type:"Government dataset",supports:"All-sky surface shortwave irradiance, December and annual means, at the state's 2020 Census center of population. One grid cell of roughly 0.5 degrees per state, not a site survey; yield varies within a state.",reviewed:"2026-09-23"};
 function escapeHTML(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function sourceCard(r){
   const type=r.type||"Unclassified reference";
@@ -936,7 +979,7 @@ function renderTiers(){
   const col=(title,list)=>`<div><h3>${title}</h3><ol>${list.map(s=>`<li value="${s.rank}"><button type="button" class="tier-item" data-a="${s.a}" aria-label="Open ${s.n}, rank ${s.rank}, fit ${s.total.toFixed(0)}">${s.n}<span>${s.total.toFixed(0)}</span></button></li>`).join("")}</ol></div>`;
   box.innerHTML=`<p class="tiers-head">Top and bottom five · ${sizeLabel()} · ${rankModeLabel().toLowerCase()} · ${viewLabel()}</p>`
     +col("Top five",all.slice(0,5))+col("Bottom five",all.slice(-5))
-    +`<p class="fine">Seven of eight factors are provisional analyst ratings. Equal scores share a rank number. Fit does not establish site readiness.</p>`;
+    +`<p class="fine">Seven of nine factors are provisional analyst ratings. Equal scores share a rank number. Fit does not establish site readiness.</p>`;
   box.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>select(b.dataset.a)));
 }
 function select(abbr){
@@ -994,7 +1037,7 @@ function renderDetail(){
   document.getElementById("profile-title").textContent=s.n+" · State profile";
   const bars=FACTORS.map(f=>{
     const value=sub(s,f.k), points=contribution(s,f.k), off=(W[f.k]||0)===0;
-    return `<div class="bar${off?" off":""}"><span class="label">${f.name}<span class="factor-kind">${f.k==="p"?"Measured benchmark":"Provisional analyst rating · "+s[f.k]+"/5"}</span></span><span class="c">${off?"Not weighted":"+"+points.toFixed(1)+" pts"}</span><div class="track" aria-hidden="true"><div class="fill" style="width:${value}%"></div></div><span class="n">${value.toFixed(0)}/100</span></div>`;
+    return `<div class="bar${off?" off":""}"><span class="label">${f.name}<span class="factor-kind">${MEASURED.has(f.k)?"Measured benchmark":"Provisional analyst rating · "+s[f.k]+"/5"}</span></span><span class="c">${off?"Not weighted":"+"+points.toFixed(1)+" pts"}</span><div class="track" aria-hidden="true"><div class="fill" style="width:${value}%"></div></div><span class="n">${value.toFixed(0)}/100</span></div>`;
   }).join("");
   const order=["Government dataset","Government record","Grid operator","Reporting","Market research","Legal analysis","Reprinted release","Company statement","Advocacy statement"];
   const sources=[...(s.srcs||[])].sort((a,b)=>order.indexOf(a.type)-order.indexOf(b.type));
@@ -1006,6 +1049,7 @@ function renderDetail(){
     <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">
       <div class="delivery-status" data-tier="${deliveryTier(s)}"><b>${deliveryLabel(s)} ${deliveryContext()}</b><p>Power headroom ${s.pw}/5 · Community and permitting ${s.op}/5. Lower concern at this size needs headroom ${SIZES[size].floors.pw} and permitting ${SIZES[size].floors.op}. These are analyst ratings, not a confirmed power allocation or permit decision.</p></div>
       <div class="fact"><p>2024 industrial electricity price</p><strong>${s.p.toFixed(2)}¢/kWh</strong><a href="${EIA_SOURCE.u}" target="_blank" rel="noopener">EIA measured benchmark ↗</a></div>
+      <div class="fact"><p>December solar irradiance at the state's population center (annual ${s.sy.toFixed(2)})</p><strong>${s.sr.toFixed(2)} kWh/m²/day</strong><a href="${SOLAR_SOURCE.u}" target="_blank" rel="noopener">NASA POWER 2001–2020 climatology ↗</a></div>
       <details class="diligence"><summary>What to verify before advancing ${s.n}</summary>
         <ul><li>Utility: available MW at the proposed substation, energization date, upgrade costs and the applicable tariff.</li><li>Local authority: parcel zoning, permit sequence, hearing requirements and current restrictions.</li><li>Water provider: supply allocation, cooling design and discharge requirements.</li><li>Project team: site hazards, fiber routes and incentive eligibility for this project.</li></ul>
         <p class="evidence-note">Record project-specific answers alongside the state evidence in the Sources tab.</p>
@@ -1024,7 +1068,7 @@ function renderDetail(){
     </section>
     <section id="panel-sources" role="tabpanel" aria-labelledby="tab-sources" tabindex="0" hidden>
       <h3>Evidence and its limits</h3><p class="evidence-note">Source type describes who published the material, not a credibility score. A source can support a policy event without validating a 1–5 rating. Company and advocacy statements represent the publisher's own account.</p>
-      <ul class="source-list">${sourceCard(EIA_SOURCE)}${sources.map(sourceCard).join("")}</ul>
+      <ul class="source-list">${sourceCard(EIA_SOURCE)}${sourceCard(SOLAR_SOURCE)}${sources.map(sourceCard).join("")}</ul>
       ${sources.length?"":'<p class="note">No state-specific citations yet. This is an evidence gap.</p>'}
     </section>`;
   setProfilePanel(profilePanel);
@@ -1033,7 +1077,7 @@ function renderDetail(){
 // --- table ---
 const COLS=[
   {k:"rank",label:"#"},{k:"n",label:"State"},{k:"total",label:"Fit"},
-  {k:"p",label:"¢/kWh"},{k:"pw",label:"Headroom"},{k:"po",label:"Policy"},{k:"op",label:"Community"},
+  {k:"p",label:"¢/kWh"},{k:"sr",label:"Dec sun"},{k:"pw",label:"Headroom"},{k:"po",label:"Policy"},{k:"op",label:"Community"},
   {k:"w",label:"Water"},{k:"h",label:"Hazard"},{k:"c",label:"Climate"},{k:"x",label:"Connectivity"},{k:"delivery",label:"Delivery concerns"},
   {k:"pb",label:"Pushback"},{k:"rules",label:"Rules in force"},
   {k:"phy",label:"Physical"},{k:"pol",label:"Political"}
@@ -1077,8 +1121,8 @@ function renderTable(){
   document.getElementById("export-comparison").disabled=rows.length===0;
   const dash=v=>scored?v:"--";
   const tb=document.getElementById("tbody");
-  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
-  if(!rows.length) tb.innerHTML=`<tr><td colspan="16">Your shortlist is empty. Add a state above or from a state profile to start comparing.</td></tr>`;
+  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.sr.toFixed(1)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
+  if(!rows.length) tb.innerHTML=`<tr><td colspan="17">Your shortlist is empty. Add a state above or from a state profile to start comparing.</td></tr>`;
   tb.querySelectorAll("tr[data-a]").forEach(tr=>{
     tr.addEventListener("click",()=>select(tr.dataset.a));
     tr.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select(tr.dataset.a);} });
@@ -1104,9 +1148,9 @@ shortlistPicker.addEventListener("change",()=>{
 document.getElementById("shortlist-only").addEventListener("change",renderTable);
 document.getElementById("export-comparison").addEventListener("click",()=>{
   const W=activeWeights(), tw=totalWeight(W);
-  const columns=["state","postal","rank_of_50","fit_0_100","delivery_concern","project_size","rating_sensitivity_rank_min","rating_sensitivity_rank_max","industrial_price_cents_kwh_2024","view","ranking_rule","model_version","price_anchor_low","price_anchor_high",...FACTORS.map(f=>"weight_share_"+f.k),"evidence_limit"];
+  const columns=["state","postal","rank_of_50","fit_0_100","delivery_concern","project_size","rating_sensitivity_rank_min","rating_sensitivity_rank_max","industrial_price_cents_kwh_2024","december_ghi_kwh_m2_day","view","ranking_rule","model_version","price_anchor_low","price_anchor_high","solar_anchor_low","solar_anchor_high",...FACTORS.map(f=>"weight_share_"+f.k),"evidence_limit"];
   const rows=[...document.querySelectorAll("#tbody tr[data-a]")].map(tr=>BY[tr.dataset.a]).map(s=>[
-    s.n,s.a,s.rank,s.total,deliveryLabel(s),size,s.rankMin,s.rankMax,s.p,view,rankMode,MODEL_VERSION,priceScale.low,priceScale.high,...FACTORS.map(f=>tw?(W[f.k]||0)/tw:0),"EIA 2024 state average; seven provisional analyst ratings. Not site readiness or a utility tariff."
+    s.n,s.a,s.rank,s.total,deliveryLabel(s),size,s.rankMin,s.rankMax,s.p,s.sr,view,rankMode,MODEL_VERSION,priceScale.low,priceScale.high,SOLAR_SCALE.low,SOLAR_SCALE.high,...FACTORS.map(f=>tw?(W[f.k]||0)/tw:0),"EIA 2024 state average and NASA POWER climatology at one point per state; seven provisional analyst ratings. Not site readiness or a utility tariff."
   ]);
   const cell=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
   const blob=new Blob([[columns,...rows].map(r=>r.map(cell).join(",")).join("\r\n")+"\r\n"],{type:"text/csv;charset=utf-8"});
@@ -1147,12 +1191,12 @@ function drawShareCard(){
   text("Priority shares",x0,200,19,600);
   FACTORS.forEach((f,i)=>{
     const y=236+i*28, share=shares[i], bw=Math.round(share/maxShare*170);
-    text(f.name.replace(" and ecosystem","").replace("Incentives and policy","Policy").replace("Community and permitting","Permitting").replace("Climate for cooling","Climate").replace("Natural hazard","Hazard").replace("Power headroom","Headroom").replace("Power cost","Cost"),x0,y,14,400,MUTED);
+    text(f.name.replace(" and ecosystem","").replace("Winter solar resource","Winter sun").replace("Incentives and policy","Policy").replace("Community and permitting","Permitting").replace("Climate for cooling","Climate").replace("Natural hazard","Hazard").replace("Power headroom","Headroom").replace("Power cost","Cost"),x0,y,14,400,MUTED);
     ctx.fillStyle=share>0?INK:"#E6EAEE"; ctx.fillRect(x0+110,y-12,Math.max(bw,3),14);
     text(share>0?share.toFixed(0)+"%":"0%",x0+340,y,14,400,MUTED,"right");
   });
   text("sonnetx.github.io/datacenter-map",60,632,18,600);
-  text("One measured price and seven provisional analyst ratings. Not site readiness.",1140,632,15,400,MUTED,"right");
+  text("Two measured inputs and seven provisional analyst ratings. Not site readiness.",1140,632,15,400,MUTED,"right");
   return cv;
 }
 function downloadShareCard(){
@@ -1408,7 +1452,7 @@ function drawSpread(host){
     E("path",{d:path,fill:color(i/(FACTORS.length-1)*70+15),"fill-opacity":.9,
       stroke:PANEL,"stroke-width":1.2,"stroke-linejoin":"round"},s);
     T(s,m.l-12,base-2,d.f.name,{"text-anchor":"end","font-size":11.5,fill:INK});
-    T(s,m.l-12,base+11,d.f.k==="p"?"measured":"analyst rating",
+    T(s,m.l-12,base+11,MEASURED.has(d.f.k)?"measured":"analyst rating",
       {"text-anchor":"end","font-size":9.5});
   }
 }
@@ -1420,7 +1464,7 @@ function rose(st,S){
   E("circle",{cx:c,cy:c,r:R,fill:"none",stroke:SOFT,"stroke-width":1},s);
   FACTORS.forEach((f,i)=>{
     const v=sub(st,f.k), rr=Math.max(2,v/100*R);
-    const a0=(i/8)*2*Math.PI-Math.PI/2, a1=((i+1)/8)*2*Math.PI-Math.PI/2-0.04;
+    const n=FACTORS.length, a0=(i/n)*2*Math.PI-Math.PI/2, a1=((i+1)/n)*2*Math.PI-Math.PI/2-0.04;
     const d=`M${c},${c}L${(c+rr*Math.cos(a0)).toFixed(2)},${(c+rr*Math.sin(a0)).toFixed(2)}`+
       `A${rr.toFixed(2)},${rr.toFixed(2)} 0 0 1 ${(c+rr*Math.cos(a1)).toFixed(2)},${(c+rr*Math.sin(a1)).toFixed(2)}Z`;
     E("path",{d,fill:color(v),stroke:"#9FAAB5","stroke-width":.6},s);
@@ -1692,7 +1736,7 @@ function glyph(st,S){
   const pr=2.5+(1-Math.max(0,Math.min(1,(priceScale.high-st.p)/(priceScale.high-priceScale.low))))*8;
   E("circle",{cx:c,cy:c,r:pr,fill:"#C4B56C",stroke:"#958F78","stroke-width":1.2},s);
   FACTORS.forEach((f,i)=>{
-    const v=sub(st,f.k), a=(i/8)*2*Math.PI-Math.PI/2;
+    const v=sub(st,f.k), a=(i/FACTORS.length)*2*Math.PI-Math.PI/2;
     const r0=pr+2, r1=r0+v/100*(maxR-r0);
     E("line",{x1:c+r0*Math.cos(a),y1:c+r0*Math.sin(a),x2:c+r1*Math.cos(a),
       y2:c+r1*Math.sin(a),stroke:MUTED,"stroke-width":2.4,
@@ -1808,9 +1852,9 @@ const VIEWS=[
   {id:"prices",label:"Prices",draw:drawPrices,wide:true,
    note:"<b>Beeswarm.</b> Every state as one dot on the measured price axis. Thirty-odd states clot between 6 and 10 cents, then a long thin tail. <span class='hides'>Hides that these are historical statewide averages, not a tariff anyone would sign.</span>"},
   {id:"spread",label:"Spread",draw:drawSpread,wide:true,
-   note:"<b>Ridgelines.</b> All eight factor distributions on one axis. <span class='hides'>Hides nothing, and that is why it is here: seven curves are five spikes wearing a smooth coat, because seven of the eight factors are 1-to-5 analyst ratings.</span>"},
+   note:"<b>Ridgelines.</b> All nine factor distributions on one axis. <span class='hides'>Hides nothing, and that is why it is here: seven curves are five spikes wearing a smooth coat, because seven of the nine factors are 1-to-5 analyst ratings.</span>"},
   {id:"profiles",label:"Profiles",draw:drawProfiles,tall:true,
-   note:"<b>Fifty coxcombs, after Nightingale.</b> Clockwise from twelve: headroom, cost, incentives, permitting, water, hazard, climate, connectivity. A state with one collapsed petal is a different object from a merely mediocre state. <span class='hides'>Hides which petal is which until you have learned the order, and wedge area grows as the square of a radius the eye reads as linear.</span>"},
+   note:"<b>Fifty coxcombs, after Nightingale.</b> Clockwise from twelve: headroom, cost, incentives, permitting, water, hazard, climate, connectivity, winter sun. A state with one collapsed petal is a different object from a merely mediocre state. <span class='hides'>Hides which petal is which until you have learned the order, and wedge area grows as the square of a radius the eye reads as linear.</span>"},
   {id:"ranks",label:"Ranks",draw:drawRanks,tall:true,wide:true,
    note:"<b>Bump chart.</b> Every state's rank across the five presets and your own weights. Flat lines do not depend on what you value; plunging lines are winning on one weighting choice. <span class='hides'>Hides the size of the gaps: a line can fall six places on two points of fit.</span>"},
   {id:"flow",label:"Flow",draw:drawFlow,wide:true,
@@ -1820,7 +1864,7 @@ const VIEWS=[
   {id:"count",label:"Count",draw:drawCount,tall:true,wide:true,
    note:"<b>Isotype, after Neurath.</b> One mark per state, grouped by posture; hatched marks carry a 2026 statewide action. <span class='hides'>Hides magnitude of every kind: a state with four campuses and a state with none are one mark each.</span>"},
   {id:"glyphs",label:"Glyphs",draw:drawGlyphs,tall:true,
-   note:"<b>Bespoke grammar, after Dear Data.</b> Stem height is fit, the disc grows with the price of power, eight hairs are the eight factors, rim dashes count momentum, a pennant marks a 2026 action. <span class='hides'>Hides comparability. Nothing here supports reading one state precisely against another.</span>"},
+   note:"<b>Bespoke grammar, after Dear Data.</b> Stem height is fit, the disc grows with the price of power, nine hairs are the nine factors, rim dashes count momentum, a pennant marks a 2026 action. <span class='hides'>Hides comparability. Nothing here supports reading one state precisely against another.</span>"},
   {id:"screens",label:"Screens",draw:drawScreens,wide:true,
    note:"<b>Attrition band, after Minard.</b> A shortlist losing width as six thresholds are applied, with the states labeled where they drop and the survivors' median price running beneath. <span class='hides'>Hides the order of operations, which does more work than any single threshold. This is also not the Minard we want: the data has no flows, no transmission geography and no time axis, so the band keeps the geometry and admits the gap.</span>"}
 ];
@@ -1938,6 +1982,7 @@ urlReady=true; writeURL();
   const COLUMNS=[
     ["postal",s=>s.a],["state",s=>s.n],
     ["industrial_price_cents_kwh_2024",s=>s.p],
+    ["december_ghi_kwh_m2_day",s=>s.sr],["annual_ghi_kwh_m2_day",s=>s.sy],
     ["power_headroom_1_5",s=>s.pw],["incentives_policy_1_5",s=>s.po],
     ["community_permitting_1_5",s=>s.op],["water_1_5",s=>s.w],
     ["natural_hazard_1_5",s=>s.h],["climate_cooling_1_5",s=>s.c],
@@ -1956,7 +2001,7 @@ urlReady=true; writeURL();
     .concat(byPostal().map(s=>COLUMNS.map(c=>cell(c[1](s))).join(",")))
     .join("\n")+"\n";
   // Ship the record as authored, without the fields compute() adds at runtime.
-  const AUTHORED=["a","n","p","pw","po","op","w","h","c","x","mo","st","tag","note","rr","srcs"];
+  const AUTHORED=["a","n","p","sr","sy","pw","po","op","w","h","c","x","mo","st","tag","note","rr","srcs"];
   const toJSON=()=>JSON.stringify(byPostal().map(s=>Object.fromEntries(
     AUTHORED.filter(k=>s[k]!==undefined).map(k=>[k,s[k]]))),null,1)+"\n";
 

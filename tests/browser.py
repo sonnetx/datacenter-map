@@ -23,7 +23,8 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     assert page.locator('#state-dialog').evaluate('(e)=>e.open')
     page.locator('#tab-scores').click()
     assert page.locator('#panel-scores').is_visible()
-    assert page.locator('#detail .bar').count()==8
+    assert page.locator('#detail .bar').count()==9
+    assert page.locator('#detail .fact').count()==2
     page.keyboard.press('ArrowRight')
     assert page.locator('#panel-reception').is_visible()
     # Four axes, and the panel says plainly that none of it is scored.
@@ -108,7 +109,8 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     exported=json.loads(Path(caught.value.path()).read_text())
     assert len(exported)==50
     # The export is the authored record, not the fields compute() derives.
-    assert set(exported[0])<= {'a','n','p','pw','po','op','w','h','c','x','mo','st','tag','note','rr','srcs'}
+    assert set(exported[0])<= {'a','n','p','sr','sy','pw','po','op','w','h','c','x','mo','st','tag','note','rr','srcs'}
+    assert 'december_ghi_kwh_m2_day' in header.split(',')
     assert set(exported[0]['rr'])=={'pb','wt','pg','zn','tx','n'}
     # With a counter present the download records that it happened, and nothing
     # identifying about who asked for it.
@@ -132,7 +134,7 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     comparison=list(csv_module.DictReader(io.StringIO(Path(caught.value.path()).read_text())))
     assert {s['postal'] for s in comparison}=={'VA','AZ'}
     assert all(abs(sum(float(v) for k,v in s.items() if k.startswith('weight_share_'))-1)<1e-9 for s in comparison)
-    assert all(s['model_version']=='2' and s['price_anchor_high']=='35' for s in comparison)
+    assert all(s['model_version']=='3' and s['price_anchor_high']=='35' and s['solar_anchor_high']=='4' for s in comparison)
     page.locator('#state-picker').select_option('VA')
     assert page.locator('#save-state').get_attribute('aria-pressed')=='true'
     page.locator('#save-state').click()
@@ -163,6 +165,26 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     assert page.evaluate('size==="hyper" && weights.pw===10')
     assert page.locator('#sizes [aria-pressed=true]').inner_text().startswith('Hyperscale')
 
+    # The off-grid band weights winter sun, zeros price and headroom, shows the
+    # workload buttons, and only permitting can raise a delivery concern.
+    assert page.locator('#workload').is_hidden()
+    page.locator('[data-z=solar]').click()
+    assert page.evaluate('weights.sr===35 && weights.p===0 && weights.pw===0')
+    assert page.locator('#workload').is_visible()
+    assert page.locator('#workload [aria-pressed=true]').inner_text()=='Batch inference'
+    assert page.evaluate('STATES.every(s=>deliveryTier(s)===factorTier(s.op,3))')
+    assert 'grid headroom is not required' in page.locator('#size-note').inner_text()
+    page.locator('[data-wl=training]').click()
+    assert page.evaluate('weights.x')==40 and page.evaluate('weights.sr')==35
+    assert page.locator('#workload [aria-pressed=true]').inner_text()=='Distributed training'
+    page.locator('#state-picker').select_option('AZ')
+    assert 'kWh/m²/day' in page.locator('#detail .fact').nth(1).inner_text()
+    assert 'Measured benchmark' in page.locator('#detail .bar').nth(8).inner_text()
+    page.keyboard.press('Escape')
+    page.locator('[data-z=hyper]').click()
+    assert page.locator('#workload').is_hidden()
+    page.locator('#reset-model').click()
+
     # The tiers card lists the extremes of the current ranking, with ties
     # keeping their shared rank number.
     assert page.locator('#tiers li').count()==10
@@ -188,7 +210,9 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     # The address reproduces a scenario, drops what is at its default, and
     # survives garbage without a script error.
     uri=(ROOT / 'index.html').as_uri()
+    # A version 2 link carries eight weights; solar reads as zero.
     page.goto(uri+'?z=gw&w=35.25.10.20.5.5.0.0&v=physical&r=delivery&c=6-30&f=ranks&s=VA,AZ')
+    assert page.evaluate('weights.sr')==0
     assert page.evaluate('size')=='gw' and page.evaluate('weights.pw')==35 and page.evaluate('view')=='physical'
     assert page.locator('#rank-mode').input_value()=='delivery'
     assert page.evaluate('priceScale.high')==30 and page.locator('#price-high').input_value()=='30'
@@ -206,12 +230,14 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     # and keeps the figure and the shortlist.
     page.wait_for_function('location.search==="?f=ranks&s=VA,AZ"')
     page.locator('#w-pw').fill('40');page.locator('#w-pw').dispatch_event('input')
-    page.wait_for_function('new URLSearchParams(location.search).get("w")==="40.10.10.10.10.10.10.10"')
+    page.wait_for_function('new URLSearchParams(location.search).get("w")==="40.10.10.10.10.10.10.10.0"')
+    page.goto(uri+'?z=solar')
+    assert page.evaluate('weights.sr')==35 and page.evaluate('location.search')=='?z=solar'
     page.goto(uri+'?z=huge&w=abc&v=nope&r=maybe&c=9&f=zzz&s=XX,va&p=colo')
     assert page.evaluate('size')=='hyper' and page.evaluate('weights.x')==30
     assert page.evaluate('view')=='all' and page.evaluate('FIGS.active()')=='map'
     assert page.evaluate('[...shortlist]')==['VA']
-    assert page.evaluate('location.search')=='?w=15.15.10.10.5.10.5.30&s=VA'
+    assert page.evaluate('location.search')=='?w=15.15.10.10.5.10.5.30.0&s=VA'
     page.goto(uri)
     assert page.evaluate('location.search')==''
 
