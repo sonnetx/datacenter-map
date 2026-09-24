@@ -9,22 +9,23 @@ An interactive map for exploring state-level conditions for hyperscale and AI tr
 - The map card holds twelve figures of the same 50 states, one at a time. Choose one from the row of buttons, or explicitly play a tour that advances every eight seconds. The map stays still by default. Rotation stops for good the first time you click, key or scroll inside the card, and never starts when the browser asks for reduced motion.
 - Every figure that can answer the priority sliders does. Relief, cartogram, prices, profiles, ranks, flow, uncertainty and count all re-read your weights; spread, glyphs and screens are fixed by construction and their notes say so. Each figure names what it hides as well as what it shows.
 - State profiles open in a side panel with Overview, Scores, Reception and Sources tabs. Profiles support keyboard navigation and close with Escape.
-- Choose a project size (edge or micro, enterprise or colocation, hyperscale, gigawatt campus). The size loads a starting weight profile and sets the headroom and permitting thresholds behind delivery concerns. The page opens on hyperscale with Balanced weights.
+- Choose a project size (edge or micro, enterprise or colocation, hyperscale, gigawatt campus, or off-grid solar and battery). The size loads a starting weight profile and sets the headroom and permitting thresholds behind delivery concerns. The page opens on hyperscale with Balanced weights. The off-grid band shows three workload buttons (batch inference, real-time serving, distributed training) that move only the connectivity weight.
 - Choose Balanced, Build sooner, Lower costs, Lower risk or Connectivity first, then adjust relative priorities. Effective percentage shares update automatically. The pressed preset is inferred from the weights, so sliding back onto a preset re-presses it.
 - Switch between Combined, Political outlook and Physical fundamentals without losing custom priorities. Editing a slider returns to Combined.
-- The address records the scenario: `z` size, `w` eight weights in factor order, `v` view, `r` ranking rule, `c` price anchors as `low-high`, `f` figure and `s` shortlist postal codes, each omitted at its default. `p` names a preset and is read only when `w` is absent. Copy scenario link copies the address. Reset restores the model but keeps the shortlist.
+- The address records the scenario: `z` size, `w` nine weights in factor order (eight-weight links from version 2 still open, with solar read as zero), `v` view, `r` ranking rule, `c` price anchors as `low-high`, `f` figure and `s` shortlist postal codes, each omitted at its default. `p` names a preset and is read only when `w` is absent. Copy scenario link copies the address. Reset restores the model but keeps the shortlist.
 - Download share image saves a 1200 by 675 PNG of the five leading states and the priority shares for the current scenario. A top and bottom five card under the figure legend lists the extremes of the current ranking.
 - Priorities collapse above the map on mobile. Wide charts and tables scroll within their containers.
 
 Hatching identifies a recorded 2026 statewide policy action. Its scope differs by state; consult the profile and original record.
 
-## Model version 2
+## Model version 3
 
-Balanced is the default: each of eight factors receives 12.5%. Fit is the weighted mean of their normalized values, on a fixed 0–100 scale.
+Balanced is the default: each of the eight grid-siting factors receives 12.5% and winter solar resource receives 0%. Fit is the weighted mean of the normalized values, on a fixed 0–100 scale. Version 3 added the solar factor and the off-grid band on September 23, 2026; every version 2 preset and band weights solar at zero, so version 2 output is unchanged.
 
 | Factor | Input and normalization |
 |---|---|
 | Power cost | EIA 2024 industrial average; 100 at 5¢/kWh, 0 at 35¢/kWh, linear between, clamped outside. Users can change these preference anchors. |
+| Winter solar resource | NASA POWER 2001–2020 December mean all-sky irradiance at the state's 2020 Census center of population, kWh/m²/day; 0 at 1.0, 100 at 4.0, linear between, clamped outside. One grid cell per state. |
 | Power headroom | Provisional analyst rating, 1–5 |
 | Incentives and policy | Provisional analyst rating, 1–5 |
 | Community and permitting | Provisional analyst rating, 1–5 |
@@ -37,12 +38,15 @@ Analyst ratings map to 0, 25, 50, 75 and 100. Equal steps are an assumption, not
 
 ### Project size
 
-| Band | Range | Starting weights (pw, p, po, op, w, h, c, x) | Floors (headroom, permitting) |
+| Band | Range | Starting weights (pw, p, po, op, w, h, c, x, sr) | Floors (headroom, permitting) |
 |---|---|---|---|
-| Edge or micro | under 5 MW | 5, 15, 5, 10, 0, 15, 10, 40 | 2, 2 |
-| Enterprise or colocation | 5 to 50 MW | 15, 15, 10, 10, 5, 10, 5, 30 | 3, 2 |
-| Hyperscale (default) | 50 to 300 MW | 25, 20, 15, 15, 10, 5, 5, 5 | 3, 3 |
-| Gigawatt campus | 300 MW and up | 35, 25, 10, 20, 5, 5, 0, 0 | 4, 3 |
+| Edge or micro | under 5 MW | 5, 15, 5, 10, 0, 15, 10, 40, 0 | 2, 2 |
+| Enterprise or colocation | 5 to 50 MW | 15, 15, 10, 10, 5, 10, 5, 30, 0 | 3, 2 |
+| Hyperscale (default) | 50 to 300 MW | 25, 20, 15, 15, 10, 5, 5, 5, 0 | 3, 3 |
+| Gigawatt campus | 300 MW and up | 35, 25, 10, 20, 5, 5, 0, 0, 0 | 4, 3 |
+| Off-grid solar and battery | self-powered, any size | 0, 0, 5, 20, 0, 15, 15, 10, 35 | 1, 3 |
+
+A headroom floor of 1 means headroom never raises a concern, so the off-grid band groups states by permitting alone. Its workload buttons set connectivity to 10 (batch inference), 25 (real-time serving) or 40 (distributed training) and leave every other weight in place. Battery autonomy, land, local maintenance and physical security have no state-level public source and are not modeled. See [the solar factor record](review/2026-09-23-solar-factor.md).
 
 Delivery concerns compare headroom and permitting with the size floors. At or above the floor is lower, one level below is elevated, two or more below is major, and the worse factor sets the level. Hyperscale reproduces the original rule (1 = major, 2 = elevated, 3–5 = lower), so the default output is unchanged. Floors are analyst judgments about scale, not measured capacity; state ratings do not change with size. Default ranking compares fit; optional Delivery first compares concern groups before fit. These groups are model judgments, not confirmed connection timelines or permitting eligibility. See [the project size record](review/2026-09-20-project-size.md).
 
@@ -54,7 +58,7 @@ Reference weights: Political outlook = policy 50%, permitting 50%. Physical fund
 
 A separate power-demand context section records EIA’s September 9, 2026 national electricity-sales forecasts for 2026 and 2027 and the commercial sector’s share of 2026 sales growth. These dated forecasts do not affect state ratings or rankings. See [the source review](review/2026-09-13-demand-context.md).
 
-All 50 electricity prices matched the EIA-861 historical workbook's 2024 industrial data, Total Electric Industry sheet. These are historical state averages, not datacenter tariffs. Seven analyst factors remain provisional and have not been individually validated against original records.
+All 50 electricity prices matched the EIA-861 historical workbook's 2024 industrial data, Total Electric Industry sheet. These are historical state averages, not datacenter tariffs. Solar irradiance comes from the NASA POWER climatology API at each state's 2020 Census center of population, with eight states spot-checked against NREL's solar resource service (see the solar factor record). It is one grid cell per state, not a site survey. Seven analyst factors remain provisional and have not been individually validated against original records.
 
 State citations carry `type`, with optional `supports` and `reviewed` fields explaining a checked document's scope. Source type identifies the publisher's role, not a credibility rating. Company announcements are self-reported; advocacy statements describe their publisher's position. References to policy events do not establish numerical ratings.
 
@@ -81,6 +85,8 @@ See the [model and source change record](review/2026-09-07-model-v2.md), [initia
 | `a` | Two-letter postal code. Must be one of the 50 states, no duplicates. |
 | `n` | State name. |
 | `p` | EIA 2024 industrial price in cents per kWh. |
+| `sr` | NASA POWER 2001–2020 December mean irradiance at the population center, kWh/m²/day. |
+| `sy` | NASA POWER 2001–2020 annual mean irradiance at the same point, kWh/m²/day. Context only in the model; must be at least `sr`. |
 | `pw` | Power headroom, 1 to 5. |
 | `po` | Incentives and policy, 1 to 5. |
 | `op` | Community and permitting, 1 to 5. |

@@ -42,6 +42,8 @@ SCALARS = {
     "a": "two-letter postal code",
     "n": "state name",
     "p": "EIA 2024 industrial price, cents per kWh",
+    "sr": "NASA POWER 2001-2020 December mean irradiance at the population center, kWh/m2/day",
+    "sy": "NASA POWER 2001-2020 annual mean irradiance at the population center, kWh/m2/day",
     "tag": "short label for a 2026 statewide action, or empty string",
     "note": "prose shown in the state profile",
     "st": "state posture label",
@@ -95,6 +97,11 @@ SOURCE_OPTIONAL = {"supports", "reviewed"}
 
 MAX_SOURCE_TITLE = 60
 PRICE_RANGE = (3.0, 40.0)
+# Plausible December and annual means for the 50 states. December runs from
+# near zero at Alaska's population center to about 4 in Hawaii; annual from
+# about 2.5 to 6.
+SOLAR_DEC_RANGE = (0.05, 5.0)
+SOLAR_ANN_RANGE = (2.0, 7.0)
 
 problems = []
 
@@ -218,6 +225,16 @@ def main():
             fail(where, f"'p' must be a number, got {price!r}")
         elif not PRICE_RANGE[0] <= price <= PRICE_RANGE[1]:
             fail(where, f"'p' is {price}, outside the plausible {PRICE_RANGE[0]} to {PRICE_RANGE[1]} c/kWh range")
+
+        for field, rng in (("sr", SOLAR_DEC_RANGE), ("sy", SOLAR_ANN_RANGE)):
+            v = s.get(field)
+            if isinstance(v, bool) or not isinstance(v, (int, float)):
+                fail(where, f"'{field}' must be a number, got {v!r}")
+            elif not rng[0] <= v <= rng[1]:
+                fail(where, f"'{field}' is {v}, outside the plausible {rng[0]} to {rng[1]} kWh/m2/day range")
+        sr, sy = s.get("sr"), s.get("sy")
+        if isinstance(sr, (int, float)) and isinstance(sy, (int, float)) and sr > sy:
+            fail(where, f"December irradiance {sr} exceeds the annual mean {sy}")
 
         for field, label in RATINGS.items():
             v = s.get(field)

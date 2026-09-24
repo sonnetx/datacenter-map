@@ -14,13 +14,14 @@ function model(states = data) {
   vm.runInContext(source + '\n' + activeWeights + '\ncompute();', context);
   return code => vm.runInContext(code, context);
 }
-const neutral = {n:'Example',p:20,pw:3,po:3,op:3,w:3,h:3,c:3,x:3,mo:1};
+const neutral = {n:'Example',p:20,sr:2.75,sy:4.5,pw:3,po:3,op:3,w:3,h:3,c:3,x:3,mo:1};
 
-test('balanced fit gives all eight factors equal shares and contributions sum to fit', () => {
+test('balanced fit gives the eight grid factors equal shares, solar zero, and contributions sum to fit', () => {
   const run = model([{...neutral,a:'A'}]);
   assert.equal(run('BY.A.total'), 50);
-  assert.equal(run('FACTORS.length'), 8);
-  assert.equal(run('Object.values(weights).every(w=>w/totalWeight(weights)===0.125)'), true);
+  assert.equal(run('FACTORS.length'), 9);
+  assert.equal(run('weights.sr'), 0);
+  assert.equal(run('FACTORS.filter(f=>f.k!=="sr").every(f=>weights[f.k]/totalWeight(weights)===0.125)'), true);
   assert.equal(run('FACTORS.reduce((sum,f)=>sum+contribution(BY.A,f.k),0)'), 50);
   assert.equal(run('sub({...BY.A,pw:4},"pw")-sub(BY.A,"pw")'), 25);
 });
@@ -32,6 +33,32 @@ test('cost anchors clamp at endpoints and distinguish expensive states', () => {
   assert.equal(run('sub({p:40},"p")'), 0);
   assert.equal(run('sub({p:15},"p")>sub({p:20},"p")'), true);
   assert.equal(run('new Set(STATES.map(s=>sub(s,"p"))).size'), new Set(data.map(s=>s.p)).size);
+});
+
+test('winter solar is measured, anchored at 1.0 and 4.0, and contributes nothing until weighted', () => {
+  const run = model([{...neutral,a:'A',sr:1.0},{...neutral,a:'B',sr:4.0},{...neutral,a:'C',sr:2.5}]);
+  assert.equal(run('sub(BY.A,"sr")'), 0);
+  assert.equal(run('sub(BY.B,"sr")'), 100);
+  assert.equal(run('sub(BY.C,"sr")'), 50);
+  assert.equal(run('sub({sr:0.2},"sr")===0 && sub({sr:6},"sr")===100'), true);
+  assert.equal(run('MEASURED.has("sr") && MEASURED.has("p") && MEASURED.size===2'), true);
+  // Default weights ignore solar, so the three states tie.
+  assert.equal(run('BY.A.total===BY.B.total && BY.A.rank===1 && BY.B.rank===1'), true);
+  // A record without the field still scores when the factor is unweighted.
+  const bare = model([{...neutral,a:'A',sr:undefined,sy:undefined}]);
+  assert.equal(bare('BY.A.total'), 50);
+  run('weights={...SIZES.solar.weights};compute()');
+  assert.equal(run('BY.B.rank===1 && BY.A.rank===3'), true);
+});
+
+test('the off-grid band ignores grid price and headroom and raises concerns only on permitting', () => {
+  const run = model([{...neutral,a:'A',p:35,pw:1,sr:4.0},{...neutral,a:'B',p:5,pw:5,sr:2.0}]);
+  run('size="solar";weights={...SIZES.solar.weights};compute()');
+  assert.equal(run('SIZES.solar.weights.p===0 && SIZES.solar.weights.pw===0'), true);
+  assert.equal(run('BY.A.rank'), 1);
+  assert.equal(run('deliveryTier(BY.A)'), 0);
+  assert.equal(run('JSON.stringify([1,2,3].map(op=>deliveryTier({pw:1,op})))'), '[2,1,0]');
+  assert.equal(run('Object.values(WORKLOADS).every(w=>Number.isInteger(w.x/5) && w.x>0 && w.x<=40)'), true);
 });
 
 test('momentum does not influence fit or political outlook', () => {
@@ -122,6 +149,8 @@ test('every size profile and preset uses slider steps and each profile sums to 1
   const run = model();
   assert.equal(run('Object.values(SIZES).every(z=>FACTORS.every(f=>Number.isInteger(z.weights[f.k]/5) && z.weights[f.k]>=0 && z.weights[f.k]<=40) && totalWeight(z.weights)===100)'), true);
   assert.equal(run('Object.values(PRESETS).every(P=>FACTORS.every(f=>Number.isInteger(P[f.k]/5) && P[f.k]>=0 && P[f.k]<=40))'), true);
-  assert.equal(run('Object.values(SIZES).every(z=>z.floors.pw>=2 && z.floors.pw<=5 && z.floors.op>=2 && z.floors.op<=5)'), true);
+  // A headroom floor of 1 (off-grid) means headroom never raises a concern.
+  assert.equal(run('Object.values(SIZES).every(z=>z.floors.pw>=1 && z.floors.pw<=5 && z.floors.op>=2 && z.floors.op<=5)'), true);
+  assert.equal(run('Object.entries(SIZES).every(([k,z])=>(k==="solar")===(z.weights.sr>0))'), true);
   assert.equal(run('SIZES.gw.weights.pw'), 35);
 });
