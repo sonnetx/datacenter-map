@@ -34,7 +34,11 @@ A headroom floor of 1 means headroom never raises a concern, so the off-grid ban
 
 ## Sensitivity and ties
 
-Each profile reports the rank range obtained by moving one active analyst rating one level at a time, holding other states fixed. Delivery first also varies headroom and permitting when their fit weights are zero. This limited sensitivity test is not a confidence interval. Exact ties share ranks. All-zero weights remove scores and ranks.
+Each profile reports the rank range obtained by moving one active analyst rating one level at a time, holding other states fixed. Delivery first also varies headroom and permitting when their fit weights are zero. The profile also names the single one-level change that moves the rank furthest from its current position, with the rank it would produce; when no change moves the rank, it says so. The comparison table repeats the range as its Rank range column. This limited sensitivity test is not a confidence interval. Exact ties share ranks. All-zero weights remove scores and ranks.
+
+## Color scale
+
+Fit-colored figures (map, relief, cartogram, prices, profiles, flow, count, the share card and the scatter dots) shade a fixed 0 to 100 domain by default, so a color means the same fit in every scenario and every shared link. Stretch to range sets the domain to the scenario's lowest and highest scored fit instead. It changes only colors: scores, ranks, the sensitivity test and the exports are unaffected. A scenario with one distinct score, or with no weights, falls back to the fixed domain. Factor values in the coxcombs and the ridgeline palette always use the fixed scale.
 
 ## Scenario links
 
@@ -48,8 +52,12 @@ The address records the scenario, and each parameter is omitted at its default.
 | `r` | Ranking rule |
 | `c` | Price anchors as `low-high` |
 | `f` | Figure |
+| `k` | Color scale, `stretch`; absent means fixed 0 to 100 |
 | `s` | Shortlist postal codes |
+| `st` | Postal code of the profile that is open; present only while the dialog is open |
 | `p` | Preset name, read only when `w` is absent |
+
+Unknown or malformed values are dropped one at a time and never stop the page from opening.
 
 ## Evidence
 
