@@ -1,5 +1,17 @@
 // Interface: map, priorities panel, scenario address, state profiles, table,
-// share card and scatter plot. Runs after model.js in the same script.
+// shortlist comparison, share card and scatter plot. Runs after model.js in
+// the same script.
+
+// Theme colors, read from the stylesheet so SVG and canvas drawings follow
+// the light or dark scheme the page is showing. Re-read when the scheme flips.
+const THEME={};
+function readTheme(){
+  const cs=getComputedStyle(document.documentElement), v=n=>cs.getPropertyValue(n).trim();
+  Object.assign(THEME,{ink:v("--ink"),muted:v("--muted"),rule:v("--rule"),soft:v("--rule-soft"),panel:v("--panel"),bg:v("--bg"),
+    warn:v("--warn"),focus:v("--focus"),wall:v("--wall"),edge:v("--edge"),quiet:v("--quiet"),sand:v("--sand-ink")});
+  return THEME;
+}
+readTheme();
 // --- map ---
 function pathOf(geom){
   const f = topojson.feature(TOPO, geom).geometry;
@@ -81,11 +93,26 @@ function showTip(abbr,e){
 }
 function paint(){
   const scored=hasWeights();
-  STATES.forEach(s=>{ paths[s.a].style.fill = scored ? color(s.total) : "#E6EAEE"; });
+  STATES.forEach(s=>{ paths[s.a].style.fill = scored ? fitColor(s.total) : THEME.soft; });
+  renderRampLegend();
   document.getElementById("hint").textContent = scored
     ? "Select a state to see its scores and sources."
     : "Choose a priority or preset to see scores.";
 }
+
+// The ramp legend reads the domain the colors actually span. Under Stretch
+// the end labels carry the scenario's lowest and highest fit.
+function renderRampLegend(){
+  const [lo,hi]=fitDomain(), stretched=colorScale==="stretch"&&hasWeights();
+  document.getElementById("ramp-lo").textContent=stretched?`Lower fit · ${lo.toFixed(0)}`:"Lower fit · 0";
+  document.getElementById("ramp-hi").textContent=stretched?`${hi.toFixed(0)} · Higher fit`:"100 · Higher fit";
+  document.querySelectorAll("#scale-toggle button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.k===colorScale)));
+}
+function setColorScale(k){
+  if(k!=="fixed"&&k!=="stretch") return;
+  colorScale=k; paint(); renderScatter(); FIGS.draw(); scheduleURL();
+}
+document.querySelectorAll("#scale-toggle button").forEach(b=>b.addEventListener("click",()=>setColorScale(b.dataset.k)));
 
 // --- weights UI ---
 const wbox=document.getElementById("weights");
@@ -109,7 +136,9 @@ function syncSliders(){
     : `Lower delivery concern needs headroom ${F.pw} and permitting ${F.op} of 5.`);
   const wl=document.getElementById("workload"); wl.hidden = size!=="solar";
   wl.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed", String(size==="solar" && WORKLOADS[b.dataset.wl].x===weights.x)));
-  document.getElementById("legend-rampnote").textContent=`Color shows weighted fit on a fixed 0–100 scale. Delivery concerns, judged for ${Z.noun}, are shown separately in each profile.`;
+  document.getElementById("legend-rampnote").textContent=(colorScale==="stretch"
+    ? `Color spreads this scenario's lowest to highest fit across the ramp, so colors are not comparable between scenarios. `
+    : `Color shows weighted fit on a fixed 0–100 scale. `)+`Delivery concerns, judged for ${Z.noun}, are shown separately in each profile.`;
   document.getElementById("share-card").disabled=!hasWeights();
   const tw=totalWeight(weights);
   FACTORS.forEach(f=>{
@@ -162,7 +191,7 @@ for(const id of ["price-low","price-high"]){
 }
 
 document.getElementById("reset-model").addEventListener("click",()=>{
-  size="hyper";weights={...PRESETS.balanced};view="all";rankMode="fit";priceScale={low:5,high:35};sortKey="rank";sortAsc=true;
+  size="hyper";weights={...PRESETS.balanced};view="all";rankMode="fit";priceScale={low:5,high:35};sortKey="rank";sortAsc=true;colorScale="fixed";
   document.getElementById("rank-mode").value="fit";
   for(const [id,value] of [["price-low",5],["price-high",35]]){const input=document.getElementById(id);input.value=value;input.removeAttribute("aria-invalid");}
   document.getElementById("price-error").textContent="";document.getElementById("link-status").textContent="";
@@ -187,7 +216,10 @@ function encodeURLState(){
   if(rankMode!=="fit") parts.push("r="+rankMode);
   if(priceScale.low!==DEFAULT_SCALE.low||priceScale.high!==DEFAULT_SCALE.high) parts.push("c="+priceScale.low+"-"+priceScale.high);
   const fig=FIGS.active(); if(fig!=="map") parts.push("f="+fig);
+  if(colorScale!=="fixed") parts.push("k="+colorScale);
   if(shortlist.size) parts.push("s="+[...shortlist].join(","));
+  // an open profile travels with the link, so a state can be sent directly
+  if(selected && profileDialog.open) parts.push("st="+selected);
   return parts.join("&");
 }
 function writeURL(){
@@ -199,7 +231,7 @@ function scheduleURL(){ clearTimeout(urlTimer); urlTimer=setTimeout(writeURL,150
 // Malformed values are dropped one at a time and can never throw: a bad link
 // still opens the page with everything else it asked for.
 function readURLState(){
-  let figure=null;
+  let figure=null, profile=null;
   try{
     const q=new URLSearchParams(location.search);
     const z=q.get("z");
@@ -221,19 +253,23 @@ function readURLState(){
     if(c){ const low=Math.round(+c[1]*2)/2, high=Math.round(+c[2]*2)/2; if(low>=0&&high<=100&&high>low) priceScale={low,high}; }
     (q.get("s")||"").split(",").map(x=>x.trim().toUpperCase()).filter(x=>BY[x]).forEach(x=>shortlist.add(x));
     figure=q.get("f");
+    if(q.get("k")==="stretch") colorScale="stretch";
+    const st=(q.get("st")||"").trim().toUpperCase(); if(BY[st]) profile=st;
   }catch(err){}
   setSize(size); setPressed(presetMatching(weights)); setLens(view);
   document.getElementById("rank-mode").value=rankMode;
   document.getElementById("price-low").value=priceScale.low; document.getElementById("price-high").value=priceScale.high;
   renderShortlistChips();
-  return figure;
+  return {figure,profile};
+}
+function copyAddress(status,doneText){
+  writeURL();
+  const done=()=>{ status.textContent=doneText; };
+  const fail=()=>{ status.textContent="Copy the address bar to share this. It already holds every setting."; };
+  try{ (navigator.clipboard ? navigator.clipboard.writeText(location.href) : Promise.reject()).then(done,fail); }catch(err){ fail(); }
 }
 document.getElementById("copy-link").addEventListener("click",()=>{
-  writeURL();
-  const status=document.getElementById("link-status");
-  const done=()=>{ status.textContent="Link copied. It reproduces the size, priorities, ranking rule, price anchors, figure and shortlist."; };
-  const fail=()=>{ status.textContent="Copy the address bar to share this scenario. It already holds every setting."; };
-  try{ (navigator.clipboard ? navigator.clipboard.writeText(location.href) : Promise.reject()).then(done,fail); }catch(err){ fail(); }
+  copyAddress(document.getElementById("link-status"),"Link copied. It reproduces the size, priorities, ranking rule, price anchors, color scale, figure and shortlist.");
 });
 
 // --- state profiles ---
@@ -283,6 +319,38 @@ profileDialog.addEventListener("click",e=>{
   const r=profileDialog.getBoundingClientRect();
   if(e.target===profileDialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)) profileDialog.close();
 });
+// closing drops the state from the address again
+profileDialog.addEventListener("close",()=>{ document.getElementById("profile-link-status").textContent=""; scheduleURL(); });
+// Previous and next walk the current ranking, or the alphabet when nothing is
+// scored, so a reader can page through profiles without leaving the dialog.
+function profileOrder(){ return hasWeights() ? rankedStates() : sortedStates; }
+function stepProfile(dir){
+  if(!selected) return;
+  const order=profileOrder(), i=order.findIndex(s=>s.a===selected);
+  const next=order[i+dir]; if(next) select(next.a);
+}
+function renderProfileNav(){
+  const order=profileOrder(), i=order.findIndex(s=>s.a===selected), prev=order[i-1], next=order[i+1], scored=hasWeights();
+  const label=s=>scored?`${s.n} · #${s.rank}`:s.n;
+  const prevBtn=document.getElementById("profile-prev"), nextBtn=document.getElementById("profile-next");
+  prevBtn.disabled=!prev; nextBtn.disabled=!next;
+  prevBtn.querySelector("span").textContent=prev?label(prev):"";
+  nextBtn.querySelector("span").textContent=next?label(next):"";
+  prevBtn.setAttribute("aria-label",prev?`Previous: ${label(prev)}`:"No previous state");
+  nextBtn.setAttribute("aria-label",next?`Next: ${label(next)}`:"No next state");
+}
+document.getElementById("profile-prev").addEventListener("click",()=>stepProfile(-1));
+document.getElementById("profile-next").addEventListener("click",()=>stepProfile(1));
+profileDialog.addEventListener("keydown",e=>{
+  // Alt with an arrow pages through profiles from anywhere in the dialog; the
+  // bare arrows still belong to the tab strip and the select.
+  if(!e.altKey) return;
+  if(e.key==="ArrowLeft"){ e.preventDefault(); stepProfile(-1); }
+  if(e.key==="ArrowRight"){ e.preventDefault(); stepProfile(1); }
+});
+document.getElementById("profile-link").addEventListener("click",()=>{
+  copyAddress(document.getElementById("profile-link-status"),"Link copied. It opens this profile with the current scenario.");
+});
 function rankedStates(){ return [...STATES].sort((a,b)=>a.rank-b.rank||a.n.localeCompare(b.n)); }
 function renderCandidates(){
   const box=document.getElementById("candidates");
@@ -312,6 +380,7 @@ function select(abbr){
   tip.style.display="none";
   if(!profileDialog.open) profileDialog.showModal();
   profileDialog.scrollTop=0;
+  scheduleURL();
 }
 // --- reception and regulation (context only, never scored) ---
 const RR_AXES=[
@@ -356,13 +425,15 @@ function renderDetail(){
   const s=BY[selected], scored=hasWeights(), W=activeWeights();
   document.getElementById("profile-state").value=selected;
   document.getElementById("profile-title").textContent=s.n+" · State profile";
+  renderProfileNav();
   const bars=FACTORS.map(f=>{
     const value=sub(s,f.k), points=contribution(s,f.k), off=(W[f.k]||0)===0;
     return `<div class="bar${off?" off":""}"><span class="label">${f.name}<span class="factor-kind">${MEASURED.has(f.k)?"Measured benchmark":"Provisional analyst rating · "+s[f.k]+"/5"}</span></span><span class="c">${off?"Not weighted":"+"+points.toFixed(1)+" pts"}</span><div class="track" aria-hidden="true"><div class="fill" style="width:${value}%"></div></div><span class="n">${value.toFixed(0)}/100</span></div>`;
   }).join("");
   const order=["Government dataset","Government record","Grid operator","Reporting","Market research","Legal analysis","Reprinted release","Company statement","Advocacy statement"];
   const sources=[...(s.srcs||[])].sort((a,b)=>order.indexOf(a.type)-order.indexOf(b.type));
-  const sensitivity=scored?`<p class="sensitivity"><b>One-rating sensitivity: rank ${s.rankMin}–${s.rankMax}.</b> This changes one of this state's analyst ratings by one level at a time, holding all other states fixed. It is not a confidence interval.</p>`:"";
+  const swing=s.swing?` The largest single move is ${s.swing.name.toLowerCase()} at ${s.swing.value}/5 instead of ${s[s.swing.k]}/5, which would place it at rank ${s.swing.rank}.`:(scored?" No single one-level change moves its rank.":"");
+  const sensitivity=scored?`<p class="sensitivity"><b>One-rating sensitivity: rank ${s.rankMin}–${s.rankMax}.</b> This changes one of this state's analyst ratings by one level at a time, holding all other states fixed.${swing} It is not a confidence interval.</p>`:"";
   document.getElementById("detail").innerHTML=`
     <div class="top"><div><h2>${s.n}</h2>${s.tag?`<span class="chip">${s.tag}</span>`:""}</div><div class="score">${scored?s.total.toFixed(0):"—"}<small>fit / 100</small></div></div>
     <button type="button" class="close-btn" id="save-state" aria-pressed="${shortlist.has(s.a)}" onclick="toggleShortlist(selected)">${shortlist.has(s.a)?"Remove from shortlist":"Add to shortlist"}</button>
@@ -397,7 +468,7 @@ function renderDetail(){
 
 // --- table ---
 const COLS=[
-  {k:"rank",label:"#"},{k:"n",label:"State"},{k:"total",label:"Fit"},
+  {k:"rank",label:"#"},{k:"n",label:"State"},{k:"total",label:"Fit"},{k:"swing",label:"Rank range"},
   {k:"p",label:"¢/kWh"},{k:"sr",label:"Dec sun"},{k:"pw",label:"Headroom"},{k:"po",label:"Policy"},{k:"op",label:"Community"},
   {k:"w",label:"Water"},{k:"h",label:"Hazard"},{k:"c",label:"Climate"},{k:"x",label:"Connectivity"},{k:"delivery",label:"Delivery concerns"},
   {k:"pb",label:"Pushback"},{k:"rules",label:"Rules in force"},
@@ -409,7 +480,7 @@ COLS.forEach(c=>{
   // a real button so the header is reachable and operable from the keyboard
   const btn=document.createElement("button"); btn.type="button"; btn.className="sortbtn"; btn.textContent=c.label;
   th.appendChild(btn);
-  const doSort=()=>{ if(sortKey===c.k){sortAsc=!sortAsc;} else {sortKey=c.k; sortAsc=(c.k==="n"||c.k==="p"||c.k==="rank"||c.k==="delivery");} renderTable(); };
+  const doSort=()=>{ if(sortKey===c.k){sortAsc=!sortAsc;} else {sortKey=c.k; sortAsc=(c.k==="n"||c.k==="p"||c.k==="rank"||c.k==="delivery"||c.k==="swing");} renderTable(); };
   btn.addEventListener("click",doSort);
   thead.appendChild(th);
 });
@@ -419,6 +490,8 @@ const PB_ORDER={Low:0,Moderate:1,High:2};
 const ruleCount=s=>RR_AXES.filter(a=>s.rr[a.k]>0).length;
 function sortValue(s,key){
   if(key==="delivery") return deliveryTier(s);
+  // the width of the one-rating sensitivity band; narrower is steadier
+  if(key==="swing") return s.rank===null ? null : s.rankMax-s.rankMin;
   if(key==="pb") return PB_ORDER[s.rr.pb];
   if(key==="rules") return ruleCount(s);
   return s[key];
@@ -442,8 +515,8 @@ function renderTable(){
   document.getElementById("export-comparison").disabled=rows.length===0;
   const dash=v=>scored?v:"--";
   const tb=document.getElementById("tbody");
-  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.sr.toFixed(1)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
-  if(!rows.length) tb.innerHTML=`<tr><td colspan="17">Your shortlist is empty. Add a state above or from a state profile to start comparing.</td></tr>`;
+  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${dash(scored?(s.rankMin===s.rankMax?String(s.rank):s.rankMin+"–"+s.rankMax):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.sr.toFixed(1)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
+  if(!rows.length) tb.innerHTML=`<tr><td colspan="${COLS.length}" class="empty">Your shortlist is empty. Add a state above or from a state profile to start comparing.</td></tr>`;
   tb.querySelectorAll("tr[data-a]").forEach(tr=>{
     tr.addEventListener("click",()=>select(tr.dataset.a));
     tr.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select(tr.dataset.a);} });
@@ -455,8 +528,56 @@ function toggleShortlist(abbr){
   if(shortlist.has(abbr)) shortlist.delete(abbr); else shortlist.add(abbr);
   const refocus=document.activeElement?.id==="save-state";
   renderShortlistChips();
-  renderTable(); renderDetail(); scheduleURL();
+  renderTable(); renderCompare(); renderDetail(); scheduleURL();
   if(refocus) document.getElementById("save-state")?.focus();
+}
+
+// --- shortlist comparison ---
+// The saved states side by side, one column each, in rank order. Every row
+// marks its most favorable cell, and the factor rows carry the same value
+// bars as a profile so a trade-off reads as a shape rather than a digit. The
+// table below still holds all fifty states; this card holds the decision.
+const COMPARE_MAX=8;
+function renderCompare(){
+  const box=document.getElementById("compare");
+  const saved=[...shortlist].map(a=>BY[a]).sort((x,y)=>hasWeights()?compareFit(x,y)||x.n.localeCompare(y.n):x.n.localeCompare(y.n));
+  box.hidden=saved.length<2;
+  if(saved.length<2){ box.innerHTML=""; return; }
+  const shown=saved.slice(0,COMPARE_MAX), scored=hasWeights(), W=activeWeights();
+  const fmt1=v=>Number.isFinite(v)?v.toFixed(1):"—";
+  // Rows: [label, value fn for sorting best, cell renderer, higher-is-better]
+  const head=`<tr><th scope="col" class="cmp-label"><span class="visually-hidden">Measure</span></th>${shown.map(s=>`<th scope="col"><button type="button" class="cmp-state" data-a="${s.a}" aria-label="Open ${s.n}">${s.n}</button><button type="button" class="cmp-remove" data-remove="${s.a}" aria-label="Remove ${s.n} from shortlist">×</button></th>`).join("")}</tr>`;
+  const row=(label,vals,render,opts={})=>{
+    const nums=vals.filter(v=>Number.isFinite(v));
+    let best=null;
+    if(opts.mark!==false && nums.length>1 && new Set(nums).size>1) best=opts.lowerBetter?Math.min(...nums):Math.max(...nums);
+    return `<tr><th scope="row" class="cmp-label">${label}${opts.sub?`<span class="factor-kind">${opts.sub}</span>`:""}</th>${vals.map((v,i)=>`<td class="${best!==null&&v===best?"best":""}">${render(v,shown[i])}</td>`).join("")}</tr>`;
+  };
+  const rows=[];
+  rows.push(row("Fit",shown.map(s=>scored?s.total:null),v=>scored?`<b class="cmp-big">${v.toFixed(0)}</b>`:"—"));
+  rows.push(row("Rank of 50",shown.map(s=>scored?s.rank:null),(v,s)=>scored?`${v}${s.tied?" tied":""}<span class="cmp-fine">range ${s.rankMin}–${s.rankMax}</span>`:"—",{lowerBetter:true}));
+  rows.push(row("Delivery concerns",shown.map(s=>deliveryTier(s)),(v,s)=>`<span class="cmp-tier" data-tier="${v}">${deliveryLabel(s).replace(" modeled concerns","")}</span>`,{lowerBetter:true}));
+  rows.push(row("2024 industrial price",shown.map(s=>s.p),v=>`${v.toFixed(2)}¢<span class="cmp-fine">per kWh</span>`,{lowerBetter:true,sub:"EIA, measured"}));
+  rows.push(row("December sun",shown.map(s=>s.sr),v=>`${v.toFixed(2)}<span class="cmp-fine">kWh/m²/day</span>`,{sub:"NASA POWER, measured"}));
+  FACTORS.forEach(f=>{
+    const off=(W[f.k]||0)===0;
+    rows.push(row(f.name,shown.map(s=>sub(s,f.k)),(v,s)=>`<div class="cmp-bar${off?" off":""}" aria-hidden="true"><i style="width:${v}%"></i></div><span class="cmp-fine">${MEASURED.has(f.k)?v.toFixed(0)+"/100":s[f.k]+"/5"}${off||!scored?"":" · +"+contribution(s,f.k).toFixed(1)+" pts"}</span>`,{sub:off?"not weighted":MEASURED.has(f.k)?"measured":"analyst rating"}));
+  });
+  rows.push(row("Pushback",shown.map(s=>PB_ORDER[s.rr.pb]),(v,s)=>s.rr.pb,{mark:false}));
+  rows.push(row("Rules in force",shown.map(s=>ruleCount(s)),v=>`${v} of 4`,{mark:false}));
+  rows.push(row("State posture",shown.map(()=>null),(v,s)=>s.st,{mark:false}));
+  // Where the shortlist disagrees most, among the factors that count.
+  const spreads=FACTORS.filter(f=>(W[f.k]||0)>0).map(f=>{const vs=shown.map(s=>sub(s,f.k));return {f,d:Math.max(...vs)-Math.min(...vs)};}).sort((p,q)=>q.d-p.d);
+  const lead=spreads[0], agree=spreads.filter(d=>d.d===0).map(d=>d.f.name.toLowerCase());
+  const summary=scored&&lead
+    ? `Widest gap among weighted factors: <b>${lead.f.name.toLowerCase()}</b>, ${lead.d.toFixed(0)} points between ${shown[shown.map(s=>sub(s,lead.f.k)).indexOf(Math.max(...shown.map(s=>sub(s,lead.f.k))))].n} and ${shown[shown.map(s=>sub(s,lead.f.k)).indexOf(Math.min(...shown.map(s=>sub(s,lead.f.k))))].n}.${agree.length?` The shortlist agrees on ${agree.join(", ")}.`:""}`
+    : "Set a priority to compare fit; facts and ratings are shown regardless.";
+  box.innerHTML=`<div class="cmp-head"><h2>Shortlist side by side</h2><p>${shown.length} of ${saved.length} saved states${saved.length>COMPARE_MAX?(scored?`, the ${COMPARE_MAX} highest ranked`:`, the first ${COMPARE_MAX} alphabetically`):""} · ${sizeLabel()} · ${viewLabel()} · ${rankModeLabel()}. Marked cells are the most favorable in each row.</p></div>
+    <div class="cmp-scroll"><table class="cmp"><thead>${head}</thead><tbody>${rows.join("")}</tbody></table></div>
+    <p class="cmp-summary">${summary}</p>
+    <p class="fine">Seven of nine factors are provisional analyst ratings, so a one-level gap is within the model's own uncertainty. Reception and rules are context and never scored.</p>`;
+  box.querySelectorAll(".cmp-state").forEach(b=>b.addEventListener("click",()=>select(b.dataset.a)));
+  box.querySelectorAll(".cmp-remove").forEach(b=>b.addEventListener("click",()=>toggleShortlist(b.dataset.remove)));
 }
 function renderShortlistChips(){
   document.getElementById("shortlist-chips").innerHTML=[...shortlist].map(a=>`<button type="button" class="candidate" data-remove="${a}" aria-label="Remove ${BY[a].n} from shortlist">${BY[a].n} ×</button>`).join("");
@@ -503,7 +624,7 @@ function drawShareCard(){
   text(`Model version ${MODEL_VERSION} · evidence review ${EVIDENCE_REVIEW} · EIA 2024 industrial prices`,60,154,16,400,MUTED);
   rankedStates().slice(0,5).forEach((s,i)=>{
     const y=222+i*80;
-    ctx.fillStyle=color(s.total); ctx.fillRect(60,y-32,40,40);
+    ctx.fillStyle=fitColor(s.total); ctx.fillRect(60,y-32,40,40);
     text(`#${s.rank}${s.tied?" tied":""}`,118,y-6,17,400,MUTED);
     text(s.n,190,y,30,600);
     text(s.total.toFixed(0),720,y,30,600,INK,"right");
@@ -540,11 +661,12 @@ function renderScatter(){
   const svg=document.getElementById("scsvg"); const L=52,R=880,T=18,B=478;
   const xs=v=>L+(R-L)*(v/100), ys=v=>B-(B-T)*(v/100);
   const mx=median(STATES.map(s=>s.phy)), my=median(STATES.map(s=>s.pol));
-  let h=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="#D3DAE1"/><line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="#D3DAE1"/>`;
-  h+=`<line x1="${xs(mx)}" y1="${T}" x2="${xs(mx)}" y2="${B}" stroke="#B5432A" stroke-dasharray="3 4" opacity=".6"/><line x1="${L}" y1="${ys(my)}" x2="${R}" y2="${ys(my)}" stroke="#B5432A" stroke-dasharray="3 4" opacity=".6"/>`;
-  [0,25,50,75,100].forEach(v=>{h+=`<text x="${xs(v)}" y="${B+16}" font-size="11" text-anchor="middle" fill="#5C6773">${v}</text><text x="${L-8}" y="${ys(v)+4}" font-size="11" text-anchor="end" fill="#5C6773">${v}</text>`;});
-  h+=`<text x="${(L+R)/2}" y="${B+36}" font-size="12.5" text-anchor="middle" fill="#18212B">Physical fundamentals →</text>`;
-  h+=`<text transform="translate(14 ${(T+B)/2}) rotate(-90)" font-size="12.5" text-anchor="middle" fill="#18212B">Political outlook →</text>`;
+  const C=THEME;
+  let h=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="${C.rule}"/><line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="${C.rule}"/>`;
+  h+=`<line x1="${xs(mx)}" y1="${T}" x2="${xs(mx)}" y2="${B}" stroke="${C.warn}" stroke-dasharray="3 4" opacity=".6"/><line x1="${L}" y1="${ys(my)}" x2="${R}" y2="${ys(my)}" stroke="${C.warn}" stroke-dasharray="3 4" opacity=".6"/>`;
+  [0,25,50,75,100].forEach(v=>{h+=`<text x="${xs(v)}" y="${B+16}" font-size="11" text-anchor="middle" fill="${C.muted}">${v}</text><text x="${L-8}" y="${ys(v)+4}" font-size="11" text-anchor="end" fill="${C.muted}">${v}</text>`;});
+  h+=`<text x="${(L+R)/2}" y="${B+36}" font-size="12.5" text-anchor="middle" fill="${C.ink}">Physical fundamentals →</text>`;
+  h+=`<text transform="translate(14 ${(T+B)/2}) rotate(-90)" font-size="12.5" text-anchor="middle" fill="${C.ink}">Political outlook →</text>`;
   // label placement with collision avoidance
   const placed=[]; const LW=16, LH=11;
   const cands=[[8,4],[-24,4],[-8,-9],[-8,17],[8,-8],[8,16],[-24,-8],[-24,16],[8,28],[-8,-20]];
@@ -558,7 +680,7 @@ function renderScatter(){
     placed.push(best[2]); p.lx=p.x+best[0]; p.ly=p.y+best[1];
   });
   pts.forEach(p=>{const s=p.s;
-    h+=`<g class="dot ${s.a===selected?"selected":""}" data-a="${s.a}" tabindex="0" role="button" aria-label="${s.n}: physical fundamentals ${s.phy.toFixed(0)}, political will ${s.pol.toFixed(0)}. ${s.st}. Activate to select."><circle cx="${p.x}" cy="${p.y}" r="6" fill="${hasWeights()?color(s.total):"#E6EAEE"}" stroke="#fff" stroke-width="1.2"/><text x="${p.lx}" y="${p.ly}" font-size="10.5" fill="#18212B" style="paint-order:stroke;stroke:#fff;stroke-width:2.5px">${s.a}</text><title>${s.n}: physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}. ${s.st}.</title></g>`;
+    h+=`<g class="dot ${s.a===selected?"selected":""}" data-a="${s.a}" tabindex="0" role="button" aria-label="${s.n}: physical fundamentals ${s.phy.toFixed(0)}, political outlook ${s.pol.toFixed(0)}. ${s.st}. Activate to select."><circle cx="${p.x}" cy="${p.y}" r="6" fill="${hasWeights()?fitColor(s.total):C.soft}" stroke="${C.panel}" stroke-width="1.2"/><text x="${p.lx}" y="${p.ly}" font-size="10.5" fill="${C.ink}" style="paint-order:stroke;stroke:${C.panel};stroke-width:2.5px">${s.a}</text><title>${s.n}: physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}. ${s.st}.</title></g>`;
   });
   svg.innerHTML=h;
   svg.querySelectorAll(".dot").forEach(g=>{

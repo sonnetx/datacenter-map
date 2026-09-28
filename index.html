@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F4F6">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#10151B">
 <title>US datacenter siting suitability, October 2026</title>
 <meta name="description" content="Compare hyperscale and AI datacenter siting conditions across 50 US states using one measured factor and seven provisional analyst ratings.">
 <link rel="canonical" href="https://sonnetx.github.io/datacenter-map/">
@@ -20,17 +23,55 @@
 <meta name="twitter:description" content="Compare 50 states using adjustable weights for power, policy, water and permitting. Ratings are provisional.">
 <meta name="twitter:image" content="https://sonnetx.github.io/datacenter-map/assets/social-card.png">
 <meta name="twitter:image:alt" content="Choropleth map of the 50 US states shaded by datacenter siting fit, with twelve states hatched to mark a 2026 policy change.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "US datacenter siting conditions, 2026",
+  "description": "State-level records for the 50 US states: EIA 2024 industrial electricity prices, NASA POWER December and annual solar irradiance, seven provisional analyst ratings on siting factors, 2026 policy posture, public reception, statewide rules in force and citations.",
+  "url": "https://sonnetx.github.io/datacenter-map/",
+  "sameAs": "https://github.com/sonnetx/datacenter-map",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "isAccessibleForFree": true,
+  "creator": {"@type": "Person", "name": "Sonnet Xu", "url": "https://sonnetx.github.io/"},
+  "temporalCoverage": "2024/2026",
+  "spatialCoverage": {"@type": "Place", "name": "United States"},
+  "keywords": ["datacenter", "data center", "siting", "electricity prices", "solar irradiance", "state policy", "United States"],
+  "distribution": [
+    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://github.com/sonnetx/datacenter-map/blob/main/data/states.json"},
+    {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://sonnetx.github.io/datacenter-map/#dataset"}
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
+  color-scheme:light;
   --bg:#F2F4F6; --panel:#FFFFFF; --ink:#18212B; --muted:#5C6773; --rule:#D3DAE1; --rule-soft:#E6EAEE;
   --warn:#B5432A; --focus:#2456A6;
+  --prose:#2B3540;          /* long-form reading text, a step softer than ink */
+  --hover:#F6F8FA; --select:#EEF2F6;
+  --wall:#B9C2CB; --edge:#9FAAB5; --quiet:#C0C8D0; --sand-ink:#7A6E42;   /* figure strokes and walls */
+  --shade:#18212B;          /* dialog backdrop and drawer shadow base */
   --c0:#00204C; --c1:#31446B; --c2:#666970; --c3:#958F78; --c4:#C4B56C; --c5:#FFEA46;
   /* shared spacing and text measure */
   --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px;
   --pad-y:20px; --pad-x:20px;   /* shared card inset */
   --measure:660px;              /* reading width for detailed explanations */
+}
+/* Dark scheme follows the operating system. Only the neutrals move: the fit
+   ramp, the hatch red and the sand tones are data colors and stay put. */
+@media (prefers-color-scheme:dark){
+  :root{
+    color-scheme:dark;
+    --bg:#10151B; --panel:#181F27; --ink:#E8ECF0; --muted:#98A4B0; --rule:#2E3947; --rule-soft:#232C37;
+    --warn:#E0785C; --focus:#8AB0F0;
+    --prose:#CBD3DB;
+    --hover:#1E2731; --select:#243040;
+    --wall:#3A4652; --edge:#5B6975; --quiet:#3E4A57; --sand-ink:#D9C97B;
+    --shade:#000000;
+  }
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5}
@@ -54,17 +95,17 @@ svg.map{width:100%;height:auto;max-height:64vh;display:block}
 select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:8px;max-width:100%}
 .candidates{display:flex;align-items:center;flex-wrap:wrap;gap:var(--s2);padding:var(--s3) 0;border-top:1px solid var(--rule-soft);font-size:12px;color:var(--muted)}
 .candidate{font:inherit;border:1px solid var(--rule);background:var(--panel);border-radius:20px;padding:5px 9px;color:var(--ink);cursor:pointer}
-.candidate[aria-pressed="true"]{border-color:var(--focus);background:#EEF2F6}
+.candidate[aria-pressed="true"]{border-color:var(--focus);background:var(--select)}
 .candidate span{color:var(--muted);margin-left:5px;font-variant-numeric:tabular-nums}
 button:focus-visible,select:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
-.state{stroke:#F2F4F6;stroke-width:0.9;cursor:pointer;transition:opacity .12s}
+.state{stroke:var(--bg);stroke-width:0.9;cursor:pointer;transition:opacity .12s}
 .state:hover,.state.selected{stroke:var(--ink);stroke-width:1.6}
 .state:focus{outline:none;stroke:var(--focus);stroke-width:2}
 .dim .state:not(.selected):not(:hover){opacity:.55}
 .hatch{pointer-events:none}
 .lens{display:flex;gap:var(--s2);flex-wrap:wrap;margin:0 0 var(--s3)}
-.lens button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:5px 10px;font-size:13px;cursor:pointer;color:var(--ink)}
-.lens button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lens button{border:1px solid var(--rule);background:var(--panel);border-radius:4px;padding:5px 10px;font-size:13px;cursor:pointer;color:var(--ink)}
+.lens button[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
 .lens button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 .scatter{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x);margin-top:var(--s6)}
 .scatter h2{font-weight:600;font-size:15px;margin:0 0 var(--s1)}
@@ -77,7 +118,14 @@ button:focus-visible,select:focus-visible{outline:2px solid var(--focus);outline
 .ramp{width:180px;min-width:60px;height:10px;border-radius:2px;background:linear-gradient(90deg,var(--c0),var(--c1),var(--c2),var(--c3),var(--c4),var(--c5))}
 .legend .key{display:flex;align-items:center;gap:8px}
 .swatch{width:18px;height:12px;flex:none;border:1px solid var(--rule);background:#C4B56C repeating-linear-gradient(45deg,#B5432A 0 1.5px,transparent 1.5px 6px)}
-.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;padding:8px 10px;border-radius:4px;font-size:13px;line-height:1.35;max-width:240px;display:none;z-index:5}
+/* Fixed or stretched fit colors: a small segmented control at the end of the ramp row. */
+.scale-toggle{display:inline-flex;margin-left:auto;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.scale-toggle button{font:inherit;font-size:12px;border:0;background:var(--panel);color:var(--muted);padding:4px 9px;cursor:pointer}
+.scale-toggle button+button{border-left:1px solid var(--rule)}
+.scale-toggle button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.scale-toggle button:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--panel);padding:8px 10px;border-radius:4px;font-size:13px;line-height:1.35;max-width:240px;display:none;z-index:5}
 .tip b{font-weight:600}
 .tip .sc{font-size:20px;font-weight:300;display:block;margin:2px 0 2px}
 .tip .small{opacity:.8}
@@ -95,16 +143,16 @@ aside h2{font-size:15px;font-weight:600;margin:0;display:inline}
 aside p.hint{margin:var(--s2) 0 var(--s3);font-size:13px;color:var(--muted)}
 .view-note{margin:0 0 var(--s4);padding:var(--s2) var(--s3);background:var(--bg);border-radius:4px;font-size:12.5px;color:var(--muted)}
 .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:var(--s4)}
-.presets button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:5px 9px;font-size:13px;cursor:pointer;color:var(--ink)}
-.presets button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.presets button{border:1px solid var(--rule);background:var(--panel);border-radius:4px;padding:5px 9px;font-size:13px;cursor:pointer;color:var(--ink)}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
 .presets button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 /* Project size: one of four bands. Each button carries its MW range so the
    band reads as a scale, not a brand of customer. */
 .sizes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:var(--s2)}
-.sizes button{border:1px solid var(--rule);background:#fff;border-radius:4px;padding:6px 9px;font-size:13px;line-height:1.3;cursor:pointer;color:var(--ink);text-align:left;display:grid;gap:1px;min-width:0}
+.sizes button{border:1px solid var(--rule);background:var(--panel);border-radius:4px;padding:6px 9px;font-size:13px;line-height:1.3;cursor:pointer;color:var(--ink);text-align:left;display:grid;gap:1px;min-width:0}
 .sizes button small{font-size:11px;color:var(--muted)}
-.sizes button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
-.sizes button[aria-pressed="true"] small{color:#D3DAE1}
+.sizes button[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.sizes button[aria-pressed="true"] small{color:var(--rule)}
 .sizes button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 .sizes button[data-z="solar"]{grid-column:1/-1}
 .workload{margin:0 0 var(--s3)}
@@ -130,8 +178,8 @@ aside p.hint{margin:var(--s2) 0 var(--s3);font-size:13px;color:var(--muted)}
 .w .val{grid-column:2/3;grid-row:1/3;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
 .total{font-size:12px;color:var(--muted);margin-top:var(--s3)}
 .detail{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x);margin-top:var(--s6)}
-.drawer{position:fixed;inset:0 0 0 auto;margin:0;border:0;border-left:1px solid var(--rule);width:min(540px,100%);max-width:100%;height:100dvh;max-height:100dvh;padding:0;background:var(--panel);color:var(--ink);box-shadow:-12px 0 40px #18212b20}
-.drawer::backdrop{background:#18212b38}
+.drawer{position:fixed;inset:0 0 0 auto;margin:0;border:0;border-left:1px solid var(--rule);width:min(540px,100%);max-width:100%;height:100dvh;max-height:100dvh;padding:0;background:var(--panel);color:var(--ink);box-shadow:-12px 0 40px color-mix(in srgb,var(--shade) 14%,transparent)}
+.drawer::backdrop{background:color-mix(in srgb,var(--shade) 30%,transparent)}
 body:has(.drawer[open]){overflow:hidden}
 .drawer-head{position:sticky;top:0;background:var(--panel);z-index:2;border-bottom:1px solid var(--rule);padding:var(--s4) var(--s5)}
 .drawer-toolbar{display:flex;align-items:center;justify-content:space-between;gap:var(--s3)}
@@ -139,6 +187,20 @@ body:has(.drawer[open]){overflow:hidden}
 .close-btn{font:inherit;background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:7px 12px;cursor:pointer;color:var(--ink)}
 .profile-picker{display:flex;align-items:center;gap:var(--s3);margin-top:var(--s3);font-size:13px;color:var(--muted)}
 .profile-picker select{flex:1;min-width:0}
+/* Previous and next along the current ranking, plus a link to this profile. */
+.profile-nav{display:grid;grid-template-columns:1fr 1fr auto;gap:var(--s2);align-items:center;margin-top:var(--s3)}
+.nav-btn{font:inherit;font-size:12.5px;display:flex;align-items:center;gap:6px;min-width:0;border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:4px;padding:6px 9px;cursor:pointer;text-align:left}
+.nav-btn span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.nav-btn b{font-weight:500;font-size:16px;line-height:1;color:var(--muted)}
+#profile-next span{text-align:right}
+.nav-btn:hover:not(:disabled){border-color:var(--ink)}
+.nav-btn:hover:not(:disabled) span,.nav-btn:hover:not(:disabled) b{color:var(--ink)}
+.nav-btn:disabled{opacity:.45;cursor:default}
+.nav-btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.profile-nav .reset-btn{padding:6px 0;white-space:nowrap}
+.profile-link-status{margin:var(--s2) 0 0}
+.profile-link-status:empty{display:none}
+@media (max-width:420px){.profile-nav{grid-template-columns:1fr 1fr}.profile-nav .reset-btn{grid-column:1/-1;text-align:left}}
 /* Four single-word tabs cannot shrink below their longest word, so they are
    tightened on narrow screens and the strip scrolls if a font still overruns
    it. Without that the whole dialog scrolls sideways at 320px. */
@@ -235,8 +297,15 @@ body:has(.drawer[open]){overflow:hidden}
 .tablecard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--s2) 0 0;margin-top:var(--s6);overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
 th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--rule-soft);white-space:nowrap}
+td{background:var(--panel)}
 td:first-child{padding-left:var(--pad-x)}
 td:last-child{padding-right:var(--pad-x)}
+/* Rank and state stay in view while the seventeen columns scroll sideways. */
+th:nth-child(1),td:nth-child(1){position:sticky;left:0;z-index:2}
+th:nth-child(2),td:nth-child(2){position:sticky;left:var(--col1);z-index:2;box-shadow:1px 0 0 var(--rule-soft)}
+th:nth-child(1),th:nth-child(2){z-index:3}
+td.empty{position:static;text-align:left;white-space:normal;color:var(--muted);padding:var(--s4) var(--pad-x)}
+table{--col1:62px}
 th{font-weight:500;color:var(--muted);user-select:none;position:sticky;top:0;background:var(--panel);padding:0}
 th .sortbtn{width:100%;border:0;background:none;color:inherit;font:inherit;font-weight:500;cursor:pointer;padding:7px 10px;text-align:inherit}
 th:first-child .sortbtn{padding-left:var(--pad-x)}
@@ -248,18 +317,52 @@ th.sorted .sortbtn::after{content:" ▾";font-size:11px}
 th.sorted.asc .sortbtn::after{content:" ▴"}
 tbody tr:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
 td:nth-child(2),th:nth-child(2){text-align:left}
-td:first-child,th:first-child{text-align:right;color:var(--muted);width:36px}
+td:first-child,th:first-child{text-align:right;color:var(--muted);width:var(--col1);min-width:var(--col1);max-width:var(--col1);box-sizing:border-box}
 tbody tr{cursor:pointer}
-tbody tr:hover{background:#F6F8FA}
-tbody tr.selected{background:#EEF2F6}
+tbody tr:hover td{background:var(--hover)}
+tbody tr.selected td{background:var(--select)}
 td.tot{font-weight:600}
 td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:var(--warn);margin-left:6px;vertical-align:middle}
+/* Shortlist side by side. One column per saved state, the most favorable cell
+   in each row marked with the link color. Value bars repeat the profile's. */
+.compare{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) 0 var(--s3);margin-top:var(--s3)}
+.compare[hidden]{display:none}
+.cmp-head{padding:0 var(--pad-x);margin-bottom:var(--s3)}
+.cmp-head h2{font-size:17px;font-weight:600;margin:0 0 var(--s1)}
+.cmp-head p{margin:0;font-size:13px;color:var(--muted);max-width:var(--measure)}
+.cmp-scroll{overflow-x:auto}
+table.cmp{font-size:13px;width:auto;min-width:100%}
+table.cmp th,table.cmp td{text-align:left;vertical-align:top;white-space:normal;padding:8px 12px;border-bottom:1px solid var(--rule-soft);position:static;box-shadow:none;width:auto;min-width:0;max-width:none}
+table.cmp thead th{position:sticky;top:0;background:var(--panel);z-index:1;padding-top:0;vertical-align:bottom}
+table.cmp th.cmp-label{position:sticky;left:0;z-index:2;background:var(--panel);color:var(--muted);font-weight:500;min-width:9.5rem;max-width:11rem;padding-left:var(--pad-x);box-shadow:1px 0 0 var(--rule-soft)}
+table.cmp thead th.cmp-label{z-index:3}
+table.cmp tbody th.cmp-label .factor-kind{margin-top:2px}
+table.cmp td{min-width:9rem;background:var(--panel);color:var(--ink)}
+table.cmp td.best{background:var(--select);box-shadow:inset 3px 0 0 var(--focus)}
+table.cmp td:last-child,table.cmp th:last-child{padding-right:var(--pad-x)}
+.compare tbody tr{cursor:auto}
+table.cmp tbody tr:hover td{background:var(--panel)}
+table.cmp tbody tr:hover td.best{background:var(--select)}
+.cmp-state{font:inherit;font-weight:600;color:var(--ink);background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.cmp-state:hover{color:var(--focus)}
+.cmp-remove{font:inherit;color:var(--muted);background:none;border:0;padding:0 4px;margin-left:4px;cursor:pointer;font-size:14px;line-height:1}
+.cmp-remove:hover{color:var(--warn)}
+.cmp-big{font-size:22px;font-weight:300;font-variant-numeric:tabular-nums}
+.cmp-fine{display:block;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:1px}
+.cmp-bar{height:6px;background:var(--rule-soft);border-radius:2px;overflow:hidden;margin:6px 0 4px}
+.cmp-bar i{display:block;height:100%;background:var(--ink)}
+.cmp-bar.off i{background:var(--wall)}
+.cmp-tier{display:inline-block;padding:2px 7px;border-radius:3px;font-size:12px;border:1px solid var(--rule);color:var(--muted)}
+.cmp-tier[data-tier="1"],.cmp-tier[data-tier="2"]{border-color:var(--warn);color:var(--warn)}
+.cmp-summary{margin:var(--s3) var(--pad-x) var(--s1);font-size:13px;color:var(--prose);max-width:var(--measure)}
+.compare .fine{margin:0 var(--pad-x);font-size:12px;color:var(--muted);max-width:var(--measure)}
+.cmp-state:focus-visible,.cmp-remove:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 /* A shared reading column for methodology, downloads and attribution. */
 .meth,.datapack,.site-foot{max-width:760px;margin-left:auto;margin-right:auto}
 .meth,.datapack{margin-top:var(--s10);padding-top:var(--s6);border-top:1px solid var(--rule);font-size:14px;line-height:1.65}
 .meth h2,.datapack h2{font-weight:600;font-size:20px;line-height:1.3;margin:0 0 var(--s4)}
 .meth h3{font-weight:600;font-size:15px;line-height:1.4;margin:var(--s8) 0 var(--s2)}
-.meth p,.datapack p{margin:0 0 var(--s3);color:#2B3540}
+.meth p,.datapack p{margin:0 0 var(--s3);color:var(--prose)}
 .meth b{font-weight:500}
 .meth .source-principles{background:none;padding:0;border:0;border-radius:0}
 .meth .sources{margin:var(--s6) 0;padding:var(--s4) 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
@@ -314,7 +417,8 @@ td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:
   .legend .key{gap:var(--s2);font-size:12px}
   .legend>.key:first-child{display:grid;grid-template-columns:1fr 1fr}
   .legend>.key:first-child .ramp{grid-column:1/-1;grid-row:1;width:100%}
-  .legend>.key:first-child span:last-child{text-align:right}
+  .legend>.key:first-child #ramp-hi{text-align:right}
+  .legend>.key:first-child .scale-toggle{grid-column:1/-1;margin-left:0;justify-self:start}
   .detail .score{font-size:34px}
   .detail .score small{display:block;margin:var(--s1) 0 0;text-align:right;font-size:12px}
   .detail h2{font-size:26px}
@@ -322,6 +426,28 @@ td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:
   .scatter svg{min-width:560px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* Print: the map, the shortlist comparison, the table and the methodology,
+   without controls, figure switches, the dialog or anything sticky. */
+@media print{
+  :root{--bg:#fff;--panel:#fff;--ink:#000;--muted:#444;--prose:#000;--rule:#999;--rule-soft:#ccc;color-scheme:light}
+  html,body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .grid{display:block}
+  .grid>aside,.workflow,.viewbar,.map-tools .lens,.state-picker,.candidates,.tip,.scale-toggle,.shortlist-tools,.dp-links,.cmp-remove,#legend-hatch+.key,.rotate-btn,.viewnote .hides{display:none!important}
+  .mapcard,.scatter,.compare,.tablecard,.detail{border:0;padding:0;margin:0 0 18pt;break-inside:avoid}
+  svg.map{max-height:none}
+  .viewpane.tall{max-height:none;overflow:visible}
+  th,td,.cmp-label,table.cmp thead th{position:static!important;box-shadow:none!important}
+  table{font-size:10pt}
+  th .sortbtn::after{content:""!important}
+  .meth,.datapack,.site-foot{max-width:none}
+  .meth .sources{display:block}
+  .meth .sources>summary{list-style:none}
+  a{color:inherit;text-decoration:none}
+  .meth a::after,.site-foot a::after{content:" (" attr(href) ")";font-size:9pt;color:#444}
+  .drawer{display:none}
+  body:has(.drawer[open]){overflow:visible}
+}
 </style>
 </head>
 <body>
@@ -370,7 +496,8 @@ td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:
     <p class="viewnote" id="viewnote" aria-live="polite"></p>
     <div class="tip" id="tip"></div>
     <div class="legend">
-      <div class="key" id="legend-ramp"><span>Lower fit · 0</span><div class="ramp"></div><span>100 · Higher fit</span></div>
+      <div class="key" id="legend-ramp"><span id="ramp-lo">Lower fit · 0</span><div class="ramp"></div><span id="ramp-hi">100 · Higher fit</span>
+        <div class="scale-toggle" id="scale-toggle" role="group" aria-label="Color scale"><button type="button" data-k="fixed" aria-pressed="true">Fixed 0–100</button><button type="button" data-k="stretch" aria-pressed="false">Stretch to range</button></div></div>
       <div class="lgnote" id="legend-rampnote">Color shows weighted fit on a fixed 0–100 scale. Delivery concerns are shown separately in each profile.</div>
       <div class="key" id="legend-hatch"><div class="swatch"></div><span>2026 state policy change; select a state for details</span></div>
       <div class="key"><span id="hint" style="font-size:12.5px">Select a state to see its scores and sources.</span></div>
@@ -432,6 +559,12 @@ td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:
   <div class="drawer-head">
     <div class="drawer-toolbar"><p id="profile-title">State profile</p><form method="dialog"><button class="close-btn" aria-label="Close state profile" autofocus>Close ×</button></form></div>
     <label class="profile-picker" for="profile-state">State <select id="profile-state"></select></label>
+    <div class="profile-nav">
+      <button type="button" class="nav-btn" id="profile-prev"><b>‹</b><span></span></button>
+      <button type="button" class="nav-btn" id="profile-next"><span></span><b>›</b></button>
+      <button type="button" class="reset-btn" id="profile-link">Copy profile link</button>
+    </div>
+    <p class="model-hint profile-link-status" id="profile-link-status" role="status"></p>
     <div class="profile-tabs" role="tablist" aria-label="State profile sections">
       <button id="tab-overview" role="tab" data-panel="overview" aria-selected="true" aria-controls="panel-overview">Overview</button>
       <button id="tab-scores" role="tab" data-panel="scores" aria-selected="false" aria-controls="panel-scores" tabindex="-1">Scores</button>
@@ -451,7 +584,7 @@ td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:
 
 <div class="table-intro" id="comparison">
   <h2>Compare all 50 states</h2>
-  <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5, and fit and reference scores run from 0 to 100. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
+  <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5, and fit and reference scores run from 0 to 100. Rank range is the one-rating sensitivity band from each profile; a narrow band means the position depends less on any single rating. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
   <p>Pushback describes public opposition; rules in force summarize statewide regulation. Neither affects fit or rank. The Reception tab provides details.</p>
 </div>
 <div class="shortlist-tools">
@@ -460,8 +593,9 @@ td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:
   <button type="button" class="close-btn" id="export-comparison">Export comparison CSV</button>
   <p id="shortlist-status" role="status"></p>
   <div id="shortlist-chips" aria-label="Saved states"></div>
-  <p>Saved for this visit. Ranks stay relative to all 50 states. Export includes the displayed states, active weights and model assumptions.</p>
+  <p>Saved for this visit and carried in a copied link. Save two or more states to compare them side by side. Ranks stay relative to all 50 states. Export includes the displayed states, active weights and model assumptions.</p>
 </div>
+<section class="compare" id="compare" aria-label="Shortlist side by side" hidden></section>
 <div class="tablecard">
   <table id="tbl">
     <thead><tr id="thead"></tr></thead>
@@ -501,12 +635,14 @@ td .flag{display:inline-block;width:8px;height:8px;border-radius:1px;background:
   <p>Each profile's Scores tab shows the best and worst rank obtained by changing one of that state's judgment ratings by one level, within 1–5. Other ratings and states stay fixed. This is a limited sensitivity test, not a confidence interval or probability. It does not capture correlated errors or simultaneous changes across states.</p>
   <p>Exact score ties within the selected ranking rule share a rank. Setting every weight to zero removes fit scores and ranks while keeping facts and sources available.</p>
   <h3>Sharing a scenario</h3>
-  <p>The page address records the size, priorities, ranking rule, price anchors, figure and shortlist, each omitted when it is at its default. Copy scenario link copies that address. Download share image draws a 1200 by 675 pixel card of the five leading states and the priority shares for the current scenario. Both describe this model's output, not a site decision.</p>
+  <p>The page address records the size, priorities, ranking rule, price anchors, color scale, figure, shortlist and, while a profile is open, that state, each omitted when it is at its default. Copy scenario link copies that address; Copy profile link in a profile does the same with the state included. Download share image draws a 1200 by 675 pixel card of the five leading states and the priority shares for the current scenario. All describe this model's output, not a site decision.</p>
   <h3>Reception and regulation</h3>
   <p>The Reception tab reports public response and statewide regulation. The table summarizes opposition and the number of regulatory categories with requirements in force. Neither affects scores or rankings.</p>
   <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. Local action counts here. The four rule axes stay strictly statewide and cover water, power and ratepayer cost, siting and zoning, and tax incentives.</p>
   <p>The four axes classify statewide rules in force: entry facilitation, no specific rule, disclosure or reporting, binding conditions, and pause or prohibition. Pending bills are described in the notes and do not affect these classifications. Tax incentives use corresponding eligibility categories. Classifications are provisional and have not been individually verified against original records.</p>
   <p>Public opposition and regulatory requirements are distinct: substantial opposition may coexist with permissive rules, and detailed regulation may coexist with support for development.</p>
+  <h3>Color scale</h3>
+  <p>By default the map, cartogram, relief and other fit-colored figures shade a fixed 0 to 100 scale, so the same color means the same fit in every scenario and in every shared link. Because most scenarios place all fifty states between about 35 and 75, the default can look muted. Stretch to range spreads the ramp from the scenario's lowest to its highest fit. It separates neighbors more clearly and makes colors incomparable between scenarios; the legend shows the values at each end, and the scale travels in the link.</p>
   <h3>Reference views</h3>
   <p>Political outlook weights policy and permitting equally. Physical fundamentals weights power headroom 30%, price 25%, water 20%, hazards 15% and climate 10%. These reference weights stay fixed. Editing a priority returns to Combined; changing the cost scale also affects the physical reference score.</p>
   <div class="source-principles">
@@ -2639,6 +2775,11 @@ let weights = {...PRESETS.balanced};
 let view = "all", rankMode = "fit";
 let priceScale = {low:5,high:35};
 let selected = null, profilePanel = "overview";
+// Color scale for fit. "fixed" shades 0 to 100 the same way in every scenario,
+// so two links are comparable by eye. "stretch" spreads the ramp across the
+// current scenario's lowest and highest fit, which separates the middle of a
+// tightly clustered ranking at the cost of that comparability.
+let colorScale = "fixed";
 let sortKey = "rank", sortAsc = true;
 const shortlist = new Set();
 
@@ -2682,29 +2823,46 @@ function compute(){
     s.tied=STATES.some(other=>other.a!==s.a && other.rank===s.rank);
     // One rating in this state changes at a time; every other state is held fixed.
     const ranks=[s.rank];
+    // The single one-level change that moves the rank furthest, so a profile
+    // can name the rating its position depends on most.
+    let swing=null;
     FACTORS.filter(f=>!MEASURED.has(f.k) && ((activeWeights()[f.k]||0)>0 || (rankMode==="delivery" && ["pw","op"].includes(f.k)))).forEach(f=>{
       [-1,1].forEach(delta=>{
         const value=s[f.k]+delta;
         if(value<1||value>5) return;
         const trial={...s,[f.k]:value};
         trial.total=lensScore(trial,activeWeights());
-        ranks.push(rankOf(trial));
+        const rank=rankOf(trial);
+        ranks.push(rank);
+        if(!swing || Math.abs(rank-s.rank)>Math.abs(swing.rank-s.rank)) swing={k:f.k,name:f.name,delta,value,rank};
       });
     });
     s.rankMin=Math.min(...ranks);s.rankMax=Math.max(...ranks);
+    s.swing=swing && swing.rank!==s.rank ? swing : null;
   });
 }
 
 // cividis-like ramp
 const STOPS=[[0,32,76],[49,68,107],[102,105,112],[149,143,120],[196,181,108],[255,234,70]];
-function color(v){ // v 0..100
-  const lo=0, hi=100; // fixed full scale for every scenario
-  let t=Math.max(0,Math.min(1,(v-lo)/(hi-lo)));
+function ramp(t){ // t 0..1 along the ramp
+  t=Math.max(0,Math.min(1,t));
   const seg=t*(STOPS.length-1), i=Math.min(STOPS.length-2,Math.floor(seg)), f=seg-i;
   const a=STOPS[i], b=STOPS[i+1];
   const c=a.map((x,j)=>Math.round(x+(b[j]-x)*f));
   return `rgb(${c[0]},${c[1]},${c[2]})`;
 }
+// A factor value or other 0-to-100 quantity on the full fixed scale.
+function color(v){ return ramp(v/100); }
+// The fit domain the map, cartogram and share card shade across. Fixed is
+// 0 to 100 in every scenario. Stretch runs from the lowest to the highest
+// scored fit; a scenario with a single distinct score falls back to fixed.
+function fitDomain(){
+  if(colorScale!=="stretch" || !hasWeights()) return [0,100];
+  const totals=STATES.map(s=>s.total).filter(v=>Number.isFinite(v));
+  const lo=Math.min(...totals), hi=Math.max(...totals);
+  return hi-lo<1e-9 ? [0,100] : [lo,hi];
+}
+function fitColor(v){ const [lo,hi]=fitDomain(); return ramp((v-lo)/(hi-lo)); }
 
 // The weights in force: the reader's own sliders in the Combined view, or a
 // fixed reference profile in one of the two lens views.
@@ -2712,7 +2870,19 @@ function activeWeights(){ return view==="all" ? weights : LENSES[view]; }
 function viewLabel(){ return view==="all" ? "Combined" : view==="politics" ? "Political outlook" : "Physical fundamentals"; }
 function rankModeLabel(){ return rankMode==="delivery" ? "Delivery first" : "Weighted fit"; }
 // Interface: map, priorities panel, scenario address, state profiles, table,
-// share card and scatter plot. Runs after model.js in the same script.
+// shortlist comparison, share card and scatter plot. Runs after model.js in
+// the same script.
+
+// Theme colors, read from the stylesheet so SVG and canvas drawings follow
+// the light or dark scheme the page is showing. Re-read when the scheme flips.
+const THEME={};
+function readTheme(){
+  const cs=getComputedStyle(document.documentElement), v=n=>cs.getPropertyValue(n).trim();
+  Object.assign(THEME,{ink:v("--ink"),muted:v("--muted"),rule:v("--rule"),soft:v("--rule-soft"),panel:v("--panel"),bg:v("--bg"),
+    warn:v("--warn"),focus:v("--focus"),wall:v("--wall"),edge:v("--edge"),quiet:v("--quiet"),sand:v("--sand-ink")});
+  return THEME;
+}
+readTheme();
 // --- map ---
 function pathOf(geom){
   const f = topojson.feature(TOPO, geom).geometry;
@@ -2794,11 +2964,26 @@ function showTip(abbr,e){
 }
 function paint(){
   const scored=hasWeights();
-  STATES.forEach(s=>{ paths[s.a].style.fill = scored ? color(s.total) : "#E6EAEE"; });
+  STATES.forEach(s=>{ paths[s.a].style.fill = scored ? fitColor(s.total) : THEME.soft; });
+  renderRampLegend();
   document.getElementById("hint").textContent = scored
     ? "Select a state to see its scores and sources."
     : "Choose a priority or preset to see scores.";
 }
+
+// The ramp legend reads the domain the colors actually span. Under Stretch
+// the end labels carry the scenario's lowest and highest fit.
+function renderRampLegend(){
+  const [lo,hi]=fitDomain(), stretched=colorScale==="stretch"&&hasWeights();
+  document.getElementById("ramp-lo").textContent=stretched?`Lower fit · ${lo.toFixed(0)}`:"Lower fit · 0";
+  document.getElementById("ramp-hi").textContent=stretched?`${hi.toFixed(0)} · Higher fit`:"100 · Higher fit";
+  document.querySelectorAll("#scale-toggle button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.k===colorScale)));
+}
+function setColorScale(k){
+  if(k!=="fixed"&&k!=="stretch") return;
+  colorScale=k; paint(); renderScatter(); FIGS.draw(); scheduleURL();
+}
+document.querySelectorAll("#scale-toggle button").forEach(b=>b.addEventListener("click",()=>setColorScale(b.dataset.k)));
 
 // --- weights UI ---
 const wbox=document.getElementById("weights");
@@ -2822,7 +3007,9 @@ function syncSliders(){
     : `Lower delivery concern needs headroom ${F.pw} and permitting ${F.op} of 5.`);
   const wl=document.getElementById("workload"); wl.hidden = size!=="solar";
   wl.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed", String(size==="solar" && WORKLOADS[b.dataset.wl].x===weights.x)));
-  document.getElementById("legend-rampnote").textContent=`Color shows weighted fit on a fixed 0–100 scale. Delivery concerns, judged for ${Z.noun}, are shown separately in each profile.`;
+  document.getElementById("legend-rampnote").textContent=(colorScale==="stretch"
+    ? `Color spreads this scenario's lowest to highest fit across the ramp, so colors are not comparable between scenarios. `
+    : `Color shows weighted fit on a fixed 0–100 scale. `)+`Delivery concerns, judged for ${Z.noun}, are shown separately in each profile.`;
   document.getElementById("share-card").disabled=!hasWeights();
   const tw=totalWeight(weights);
   FACTORS.forEach(f=>{
@@ -2875,7 +3062,7 @@ for(const id of ["price-low","price-high"]){
 }
 
 document.getElementById("reset-model").addEventListener("click",()=>{
-  size="hyper";weights={...PRESETS.balanced};view="all";rankMode="fit";priceScale={low:5,high:35};sortKey="rank";sortAsc=true;
+  size="hyper";weights={...PRESETS.balanced};view="all";rankMode="fit";priceScale={low:5,high:35};sortKey="rank";sortAsc=true;colorScale="fixed";
   document.getElementById("rank-mode").value="fit";
   for(const [id,value] of [["price-low",5],["price-high",35]]){const input=document.getElementById(id);input.value=value;input.removeAttribute("aria-invalid");}
   document.getElementById("price-error").textContent="";document.getElementById("link-status").textContent="";
@@ -2900,7 +3087,10 @@ function encodeURLState(){
   if(rankMode!=="fit") parts.push("r="+rankMode);
   if(priceScale.low!==DEFAULT_SCALE.low||priceScale.high!==DEFAULT_SCALE.high) parts.push("c="+priceScale.low+"-"+priceScale.high);
   const fig=FIGS.active(); if(fig!=="map") parts.push("f="+fig);
+  if(colorScale!=="fixed") parts.push("k="+colorScale);
   if(shortlist.size) parts.push("s="+[...shortlist].join(","));
+  // an open profile travels with the link, so a state can be sent directly
+  if(selected && profileDialog.open) parts.push("st="+selected);
   return parts.join("&");
 }
 function writeURL(){
@@ -2912,7 +3102,7 @@ function scheduleURL(){ clearTimeout(urlTimer); urlTimer=setTimeout(writeURL,150
 // Malformed values are dropped one at a time and can never throw: a bad link
 // still opens the page with everything else it asked for.
 function readURLState(){
-  let figure=null;
+  let figure=null, profile=null;
   try{
     const q=new URLSearchParams(location.search);
     const z=q.get("z");
@@ -2934,19 +3124,23 @@ function readURLState(){
     if(c){ const low=Math.round(+c[1]*2)/2, high=Math.round(+c[2]*2)/2; if(low>=0&&high<=100&&high>low) priceScale={low,high}; }
     (q.get("s")||"").split(",").map(x=>x.trim().toUpperCase()).filter(x=>BY[x]).forEach(x=>shortlist.add(x));
     figure=q.get("f");
+    if(q.get("k")==="stretch") colorScale="stretch";
+    const st=(q.get("st")||"").trim().toUpperCase(); if(BY[st]) profile=st;
   }catch(err){}
   setSize(size); setPressed(presetMatching(weights)); setLens(view);
   document.getElementById("rank-mode").value=rankMode;
   document.getElementById("price-low").value=priceScale.low; document.getElementById("price-high").value=priceScale.high;
   renderShortlistChips();
-  return figure;
+  return {figure,profile};
+}
+function copyAddress(status,doneText){
+  writeURL();
+  const done=()=>{ status.textContent=doneText; };
+  const fail=()=>{ status.textContent="Copy the address bar to share this. It already holds every setting."; };
+  try{ (navigator.clipboard ? navigator.clipboard.writeText(location.href) : Promise.reject()).then(done,fail); }catch(err){ fail(); }
 }
 document.getElementById("copy-link").addEventListener("click",()=>{
-  writeURL();
-  const status=document.getElementById("link-status");
-  const done=()=>{ status.textContent="Link copied. It reproduces the size, priorities, ranking rule, price anchors, figure and shortlist."; };
-  const fail=()=>{ status.textContent="Copy the address bar to share this scenario. It already holds every setting."; };
-  try{ (navigator.clipboard ? navigator.clipboard.writeText(location.href) : Promise.reject()).then(done,fail); }catch(err){ fail(); }
+  copyAddress(document.getElementById("link-status"),"Link copied. It reproduces the size, priorities, ranking rule, price anchors, color scale, figure and shortlist.");
 });
 
 // --- state profiles ---
@@ -2996,6 +3190,38 @@ profileDialog.addEventListener("click",e=>{
   const r=profileDialog.getBoundingClientRect();
   if(e.target===profileDialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)) profileDialog.close();
 });
+// closing drops the state from the address again
+profileDialog.addEventListener("close",()=>{ document.getElementById("profile-link-status").textContent=""; scheduleURL(); });
+// Previous and next walk the current ranking, or the alphabet when nothing is
+// scored, so a reader can page through profiles without leaving the dialog.
+function profileOrder(){ return hasWeights() ? rankedStates() : sortedStates; }
+function stepProfile(dir){
+  if(!selected) return;
+  const order=profileOrder(), i=order.findIndex(s=>s.a===selected);
+  const next=order[i+dir]; if(next) select(next.a);
+}
+function renderProfileNav(){
+  const order=profileOrder(), i=order.findIndex(s=>s.a===selected), prev=order[i-1], next=order[i+1], scored=hasWeights();
+  const label=s=>scored?`${s.n} · #${s.rank}`:s.n;
+  const prevBtn=document.getElementById("profile-prev"), nextBtn=document.getElementById("profile-next");
+  prevBtn.disabled=!prev; nextBtn.disabled=!next;
+  prevBtn.querySelector("span").textContent=prev?label(prev):"";
+  nextBtn.querySelector("span").textContent=next?label(next):"";
+  prevBtn.setAttribute("aria-label",prev?`Previous: ${label(prev)}`:"No previous state");
+  nextBtn.setAttribute("aria-label",next?`Next: ${label(next)}`:"No next state");
+}
+document.getElementById("profile-prev").addEventListener("click",()=>stepProfile(-1));
+document.getElementById("profile-next").addEventListener("click",()=>stepProfile(1));
+profileDialog.addEventListener("keydown",e=>{
+  // Alt with an arrow pages through profiles from anywhere in the dialog; the
+  // bare arrows still belong to the tab strip and the select.
+  if(!e.altKey) return;
+  if(e.key==="ArrowLeft"){ e.preventDefault(); stepProfile(-1); }
+  if(e.key==="ArrowRight"){ e.preventDefault(); stepProfile(1); }
+});
+document.getElementById("profile-link").addEventListener("click",()=>{
+  copyAddress(document.getElementById("profile-link-status"),"Link copied. It opens this profile with the current scenario.");
+});
 function rankedStates(){ return [...STATES].sort((a,b)=>a.rank-b.rank||a.n.localeCompare(b.n)); }
 function renderCandidates(){
   const box=document.getElementById("candidates");
@@ -3025,6 +3251,7 @@ function select(abbr){
   tip.style.display="none";
   if(!profileDialog.open) profileDialog.showModal();
   profileDialog.scrollTop=0;
+  scheduleURL();
 }
 // --- reception and regulation (context only, never scored) ---
 const RR_AXES=[
@@ -3069,13 +3296,15 @@ function renderDetail(){
   const s=BY[selected], scored=hasWeights(), W=activeWeights();
   document.getElementById("profile-state").value=selected;
   document.getElementById("profile-title").textContent=s.n+" · State profile";
+  renderProfileNav();
   const bars=FACTORS.map(f=>{
     const value=sub(s,f.k), points=contribution(s,f.k), off=(W[f.k]||0)===0;
     return `<div class="bar${off?" off":""}"><span class="label">${f.name}<span class="factor-kind">${MEASURED.has(f.k)?"Measured benchmark":"Provisional analyst rating · "+s[f.k]+"/5"}</span></span><span class="c">${off?"Not weighted":"+"+points.toFixed(1)+" pts"}</span><div class="track" aria-hidden="true"><div class="fill" style="width:${value}%"></div></div><span class="n">${value.toFixed(0)}/100</span></div>`;
   }).join("");
   const order=["Government dataset","Government record","Grid operator","Reporting","Market research","Legal analysis","Reprinted release","Company statement","Advocacy statement"];
   const sources=[...(s.srcs||[])].sort((a,b)=>order.indexOf(a.type)-order.indexOf(b.type));
-  const sensitivity=scored?`<p class="sensitivity"><b>One-rating sensitivity: rank ${s.rankMin}–${s.rankMax}.</b> This changes one of this state's analyst ratings by one level at a time, holding all other states fixed. It is not a confidence interval.</p>`:"";
+  const swing=s.swing?` The largest single move is ${s.swing.name.toLowerCase()} at ${s.swing.value}/5 instead of ${s[s.swing.k]}/5, which would place it at rank ${s.swing.rank}.`:(scored?" No single one-level change moves its rank.":"");
+  const sensitivity=scored?`<p class="sensitivity"><b>One-rating sensitivity: rank ${s.rankMin}–${s.rankMax}.</b> This changes one of this state's analyst ratings by one level at a time, holding all other states fixed.${swing} It is not a confidence interval.</p>`:"";
   document.getElementById("detail").innerHTML=`
     <div class="top"><div><h2>${s.n}</h2>${s.tag?`<span class="chip">${s.tag}</span>`:""}</div><div class="score">${scored?s.total.toFixed(0):"—"}<small>fit / 100</small></div></div>
     <button type="button" class="close-btn" id="save-state" aria-pressed="${shortlist.has(s.a)}" onclick="toggleShortlist(selected)">${shortlist.has(s.a)?"Remove from shortlist":"Add to shortlist"}</button>
@@ -3110,7 +3339,7 @@ function renderDetail(){
 
 // --- table ---
 const COLS=[
-  {k:"rank",label:"#"},{k:"n",label:"State"},{k:"total",label:"Fit"},
+  {k:"rank",label:"#"},{k:"n",label:"State"},{k:"total",label:"Fit"},{k:"swing",label:"Rank range"},
   {k:"p",label:"¢/kWh"},{k:"sr",label:"Dec sun"},{k:"pw",label:"Headroom"},{k:"po",label:"Policy"},{k:"op",label:"Community"},
   {k:"w",label:"Water"},{k:"h",label:"Hazard"},{k:"c",label:"Climate"},{k:"x",label:"Connectivity"},{k:"delivery",label:"Delivery concerns"},
   {k:"pb",label:"Pushback"},{k:"rules",label:"Rules in force"},
@@ -3122,7 +3351,7 @@ COLS.forEach(c=>{
   // a real button so the header is reachable and operable from the keyboard
   const btn=document.createElement("button"); btn.type="button"; btn.className="sortbtn"; btn.textContent=c.label;
   th.appendChild(btn);
-  const doSort=()=>{ if(sortKey===c.k){sortAsc=!sortAsc;} else {sortKey=c.k; sortAsc=(c.k==="n"||c.k==="p"||c.k==="rank"||c.k==="delivery");} renderTable(); };
+  const doSort=()=>{ if(sortKey===c.k){sortAsc=!sortAsc;} else {sortKey=c.k; sortAsc=(c.k==="n"||c.k==="p"||c.k==="rank"||c.k==="delivery"||c.k==="swing");} renderTable(); };
   btn.addEventListener("click",doSort);
   thead.appendChild(th);
 });
@@ -3132,6 +3361,8 @@ const PB_ORDER={Low:0,Moderate:1,High:2};
 const ruleCount=s=>RR_AXES.filter(a=>s.rr[a.k]>0).length;
 function sortValue(s,key){
   if(key==="delivery") return deliveryTier(s);
+  // the width of the one-rating sensitivity band; narrower is steadier
+  if(key==="swing") return s.rank===null ? null : s.rankMax-s.rankMin;
   if(key==="pb") return PB_ORDER[s.rr.pb];
   if(key==="rules") return ruleCount(s);
   return s[key];
@@ -3155,8 +3386,8 @@ function renderTable(){
   document.getElementById("export-comparison").disabled=rows.length===0;
   const dash=v=>scored?v:"--";
   const tb=document.getElementById("tbody");
-  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.sr.toFixed(1)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
-  if(!rows.length) tb.innerHTML=`<tr><td colspan="17">Your shortlist is empty. Add a state above or from a state profile to start comparing.</td></tr>`;
+  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${dash(scored?(s.rankMin===s.rankMax?String(s.rank):s.rankMin+"–"+s.rankMax):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.sr.toFixed(1)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
+  if(!rows.length) tb.innerHTML=`<tr><td colspan="${COLS.length}" class="empty">Your shortlist is empty. Add a state above or from a state profile to start comparing.</td></tr>`;
   tb.querySelectorAll("tr[data-a]").forEach(tr=>{
     tr.addEventListener("click",()=>select(tr.dataset.a));
     tr.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select(tr.dataset.a);} });
@@ -3168,8 +3399,56 @@ function toggleShortlist(abbr){
   if(shortlist.has(abbr)) shortlist.delete(abbr); else shortlist.add(abbr);
   const refocus=document.activeElement?.id==="save-state";
   renderShortlistChips();
-  renderTable(); renderDetail(); scheduleURL();
+  renderTable(); renderCompare(); renderDetail(); scheduleURL();
   if(refocus) document.getElementById("save-state")?.focus();
+}
+
+// --- shortlist comparison ---
+// The saved states side by side, one column each, in rank order. Every row
+// marks its most favorable cell, and the factor rows carry the same value
+// bars as a profile so a trade-off reads as a shape rather than a digit. The
+// table below still holds all fifty states; this card holds the decision.
+const COMPARE_MAX=8;
+function renderCompare(){
+  const box=document.getElementById("compare");
+  const saved=[...shortlist].map(a=>BY[a]).sort((x,y)=>hasWeights()?compareFit(x,y)||x.n.localeCompare(y.n):x.n.localeCompare(y.n));
+  box.hidden=saved.length<2;
+  if(saved.length<2){ box.innerHTML=""; return; }
+  const shown=saved.slice(0,COMPARE_MAX), scored=hasWeights(), W=activeWeights();
+  const fmt1=v=>Number.isFinite(v)?v.toFixed(1):"—";
+  // Rows: [label, value fn for sorting best, cell renderer, higher-is-better]
+  const head=`<tr><th scope="col" class="cmp-label"><span class="visually-hidden">Measure</span></th>${shown.map(s=>`<th scope="col"><button type="button" class="cmp-state" data-a="${s.a}" aria-label="Open ${s.n}">${s.n}</button><button type="button" class="cmp-remove" data-remove="${s.a}" aria-label="Remove ${s.n} from shortlist">×</button></th>`).join("")}</tr>`;
+  const row=(label,vals,render,opts={})=>{
+    const nums=vals.filter(v=>Number.isFinite(v));
+    let best=null;
+    if(opts.mark!==false && nums.length>1 && new Set(nums).size>1) best=opts.lowerBetter?Math.min(...nums):Math.max(...nums);
+    return `<tr><th scope="row" class="cmp-label">${label}${opts.sub?`<span class="factor-kind">${opts.sub}</span>`:""}</th>${vals.map((v,i)=>`<td class="${best!==null&&v===best?"best":""}">${render(v,shown[i])}</td>`).join("")}</tr>`;
+  };
+  const rows=[];
+  rows.push(row("Fit",shown.map(s=>scored?s.total:null),v=>scored?`<b class="cmp-big">${v.toFixed(0)}</b>`:"—"));
+  rows.push(row("Rank of 50",shown.map(s=>scored?s.rank:null),(v,s)=>scored?`${v}${s.tied?" tied":""}<span class="cmp-fine">range ${s.rankMin}–${s.rankMax}</span>`:"—",{lowerBetter:true}));
+  rows.push(row("Delivery concerns",shown.map(s=>deliveryTier(s)),(v,s)=>`<span class="cmp-tier" data-tier="${v}">${deliveryLabel(s).replace(" modeled concerns","")}</span>`,{lowerBetter:true}));
+  rows.push(row("2024 industrial price",shown.map(s=>s.p),v=>`${v.toFixed(2)}¢<span class="cmp-fine">per kWh</span>`,{lowerBetter:true,sub:"EIA, measured"}));
+  rows.push(row("December sun",shown.map(s=>s.sr),v=>`${v.toFixed(2)}<span class="cmp-fine">kWh/m²/day</span>`,{sub:"NASA POWER, measured"}));
+  FACTORS.forEach(f=>{
+    const off=(W[f.k]||0)===0;
+    rows.push(row(f.name,shown.map(s=>sub(s,f.k)),(v,s)=>`<div class="cmp-bar${off?" off":""}" aria-hidden="true"><i style="width:${v}%"></i></div><span class="cmp-fine">${MEASURED.has(f.k)?v.toFixed(0)+"/100":s[f.k]+"/5"}${off||!scored?"":" · +"+contribution(s,f.k).toFixed(1)+" pts"}</span>`,{sub:off?"not weighted":MEASURED.has(f.k)?"measured":"analyst rating"}));
+  });
+  rows.push(row("Pushback",shown.map(s=>PB_ORDER[s.rr.pb]),(v,s)=>s.rr.pb,{mark:false}));
+  rows.push(row("Rules in force",shown.map(s=>ruleCount(s)),v=>`${v} of 4`,{mark:false}));
+  rows.push(row("State posture",shown.map(()=>null),(v,s)=>s.st,{mark:false}));
+  // Where the shortlist disagrees most, among the factors that count.
+  const spreads=FACTORS.filter(f=>(W[f.k]||0)>0).map(f=>{const vs=shown.map(s=>sub(s,f.k));return {f,d:Math.max(...vs)-Math.min(...vs)};}).sort((p,q)=>q.d-p.d);
+  const lead=spreads[0], agree=spreads.filter(d=>d.d===0).map(d=>d.f.name.toLowerCase());
+  const summary=scored&&lead
+    ? `Widest gap among weighted factors: <b>${lead.f.name.toLowerCase()}</b>, ${lead.d.toFixed(0)} points between ${shown[shown.map(s=>sub(s,lead.f.k)).indexOf(Math.max(...shown.map(s=>sub(s,lead.f.k))))].n} and ${shown[shown.map(s=>sub(s,lead.f.k)).indexOf(Math.min(...shown.map(s=>sub(s,lead.f.k))))].n}.${agree.length?` The shortlist agrees on ${agree.join(", ")}.`:""}`
+    : "Set a priority to compare fit; facts and ratings are shown regardless.";
+  box.innerHTML=`<div class="cmp-head"><h2>Shortlist side by side</h2><p>${shown.length} of ${saved.length} saved states${saved.length>COMPARE_MAX?(scored?`, the ${COMPARE_MAX} highest ranked`:`, the first ${COMPARE_MAX} alphabetically`):""} · ${sizeLabel()} · ${viewLabel()} · ${rankModeLabel()}. Marked cells are the most favorable in each row.</p></div>
+    <div class="cmp-scroll"><table class="cmp"><thead>${head}</thead><tbody>${rows.join("")}</tbody></table></div>
+    <p class="cmp-summary">${summary}</p>
+    <p class="fine">Seven of nine factors are provisional analyst ratings, so a one-level gap is within the model's own uncertainty. Reception and rules are context and never scored.</p>`;
+  box.querySelectorAll(".cmp-state").forEach(b=>b.addEventListener("click",()=>select(b.dataset.a)));
+  box.querySelectorAll(".cmp-remove").forEach(b=>b.addEventListener("click",()=>toggleShortlist(b.dataset.remove)));
 }
 function renderShortlistChips(){
   document.getElementById("shortlist-chips").innerHTML=[...shortlist].map(a=>`<button type="button" class="candidate" data-remove="${a}" aria-label="Remove ${BY[a].n} from shortlist">${BY[a].n} ×</button>`).join("");
@@ -3216,7 +3495,7 @@ function drawShareCard(){
   text(`Model version ${MODEL_VERSION} · evidence review ${EVIDENCE_REVIEW} · EIA 2024 industrial prices`,60,154,16,400,MUTED);
   rankedStates().slice(0,5).forEach((s,i)=>{
     const y=222+i*80;
-    ctx.fillStyle=color(s.total); ctx.fillRect(60,y-32,40,40);
+    ctx.fillStyle=fitColor(s.total); ctx.fillRect(60,y-32,40,40);
     text(`#${s.rank}${s.tied?" tied":""}`,118,y-6,17,400,MUTED);
     text(s.n,190,y,30,600);
     text(s.total.toFixed(0),720,y,30,600,INK,"right");
@@ -3253,11 +3532,12 @@ function renderScatter(){
   const svg=document.getElementById("scsvg"); const L=52,R=880,T=18,B=478;
   const xs=v=>L+(R-L)*(v/100), ys=v=>B-(B-T)*(v/100);
   const mx=median(STATES.map(s=>s.phy)), my=median(STATES.map(s=>s.pol));
-  let h=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="#D3DAE1"/><line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="#D3DAE1"/>`;
-  h+=`<line x1="${xs(mx)}" y1="${T}" x2="${xs(mx)}" y2="${B}" stroke="#B5432A" stroke-dasharray="3 4" opacity=".6"/><line x1="${L}" y1="${ys(my)}" x2="${R}" y2="${ys(my)}" stroke="#B5432A" stroke-dasharray="3 4" opacity=".6"/>`;
-  [0,25,50,75,100].forEach(v=>{h+=`<text x="${xs(v)}" y="${B+16}" font-size="11" text-anchor="middle" fill="#5C6773">${v}</text><text x="${L-8}" y="${ys(v)+4}" font-size="11" text-anchor="end" fill="#5C6773">${v}</text>`;});
-  h+=`<text x="${(L+R)/2}" y="${B+36}" font-size="12.5" text-anchor="middle" fill="#18212B">Physical fundamentals →</text>`;
-  h+=`<text transform="translate(14 ${(T+B)/2}) rotate(-90)" font-size="12.5" text-anchor="middle" fill="#18212B">Political outlook →</text>`;
+  const C=THEME;
+  let h=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="${C.rule}"/><line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="${C.rule}"/>`;
+  h+=`<line x1="${xs(mx)}" y1="${T}" x2="${xs(mx)}" y2="${B}" stroke="${C.warn}" stroke-dasharray="3 4" opacity=".6"/><line x1="${L}" y1="${ys(my)}" x2="${R}" y2="${ys(my)}" stroke="${C.warn}" stroke-dasharray="3 4" opacity=".6"/>`;
+  [0,25,50,75,100].forEach(v=>{h+=`<text x="${xs(v)}" y="${B+16}" font-size="11" text-anchor="middle" fill="${C.muted}">${v}</text><text x="${L-8}" y="${ys(v)+4}" font-size="11" text-anchor="end" fill="${C.muted}">${v}</text>`;});
+  h+=`<text x="${(L+R)/2}" y="${B+36}" font-size="12.5" text-anchor="middle" fill="${C.ink}">Physical fundamentals →</text>`;
+  h+=`<text transform="translate(14 ${(T+B)/2}) rotate(-90)" font-size="12.5" text-anchor="middle" fill="${C.ink}">Political outlook →</text>`;
   // label placement with collision avoidance
   const placed=[]; const LW=16, LH=11;
   const cands=[[8,4],[-24,4],[-8,-9],[-8,17],[8,-8],[8,16],[-24,-8],[-24,16],[8,28],[-8,-20]];
@@ -3271,7 +3551,7 @@ function renderScatter(){
     placed.push(best[2]); p.lx=p.x+best[0]; p.ly=p.y+best[1];
   });
   pts.forEach(p=>{const s=p.s;
-    h+=`<g class="dot ${s.a===selected?"selected":""}" data-a="${s.a}" tabindex="0" role="button" aria-label="${s.n}: physical fundamentals ${s.phy.toFixed(0)}, political will ${s.pol.toFixed(0)}. ${s.st}. Activate to select."><circle cx="${p.x}" cy="${p.y}" r="6" fill="${hasWeights()?color(s.total):"#E6EAEE"}" stroke="#fff" stroke-width="1.2"/><text x="${p.lx}" y="${p.ly}" font-size="10.5" fill="#18212B" style="paint-order:stroke;stroke:#fff;stroke-width:2.5px">${s.a}</text><title>${s.n}: physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}. ${s.st}.</title></g>`;
+    h+=`<g class="dot ${s.a===selected?"selected":""}" data-a="${s.a}" tabindex="0" role="button" aria-label="${s.n}: physical fundamentals ${s.phy.toFixed(0)}, political outlook ${s.pol.toFixed(0)}. ${s.st}. Activate to select."><circle cx="${p.x}" cy="${p.y}" r="6" fill="${hasWeights()?fitColor(s.total):C.soft}" stroke="${C.panel}" stroke-width="1.2"/><text x="${p.lx}" y="${p.ly}" font-size="10.5" fill="${C.ink}" style="paint-order:stroke;stroke:${C.panel};stroke-width:2.5px">${s.a}</text><title>${s.n}: physical ${s.phy.toFixed(0)}, political ${s.pol.toFixed(0)}. ${s.st}.</title></g>`;
   });
   svg.innerHTML=h;
   svg.querySelectorAll(".dot").forEach(g=>{
@@ -3289,7 +3569,9 @@ function renderScatter(){
 */
 const FIGS = (function(){
 const NS="http://www.w3.org/2000/svg";
-const INK="#18212B", MUTED="#5C6773", RULE="#D3DAE1", SOFT="#E6EAEE", WARN="#B5432A", PANEL="#FFFFFF";
+// Colors come from the stylesheet at draw time (see readTheme in app.js), so
+// every figure follows the light or dark scheme without its own palette.
+const P=THEME;
 const viewport=document.getElementById("viewport");
 const viewbar=document.getElementById("viewbar");
 const viewnote=document.getElementById("viewnote");
@@ -3312,7 +3594,7 @@ function E(tag,a,parent){
   return n;
 }
 function T(parent,x,y,str,a){
-  const n=E("text",Object.assign({x,y,"font-size":11,fill:MUTED},a||{}),parent);
+  const n=E("text",Object.assign({x,y,"font-size":11,fill:P.muted},a||{}),parent);
   n.textContent=str; return n;
 }
 function SV(host,w,h){
@@ -3327,7 +3609,7 @@ function bindState(node,abbr){
   node.addEventListener("click",()=>select(abbr));
 }
 const scored=()=>hasWeights();
-const fillFor=s=>scored()?color(s.total):SOFT;
+const fillFor=s=>scored()?fitColor(s.total):P.soft;
 const fitOf=s=>scored()?s.total:0;
 function byFit(){
   return [...STATES].sort((a,b)=>scored()?compareFit(a,b):a.a.localeCompare(b.a));
@@ -3390,11 +3672,11 @@ function drawRelief(host){
         ctx.closePath();
       });
     };
-    ctx.fillStyle="#B9C2CB";
+    ctx.fillStyle=P.wall;
     for(let d=h;d>=0;d-=1){ trace(-d,g.solid); ctx.fill(); }
     trace(-h,g.rings);
     ctx.fillStyle=fillFor(s); ctx.fill();
-    ctx.strokeStyle=PANEL; ctx.lineWidth=0.8; ctx.stroke();
+    ctx.strokeStyle=P.panel; ctx.lineWidth=0.8; ctx.stroke();
   });
 }
 
@@ -3412,7 +3694,7 @@ function drawCartogram(host){
       const a=Math.PI/180*(60*i-90);
       pts+=`${(cx+(R-1.5)*Math.cos(a)).toFixed(1)},${(cy+(R-1.5)*Math.sin(a)).toFixed(1)} `;
     }
-    const poly=E("polygon",{points:pts.trim(),fill:fillFor(st),stroke:PANEL,
+    const poly=E("polygon",{points:pts.trim(),fill:fillFor(st),stroke:P.panel,
       "stroke-width":1.6},s);
     bindState(poly,st.a);
     if(st.tag) E("polygon",{points:pts.trim(),fill:"url(#fighatch)",stroke:"none",
@@ -3431,10 +3713,10 @@ function drawPrices(host){
   const x=v=>m.l+(v-lo)/(hi-lo)*(W-m.l-m.r), base=H-m.b;
   const stepTick=(hi-lo)>40?10:5;
   for(let t=Math.ceil(lo/stepTick)*stepTick;t<=hi;t+=stepTick){
-    E("line",{x1:x(t),x2:x(t),y1:m.t,y2:base,stroke:SOFT,"stroke-width":1},s);
+    E("line",{x1:x(t),x2:x(t),y1:m.t,y2:base,stroke:P.soft,"stroke-width":1},s);
     T(s,x(t),base+17,t+"¢",{"text-anchor":"middle","font-size":10.5});
   }
-  E("line",{x1:m.l,x2:W-m.r,y1:base,y2:base,stroke:RULE,"stroke-width":1},s);
+  E("line",{x1:m.l,x2:W-m.r,y1:base,y2:base,stroke:P.rule,"stroke-width":1},s);
   T(s,m.l,base+35,"EIA 2024 average industrial price, cents per kilowatt-hour",
     {"font-size":10.5});
   const r=7, placed=[], sorted=[...STATES].sort((a,b)=>a.p-b.p);
@@ -3447,12 +3729,12 @@ function drawPrices(host){
       row++;
     }
     placed.push({cx,cy});
-    const c=E("circle",{cx,cy,r,fill:fillFor(st),stroke:"#9FAAB5","stroke-width":1},s);
+    const c=E("circle",{cx,cy,r,fill:fillFor(st),stroke:P.edge,"stroke-width":1},s);
     bindState(c,st.a);
   });
   ["HI","AK","CT","RI","MA","ID","WY","LA","WA","TX"].forEach(a=>{
     const i=sorted.findIndex(z=>z.a===a); if(i<0) return;
-    T(s,placed[i].cx,placed[i].cy-r-5,a,{"text-anchor":"middle","font-size":10,fill:INK});
+    T(s,placed[i].cx,placed[i].cy-r-5,a,{"text-anchor":"middle","font-size":10,fill:P.ink});
   });
 }
 
@@ -3464,7 +3746,7 @@ function drawSpread(host){
   const x=v=>m.l+v/100*(W-m.l-m.r);
   const rowH=(H-m.t-m.b)/FACTORS.length, amp=rowH*2.4, bw=6;
   for(let t=0;t<=100;t+=25){
-    E("line",{x1:x(t),x2:x(t),y1:m.t,y2:H-m.b,stroke:SOFT,"stroke-width":1},s);
+    E("line",{x1:x(t),x2:x(t),y1:m.t,y2:H-m.b,stroke:P.soft,"stroke-width":1},s);
     T(s,x(t),H-m.b+17,t,{"text-anchor":"middle","font-size":10.5});
   }
   T(s,m.l,H-m.b+34,"normalized score, 0 unfavourable to 100 favourable",{"font-size":10.5});
@@ -3485,9 +3767,9 @@ function drawSpread(host){
     let path=`M${x(0)},${base}`;
     d.pts.forEach((v,g)=>{ path+=`L${x(g).toFixed(1)},${(base-v/gPeak*amp).toFixed(1)}`; });
     path+=`L${x(100)},${base}Z`;
-    E("path",{d:path,fill:color(i/(FACTORS.length-1)*70+15),"fill-opacity":.9,
-      stroke:PANEL,"stroke-width":1.2,"stroke-linejoin":"round"},s);
-    T(s,m.l-12,base-2,d.f.name,{"text-anchor":"end","font-size":11.5,fill:INK});
+    E("path",{d:path,fill:ramp(i/(FACTORS.length-1)*0.7+0.15),"fill-opacity":.9,
+      stroke:P.panel,"stroke-width":1.2,"stroke-linejoin":"round"},s);
+    T(s,m.l-12,base-2,d.f.name,{"text-anchor":"end","font-size":11.5,fill:P.ink});
     T(s,m.l-12,base+11,MEASURED.has(d.f.k)?"measured":"analyst rating",
       {"text-anchor":"end","font-size":9.5});
   }
@@ -3497,13 +3779,13 @@ function drawSpread(host){
 function rose(st,S){
   const R=S*0.44, c=S/2;
   const s=E("svg",{viewBox:`0 0 ${S} ${S}`,"aria-hidden":"true"});
-  E("circle",{cx:c,cy:c,r:R,fill:"none",stroke:SOFT,"stroke-width":1},s);
+  E("circle",{cx:c,cy:c,r:R,fill:"none",stroke:P.soft,"stroke-width":1},s);
   FACTORS.forEach((f,i)=>{
     const v=sub(st,f.k), rr=Math.max(2,v/100*R);
     const n=FACTORS.length, a0=(i/n)*2*Math.PI-Math.PI/2, a1=((i+1)/n)*2*Math.PI-Math.PI/2-0.04;
     const d=`M${c},${c}L${(c+rr*Math.cos(a0)).toFixed(2)},${(c+rr*Math.sin(a0)).toFixed(2)}`+
       `A${rr.toFixed(2)},${rr.toFixed(2)} 0 0 1 ${(c+rr*Math.cos(a1)).toFixed(2)},${(c+rr*Math.sin(a1)).toFixed(2)}Z`;
-    E("path",{d,fill:color(v),stroke:"#9FAAB5","stroke-width":.6},s);
+    E("path",{d,fill:color(v),stroke:P.edge,"stroke-width":.6},s);
   });
   return s;
 }
@@ -3538,12 +3820,12 @@ function drawRanks(host){
     const mp=new Map(); ord.forEach((d,i)=>mp.set(d.a,i+1)); return mp;
   });
   cols.forEach((c,i)=>{
-    E("line",{x1:colX(i),x2:colX(i),y1:m.t-8,y2:H-m.b+8,stroke:SOFT,"stroke-width":1},s);
+    E("line",{x1:colX(i),x2:colX(i),y1:m.t-8,y2:H-m.b+8,stroke:P.soft,"stroke-width":1},s);
     T(s,colX(i),m.t-14,c.label,{"font-size":10.5,
       "text-anchor":i===0?"start":i===cols.length-1?"end":"middle"});
   });
   const lead=byFit().slice(0,3).map(z=>z.a);
-  const LEADC=[INK,WARN,"#2456A6"];
+  const LEADC=[P.ink,P.warn,P.focus];
   const labelsL=[], labelsR=[];
   STATES.forEach(st=>{
     const idx=lead.indexOf(st.a);
@@ -3553,13 +3835,13 @@ function drawRanks(host){
       const [x0,y0]=pts[i-1],[x1,y1]=pts[i],mx=(x0+x1)/2;
       d+=`C${mx},${y0} ${mx},${y1} ${x1},${y1}`;
     }
-    const line=E("path",{d,fill:"none",stroke:idx>=0?LEADC[idx]:"#C0C8D0",
+    const line=E("path",{d,fill:"none",stroke:idx>=0?LEADC[idx]:P.quiet,
       "stroke-width":idx>=0?2.6:1.1,"stroke-opacity":idx>=0?1:.9,
       "stroke-linecap":"round"},s);
     bindState(line,st.a);
     if(idx>=0){
       pts.forEach(pt=>E("circle",{cx:pt[0],cy:pt[1],r:3.6,fill:LEADC[idx],
-        stroke:PANEL,"stroke-width":1.6,"pointer-events":"none"},s));
+        stroke:P.panel,"stroke-width":1.6,"pointer-events":"none"},s));
       labelsL.push({y:pts[0][1],text:st.n,c:LEADC[idx],x:pts[0][0]-9});
       labelsR.push({y:pts[pts.length-1][1],text:"#"+maps[cols.length-1].get(st.a),
         c:LEADC[idx],x:pts[pts.length-1][0]+9});
@@ -3626,7 +3908,7 @@ function drawFlow(host){
       const d=`M${x0},${y0}C${mx},${y0} ${mx},${y1} ${x1},${y1}`+
               `L${x1},${y1+hB}C${mx},${y1+hB} ${mx},${y0+hA} ${x0},${y0+hA}Z`;
       const mean=g.list.reduce((t,z)=>t+fitOf(z),0)/g.list.length;
-      const rib=E("path",{d,fill:scored()?color(mean):SOFT,"fill-opacity":.5},s);
+      const rib=E("path",{d,fill:scored()?fitColor(mean):P.soft,"fill-opacity":.5},s);
       rib.style.cursor="pointer";
       rib.addEventListener("mousemove",e=>{
         rib.setAttribute("fill-opacity",".8");
@@ -3647,12 +3929,12 @@ function drawFlow(host){
       {"font-size":10.5,"text-anchor":si===2?"end":"start"});
     stg.cats.forEach(c=>{
       const N=nodes[si][c]; if(!N||N.h<=0) return;
-      E("rect",{x:colX[si],y:N.y0,width:nodeW,height:N.h,rx:1,fill:INK},s);
+      E("rect",{x:colX[si],y:N.y0,width:nodeW,height:N.h,rx:1,fill:P.ink},s);
       const right=si!==2;
       const short=c.replace(" modeled concerns","").replace("No active state posture","No posture");
       T(s,right?colX[si]+nodeW+8:colX[si]-8,N.y0+N.h/2+4,`${short} · ${N.n}`,
-        {"text-anchor":right?"start":"end","font-size":11,fill:INK,
-         style:"paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round"});
+        {"text-anchor":right?"start":"end","font-size":11,fill:P.ink,
+         style:`paint-order:stroke;stroke:${P.panel};stroke-width:3.5px;stroke-linejoin:round`});
     });
   });
 }
@@ -3697,22 +3979,22 @@ function drawUncertainty(host){
   const s=SV(host,W,H);
   const x=r=>m.l+(r-1)/49*(W-m.l-m.r);
   for(let r=1;r<=50;r+=7){
-    E("line",{x1:x(r),x2:x(r),y1:m.t-6,y2:H-m.b,stroke:SOFT,"stroke-width":1},s);
+    E("line",{x1:x(r),x2:x(r),y1:m.t-6,y2:H-m.b,stroke:P.soft,"stroke-width":1},s);
     T(s,x(r),m.t-13,"#"+r,{"text-anchor":"middle","font-size":10});
   }
   T(s,m.l,H-m.b+17,`rank across ${N} random variations on your priorities`,{"font-size":10.5});
   rows.forEach((d,i)=>{
     const y=m.t+i*rowH+rowH/2;
-    E("line",{x1:x(d.lo),x2:x(d.hi),y1:y,y2:y,stroke:RULE,"stroke-width":1.4},s);
+    E("line",{x1:x(d.lo),x2:x(d.hi),y1:y,y2:y,stroke:P.rule,"stroke-width":1.4},s);
     const counts=new Map();
     d.all.forEach(r=>counts.set(r,(counts.get(r)||0)+1));
     const mx=Math.max(...counts.values());
     counts.forEach((c,r)=>{
-      E("rect",{x:x(r)-1.5,y:y-4.5,width:3,height:9,rx:1,fill:MUTED,
+      E("rect",{x:x(r)-1.5,y:y-4.5,width:3,height:9,rx:1,fill:P.muted,
         "fill-opacity":.18+.72*(c/mx)},s);
     });
-    E("rect",{x:x(d.med)-1.3,y:y-7,width:2.6,height:14,fill:INK},s);
-    T(s,m.l-10,y+4,d.st.n,{"text-anchor":"end","font-size":11,fill:INK});
+    E("rect",{x:x(d.med)-1.3,y:y-7,width:2.6,height:14,fill:P.ink},s);
+    T(s,m.l-10,y+4,d.st.n,{"text-anchor":"end","font-size":11,fill:P.ink});
     const hit=E("rect",{x:0,y:y-rowH/2,width:W,height:rowH,fill:"transparent"},s);
     bindState(hit,d.st.a);
   });
@@ -3721,8 +4003,8 @@ function drawUncertainty(host){
     while(live.firstChild) live.removeChild(live.firstChild);
     const mp=hopRuns[hopFrame%hopRuns.length];
     rows.forEach((d,i)=>{
-      E("circle",{cx:x(mp.get(d.st.a)),cy:m.t+i*rowH+rowH/2,r:4,fill:WARN,
-        stroke:PANEL,"stroke-width":1.4},live);
+      E("circle",{cx:x(mp.get(d.st.a)),cy:m.t+i*rowH+rowH/2,r:4,fill:P.warn,
+        stroke:P.panel,"stroke-width":1.4},live);
     });
     hopFrame++;
   };
@@ -3742,15 +4024,15 @@ function drawCount(host){
   const s=SV(host,W,H+6);
   let y=m.t;
   groups.forEach(g=>{
-    T(s,m.l-16,y+14,g.p,{"text-anchor":"end","font-size":11,fill:INK});
+    T(s,m.l-16,y+14,g.p,{"text-anchor":"end","font-size":11,fill:P.ink});
     T(s,m.l-16,y+29,g.list.length+" states",{"text-anchor":"end","font-size":10.5});
     g.list.forEach((st,i)=>{
       const cx=m.l+(i%per)*(uw+cg), cy=y+Math.floor(i/per)*(uh+rg);
       const gg=E("g",{},s);
       E("rect",{x:cx,y:cy,width:uw,height:uh,rx:2,fill:fillFor(st),
-        stroke:RULE,"stroke-width":1},gg);
+        stroke:P.rule,"stroke-width":1},gg);
       for(let k=0;k<3;k++)
-        E("rect",{x:cx+4,y:cy+6+k*9,width:uw-8,height:3.5,rx:1,fill:PANEL,
+        E("rect",{x:cx+4,y:cy+6+k*9,width:uw-8,height:3.5,rx:1,fill:P.panel,
           "fill-opacity":.75},gg);
       if(st.tag) E("rect",{x:cx,y:cy,width:uw,height:uh,rx:2,fill:"url(#fighatch)"},gg);
       T(s,cx+uw/2,cy+uh+11,st.a,{"text-anchor":"middle","font-size":9.5});
@@ -3765,9 +4047,9 @@ function glyph(st,S){
   const c=S/2, maxR=S*0.40;
   const s=E("svg",{viewBox:`0 0 ${S} ${S}`,"aria-hidden":"true"});
   const stemH=fitOf(st)/100*(S*0.28);
-  E("line",{x1:c,y1:S-3,x2:c,y2:S-3-stemH,stroke:INK,"stroke-width":1.8,
+  E("line",{x1:c,y1:S-3,x2:c,y2:S-3-stemH,stroke:P.ink,"stroke-width":1.8,
     "stroke-linecap":"round"},s);
-  E("line",{x1:c-S*0.06,y1:S-3,x2:c+S*0.06,y2:S-3,stroke:INK,"stroke-width":1.8,
+  E("line",{x1:c-S*0.06,y1:S-3,x2:c+S*0.06,y2:S-3,stroke:P.ink,"stroke-width":1.8,
     "stroke-linecap":"round"},s);
   const pr=2.5+(1-Math.max(0,Math.min(1,(priceScale.high-st.p)/(priceScale.high-priceScale.low))))*8;
   E("circle",{cx:c,cy:c,r:pr,fill:"#C4B56C",stroke:"#958F78","stroke-width":1.2},s);
@@ -3775,17 +4057,17 @@ function glyph(st,S){
     const v=sub(st,f.k), a=(i/FACTORS.length)*2*Math.PI-Math.PI/2;
     const r0=pr+2, r1=r0+v/100*(maxR-r0);
     E("line",{x1:c+r0*Math.cos(a),y1:c+r0*Math.sin(a),x2:c+r1*Math.cos(a),
-      y2:c+r1*Math.sin(a),stroke:MUTED,"stroke-width":2.4,
+      y2:c+r1*Math.sin(a),stroke:P.muted,"stroke-width":2.4,
       "stroke-linecap":"round"},s);
   });
   for(let k=0;k<(st.mo||0);k++){
     const a=-Math.PI/2+(k-((st.mo-1)/2))*0.2;
     E("line",{x1:c+(maxR+3)*Math.cos(a),y1:c+(maxR+3)*Math.sin(a),
       x2:c+(maxR+7)*Math.cos(a),y2:c+(maxR+7)*Math.sin(a),
-      stroke:MUTED,"stroke-width":1.4,"stroke-linecap":"round"},s);
+      stroke:P.muted,"stroke-width":1.4,"stroke-linecap":"round"},s);
   }
   if(st.tag) E("path",{d:`M${c},${S-3-stemH}L${c+9},${S-3-stemH+3.5}L${c},${S-3-stemH+7}Z`,
-    fill:WARN},s);
+    fill:P.warn},s);
   return s;
 }
 function drawGlyphs(host){
@@ -3833,7 +4115,7 @@ function drawScreens(host){
   E("path",{d:top+`L${x(n-1)},${mid+half(n-1)}`+bot+"Z",fill:"#C4B56C",
     stroke:"#958F78","stroke-width":1.1},s);
   stages.forEach((st,i)=>{
-    E("line",{x1:x(i),x2:x(i),y1:m.t-38,y2:m.t+bandH+50,stroke:SOFT,
+    E("line",{x1:x(i),x2:x(i),y1:m.t-38,y2:m.t+bandH+50,stroke:P.soft,
       "stroke-width":1,"stroke-dasharray":"2 3"},s);
     const anchor=i===0?"start":i===n-1?"end":"middle";
     const words=st.g.label.split(" ");
@@ -3842,7 +4124,7 @@ function drawScreens(host){
     lines.push(line.trim());
     lines.forEach((ln,li)=>T(s,x(i),m.t-40+li*13,ln,{"text-anchor":anchor,"font-size":10.5}));
     T(s,x(i)+(i===0?8:i===n-1?-8:0),mid+6,st.kept.length,
-      {"text-anchor":"middle","font-size":19,"font-weight":600,fill:INK});
+      {"text-anchor":"middle","font-size":19,"font-weight":600,fill:P.ink});
     if(st.dropped.length){
       const shown=st.dropped.slice(0,12);
       shown.forEach((d,k)=>{
@@ -3853,28 +4135,28 @@ function drawScreens(host){
       if(st.dropped.length>shown.length)
         T(s,x(i)-24,m.t+bandH+16+6*12.5,"+"+(st.dropped.length-shown.length)+" more",{"font-size":10});
       T(s,x(i),m.t+bandH+8,"−"+st.dropped.length,
-        {"text-anchor":"middle","font-size":11.5,"font-weight":600,fill:WARN});
+        {"text-anchor":"middle","font-size":11.5,"font-weight":600,fill:P.warn});
     }
   });
   const sy=m.t+bandH+92+stripH, prices=stages.map(d=>d.med).filter(v=>v!==null);
   if(prices.length){
     const plo=Math.min(...prices)-0.5, phi=Math.max(...prices)+0.5;
     const py=v=>sy-((v-plo)/(phi-plo||1))*(stripH-26);
-    E("line",{x1:m.l,x2:W-m.r,y1:sy,y2:sy,stroke:RULE,"stroke-width":1},s);
+    E("line",{x1:m.l,x2:W-m.r,y1:sy,y2:sy,stroke:P.rule,"stroke-width":1},s);
     T(s,m.l,sy+18,"median industrial price among the survivors, ¢/kWh",{"font-size":10.5});
     let pd="";
     stages.forEach((st,i)=>{ if(st.med===null) return;
       pd+=(pd?"L":"M")+x(i)+","+py(st.med).toFixed(1); });
-    E("path",{d:pd,fill:"none",stroke:INK,"stroke-width":1.5},s);
+    E("path",{d:pd,fill:"none",stroke:P.ink,"stroke-width":1.5},s);
     stages.forEach((st,i)=>{ if(st.med===null) return;
-      E("line",{x1:x(i),x2:x(i),y1:py(st.med),y2:sy,stroke:SOFT,"stroke-width":1},s);
-      E("circle",{cx:x(i),cy:py(st.med),r:3.2,fill:INK,stroke:PANEL,"stroke-width":1.3},s);
+      E("line",{x1:x(i),x2:x(i),y1:py(st.med),y2:sy,stroke:P.soft,"stroke-width":1},s);
+      E("circle",{cx:x(i),cy:py(st.med),r:3.2,fill:P.ink,stroke:P.panel,"stroke-width":1.3},s);
       T(s,x(i),py(st.med)-9,st.med.toFixed(2)+"¢",
-        {"text-anchor":"middle","font-size":10.5,"font-weight":600,fill:INK});
+        {"text-anchor":"middle","font-size":10.5,"font-weight":600,fill:P.ink});
     });
   }
   T(s,W-m.r,H-8,liveSet.length?"clearing all six: "+liveSet.map(z=>z.a).join(" "):"no survivors",
-    {"text-anchor":"end","font-size":11,"font-weight":600,fill:"#7A6E42"});
+    {"text-anchor":"end","font-size":11,"font-weight":600,fill:P.sand});
 }
 
 /* ------------------------------------------------------------------ registry */
@@ -3990,7 +4272,10 @@ window.addEventListener("resize",()=>{
 return {draw:requestDraw,setView,active:()=>active,has:id=>VIEWS.some(v=>v.id===id)};
 })();
 // Start-up: score, read the address, draw, then wire the dataset download.
-function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); renderTiers(); renderDetail(); renderTable(); renderScatter(); FIGS.draw(); scheduleURL(); }
+function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); renderTiers(); renderDetail(); renderTable(); renderCompare(); renderScatter(); FIGS.draw(); scheduleURL(); }
+// Redraw when the operating system flips between light and dark: the SVG and
+// canvas drawings read their colors from the stylesheet at draw time.
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{ readTheme(); paint(); renderScatter(); FIGS.draw(); });
 // on a phone the priorities panel starts collapsed so the map and results stay reachable
 (function(){
   const mq=window.matchMedia("(max-width:900px)"), panel=document.getElementById("wpanel");
@@ -4000,9 +4285,11 @@ function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); rende
 // Read the address first, score, then show the requested figure (figures read
 // scores, so they cannot be drawn before the first compute), then normalize
 // the address so a copied link is canonical.
-const initialFigure=readURLState();
+const initial=readURLState();
 refresh();
-if(initialFigure && FIGS.has(initialFigure)) FIGS.setView(initialFigure);
+if(initial.figure && FIGS.has(initial.figure)) FIGS.setView(initial.figure);
+// A linked profile opens last, once every figure and rank it shows exists.
+if(initial.profile) select(initial.profile);
 urlReady=true; writeURL();
 
 // --- dataset release ---

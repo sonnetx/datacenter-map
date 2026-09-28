@@ -1,6 +1,7 @@
 import csv as csv_module
 import io
 import json
+import os
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -8,7 +9,10 @@ from tempfile import TemporaryDirectory
 ROOT = Path(__file__).resolve().parents[1]
 
 with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright() as p:
-    b=p.chromium.launch(headless=True)
+    # CHROME_PATH points at a system Chrome or Chromium when the Playwright
+    # download is unavailable, for example in a locked-down container.
+    b=p.chromium.launch(headless=True,executable_path=os.environ.get('CHROME_PATH') or None,
+                        args=['--no-sandbox'] if os.environ.get('CHROME_PATH') else [])
     page=b.new_page(viewport={'width':1440,'height':1000})
     page.route('https://**/*',lambda r:r.abort())
     errors=[]
@@ -88,6 +92,17 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     assert page.locator(f'#tbody tr:first-child td:nth-child({pb_col})').inner_text()=='High'
     page.locator('th[data-k=rules] button').click()
     assert page.evaluate('Object.fromEntries(STATES.map(s=>[s.a,s.rank]))')==ranks
+    # Rank range repeats each profile's sensitivity band and sorts narrow first.
+    swing_col=page.evaluate('[...document.querySelectorAll("#thead th")].findIndex(t=>t.dataset.k==="swing")+1')
+    page.locator('th[data-k=swing] button').click()
+    first=page.locator('#tbody tr').first.get_attribute('data-a')
+    assert page.evaluate(f'BY["{first}"].rankMax-BY["{first}"].rankMin')==page.evaluate('Math.min(...STATES.map(s=>s.rankMax-s.rankMin))')
+    cell=page.locator(f'#tbody tr:first-child td:nth-child({swing_col})').inner_text()
+    assert cell==page.evaluate(f'(s=>s.rankMin===s.rankMax?String(s.rank):s.rankMin+"–"+s.rankMax)(BY["{first}"])'),cell
+    # The state column stays put while the wide table scrolls sideways.
+    page.evaluate('document.querySelector(".tablecard").scrollLeft=400')
+    assert page.evaluate('document.querySelector("#tbody td:nth-child(2)").getBoundingClientRect().left-document.querySelector(".tablecard").getBoundingClientRect().left')<80
+    page.evaluate('document.querySelector(".tablecard").scrollLeft=0')
     # The dataset is CC BY and in the repository, so the download asks nothing
     # of the visitor. Any form here would be a regression.
     assert page.locator('#dataset form, #dataset input, #dataset textarea').count()==0
@@ -125,10 +140,31 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     page.locator('#shortlist-only').check()
     assert 'Your shortlist is empty' in page.locator('#tbody').inner_text()
     assert page.locator('#export-comparison').is_disabled()
-    for state in ['VA','AZ']:
-        page.locator('#shortlist-picker').select_option(state)
+    # The side-by-side card needs two states; one saved state is not a comparison.
+    assert page.locator('#compare').is_hidden()
+    page.locator('#shortlist-picker').select_option('VA')
+    assert page.locator('#compare').is_hidden()
+    page.locator('#shortlist-picker').select_option('AZ')
+    assert page.locator('#compare').is_visible()
     assert page.locator('#tbody tr[data-a]').count()==2
     assert page.evaluate('Object.fromEntries(STATES.map(s=>[s.a,s.rank]))')==ranks
+    # Columns follow the ranking, every factor has a row, and each scored row
+    # marks its most favorable cell without ever marking context rows.
+    order=page.evaluate('[...document.querySelectorAll("#compare .cmp-state")].map(b=>b.dataset.a)')
+    assert order==sorted(order,key=lambda a:ranks[a]),order
+    assert page.locator('#compare tbody tr').count()==5+9+3
+    assert page.locator('#compare tbody tr').first.locator('td.best').count()==1
+    assert page.locator('#compare tbody tr:last-child td.best').count()==0
+    assert 'Widest gap' in page.locator('#compare .cmp-summary').inner_text()
+    assert page.evaluate('document.getElementById("compare").scrollWidth<=document.getElementById("compare").clientWidth+1')
+    page.locator('#compare .cmp-state[data-a=AZ]').click()
+    assert page.locator('#profile-title').inner_text()=='Arizona · State profile'
+    page.keyboard.press('Escape')
+    # Removing from the card is the same shortlist edit as removing a chip.
+    page.locator('#shortlist-picker').select_option('ND')
+    assert page.locator('#compare .cmp-state').count()==3
+    page.locator('#compare .cmp-remove[data-remove=ND]').click()
+    assert page.locator('#compare .cmp-state').count()==2 and page.evaluate('[...shortlist]')==['VA','AZ']
     with page.expect_download() as caught:
         page.locator('#export-comparison').click()
     comparison=list(csv_module.DictReader(io.StringIO(Path(caught.value.path()).read_text())))
@@ -141,6 +177,7 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     assert page.locator('#save-state').get_attribute('aria-pressed')=='false'
     page.keyboard.press('Escape')
     assert page.locator('#tbody tr[data-a]').count()==1
+    assert page.locator('#compare').is_hidden()
     page.locator('[data-remove=AZ]').click()
     assert page.locator('#export-comparison').is_disabled()
     page.locator('#shortlist-only').uncheck()
@@ -207,6 +244,40 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     assert page.locator('#tiers li').count()==0
     page.locator('#reset-model').click()
 
+    # Stretching the color scale changes fills and the legend ends, travels in
+    # the address, and never changes a score or a rank.
+    fixed_fill=page.evaluate('paths.ND.style.fill')
+    page.locator('#scale-toggle [data-k=stretch]').click()
+    assert page.evaluate('colorScale')=='stretch'
+    assert page.evaluate('paths.ND.style.fill')!=fixed_fill
+    lo,hi=page.evaluate('fitDomain()')
+    assert page.locator('#ramp-lo').inner_text()==f'Lower fit · {lo:.0f}' and page.locator('#ramp-hi').inner_text()==f'{hi:.0f} · Higher fit'
+    assert page.evaluate('Object.fromEntries(STATES.map(s=>[s.a,s.rank]))')==ranks
+    page.wait_for_function('new URLSearchParams(location.search).get("k")==="stretch"')
+    page.locator('#scale-toggle [data-k=fixed]').click()
+    assert page.evaluate('paths.ND.style.fill')==fixed_fill
+    assert page.locator('#ramp-lo').inner_text()=='Lower fit · 0'
+    page.wait_for_function('!new URLSearchParams(location.search).has("k")')
+
+    # An open profile joins the address and leaves it on close, and Previous
+    # and Next walk the ranking from inside the dialog.
+    leader=page.evaluate('rankedStates()[0].a')
+    page.locator('#state-picker').select_option(leader)
+    page.wait_for_function(f'new URLSearchParams(location.search).get("st")==="{leader}"')
+    assert page.locator('#profile-prev').is_disabled()
+    assert page.locator('#profile-next').is_enabled()
+    page.locator('#profile-next').click()
+    assert page.evaluate('selected')==page.evaluate('rankedStates()[1].a')
+    assert page.locator('#profile-prev').is_enabled()
+    page.keyboard.press('Alt+ArrowLeft')
+    assert page.evaluate('selected')==leader
+    assert 'largest single move' in page.locator('#detail .sensitivity').inner_text() or 'No single one-level change' in page.locator('#detail .sensitivity').inner_text()
+    page.locator('#profile-link').click()
+    page.wait_for_function('document.getElementById("profile-link-status").textContent.length>0')
+    page.keyboard.press('Escape')
+    page.wait_for_function('!new URLSearchParams(location.search).has("st")')
+    assert page.locator('#profile-link-status').inner_text()==''
+
     # The address reproduces a scenario, drops what is at its default, and
     # survives garbage without a script error.
     uri=(ROOT / 'index.html').as_uri()
@@ -233,13 +304,35 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     page.wait_for_function('new URLSearchParams(location.search).get("w")==="40.10.10.10.10.10.10.10.0"')
     page.goto(uri+'?z=solar')
     assert page.evaluate('weights.sr')==35 and page.evaluate('location.search')=='?z=solar'
-    page.goto(uri+'?z=huge&w=abc&v=nope&r=maybe&c=9&f=zzz&s=XX,va&p=colo')
+    # A profile link opens the state on top of the scenario it came with.
+    page.goto(uri+'?k=stretch&f=cartogram&st=tx')
+    assert page.locator('#state-dialog').evaluate('(e)=>e.open')
+    assert page.locator('#profile-title').inner_text()=='Texas · State profile'
+    assert page.evaluate('colorScale')=='stretch' and page.evaluate('FIGS.active()')=='cartogram'
+    page.wait_for_function('location.search==="?f=cartogram&k=stretch&st=TX"')
+    page.keyboard.press('Escape')
+    page.wait_for_function('location.search==="?f=cartogram&k=stretch"')
+    page.goto(uri+'?z=huge&w=abc&v=nope&r=maybe&c=9&f=zzz&k=neon&st=ZZ&s=XX,va&p=colo')
     assert page.evaluate('size')=='hyper' and page.evaluate('weights.x')==30
+    assert page.evaluate('colorScale')=='fixed' and page.locator('#state-dialog').evaluate('(e)=>!e.open')
     assert page.evaluate('view')=='all' and page.evaluate('FIGS.active()')=='map'
     assert page.evaluate('[...shortlist]')==['VA']
     assert page.evaluate('location.search')=='?w=15.15.10.10.5.10.5.30.0&s=VA'
     page.goto(uri)
     assert page.evaluate('location.search')==''
+
+    # Dark scheme: the figures read their colors from the stylesheet, so every
+    # one of them redraws without error and the panel really is dark.
+    page.emulate_media(color_scheme='dark')
+    page.reload()
+    assert page.evaluate('getComputedStyle(document.body).backgroundColor')=='rgb(16, 21, 27)'
+    assert page.evaluate('THEME.ink')!='#18212B'
+    for figure in page.evaluate('[...document.querySelectorAll("#viewbar button")].map(b=>b.dataset.v)'):
+        page.evaluate(f'FIGS.setView("{figure}")')
+    assert page.locator('#scsvg .dot circle').first.get_attribute('stroke')==page.evaluate('THEME.panel')
+    page.emulate_media(color_scheme='light')
+    page.reload()
+    assert page.evaluate('THEME.ink')=='#18212B'
 
     page.set_viewport_size({'width':390,'height':844})
     page.reload()

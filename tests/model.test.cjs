@@ -153,3 +153,38 @@ test('every size profile and preset uses slider steps and each profile sums to 1
   assert.equal(run('Object.entries(SIZES).every(([k,z])=>(k==="solar")===(z.weights.sr>0))'), true);
   assert.equal(run('SIZES.gw.weights.pw'), 35);
 });
+
+test('the fit color domain is fixed by default and stretches to the scored range on request', () => {
+  const run = model([{...neutral,a:'A',p:5},{...neutral,a:'B',p:10},{...neutral,a:'C',p:35}]);
+  assert.equal(run('JSON.stringify(fitDomain())'), '[0,100]');
+  assert.equal(run('colorScale'), 'fixed');
+  // Factor colors and the ramp never move with the domain.
+  assert.equal(run('color(0)===ramp(0) && color(100)===ramp(1) && color(50)===ramp(0.5)'), true);
+  assert.equal(run('fitColor(BY.A.total)===color(BY.A.total)'), true);
+  run('colorScale="stretch"');
+  const [lo, hi] = JSON.parse(run('JSON.stringify(fitDomain())'));
+  assert.equal(lo, run('BY.C.total'));
+  assert.equal(hi, run('BY.A.total'));
+  assert.equal(run('fitColor(BY.C.total)===ramp(0) && fitColor(BY.A.total)===ramp(1)'), true);
+  assert.notEqual(run('fitColor(BY.B.total)'), run('color(BY.B.total)'));
+  // A single distinct score, or no weights, falls back to the fixed domain.
+  const flat = model([{...neutral,a:'A'},{...neutral,a:'B'}]);
+  flat('colorScale="stretch"');
+  assert.equal(flat('JSON.stringify(fitDomain())'), '[0,100]');
+  run('Object.keys(weights).forEach(k=>weights[k]=0);compute()');
+  assert.equal(run('JSON.stringify(fitDomain())'), '[0,100]');
+});
+
+test('sensitivity names the single one-level change that moves the rank furthest', () => {
+  const run = model([{...neutral,a:'A',p:19},{...neutral,a:'B',p:20},{...neutral,a:'C',p:21}]);
+  assert.equal(run('BY.B.swing!==null'), true);
+  assert.equal(run('Math.abs(BY.B.swing.rank-BY.B.rank)'), 1);
+  assert.equal(run('BY.B.swing.rank===BY.B.rankMin || BY.B.swing.rank===BY.B.rankMax'), true);
+  assert.equal(run('FACTORS.some(f=>f.k===BY.B.swing.k && !MEASURED.has(f.k))'), true);
+  assert.equal(run('BY.B.swing.value===BY.B[BY.B.swing.k]+BY.B.swing.delta'), true);
+  // Only the measured factor weighted: no analyst rating can move the rank.
+  run('weights=Object.fromEntries(FACTORS.map(f=>[f.k,f.k==="p"?1:0]));compute()');
+  assert.equal(run('BY.B.swing'), null);
+  run('Object.keys(weights).forEach(k=>weights[k]=0);compute()');
+  assert.equal(run('STATES.every(s=>s.swing===null)'), true);
+});

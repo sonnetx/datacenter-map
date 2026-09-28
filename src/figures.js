@@ -8,7 +8,9 @@
 */
 const FIGS = (function(){
 const NS="http://www.w3.org/2000/svg";
-const INK="#18212B", MUTED="#5C6773", RULE="#D3DAE1", SOFT="#E6EAEE", WARN="#B5432A", PANEL="#FFFFFF";
+// Colors come from the stylesheet at draw time (see readTheme in app.js), so
+// every figure follows the light or dark scheme without its own palette.
+const P=THEME;
 const viewport=document.getElementById("viewport");
 const viewbar=document.getElementById("viewbar");
 const viewnote=document.getElementById("viewnote");
@@ -31,7 +33,7 @@ function E(tag,a,parent){
   return n;
 }
 function T(parent,x,y,str,a){
-  const n=E("text",Object.assign({x,y,"font-size":11,fill:MUTED},a||{}),parent);
+  const n=E("text",Object.assign({x,y,"font-size":11,fill:P.muted},a||{}),parent);
   n.textContent=str; return n;
 }
 function SV(host,w,h){
@@ -46,7 +48,7 @@ function bindState(node,abbr){
   node.addEventListener("click",()=>select(abbr));
 }
 const scored=()=>hasWeights();
-const fillFor=s=>scored()?color(s.total):SOFT;
+const fillFor=s=>scored()?fitColor(s.total):P.soft;
 const fitOf=s=>scored()?s.total:0;
 function byFit(){
   return [...STATES].sort((a,b)=>scored()?compareFit(a,b):a.a.localeCompare(b.a));
@@ -109,11 +111,11 @@ function drawRelief(host){
         ctx.closePath();
       });
     };
-    ctx.fillStyle="#B9C2CB";
+    ctx.fillStyle=P.wall;
     for(let d=h;d>=0;d-=1){ trace(-d,g.solid); ctx.fill(); }
     trace(-h,g.rings);
     ctx.fillStyle=fillFor(s); ctx.fill();
-    ctx.strokeStyle=PANEL; ctx.lineWidth=0.8; ctx.stroke();
+    ctx.strokeStyle=P.panel; ctx.lineWidth=0.8; ctx.stroke();
   });
 }
 
@@ -131,7 +133,7 @@ function drawCartogram(host){
       const a=Math.PI/180*(60*i-90);
       pts+=`${(cx+(R-1.5)*Math.cos(a)).toFixed(1)},${(cy+(R-1.5)*Math.sin(a)).toFixed(1)} `;
     }
-    const poly=E("polygon",{points:pts.trim(),fill:fillFor(st),stroke:PANEL,
+    const poly=E("polygon",{points:pts.trim(),fill:fillFor(st),stroke:P.panel,
       "stroke-width":1.6},s);
     bindState(poly,st.a);
     if(st.tag) E("polygon",{points:pts.trim(),fill:"url(#fighatch)",stroke:"none",
@@ -150,10 +152,10 @@ function drawPrices(host){
   const x=v=>m.l+(v-lo)/(hi-lo)*(W-m.l-m.r), base=H-m.b;
   const stepTick=(hi-lo)>40?10:5;
   for(let t=Math.ceil(lo/stepTick)*stepTick;t<=hi;t+=stepTick){
-    E("line",{x1:x(t),x2:x(t),y1:m.t,y2:base,stroke:SOFT,"stroke-width":1},s);
+    E("line",{x1:x(t),x2:x(t),y1:m.t,y2:base,stroke:P.soft,"stroke-width":1},s);
     T(s,x(t),base+17,t+"¢",{"text-anchor":"middle","font-size":10.5});
   }
-  E("line",{x1:m.l,x2:W-m.r,y1:base,y2:base,stroke:RULE,"stroke-width":1},s);
+  E("line",{x1:m.l,x2:W-m.r,y1:base,y2:base,stroke:P.rule,"stroke-width":1},s);
   T(s,m.l,base+35,"EIA 2024 average industrial price, cents per kilowatt-hour",
     {"font-size":10.5});
   const r=7, placed=[], sorted=[...STATES].sort((a,b)=>a.p-b.p);
@@ -166,12 +168,12 @@ function drawPrices(host){
       row++;
     }
     placed.push({cx,cy});
-    const c=E("circle",{cx,cy,r,fill:fillFor(st),stroke:"#9FAAB5","stroke-width":1},s);
+    const c=E("circle",{cx,cy,r,fill:fillFor(st),stroke:P.edge,"stroke-width":1},s);
     bindState(c,st.a);
   });
   ["HI","AK","CT","RI","MA","ID","WY","LA","WA","TX"].forEach(a=>{
     const i=sorted.findIndex(z=>z.a===a); if(i<0) return;
-    T(s,placed[i].cx,placed[i].cy-r-5,a,{"text-anchor":"middle","font-size":10,fill:INK});
+    T(s,placed[i].cx,placed[i].cy-r-5,a,{"text-anchor":"middle","font-size":10,fill:P.ink});
   });
 }
 
@@ -183,7 +185,7 @@ function drawSpread(host){
   const x=v=>m.l+v/100*(W-m.l-m.r);
   const rowH=(H-m.t-m.b)/FACTORS.length, amp=rowH*2.4, bw=6;
   for(let t=0;t<=100;t+=25){
-    E("line",{x1:x(t),x2:x(t),y1:m.t,y2:H-m.b,stroke:SOFT,"stroke-width":1},s);
+    E("line",{x1:x(t),x2:x(t),y1:m.t,y2:H-m.b,stroke:P.soft,"stroke-width":1},s);
     T(s,x(t),H-m.b+17,t,{"text-anchor":"middle","font-size":10.5});
   }
   T(s,m.l,H-m.b+34,"normalized score, 0 unfavourable to 100 favourable",{"font-size":10.5});
@@ -204,9 +206,9 @@ function drawSpread(host){
     let path=`M${x(0)},${base}`;
     d.pts.forEach((v,g)=>{ path+=`L${x(g).toFixed(1)},${(base-v/gPeak*amp).toFixed(1)}`; });
     path+=`L${x(100)},${base}Z`;
-    E("path",{d:path,fill:color(i/(FACTORS.length-1)*70+15),"fill-opacity":.9,
-      stroke:PANEL,"stroke-width":1.2,"stroke-linejoin":"round"},s);
-    T(s,m.l-12,base-2,d.f.name,{"text-anchor":"end","font-size":11.5,fill:INK});
+    E("path",{d:path,fill:ramp(i/(FACTORS.length-1)*0.7+0.15),"fill-opacity":.9,
+      stroke:P.panel,"stroke-width":1.2,"stroke-linejoin":"round"},s);
+    T(s,m.l-12,base-2,d.f.name,{"text-anchor":"end","font-size":11.5,fill:P.ink});
     T(s,m.l-12,base+11,MEASURED.has(d.f.k)?"measured":"analyst rating",
       {"text-anchor":"end","font-size":9.5});
   }
@@ -216,13 +218,13 @@ function drawSpread(host){
 function rose(st,S){
   const R=S*0.44, c=S/2;
   const s=E("svg",{viewBox:`0 0 ${S} ${S}`,"aria-hidden":"true"});
-  E("circle",{cx:c,cy:c,r:R,fill:"none",stroke:SOFT,"stroke-width":1},s);
+  E("circle",{cx:c,cy:c,r:R,fill:"none",stroke:P.soft,"stroke-width":1},s);
   FACTORS.forEach((f,i)=>{
     const v=sub(st,f.k), rr=Math.max(2,v/100*R);
     const n=FACTORS.length, a0=(i/n)*2*Math.PI-Math.PI/2, a1=((i+1)/n)*2*Math.PI-Math.PI/2-0.04;
     const d=`M${c},${c}L${(c+rr*Math.cos(a0)).toFixed(2)},${(c+rr*Math.sin(a0)).toFixed(2)}`+
       `A${rr.toFixed(2)},${rr.toFixed(2)} 0 0 1 ${(c+rr*Math.cos(a1)).toFixed(2)},${(c+rr*Math.sin(a1)).toFixed(2)}Z`;
-    E("path",{d,fill:color(v),stroke:"#9FAAB5","stroke-width":.6},s);
+    E("path",{d,fill:color(v),stroke:P.edge,"stroke-width":.6},s);
   });
   return s;
 }
@@ -257,12 +259,12 @@ function drawRanks(host){
     const mp=new Map(); ord.forEach((d,i)=>mp.set(d.a,i+1)); return mp;
   });
   cols.forEach((c,i)=>{
-    E("line",{x1:colX(i),x2:colX(i),y1:m.t-8,y2:H-m.b+8,stroke:SOFT,"stroke-width":1},s);
+    E("line",{x1:colX(i),x2:colX(i),y1:m.t-8,y2:H-m.b+8,stroke:P.soft,"stroke-width":1},s);
     T(s,colX(i),m.t-14,c.label,{"font-size":10.5,
       "text-anchor":i===0?"start":i===cols.length-1?"end":"middle"});
   });
   const lead=byFit().slice(0,3).map(z=>z.a);
-  const LEADC=[INK,WARN,"#2456A6"];
+  const LEADC=[P.ink,P.warn,P.focus];
   const labelsL=[], labelsR=[];
   STATES.forEach(st=>{
     const idx=lead.indexOf(st.a);
@@ -272,13 +274,13 @@ function drawRanks(host){
       const [x0,y0]=pts[i-1],[x1,y1]=pts[i],mx=(x0+x1)/2;
       d+=`C${mx},${y0} ${mx},${y1} ${x1},${y1}`;
     }
-    const line=E("path",{d,fill:"none",stroke:idx>=0?LEADC[idx]:"#C0C8D0",
+    const line=E("path",{d,fill:"none",stroke:idx>=0?LEADC[idx]:P.quiet,
       "stroke-width":idx>=0?2.6:1.1,"stroke-opacity":idx>=0?1:.9,
       "stroke-linecap":"round"},s);
     bindState(line,st.a);
     if(idx>=0){
       pts.forEach(pt=>E("circle",{cx:pt[0],cy:pt[1],r:3.6,fill:LEADC[idx],
-        stroke:PANEL,"stroke-width":1.6,"pointer-events":"none"},s));
+        stroke:P.panel,"stroke-width":1.6,"pointer-events":"none"},s));
       labelsL.push({y:pts[0][1],text:st.n,c:LEADC[idx],x:pts[0][0]-9});
       labelsR.push({y:pts[pts.length-1][1],text:"#"+maps[cols.length-1].get(st.a),
         c:LEADC[idx],x:pts[pts.length-1][0]+9});
@@ -345,7 +347,7 @@ function drawFlow(host){
       const d=`M${x0},${y0}C${mx},${y0} ${mx},${y1} ${x1},${y1}`+
               `L${x1},${y1+hB}C${mx},${y1+hB} ${mx},${y0+hA} ${x0},${y0+hA}Z`;
       const mean=g.list.reduce((t,z)=>t+fitOf(z),0)/g.list.length;
-      const rib=E("path",{d,fill:scored()?color(mean):SOFT,"fill-opacity":.5},s);
+      const rib=E("path",{d,fill:scored()?fitColor(mean):P.soft,"fill-opacity":.5},s);
       rib.style.cursor="pointer";
       rib.addEventListener("mousemove",e=>{
         rib.setAttribute("fill-opacity",".8");
@@ -366,12 +368,12 @@ function drawFlow(host){
       {"font-size":10.5,"text-anchor":si===2?"end":"start"});
     stg.cats.forEach(c=>{
       const N=nodes[si][c]; if(!N||N.h<=0) return;
-      E("rect",{x:colX[si],y:N.y0,width:nodeW,height:N.h,rx:1,fill:INK},s);
+      E("rect",{x:colX[si],y:N.y0,width:nodeW,height:N.h,rx:1,fill:P.ink},s);
       const right=si!==2;
       const short=c.replace(" modeled concerns","").replace("No active state posture","No posture");
       T(s,right?colX[si]+nodeW+8:colX[si]-8,N.y0+N.h/2+4,`${short} · ${N.n}`,
-        {"text-anchor":right?"start":"end","font-size":11,fill:INK,
-         style:"paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round"});
+        {"text-anchor":right?"start":"end","font-size":11,fill:P.ink,
+         style:`paint-order:stroke;stroke:${P.panel};stroke-width:3.5px;stroke-linejoin:round`});
     });
   });
 }
@@ -416,22 +418,22 @@ function drawUncertainty(host){
   const s=SV(host,W,H);
   const x=r=>m.l+(r-1)/49*(W-m.l-m.r);
   for(let r=1;r<=50;r+=7){
-    E("line",{x1:x(r),x2:x(r),y1:m.t-6,y2:H-m.b,stroke:SOFT,"stroke-width":1},s);
+    E("line",{x1:x(r),x2:x(r),y1:m.t-6,y2:H-m.b,stroke:P.soft,"stroke-width":1},s);
     T(s,x(r),m.t-13,"#"+r,{"text-anchor":"middle","font-size":10});
   }
   T(s,m.l,H-m.b+17,`rank across ${N} random variations on your priorities`,{"font-size":10.5});
   rows.forEach((d,i)=>{
     const y=m.t+i*rowH+rowH/2;
-    E("line",{x1:x(d.lo),x2:x(d.hi),y1:y,y2:y,stroke:RULE,"stroke-width":1.4},s);
+    E("line",{x1:x(d.lo),x2:x(d.hi),y1:y,y2:y,stroke:P.rule,"stroke-width":1.4},s);
     const counts=new Map();
     d.all.forEach(r=>counts.set(r,(counts.get(r)||0)+1));
     const mx=Math.max(...counts.values());
     counts.forEach((c,r)=>{
-      E("rect",{x:x(r)-1.5,y:y-4.5,width:3,height:9,rx:1,fill:MUTED,
+      E("rect",{x:x(r)-1.5,y:y-4.5,width:3,height:9,rx:1,fill:P.muted,
         "fill-opacity":.18+.72*(c/mx)},s);
     });
-    E("rect",{x:x(d.med)-1.3,y:y-7,width:2.6,height:14,fill:INK},s);
-    T(s,m.l-10,y+4,d.st.n,{"text-anchor":"end","font-size":11,fill:INK});
+    E("rect",{x:x(d.med)-1.3,y:y-7,width:2.6,height:14,fill:P.ink},s);
+    T(s,m.l-10,y+4,d.st.n,{"text-anchor":"end","font-size":11,fill:P.ink});
     const hit=E("rect",{x:0,y:y-rowH/2,width:W,height:rowH,fill:"transparent"},s);
     bindState(hit,d.st.a);
   });
@@ -440,8 +442,8 @@ function drawUncertainty(host){
     while(live.firstChild) live.removeChild(live.firstChild);
     const mp=hopRuns[hopFrame%hopRuns.length];
     rows.forEach((d,i)=>{
-      E("circle",{cx:x(mp.get(d.st.a)),cy:m.t+i*rowH+rowH/2,r:4,fill:WARN,
-        stroke:PANEL,"stroke-width":1.4},live);
+      E("circle",{cx:x(mp.get(d.st.a)),cy:m.t+i*rowH+rowH/2,r:4,fill:P.warn,
+        stroke:P.panel,"stroke-width":1.4},live);
     });
     hopFrame++;
   };
@@ -461,15 +463,15 @@ function drawCount(host){
   const s=SV(host,W,H+6);
   let y=m.t;
   groups.forEach(g=>{
-    T(s,m.l-16,y+14,g.p,{"text-anchor":"end","font-size":11,fill:INK});
+    T(s,m.l-16,y+14,g.p,{"text-anchor":"end","font-size":11,fill:P.ink});
     T(s,m.l-16,y+29,g.list.length+" states",{"text-anchor":"end","font-size":10.5});
     g.list.forEach((st,i)=>{
       const cx=m.l+(i%per)*(uw+cg), cy=y+Math.floor(i/per)*(uh+rg);
       const gg=E("g",{},s);
       E("rect",{x:cx,y:cy,width:uw,height:uh,rx:2,fill:fillFor(st),
-        stroke:RULE,"stroke-width":1},gg);
+        stroke:P.rule,"stroke-width":1},gg);
       for(let k=0;k<3;k++)
-        E("rect",{x:cx+4,y:cy+6+k*9,width:uw-8,height:3.5,rx:1,fill:PANEL,
+        E("rect",{x:cx+4,y:cy+6+k*9,width:uw-8,height:3.5,rx:1,fill:P.panel,
           "fill-opacity":.75},gg);
       if(st.tag) E("rect",{x:cx,y:cy,width:uw,height:uh,rx:2,fill:"url(#fighatch)"},gg);
       T(s,cx+uw/2,cy+uh+11,st.a,{"text-anchor":"middle","font-size":9.5});
@@ -484,9 +486,9 @@ function glyph(st,S){
   const c=S/2, maxR=S*0.40;
   const s=E("svg",{viewBox:`0 0 ${S} ${S}`,"aria-hidden":"true"});
   const stemH=fitOf(st)/100*(S*0.28);
-  E("line",{x1:c,y1:S-3,x2:c,y2:S-3-stemH,stroke:INK,"stroke-width":1.8,
+  E("line",{x1:c,y1:S-3,x2:c,y2:S-3-stemH,stroke:P.ink,"stroke-width":1.8,
     "stroke-linecap":"round"},s);
-  E("line",{x1:c-S*0.06,y1:S-3,x2:c+S*0.06,y2:S-3,stroke:INK,"stroke-width":1.8,
+  E("line",{x1:c-S*0.06,y1:S-3,x2:c+S*0.06,y2:S-3,stroke:P.ink,"stroke-width":1.8,
     "stroke-linecap":"round"},s);
   const pr=2.5+(1-Math.max(0,Math.min(1,(priceScale.high-st.p)/(priceScale.high-priceScale.low))))*8;
   E("circle",{cx:c,cy:c,r:pr,fill:"#C4B56C",stroke:"#958F78","stroke-width":1.2},s);
@@ -494,17 +496,17 @@ function glyph(st,S){
     const v=sub(st,f.k), a=(i/FACTORS.length)*2*Math.PI-Math.PI/2;
     const r0=pr+2, r1=r0+v/100*(maxR-r0);
     E("line",{x1:c+r0*Math.cos(a),y1:c+r0*Math.sin(a),x2:c+r1*Math.cos(a),
-      y2:c+r1*Math.sin(a),stroke:MUTED,"stroke-width":2.4,
+      y2:c+r1*Math.sin(a),stroke:P.muted,"stroke-width":2.4,
       "stroke-linecap":"round"},s);
   });
   for(let k=0;k<(st.mo||0);k++){
     const a=-Math.PI/2+(k-((st.mo-1)/2))*0.2;
     E("line",{x1:c+(maxR+3)*Math.cos(a),y1:c+(maxR+3)*Math.sin(a),
       x2:c+(maxR+7)*Math.cos(a),y2:c+(maxR+7)*Math.sin(a),
-      stroke:MUTED,"stroke-width":1.4,"stroke-linecap":"round"},s);
+      stroke:P.muted,"stroke-width":1.4,"stroke-linecap":"round"},s);
   }
   if(st.tag) E("path",{d:`M${c},${S-3-stemH}L${c+9},${S-3-stemH+3.5}L${c},${S-3-stemH+7}Z`,
-    fill:WARN},s);
+    fill:P.warn},s);
   return s;
 }
 function drawGlyphs(host){
@@ -552,7 +554,7 @@ function drawScreens(host){
   E("path",{d:top+`L${x(n-1)},${mid+half(n-1)}`+bot+"Z",fill:"#C4B56C",
     stroke:"#958F78","stroke-width":1.1},s);
   stages.forEach((st,i)=>{
-    E("line",{x1:x(i),x2:x(i),y1:m.t-38,y2:m.t+bandH+50,stroke:SOFT,
+    E("line",{x1:x(i),x2:x(i),y1:m.t-38,y2:m.t+bandH+50,stroke:P.soft,
       "stroke-width":1,"stroke-dasharray":"2 3"},s);
     const anchor=i===0?"start":i===n-1?"end":"middle";
     const words=st.g.label.split(" ");
@@ -561,7 +563,7 @@ function drawScreens(host){
     lines.push(line.trim());
     lines.forEach((ln,li)=>T(s,x(i),m.t-40+li*13,ln,{"text-anchor":anchor,"font-size":10.5}));
     T(s,x(i)+(i===0?8:i===n-1?-8:0),mid+6,st.kept.length,
-      {"text-anchor":"middle","font-size":19,"font-weight":600,fill:INK});
+      {"text-anchor":"middle","font-size":19,"font-weight":600,fill:P.ink});
     if(st.dropped.length){
       const shown=st.dropped.slice(0,12);
       shown.forEach((d,k)=>{
@@ -572,28 +574,28 @@ function drawScreens(host){
       if(st.dropped.length>shown.length)
         T(s,x(i)-24,m.t+bandH+16+6*12.5,"+"+(st.dropped.length-shown.length)+" more",{"font-size":10});
       T(s,x(i),m.t+bandH+8,"−"+st.dropped.length,
-        {"text-anchor":"middle","font-size":11.5,"font-weight":600,fill:WARN});
+        {"text-anchor":"middle","font-size":11.5,"font-weight":600,fill:P.warn});
     }
   });
   const sy=m.t+bandH+92+stripH, prices=stages.map(d=>d.med).filter(v=>v!==null);
   if(prices.length){
     const plo=Math.min(...prices)-0.5, phi=Math.max(...prices)+0.5;
     const py=v=>sy-((v-plo)/(phi-plo||1))*(stripH-26);
-    E("line",{x1:m.l,x2:W-m.r,y1:sy,y2:sy,stroke:RULE,"stroke-width":1},s);
+    E("line",{x1:m.l,x2:W-m.r,y1:sy,y2:sy,stroke:P.rule,"stroke-width":1},s);
     T(s,m.l,sy+18,"median industrial price among the survivors, ¢/kWh",{"font-size":10.5});
     let pd="";
     stages.forEach((st,i)=>{ if(st.med===null) return;
       pd+=(pd?"L":"M")+x(i)+","+py(st.med).toFixed(1); });
-    E("path",{d:pd,fill:"none",stroke:INK,"stroke-width":1.5},s);
+    E("path",{d:pd,fill:"none",stroke:P.ink,"stroke-width":1.5},s);
     stages.forEach((st,i)=>{ if(st.med===null) return;
-      E("line",{x1:x(i),x2:x(i),y1:py(st.med),y2:sy,stroke:SOFT,"stroke-width":1},s);
-      E("circle",{cx:x(i),cy:py(st.med),r:3.2,fill:INK,stroke:PANEL,"stroke-width":1.3},s);
+      E("line",{x1:x(i),x2:x(i),y1:py(st.med),y2:sy,stroke:P.soft,"stroke-width":1},s);
+      E("circle",{cx:x(i),cy:py(st.med),r:3.2,fill:P.ink,stroke:P.panel,"stroke-width":1.3},s);
       T(s,x(i),py(st.med)-9,st.med.toFixed(2)+"¢",
-        {"text-anchor":"middle","font-size":10.5,"font-weight":600,fill:INK});
+        {"text-anchor":"middle","font-size":10.5,"font-weight":600,fill:P.ink});
     });
   }
   T(s,W-m.r,H-8,liveSet.length?"clearing all six: "+liveSet.map(z=>z.a).join(" "):"no survivors",
-    {"text-anchor":"end","font-size":11,"font-weight":600,fill:"#7A6E42"});
+    {"text-anchor":"end","font-size":11,"font-weight":600,fill:P.sand});
 }
 
 /* ------------------------------------------------------------------ registry */

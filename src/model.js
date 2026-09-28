@@ -56,6 +56,11 @@ let weights = {...PRESETS.balanced};
 let view = "all", rankMode = "fit";
 let priceScale = {low:5,high:35};
 let selected = null, profilePanel = "overview";
+// Color scale for fit. "fixed" shades 0 to 100 the same way in every scenario,
+// so two links are comparable by eye. "stretch" spreads the ramp across the
+// current scenario's lowest and highest fit, which separates the middle of a
+// tightly clustered ranking at the cost of that comparability.
+let colorScale = "fixed";
 let sortKey = "rank", sortAsc = true;
 const shortlist = new Set();
 
@@ -99,29 +104,46 @@ function compute(){
     s.tied=STATES.some(other=>other.a!==s.a && other.rank===s.rank);
     // One rating in this state changes at a time; every other state is held fixed.
     const ranks=[s.rank];
+    // The single one-level change that moves the rank furthest, so a profile
+    // can name the rating its position depends on most.
+    let swing=null;
     FACTORS.filter(f=>!MEASURED.has(f.k) && ((activeWeights()[f.k]||0)>0 || (rankMode==="delivery" && ["pw","op"].includes(f.k)))).forEach(f=>{
       [-1,1].forEach(delta=>{
         const value=s[f.k]+delta;
         if(value<1||value>5) return;
         const trial={...s,[f.k]:value};
         trial.total=lensScore(trial,activeWeights());
-        ranks.push(rankOf(trial));
+        const rank=rankOf(trial);
+        ranks.push(rank);
+        if(!swing || Math.abs(rank-s.rank)>Math.abs(swing.rank-s.rank)) swing={k:f.k,name:f.name,delta,value,rank};
       });
     });
     s.rankMin=Math.min(...ranks);s.rankMax=Math.max(...ranks);
+    s.swing=swing && swing.rank!==s.rank ? swing : null;
   });
 }
 
 // cividis-like ramp
 const STOPS=[[0,32,76],[49,68,107],[102,105,112],[149,143,120],[196,181,108],[255,234,70]];
-function color(v){ // v 0..100
-  const lo=0, hi=100; // fixed full scale for every scenario
-  let t=Math.max(0,Math.min(1,(v-lo)/(hi-lo)));
+function ramp(t){ // t 0..1 along the ramp
+  t=Math.max(0,Math.min(1,t));
   const seg=t*(STOPS.length-1), i=Math.min(STOPS.length-2,Math.floor(seg)), f=seg-i;
   const a=STOPS[i], b=STOPS[i+1];
   const c=a.map((x,j)=>Math.round(x+(b[j]-x)*f));
   return `rgb(${c[0]},${c[1]},${c[2]})`;
 }
+// A factor value or other 0-to-100 quantity on the full fixed scale.
+function color(v){ return ramp(v/100); }
+// The fit domain the map, cartogram and share card shade across. Fixed is
+// 0 to 100 in every scenario. Stretch runs from the lowest to the highest
+// scored fit; a scenario with a single distinct score falls back to fixed.
+function fitDomain(){
+  if(colorScale!=="stretch" || !hasWeights()) return [0,100];
+  const totals=STATES.map(s=>s.total).filter(v=>Number.isFinite(v));
+  const lo=Math.min(...totals), hi=Math.max(...totals);
+  return hi-lo<1e-9 ? [0,100] : [lo,hi];
+}
+function fitColor(v){ const [lo,hi]=fitDomain(); return ramp((v-lo)/(hi-lo)); }
 
 // The weights in force: the reader's own sliders in the Combined view, or a
 // fixed reference profile in one of the two lens views.

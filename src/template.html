@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F4F6">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#10151B">
 <title>US datacenter siting suitability, October 2026</title>
 <meta name="description" content="Compare hyperscale and AI datacenter siting conditions across 50 US states using one measured factor and seven provisional analyst ratings.">
 <link rel="canonical" href="https://sonnetx.github.io/datacenter-map/">
@@ -20,6 +23,26 @@
 <meta name="twitter:description" content="Compare 50 states using adjustable weights for power, policy, water and permitting. Ratings are provisional.">
 <meta name="twitter:image" content="https://sonnetx.github.io/datacenter-map/assets/social-card.png">
 <meta name="twitter:image:alt" content="Choropleth map of the 50 US states shaded by datacenter siting fit, with twelve states hatched to mark a 2026 policy change.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "US datacenter siting conditions, 2026",
+  "description": "State-level records for the 50 US states: EIA 2024 industrial electricity prices, NASA POWER December and annual solar irradiance, seven provisional analyst ratings on siting factors, 2026 policy posture, public reception, statewide rules in force and citations.",
+  "url": "https://sonnetx.github.io/datacenter-map/",
+  "sameAs": "https://github.com/sonnetx/datacenter-map",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "isAccessibleForFree": true,
+  "creator": {"@type": "Person", "name": "Sonnet Xu", "url": "https://sonnetx.github.io/"},
+  "temporalCoverage": "2024/2026",
+  "spatialCoverage": {"@type": "Place", "name": "United States"},
+  "keywords": ["datacenter", "data center", "siting", "electricity prices", "solar irradiance", "state policy", "United States"],
+  "distribution": [
+    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://github.com/sonnetx/datacenter-map/blob/main/data/states.json"},
+    {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://sonnetx.github.io/datacenter-map/#dataset"}
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -72,7 +95,8 @@ __CSS__
     <p class="viewnote" id="viewnote" aria-live="polite"></p>
     <div class="tip" id="tip"></div>
     <div class="legend">
-      <div class="key" id="legend-ramp"><span>Lower fit · 0</span><div class="ramp"></div><span>100 · Higher fit</span></div>
+      <div class="key" id="legend-ramp"><span id="ramp-lo">Lower fit · 0</span><div class="ramp"></div><span id="ramp-hi">100 · Higher fit</span>
+        <div class="scale-toggle" id="scale-toggle" role="group" aria-label="Color scale"><button type="button" data-k="fixed" aria-pressed="true">Fixed 0–100</button><button type="button" data-k="stretch" aria-pressed="false">Stretch to range</button></div></div>
       <div class="lgnote" id="legend-rampnote">Color shows weighted fit on a fixed 0–100 scale. Delivery concerns are shown separately in each profile.</div>
       <div class="key" id="legend-hatch"><div class="swatch"></div><span>2026 state policy change; select a state for details</span></div>
       <div class="key"><span id="hint" style="font-size:12.5px">Select a state to see its scores and sources.</span></div>
@@ -134,6 +158,12 @@ __CSS__
   <div class="drawer-head">
     <div class="drawer-toolbar"><p id="profile-title">State profile</p><form method="dialog"><button class="close-btn" aria-label="Close state profile" autofocus>Close ×</button></form></div>
     <label class="profile-picker" for="profile-state">State <select id="profile-state"></select></label>
+    <div class="profile-nav">
+      <button type="button" class="nav-btn" id="profile-prev"><b>‹</b><span></span></button>
+      <button type="button" class="nav-btn" id="profile-next"><span></span><b>›</b></button>
+      <button type="button" class="reset-btn" id="profile-link">Copy profile link</button>
+    </div>
+    <p class="model-hint profile-link-status" id="profile-link-status" role="status"></p>
     <div class="profile-tabs" role="tablist" aria-label="State profile sections">
       <button id="tab-overview" role="tab" data-panel="overview" aria-selected="true" aria-controls="panel-overview">Overview</button>
       <button id="tab-scores" role="tab" data-panel="scores" aria-selected="false" aria-controls="panel-scores" tabindex="-1">Scores</button>
@@ -153,7 +183,7 @@ __CSS__
 
 <div class="table-intro" id="comparison">
   <h2>Compare all 50 states</h2>
-  <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5, and fit and reference scores run from 0 to 100. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
+  <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5, and fit and reference scores run from 0 to 100. Rank range is the one-rating sensitivity band from each profile; a narrow band means the position depends less on any single rating. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
   <p>Pushback describes public opposition; rules in force summarize statewide regulation. Neither affects fit or rank. The Reception tab provides details.</p>
 </div>
 <div class="shortlist-tools">
@@ -162,8 +192,9 @@ __CSS__
   <button type="button" class="close-btn" id="export-comparison">Export comparison CSV</button>
   <p id="shortlist-status" role="status"></p>
   <div id="shortlist-chips" aria-label="Saved states"></div>
-  <p>Saved for this visit. Ranks stay relative to all 50 states. Export includes the displayed states, active weights and model assumptions.</p>
+  <p>Saved for this visit and carried in a copied link. Save two or more states to compare them side by side. Ranks stay relative to all 50 states. Export includes the displayed states, active weights and model assumptions.</p>
 </div>
+<section class="compare" id="compare" aria-label="Shortlist side by side" hidden></section>
 <div class="tablecard">
   <table id="tbl">
     <thead><tr id="thead"></tr></thead>
@@ -203,12 +234,14 @@ __CSS__
   <p>Each profile's Scores tab shows the best and worst rank obtained by changing one of that state's judgment ratings by one level, within 1–5. Other ratings and states stay fixed. This is a limited sensitivity test, not a confidence interval or probability. It does not capture correlated errors or simultaneous changes across states.</p>
   <p>Exact score ties within the selected ranking rule share a rank. Setting every weight to zero removes fit scores and ranks while keeping facts and sources available.</p>
   <h3>Sharing a scenario</h3>
-  <p>The page address records the size, priorities, ranking rule, price anchors, figure and shortlist, each omitted when it is at its default. Copy scenario link copies that address. Download share image draws a 1200 by 675 pixel card of the five leading states and the priority shares for the current scenario. Both describe this model's output, not a site decision.</p>
+  <p>The page address records the size, priorities, ranking rule, price anchors, color scale, figure, shortlist and, while a profile is open, that state, each omitted when it is at its default. Copy scenario link copies that address; Copy profile link in a profile does the same with the state included. Download share image draws a 1200 by 675 pixel card of the five leading states and the priority shares for the current scenario. All describe this model's output, not a site decision.</p>
   <h3>Reception and regulation</h3>
   <p>The Reception tab reports public response and statewide regulation. The table summarizes opposition and the number of regulatory categories with requirements in force. Neither affects scores or rankings.</p>
   <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. Local action counts here. The four rule axes stay strictly statewide and cover water, power and ratepayer cost, siting and zoning, and tax incentives.</p>
   <p>The four axes classify statewide rules in force: entry facilitation, no specific rule, disclosure or reporting, binding conditions, and pause or prohibition. Pending bills are described in the notes and do not affect these classifications. Tax incentives use corresponding eligibility categories. Classifications are provisional and have not been individually verified against original records.</p>
   <p>Public opposition and regulatory requirements are distinct: substantial opposition may coexist with permissive rules, and detailed regulation may coexist with support for development.</p>
+  <h3>Color scale</h3>
+  <p>By default the map, cartogram, relief and other fit-colored figures shade a fixed 0 to 100 scale, so the same color means the same fit in every scenario and in every shared link. Because most scenarios place all fifty states between about 35 and 75, the default can look muted. Stretch to range spreads the ramp from the scenario's lowest to its highest fit. It separates neighbors more clearly and makes colors incomparable between scenarios; the legend shows the values at each end, and the scale travels in the link.</p>
   <h3>Reference views</h3>
   <p>Political outlook weights policy and permitting equally. Physical fundamentals weights power headroom 30%, price 25%, water 20%, hazards 15% and climate 10%. These reference weights stay fixed. Editing a priority returns to Combined; changing the cost scale also affects the physical reference score.</p>
   <div class="source-principles">

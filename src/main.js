@@ -1,5 +1,8 @@
 // Start-up: score, read the address, draw, then wire the dataset download.
-function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); renderTiers(); renderDetail(); renderTable(); renderScatter(); FIGS.draw(); scheduleURL(); }
+function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); renderTiers(); renderDetail(); renderTable(); renderCompare(); renderScatter(); FIGS.draw(); scheduleURL(); }
+// Redraw when the operating system flips between light and dark: the SVG and
+// canvas drawings read their colors from the stylesheet at draw time.
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{ readTheme(); paint(); renderScatter(); FIGS.draw(); });
 // on a phone the priorities panel starts collapsed so the map and results stay reachable
 (function(){
   const mq=window.matchMedia("(max-width:900px)"), panel=document.getElementById("wpanel");
@@ -9,9 +12,11 @@ function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); rende
 // Read the address first, score, then show the requested figure (figures read
 // scores, so they cannot be drawn before the first compute), then normalize
 // the address so a copied link is canonical.
-const initialFigure=readURLState();
+const initial=readURLState();
 refresh();
-if(initialFigure && FIGS.has(initialFigure)) FIGS.setView(initialFigure);
+if(initial.figure && FIGS.has(initial.figure)) FIGS.setView(initial.figure);
+// A linked profile opens last, once every figure and rank it shows exists.
+if(initial.profile) select(initial.profile);
 urlReady=true; writeURL();
 
 // --- dataset release ---
