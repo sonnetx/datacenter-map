@@ -4,14 +4,13 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 const root = path.join(__dirname, '..');
-const template = fs.readFileSync(path.join(root, 'src/template.html'), 'utf8');
+// src/model.js is the scoring model the page ships, kept free of DOM access
+// so it runs here as-is: no duplicate scoring implementation.
+const source = fs.readFileSync(path.join(root, 'src/model.js'), 'utf8');
 const data = JSON.parse(fs.readFileSync(path.join(root, 'data/states.json'), 'utf8'));
-// Run the actual browser model in isolation; no duplicate scoring implementation.
-const source = template.slice(template.indexOf('const FACTORS ='), template.indexOf('// cividis-like ramp'));
-const activeWeights = template.match(/function activeWeights\(\)\{[^\n]+\}/)[0];
 function model(states = data) {
   const context = vm.createContext({STATES: structuredClone(states)});
-  vm.runInContext(source + '\n' + activeWeights + '\ncompute();', context);
+  vm.runInContext(source + '\ncompute();', context);
   return code => vm.runInContext(code, context);
 }
 const neutral = {n:'Example',p:20,sr:2.75,sy:4.5,pw:3,po:3,op:3,w:3,h:3,c:3,x:3,mo:1};
