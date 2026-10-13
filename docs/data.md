@@ -31,7 +31,7 @@ A citation is `{"t": title, "u": https url, "type": publisher role}`, with optio
 
 The `rr` record describes public response and statewide regulation. It does not affect fit, rankings or delivery concerns, and the model tests verify this independence. The Reception tab displays the record, and the comparison table reports pushback and the number of regulatory categories with requirements in force.
 
-`rr.pb` classifies pushback as Low (no recorded organized opposition or local restriction), Moderate (local restrictions or contested proceedings in some jurisdictions), or High (multiple local bans, a statewide restriction passed by one chamber, or a referendum). Local actions inform pushback. The regulatory axes cover statewide measures only.
+`rr.pb` classifies pushback as Low (no recorded organized opposition or local restriction), Moderate (local restrictions or contested proceedings in some jurisdictions), or High (multiple local bans, a statewide restriction passed by one chamber, or a referendum). Local actions inform pushback. The regulatory axes cover statewide measures only. A referendum counts toward High when voters approve a binding restriction, and one in-force local moratorium or ban rules out Low. The [election re-rating rules](../review/2026-10-13-election-rerating-rules.md) set out these clarifications.
 
 `rr.wt`, `rr.pg`, `rr.zn` and `rr.tx` describe water, power and ratepayer costs, siting and zoning, and tax incentives.
 

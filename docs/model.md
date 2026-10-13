@@ -53,7 +53,7 @@ The address records the scenario, and each parameter is omitted at its default.
 
 ## Evidence
 
-All 50 electricity prices matched the EIA-861 historical workbook's 2024 industrial data, Total Electric Industry sheet. These are historical state averages, not datacenter tariffs. Solar irradiance comes from the NASA POWER climatology API at each state's 2020 Census center of population, and eight states were spot-checked against NREL's solar resource service. It is one grid cell per state, not a site survey. Seven analyst factors remain provisional, and nobody has individually validated them against original records.
+All 50 electricity prices matched the EIA-861 historical workbook's 2024 industrial data, Total Electric Industry sheet. These are historical state averages, not datacenter tariffs. Solar irradiance comes from the NASA POWER climatology API at each state's 2020 Census center of population, and eight states were spot-checked against NREL's solar resource service. It is one grid cell per state, not a site survey. Seven analyst factors remain provisional, and nobody has individually validated them against original records. The [election re-rating rules](../review/2026-10-13-election-rerating-rules.md), registered before the November 3, 2026 elections, set how statewide actions move the policy and permitting ratings.
 
 The power-demand context section records EIA's September 9, 2026 national electricity-sales forecasts for 2026 and 2027 and the commercial sector's share of 2026 sales growth. These dated forecasts do not affect state ratings or rankings. See [the source review](../review/2026-09-13-demand-context.md).
 
