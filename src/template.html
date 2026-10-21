@@ -54,7 +54,7 @@ __CSS__
 <header>
   <h1>US data center politics by state</h1>
   <p class="lede">States are courting, pausing and restricting data center development, and towns and counties are passing moratoriums of their own. The map shows each state's 2026 posture, public pushback, statewide rules in force and local moratoriums. Select a state for its record and sources. A siting model for developers is under Advanced analysis.</p>
-  <div class="asof" id="asof">Updated October 20, 2026 · State records: analyst classifications with linked sources · Local moratoriums: <a href="https://mjbommar.github.io/moratorium-data-2026/" target="_blank" rel="noopener">Moratorium Nation</a>, status as of <span id="local-updated"></span> · Power prices: EIA 2024 industrial averages · Solar: NASA POWER 2001 to 2020 climatology.</div>
+  <div class="asof" id="asof">Updated October 20, 2026 · State records: analyst classifications with linked sources · Local moratoriums: <a href="https://mjbommar.github.io/moratorium-data-2026/" target="_blank" rel="noopener">Moratorium Nation</a>, status as of <span id="local-updated"></span> · Power prices: EIA 2024 industrial averages · Solar: NASA POWER 2001 to 2020 climatology. · <a href="#methods">How the map works</a></div>
 </header>
 
 <div class="grid">
@@ -213,72 +213,89 @@ __CSS__
   </table>
 </div>
 
-<section class="meth" id="demand-context" aria-labelledby="demand-heading">
-  <h2 id="demand-heading">Power demand: context for your shortlist</h2>
-  <p>EIA’s September 9, 2026 outlook forecasts growing US electricity sales, driven by datacenter development and manufacturing. These national forecasts provide context for utility diligence; they do not measure spare capacity in a state.</p>
-  <dl class="demand-stats">
-    <div><dt>2026 electricity sales forecast</dt><dd>4,135 TWh</dd></div>
-    <div><dt>2027 electricity sales forecast</dt><dd>4,211 TWh</dd></div>
-    <div><dt>Commercial share of 2026 sales growth</dt><dd>63%</dd></div>
-  </dl>
-  <p>The commercial sector includes more than datacenters. TWh means billion kilowatt-hours. All figures are forecasts, not observed demand or datacenter-only consumption, and contribute no points to state fit.</p>
-  <p><b>Use in diligence:</b> ask the serving utility how its load forecast affects your proposed connection date and upgrade requirements.</p>
-  <p>Source: <a href="https://www.eia.gov/outlooks/steo/report/elec_coal_renew.php" target="_blank" rel="noopener">EIA Short-Term Energy Outlook, September 9, 2026</a> · Checked September 13, 2026. The source page updates monthly; figures here retain the September release.</p>
-</section>
-
-<section class="meth" id="political-method" aria-labelledby="political-heading">
-  <h2 id="political-heading">How the political map works</h2>
-  <p>The map opens on three political views of the same fifty states. Each colors a state by a recorded category instead of a score, because the classifications are ordinal analyst judgments and a number such as 73 would claim more precision than they have. None of the three views changes fit, rank or delivery concerns.</p>
-  <h3>State posture</h3>
-  <p>Posture is an analyst label for how the state government treated data center development in 2026. Courting states offer incentives without new conditions. Courting with conditions keeps incentives but attaches requirements, as Alabama's cost recovery statute and Nevada's abatement order do. Reviewing or paused covers incentive pauses, permit holds and formal reviews, as in Arizona, Texas and Massachusetts. Restrictive covers states that have enacted or ordered limits, such as New York's moratorium order and Maine's bar on incentives, including limits that take effect later. No active state posture means no statewide action on record. The labels have no written rubric, so these precedents define them. Posture follows statewide actions and announced direction, so it can run ahead of the rules in force.</p>
-  <h3>Public pushback</h3>
-  <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. One local moratorium in force rules out Low. The rule counts bans and not temporary moratoriums, so Michigan reads Moderate with more than a hundred local moratoriums in force.</p>
-  <h3>Rules in force</h3>
-  <p>This view shows the strongest datacenter-specific statewide rule in force on any of four axes, which are water, power and ratepayer cost, siting and zoning, and tax incentives. The levels are eases entry, no specific rule, reporting or incentive conditions, binding conditions or narrowed incentives, and a pause, ban or repealed incentive. Pending bills, and enacted laws whose effective date has not arrived, count as no rule. California signed seven data center laws in September 2026 that take effect on January 1, 2027, so it reads Restrictive on posture and no rule on this view.</p>
-  <h3>Local moratoriums</h3>
-  <p>The dots are city, county, township and tribal moratoriums and bans on data centers from <a href="https://mjbommar.github.io/moratorium-data-2026/" target="_blank" rel="noopener">Moratorium Nation</a>, a dataset by Michael J. Bommarito published under CC BY 4.0. Each dot is placed at the coordinates the dataset gives for its jurisdiction. Filled dots are in force (active or extended) and open dots are proposed. Measures that expired, were replaced by permanent zoning or were rescinded are counted in each profile but not drawn. Statuses are the dataset's own as of <span class="local-asof"></span>, and some temporary measures have scheduled end dates since then. The page does not infer that any of them lapsed. A state-level map hides county-level conflict, so the profiles list each state's most recent local measures.</p>
-  <h3>Findings</h3>
-  <p>The findings beside the map are rules over these records, each printed under its list, so they change when a record changes. They describe where the records disagree. They do not predict where projects will be approved or blocked.</p>
-  <p>Posture, pushback and the rule axes are provisional analyst classifications. Every state now cites at least one source, and the Sources tab in each profile lists what each document establishes. A citation can support a policy event without validating a classification.</p>
-</section>
-
-<section class="meth" id="methodology">
-  <h2>How the siting model works</h2>
-  <p>This exploratory model reports weighted suitability, delivery concerns and rating sensitivity. Public response and regulation are reported separately and do not affect scores. The model does not predict project approval.</p>
-  <h3>Weighted fit</h3>
-  <p>Balanced starts with equal importance for the eight grid-siting factors: power headroom, power cost, incentives and policy, community and permitting, water, natural hazards, cooling climate, and connectivity. Each contributes 12.5% initially. The ninth factor, winter solar resource, starts at zero because a grid-connected project buys power rather than generating it. Presets and sliders change those shares.</p>
-  <p><b>Fit = sum of each factor's score × its share.</b> Seven factors retain provisional analyst ratings on a 1–5 scale, mapped to 0, 25, 50, 75 and 100. These equal steps are a modeling assumption, not measured differences. Momentum is shown only as context: existing development can signal an ecosystem, but can also consume power capacity.</p>
-  <p>Power price and winter solar resource are the two measured factors. By default, the cost score declines linearly from 100 at 5¢/kWh to 0 at 35¢/kWh, with scores capped at those endpoints. These limits distinguish all prices in the current dataset. Change them under Power cost assumptions to test your preferences. They are not forecasts or tariffs.</p>
-  <p>Winter solar resource is the December mean all-sky irradiance from NASA POWER's 2001–2020 climatology, read at each state's 2020 Census center of population, in kWh per square metre per day. December sizes an off-grid array and battery, so it stands in for the year. The score rises linearly from 0 at 1.0 to 100 at 4.0 kWh/m²/day, which spans the December values from Washington and Vermont near 1 to Hawaii near 4. One grid cell of about half a degree per state is a coarse proxy: a state's sunniest and cloudiest sites can differ by a third or more, and the value says nothing about land, interconnection or permitting for a solar array.</p>
-  <h3>Project size</h3>
-  <p>Four size bands describe the project: edge or micro (under 5 MW), enterprise or colocation (5 to 50 MW), hyperscale (50 to 300 MW) and gigawatt campus (300 MW and up). Choosing a band loads a starting weight profile, which the presets and sliders then adjust. Edge starts from connectivity 40%, hazard 15%, cost 15%, climate 10%, permitting 10%, headroom 5%, policy 5%. Enterprise matches Connectivity first. Hyperscale starts from headroom 25%, cost 20%, policy 15%, permitting 15%, water 10%, hazard 5%, climate 5%, connectivity 5%. Gigawatt starts from headroom 35%, cost 25%, permitting 20%, policy 10%, water 5%, hazard 5%, with climate and connectivity at zero.</p>
-  <p>Size also sets the headroom and permitting ratings a project needs before its delivery concerns read as lower: edge needs 2 and 2, enterprise 3 and 2, hyperscale 3 and 3, gigawatt 4 and 3. These thresholds are analyst judgments about scale, not measured capacity, and a state's ratings do not change with size. The page opens on hyperscale with Balanced weights.</p>
-  <p>A fifth band, off-grid solar and battery, describes a self-powered unit of any size. It starts from winter solar resource 35%, community and permitting 20%, natural hazard 15%, cooling climate 15%, connectivity 10% and incentives 5%, with power cost, headroom and water at zero, since the unit buys no grid electricity, joins no interconnection queue and is usually air cooled. Only permitting can raise its delivery concern, at 3 of 5. Three workload buttons move the connectivity weight alone: batch inference 10, real-time serving 25, distributed training 40, on the same relative scale as the sliders. Battery autonomy, land cost, local maintenance capacity and physical security are site questions with no state-level public source and are not modeled.</p>
-  <h3>Delivery concerns</h3>
-  <p>Power headroom and community/permitting are each compared with the size threshold. A rating at or above the threshold means lower concerns, one level below means elevated concerns, and two or more below means major concerns. The worse of the two factors sets the state's level. For hyperscale that is the original rule: a rating of 1 means major, 2 elevated, 3–5 lower. Lower concerns do not establish available power or permit eligibility.</p>
-  <p><b>Weighted fit</b> permits trade-offs and is the default. <b>Delivery first</b> ranks lower-concern states ahead of elevated- and major-concern states, then compares fit within each group. Cheap power therefore cannot offset a worse delivery group in that mode. The grouping still relies on provisional ratings, not verified connection timelines.</p>
-  <h3>Sensitivity</h3>
-  <p>Each profile's Scores tab shows the best and worst rank obtained by changing one of that state's judgment ratings by one level, within 1–5. Other ratings and states stay fixed. This is a limited sensitivity test, not a confidence interval or probability. It does not capture correlated errors or simultaneous changes across states.</p>
-  <p>Exact score ties within the selected ranking rule share a rank. Setting every weight to zero removes fit scores and ranks while keeping facts and sources available.</p>
-  <h3>Sharing a scenario</h3>
-  <p>The page address records the size, priorities, ranking rule, price anchors, color scale, figure, shortlist and, while a profile is open, that state, each omitted when it is at its default. Copy scenario link copies that address; Copy profile link in a profile does the same with the state included. Download share image draws a 1200 by 675 pixel card of the five leading states and the priority shares for the current scenario. All describe this model's output, not a site decision.</p>
-  <h3>Reception and regulation</h3>
-  <p>The Reception tab reports public response and statewide regulation. The table summarizes opposition and the number of regulatory categories with requirements in force. Neither affects scores or rankings.</p>
-  <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. Local action counts here. The four rule axes stay strictly statewide and cover water, power and ratepayer cost, siting and zoning, and tax incentives.</p>
-  <p>The four axes classify statewide rules in force: entry facilitation, no specific rule, disclosure or reporting, binding conditions, and pause or prohibition. Pending bills are described in the notes and do not affect these classifications. Tax incentives use corresponding eligibility categories. Classifications are provisional and have not been individually verified against original records.</p>
-  <p>Public opposition and regulatory requirements are distinct: substantial opposition may coexist with permissive rules, and detailed regulation may coexist with support for development.</p>
-  <h3>Color scale</h3>
-  <p>By default the map, cartogram, relief and other fit-colored figures shade a fixed 0 to 100 scale, so the same color means the same fit in every scenario and in every shared link. Because most scenarios place all fifty states between about 35 and 75, the default can look muted. Stretch to range spreads the ramp from the scenario's lowest to its highest fit. It separates neighbors more clearly and makes colors incomparable between scenarios; the legend shows the values at each end, and the scale travels in the link.</p>
-  <h3>Reference views</h3>
-  <p>Political outlook weights policy and permitting equally. Physical fundamentals weights power headroom 30%, price 25%, water 20%, hazards 15% and climate 10%. These reference weights stay fixed. Editing a priority returns to Combined; changing the cost scale also affects the physical reference score.</p>
-  <div class="source-principles">
-    <h3>What the evidence establishes</h3>
-    <p>All 50 historical electricity prices were compared with EIA's 2024 industrial data. Solar irradiance comes from NASA POWER at one point per state, with eight states spot-checked against NREL's solar resource service. The seven judgment factors have not been individually validated. A state citation can support a policy event without proving its numerical rating.</p>
-    <p>State profiles distinguish government records, grid publications, reporting, legal analysis, market research, company statements and advocacy statements. Company plans are self-reported; an advocacy organization's account of a lawsuit is not a court finding. A bill or agenda item is not automatically an enacted restriction.</p>
-    <p>Commercial tracker totals and references without identifiable documents have been removed from the displayed source list. Some unsupported counts and subsidy estimates have also been removed from state summaries. On October 20, 2026 the fifteen states that had no citations were reviewed claim by claim, and every state now cites at least one source. The other summaries and all ratings remain provisional.</p>
+<section class="meth methods" id="methods" aria-labelledby="methods-heading">
+  <h2 id="methods-heading">How the map works</h2>
+  <p class="methods-lede">Open a topic to read how each view and score is built.</p>
+  <div class="meth-groups">
+  <div class="meth-group" id="political-method">
+    <h3>Political map</h3>
+    <p>The map opens on three political views of the same fifty states. Each colors a state by a recorded category instead of a score, because the classifications are ordinal analyst judgments and a number such as 73 would claim more precision than they have. None of the three views changes fit, rank or delivery concerns.</p>
+    <details class="meth-item"><summary>State posture</summary>
+      <p>Posture is an analyst label for how the state government treated data center development in 2026. Courting states offer incentives without new conditions. Courting with conditions keeps incentives but attaches requirements, as Alabama's cost recovery statute and Nevada's abatement order do. Reviewing or paused covers incentive pauses, permit holds and formal reviews, as in Arizona, Texas and Massachusetts. Restrictive covers states that have enacted or ordered limits, such as New York's moratorium order and Maine's bar on incentives, including limits that take effect later. No active state posture means no statewide action on record. The labels have no written rubric, so these precedents define them. Posture follows statewide actions and announced direction, so it can run ahead of the rules in force.</p>
+    </details>
+    <details class="meth-item"><summary>Public pushback</summary>
+      <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. One local moratorium in force rules out Low. The rule counts bans and not temporary moratoriums, so Michigan reads Moderate with more than a hundred local moratoriums in force.</p>
+    </details>
+    <details class="meth-item"><summary>Rules in force</summary>
+      <p>This view shows the strongest datacenter-specific statewide rule in force on any of four axes, which are water, power and ratepayer cost, siting and zoning, and tax incentives. The levels are eases entry, no specific rule, reporting or incentive conditions, binding conditions or narrowed incentives, and a pause, ban or repealed incentive. Pending bills, and enacted laws whose effective date has not arrived, count as no rule. California signed seven data center laws in September 2026 that take effect on January 1, 2027, so it reads Restrictive on posture and no rule on this view.</p>
+    </details>
+    <details class="meth-item"><summary>Local moratoriums</summary>
+      <p>The dots are city, county, township and tribal moratoriums and bans on data centers from <a href="https://mjbommar.github.io/moratorium-data-2026/" target="_blank" rel="noopener">Moratorium Nation</a>, a dataset by Michael J. Bommarito published under CC BY 4.0. Each dot is placed at the coordinates the dataset gives for its jurisdiction. Filled dots are in force (active or extended) and open dots are proposed. Measures that expired, were replaced by permanent zoning or were rescinded are counted in each profile but not drawn. Statuses are the dataset's own as of <span class="local-asof"></span>, and some temporary measures have scheduled end dates since then. The page does not infer that any of them lapsed. A state-level map hides county-level conflict, so the profiles list each state's most recent local measures.</p>
+    </details>
+    <details class="meth-item"><summary>Findings</summary>
+      <p>The findings beside the map are rules over these records, each printed under its list, so they change when a record changes. They describe where the records disagree. They do not predict where projects will be approved or blocked.</p>
+    </details>
   </div>
-  <details class="sources">
-    <summary>Original records and datasets</summary>
+  <div class="meth-group" id="methodology">
+    <h3>Siting model</h3>
+    <p>This exploratory model reports weighted suitability, delivery concerns and rating sensitivity. Public response and regulation are reported separately and do not affect scores. The model does not predict project approval.</p>
+    <details class="meth-item"><summary>Weighted fit</summary>
+      <p>Balanced starts with equal importance for the eight grid-siting factors: power headroom, power cost, incentives and policy, community and permitting, water, natural hazards, cooling climate, and connectivity. Each contributes 12.5% initially. The ninth factor, winter solar resource, starts at zero because a grid-connected project buys power rather than generating it. Presets and sliders change those shares.</p>
+      <p><b>Fit = sum of each factor's score × its share.</b> Seven factors retain provisional analyst ratings on a 1–5 scale, mapped to 0, 25, 50, 75 and 100. These equal steps are a modeling assumption, not measured differences. Momentum is shown only as context: existing development can signal an ecosystem, but can also consume power capacity.</p>
+      <p>Power price and winter solar resource are the two measured factors. By default, the cost score declines linearly from 100 at 5¢/kWh to 0 at 35¢/kWh, with scores capped at those endpoints. These limits distinguish all prices in the current dataset. Change them under Power cost assumptions to test your preferences. They are not forecasts or tariffs.</p>
+      <p>Winter solar resource is the December mean all-sky irradiance from NASA POWER's 2001–2020 climatology, read at each state's 2020 Census center of population, in kWh per square metre per day. December sizes an off-grid array and battery, so it stands in for the year. The score rises linearly from 0 at 1.0 to 100 at 4.0 kWh/m²/day, which spans the December values from Washington and Vermont near 1 to Hawaii near 4. One grid cell of about half a degree per state is a coarse proxy: a state's sunniest and cloudiest sites can differ by a third or more, and the value says nothing about land, interconnection or permitting for a solar array.</p>
+    </details>
+    <details class="meth-item"><summary>Project size</summary>
+      <p>Four size bands describe the project: edge or micro (under 5 MW), enterprise or colocation (5 to 50 MW), hyperscale (50 to 300 MW) and gigawatt campus (300 MW and up). Choosing a band loads a starting weight profile, which the presets and sliders then adjust. Edge starts from connectivity 40%, hazard 15%, cost 15%, climate 10%, permitting 10%, headroom 5%, policy 5%. Enterprise matches Connectivity first. Hyperscale starts from headroom 25%, cost 20%, policy 15%, permitting 15%, water 10%, hazard 5%, climate 5%, connectivity 5%. Gigawatt starts from headroom 35%, cost 25%, permitting 20%, policy 10%, water 5%, hazard 5%, with climate and connectivity at zero.</p>
+      <p>Size also sets the headroom and permitting ratings a project needs before its delivery concerns read as lower: edge needs 2 and 2, enterprise 3 and 2, hyperscale 3 and 3, gigawatt 4 and 3. These thresholds are analyst judgments about scale, not measured capacity, and a state's ratings do not change with size. The page opens on hyperscale with Balanced weights.</p>
+      <p>A fifth band, off-grid solar and battery, describes a self-powered unit of any size. It starts from winter solar resource 35%, community and permitting 20%, natural hazard 15%, cooling climate 15%, connectivity 10% and incentives 5%, with power cost, headroom and water at zero, since the unit buys no grid electricity, joins no interconnection queue and is usually air cooled. Only permitting can raise its delivery concern, at 3 of 5. Three workload buttons move the connectivity weight alone: batch inference 10, real-time serving 25, distributed training 40, on the same relative scale as the sliders. Battery autonomy, land cost, local maintenance capacity and physical security are site questions with no state-level public source and are not modeled.</p>
+    </details>
+    <details class="meth-item"><summary>Delivery concerns</summary>
+      <p>Power headroom and community/permitting are each compared with the size threshold. A rating at or above the threshold means lower concerns, one level below means elevated concerns, and two or more below means major concerns. The worse of the two factors sets the state's level. For hyperscale that is the original rule: a rating of 1 means major, 2 elevated, 3–5 lower. Lower concerns do not establish available power or permit eligibility.</p>
+      <p><b>Weighted fit</b> permits trade-offs and is the default. <b>Delivery first</b> ranks lower-concern states ahead of elevated- and major-concern states, then compares fit within each group. Cheap power therefore cannot offset a worse delivery group in that mode. The grouping still relies on provisional ratings, not verified connection timelines.</p>
+    </details>
+    <details class="meth-item"><summary>Sensitivity</summary>
+      <p>Each profile's Scores tab shows the best and worst rank obtained by changing one of that state's judgment ratings by one level, within 1–5. Other ratings and states stay fixed. This is a limited sensitivity test, not a confidence interval or probability. It does not capture correlated errors or simultaneous changes across states.</p>
+      <p>Exact score ties within the selected ranking rule share a rank. Setting every weight to zero removes fit scores and ranks while keeping facts and sources available.</p>
+    </details>
+    <details class="meth-item"><summary>Sharing a scenario</summary>
+      <p>The page address records the size, priorities, ranking rule, price anchors, color scale, figure, shortlist and, while a profile is open, that state, each omitted when it is at its default. Copy scenario link copies that address; Copy profile link in a profile does the same with the state included. Download share image draws a 1200 by 675 pixel card of the five leading states and the priority shares for the current scenario. All describe this model's output, not a site decision.</p>
+    </details>
+    <details class="meth-item"><summary>Reception and regulation</summary>
+      <p>The Reception tab reports public response and statewide regulation. The table summarizes opposition and the number of regulatory categories with requirements in force. Neither affects scores or rankings.</p>
+      <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. Local action counts here. The four rule axes stay strictly statewide and cover water, power and ratepayer cost, siting and zoning, and tax incentives.</p>
+      <p>The four axes classify statewide rules in force: entry facilitation, no specific rule, disclosure or reporting, binding conditions, and pause or prohibition. Pending bills are described in the notes and do not affect these classifications. Tax incentives use corresponding eligibility categories. Classifications are provisional and have not been individually verified against original records.</p>
+      <p>Public opposition and regulatory requirements are distinct: substantial opposition may coexist with permissive rules, and detailed regulation may coexist with support for development.</p>
+    </details>
+    <details class="meth-item"><summary>Color scale</summary>
+      <p>By default the map, cartogram, relief and other fit-colored figures shade a fixed 0 to 100 scale, so the same color means the same fit in every scenario and in every shared link. Because most scenarios place all fifty states between about 35 and 75, the default can look muted. Stretch to range spreads the ramp from the scenario's lowest to its highest fit. It separates neighbors more clearly and makes colors incomparable between scenarios; the legend shows the values at each end, and the scale travels in the link.</p>
+    </details>
+    <details class="meth-item"><summary>Reference views</summary>
+      <p>Political outlook weights policy and permitting equally. Physical fundamentals weights power headroom 30%, price 25%, water 20%, hazards 15% and climate 10%. These reference weights stay fixed. Editing a priority returns to Combined; changing the cost scale also affects the physical reference score.</p>
+    </details>
+    <details class="meth-item" id="demand-context"><summary>Power demand context</summary>
+      <p>EIA’s September 9, 2026 outlook forecasts growing US electricity sales, driven by datacenter development and manufacturing. These national forecasts provide context for utility diligence; they do not measure spare capacity in a state.</p>
+      <dl class="demand-stats">
+      <div><dt>2026 electricity sales forecast</dt><dd>4,135 TWh</dd></div>
+      <div><dt>2027 electricity sales forecast</dt><dd>4,211 TWh</dd></div>
+      <div><dt>Commercial share of 2026 sales growth</dt><dd>63%</dd></div>
+      </dl>
+      <p>The commercial sector includes more than datacenters. TWh means billion kilowatt-hours. All figures are forecasts, not observed demand or datacenter-only consumption, and contribute no points to state fit.</p>
+      <p><b>Use in diligence:</b> ask the serving utility how its load forecast affects your proposed connection date and upgrade requirements.</p>
+      <p>Source: <a href="https://www.eia.gov/outlooks/steo/report/elec_coal_renew.php" target="_blank" rel="noopener">EIA Short-Term Energy Outlook, September 9, 2026</a> · Checked September 13, 2026. The source page updates monthly; figures here retain the September release.</p>
+    </details>
+  </div>
+  <div class="meth-group" id="evidence">
+    <h3>Evidence and sources</h3>
+    <details class="meth-item"><summary>What the evidence establishes</summary>
+      <p>Posture, pushback and the rule axes are provisional analyst classifications. Every state now cites at least one source, and the Sources tab in each profile lists what each document establishes. A citation can support a policy event without validating a classification.</p>
+      
+      <p>All 50 historical electricity prices were compared with EIA's 2024 industrial data. Solar irradiance comes from NASA POWER at one point per state, with eight states spot-checked against NREL's solar resource service. The seven judgment factors have not been individually validated. A state citation can support a policy event without proving its numerical rating.</p>
+      <p>State profiles distinguish government records, grid publications, reporting, legal analysis, market research, company statements and advocacy statements. Company plans are self-reported; an advocacy organization's account of a lawsuit is not a court finding. A bill or agenda item is not automatically an enacted restriction.</p>
+      <p>Commercial tracker totals and references without identifiable documents have been removed from the displayed source list. Some unsupported counts and subsidy estimates have also been removed from state summaries. On October 20, 2026 the fifteen states that had no citations were reviewed claim by claim, and every state now cites at least one source. The other summaries and all ratings remain provisional.</p>
+    </details>
+    <details class="meth-item sources"><summary>Original records and datasets</summary>
+
     <ul class="src">
       <li><a href="https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx">EIA-861 historical electricity data</a>: 2024 industrial prices, Total Electric Industry sheet. These state averages do not represent a project's large-load tariff.</li>
       <li><a href="https://www.governor.ny.gov/executive-order/no-62-establishing-temporary-moratorium-data-centers-new-york-while-state-develops">New York EO 62</a> and <a href="https://www.nysenate.gov/legislation/bills/2025/S10642">S10642 bill status</a>: separate executive action and legislation.</li>
@@ -293,7 +310,9 @@ __CSS__
       <li><a href="https://www.afslaw.com/perspectives/alerts/state-regulation-data-centers-2026-shifting-landscape">ArentFox Schiff's 2026 state regulation survey</a> and <a href="https://www.multistate.us/resources/state-data-center-policy-101">MultiState's state data center policy guide</a>: background for the reception and regulation readings. Both are legal and government-affairs summaries; the readings here have not been checked state by state against the underlying statutes.</li>
       <li><a href="https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf">FEMA National Risk Index documentation</a> and <a href="https://www.wri.org/aqueduct">WRI Aqueduct</a>: background for further hazard and water research. This app has not calculated its state ratings directly from these datasets.</li>
     </ul>
-  </details>
+    </details>
+  </div>
+  </div>
   <p class="method-note">Model version 3 · Evidence review September 7, 2026 · Solar factor and off-grid band added September 23, 2026 · State records corrected October 13, 2026 · Fifteen uncited states sourced claim by claim October 20, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
 </section>
 

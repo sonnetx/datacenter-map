@@ -181,6 +181,12 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     page.evaluate('document.querySelector(".tablecard").scrollLeft=400')
     assert page.evaluate('document.querySelector("#tbody td:nth-child(2)").getBoundingClientRect().left-document.querySelector(".tablecard").getBoundingClientRect().left')<80
     page.evaluate('document.querySelector(".tablecard").scrollLeft=0')
+    # The method topics start closed, and a link to one opens it.
+    assert page.locator('#methods details.meth-item').count()>=15
+    assert page.locator('#methods details[open]').count()==0
+    page.evaluate('location.hash="demand-context"')
+    page.wait_for_function('document.getElementById("demand-context").open')
+    page.evaluate('history.replaceState(null,"",location.pathname+location.search); document.getElementById("demand-context").open=false')
     # The dataset is CC BY and in the repository, so the download asks nothing
     # of the visitor. Any form here would be a regression.
     assert page.locator('#dataset form, #dataset input, #dataset textarea').count()==0

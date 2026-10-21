@@ -21,6 +21,20 @@ setMapView(initial.map || (impliesFit() ? "fit" : "posture"),{openPanel:true});
 if(initial.profile) select(initial.profile);
 urlReady=true; writeURL();
 
+// The method topics start closed. A link to a topic opens it, and printing
+// opens every topic so the page prints whole.
+(function(){
+  const openTarget=()=>{
+    const id=decodeURIComponent(location.hash.slice(1)), el=id&&document.getElementById(id);
+    const topic=el&&el.closest("details");
+    if(topic&&!topic.open){ topic.open=true; el.scrollIntoView(); }
+  };
+  window.addEventListener("hashchange",openTarget); openTarget();
+  let reopened=[];
+  window.addEventListener("beforeprint",()=>{ reopened=[...document.querySelectorAll(".methods details:not([open])")]; reopened.forEach(d=>{ d.open=true; }); });
+  window.addEventListener("afterprint",()=>{ reopened.forEach(d=>{ d.open=false; }); reopened=[]; });
+})();
+
 // --- dataset release ---
 // The dataset is CC BY and already in the public repository, so the download
 // asks for nothing. Counting is left to the same GoatCounter that measures

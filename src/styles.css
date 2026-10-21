@@ -216,7 +216,6 @@ body:has(.drawer[open]){overflow:hidden}
 .source-list .checked{font-size:11px}
 .factor-kind{display:block;color:var(--muted);font-size:11px;font-weight:400;margin-top:3px}
 .drawer [hidden]{display:none}
-.source-principles{background:var(--panel);padding:var(--s4);border:1px solid var(--rule);border-radius:4px}
 .ranking-control{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);font-size:13px}
 .ranking-control select{min-width:0}
 .reset-btn{font:inherit;font-size:12px;color:var(--focus);border:0;background:transparent;padding:8px 0;cursor:pointer}
@@ -362,10 +361,26 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
 .meth h3{font-weight:600;font-size:15px;line-height:1.4;margin:var(--s8) 0 var(--s2)}
 .meth p,.datapack p{margin:0 0 var(--s3);color:var(--prose)}
 .meth b{font-weight:500}
-.meth .source-principles{background:none;padding:0;border:0;border-radius:0}
-.meth .sources{margin:var(--s6) 0;padding:var(--s4) 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-.meth .sources>summary{font-size:14px;font-weight:500;color:var(--focus)}
-.meth .src{padding-left:var(--s5);margin:var(--s4) 0 0}
+/* How the map works: topics start closed, in two columns on a wide screen,
+   so the explanations take a screen of headings instead of several of text. */
+.meth.methods{max-width:none}
+.methods-lede{color:var(--muted)}
+.meth-groups{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"pol sit" "ev sit";gap:var(--s6) var(--s10);align-items:start;margin-top:var(--s5)}
+#political-method{grid-area:pol} #methodology{grid-area:sit} #evidence{grid-area:ev}
+@media (max-width:860px){.meth-groups{grid-template-columns:minmax(0,1fr);grid-template-areas:"pol" "sit" "ev"}}
+.meth .meth-group>h3{margin:0 0 var(--s2)}
+.meth .meth-group>p{font-size:13.5px;color:var(--muted)}
+.meth-item{border-top:1px solid var(--rule)}
+.meth-item:last-child{border-bottom:1px solid var(--rule)}
+.meth-item>summary{list-style:none;display:flex;justify-content:space-between;align-items:baseline;gap:var(--s3);padding:10px 0;font-weight:500;color:var(--ink)}
+.meth-item>summary::-webkit-details-marker{display:none}
+.meth-item>summary::after{content:"+";flex:none;font-weight:400;color:var(--muted)}
+.meth-item[open]>summary::after{content:"\2212"}
+.meth-item>summary:hover{color:var(--focus)}
+.meth-item[open]{padding-bottom:var(--s2)}
+.meth-item p{font-size:14px}
+.meth .src{padding-left:var(--s5);margin:var(--s2) 0 var(--s3)}
+.methods .method-note{margin-top:var(--s6)}
 .meth .src li{padding-left:var(--s1);margin:0 0 var(--s3);font-size:13px;overflow-wrap:anywhere}
 .meth .src li:last-child{margin-bottom:0}
 .meth .method-note,.datapack .fine{font-size:12.5px;color:var(--muted)}
@@ -439,8 +454,8 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
   table{font-size:10pt}
   th .sortbtn::after{content:""!important}
   .meth,.datapack,.site-foot{max-width:none}
-  .meth .sources{display:block}
-  .meth .sources>summary{list-style:none}
+  .meth-groups{display:block}
+  .meth-item>summary::after{content:""}
   a{color:inherit;text-decoration:none}
   .meth a::after,.site-foot a::after{content:" (" attr(href) ")";font-size:9pt;color:#444}
   .drawer{display:none}
