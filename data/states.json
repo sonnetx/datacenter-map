@@ -59,16 +59,67 @@
 "c": 5,
 "x": 1,
 "tag": "",
-"note": "Favorable ambient cooling and water availability, but an isolated grid, very high power prices, seismic risk and limited fiber infrastructure.",
+"note": "Favorable ambient cooling and water, but separate grids that are not interconnected, very high power prices and severe seismic risk. DNR made a preliminary decision in May 2026 to lease 715 acres near Deadhorse for a gas-powered computing campus, which drew more than 500 mostly opposing comments. SB 250 on data center cost allocation passed the Senate and died in the House.",
 "mo": 1,
 "st": "No active state posture",
+"srcs": [
+{
+"t": "SB 250 bill history (Alaska Legislature)",
+"u": "https://www.akleg.gov/basis/Bill/Detail/34?Root=SB+250",
+"type": "Government record",
+"supports": "SB 250, a data center cost allocation bill, passed the Senate 14-5 on May 16, 2026 and was held in House committee, so it never became law.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Alaska Electricity Profile 2024 (EIA)",
+"u": "https://www.eia.gov/electricity/state/alaska/index.php",
+"type": "Government record",
+"supports": "Alaska's 2024 average retail electricity price was 22.17 cents per kWh, sixth highest among states.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Alaska data center potential (LB&B law firm)",
+"u": "https://lbblawyers.com/resource/alaska-data-centers-potential/",
+"type": "Legal analysis",
+"supports": "Alaska has a 35 F mean annual temperature and abundant fresh water, and its electric grids are separate and not interconnected.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Alaska subduction zone seismicity (USGS)",
+"u": "https://www.usgs.gov/special-topics/subduction-zone-science/science/alaska",
+"type": "Government record",
+"supports": "Alaska has more large earthquakes than the rest of the United States combined.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Anchorage AO 2026-27(S) data center ordinance",
+"u": "https://ecode360.com/AN6998/laws/LF2706619.pdf",
+"type": "Government record",
+"supports": "On March 24, 2026 Anchorage made data centers a conditional use and began requiring a letter from the utility confirming grid capacity.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "ADL 422741 STAK Energy lease notice (Alaska DNR)",
+"u": "https://aws.state.ak.us/OnlinePublicNotices/Notices/View.aspx?id=223817",
+"type": "Government record",
+"supports": "On May 12, 2026 DNR made a preliminary decision to lease 715.4 acres near Deadhorse to STAK Energy for a gas-powered computing campus.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Critics flood DNR over North Slope lease (ADN)",
+"u": "https://www.adn.com/business-economy/2026/07/07/data-center-critics-flood-alaska-land-managers-with-opposition-to-north-slope-project/",
+"type": "Reporting",
+"supports": "DNR received more than 500 public comments on the proposed 50-year North Slope lease, most of them opposed.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Low",
 "wt": 0,
 "pg": 0,
 "zn": 0,
 "tx": 0,
-"n": "No datacenter-specific state legislation is recorded. Siting runs through ordinary utility and land use review."
+"n": "SB 250, which would allocate grid costs to data centers and require community benefit agreements, passed the Senate 14-5 on May 16, 2026 and died in House committee. No statewide data center rule is in force. Anchorage made data centers a conditional use in March 2026 and requires a utility letter confirming grid capacity, and DNR's proposed North Slope lease for a gas-powered computing campus drew wide opposition."
 }
 },
 {
@@ -258,16 +309,60 @@
 "c": 3,
 "x": 3,
 "tag": "",
-"note": "ISO-NE power is scarce and expensive; Groton enacted a local moratorium. Low natural hazard exposure is the principal advantage.",
+"note": "ISO-NE power is scarce and expensive, with the third-highest retail price of any state in 2024. PA 21-1 (2021) grants qualified data centers sales, use and property tax exemptions, and a 2026 repeal bill died in committee. Groton replaced its 2022 moratorium with a 12,500 square foot cap in 2023, and other towns adopted moratoriums in 2026. Low natural hazard exposure is the principal advantage.",
 "mo": 1,
 "st": "No active state posture",
+"srcs": [
+{
+"t": "HB 6514, PA 21-1 bill status (CT General Assembly)",
+"u": "https://www.cga.ct.gov/asp/cgabillstatus/cgabillstatus.asp?selBillType=Bill&which_year=2021&bill_num=6514",
+"type": "Government record",
+"supports": "Connecticut enacted An Act Concerning Incentives for Qualified Data Centers, signed by the governor on March 4, 2021.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "OLR report 2026-R-0137, Data Centers and Energy Policy",
+"u": "https://www.cga.ct.gov/gl/tfs/20261231_2026-2027%20Artificial%20Intelligence%20Working%20Group/OLR%20Reports%20on%20Existing%20Laws%20and%20Policies/3%20data%20centers/9.14.2026%20Data%20Centers%20and%20Energy%20Policy.pdf",
+"type": "Government record",
+"supports": "As of September 14, 2026, CGS 32-286 still grants data center tax incentives, and HB 5469 (2026) died without House action.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "SB 245 (2026) bill status (CT General Assembly)",
+"u": "https://www.cga.ct.gov/asp/cgabillstatus/cgabillstatus.asp?selBillType=Bill&which_year=2026&bill_num=245",
+"type": "Government record",
+"supports": "The 2026 bill to eliminate data center tax incentives last moved on March 23, 2026, when it was referred to the Finance Committee.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Town of Groton Zoning Regulations, Sec. 5.1-6.F and 11.1",
+"u": "https://www.groton-ct.gov/document_center/Departments/Planning%20&%20development/Regulation/FINAL%20Tables%20Changed%207-15-26%20Groton_Zoning_Regulations%20no%20buttons.pdf",
+"type": "Government record",
+"supports": "Groton deleted its 2022 data center moratorium on July 14, 2023 and replaced it with a 12,500 sq ft cap on data centers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Connecticut Electricity Profile 2024 (EIA)",
+"u": "https://www.eia.gov/electricity/state/connecticut/",
+"type": "Government record",
+"supports": "Connecticut's 2024 average retail electricity price of 24.37 cents/kWh ranked third highest among states.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "2026 Summer Reliability Assessment (NERC)",
+"u": "https://www.nerc.com/globalassets/our-work/assessments/nerc_sra_2026.pdf",
+"type": "Grid operator",
+"supports": "NERC lists New England at elevated summer 2026 risk, with a 14% anticipated reserve margin against a 13% reference level.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
 "pg": 0,
 "zn": 0,
 "tx": 0,
-"n": "No datacenter-specific state statute is recorded. Groton enacted a local moratorium."
+"n": "PA 21-1 (2021, now CGS 32-286) grants qualified data centers sales, use and property tax exemptions, and the legislature's research office described it as in force in September 2026. SB 245, which would have ended those incentives, died in the Finance Committee, and HB 5469 on large load customers died without House action. Groton deleted its 2022 moratorium in 2023 and now caps data centers at 12,500 square feet."
 }
 },
 {
@@ -277,23 +372,81 @@
 "sr": 1.75,
 "sy": 4.07,
 "pw": 2,
-"po": 3,
+"po": 2,
 "op": 2,
 "w": 4,
 "h": 3,
 "c": 3,
 "x": 3,
 "tag": "",
-"note": "PJM capacity pricing at the cap flows into Delmarva bills; Dover is considering an 18-month pause and Harrington rejected a data center ordinance in Aug 2026.",
+"note": "PJM capacity prices at the auction cap contribute to Delmarva bill increases. Gov. Meyer signed three laws on August 26, 2026 that create a large energy use rate class, require such facilities to supply all their own power by year 10 and bar them from job-creation tax credits. Dover adopted an 18-month moratorium on October 12, 2026, and Harrington rejected a data center ordinance in August and is considering a ban.",
 "mo": 2,
 "st": "Reviewing or paused",
+"srcs": [
+{
+"t": "HS 1 for HB 233 bill detail (Delaware General Assembly)",
+"u": "https://legis.delaware.gov/BillDetail/143381",
+"type": "Government record",
+"supports": "Signed August 26, 2026 (Ch. 85:440), the act requires a separate utility rate class and PSC-approved service agreements for large energy use facilities.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 445 bill detail (Delaware General Assembly)",
+"u": "https://legis.delaware.gov/BillDetail/143386",
+"type": "Government record",
+"supports": "Signed August 26, 2026 (Ch. 85:442), the act requires large energy use facilities to reach 100% self-supplied power by year 10 under a PSC plan.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 310 bill detail (Delaware General Assembly)",
+"u": "https://legis.delaware.gov/BillDetail/142891",
+"type": "Government record",
+"supports": "Signed August 26, 2026 (Ch. 85:441), the act bars large energy use facilities from job-creation tax credits and license fee reductions.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "PJM 2028/2029 capacity auction results (PJM Inside Lines)",
+"u": "https://insidelines.pjm.com/pjm-capacity-auction-procures-138318-mw-of-generation-resources-as-work-continues-to-address-growing-electricity-demand/",
+"type": "Grid operator",
+"supports": "The July 14, 2026 auction cleared at the $325/MW-day cap across PJM, the third straight auction under the price collar.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Delmarva rate increase notice (DE Public Advocate)",
+"u": "https://news.delaware.gov/2026/04/06/upcoming-electricity-rate-increase-adds-to-cost-increases-for-delmarva-customers/",
+"type": "Government record",
+"supports": "Delmarva's default supply price rose 18 to 20% on June 1, 2026, and the Public Advocate names PJM capacity costs among the drivers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Dover Proposed Ordinance 2026-14, final reading text",
+"u": "https://www.cityofdover.gov/media/Government/Ordinances-Resolutions-Tributes/2026/Proposed%20Ordinance%202026-14%20-%20Data%20Center%20Moratorium%20-%20Final%20Reading.pdf",
+"type": "Government record",
+"supports": "The ordinance bars Dover permits and approvals for large energy use facilities, including data centers of 30 MW or more, for 18 months.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Dover passes data center moratorium (Spotlight Delaware)",
+"u": "https://spotlightdelaware.org/2026/10/13/in-a-first-for-delaware-dover-passes-a-moratorium-on-data-center-development/",
+"type": "Reporting",
+"supports": "Dover City Council unanimously approved the 18-month moratorium on Monday, October 12, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Harrington council packet with Aug 17, 2026 minutes",
+"u": "https://cityofharrington.civicweb.net/document/65606/City%20Council%20Meeting%20-%2021%20Sep%202026.pdf?handle=933CD65671AA452FA24B2292478266E0",
+"type": "Government record",
+"supports": "Council denied Ordinance 25-08 (data centers as a conditional use) 6-0 on August 17, 2026, and set Ordinance 26-08 banning data centers for first reading.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
-"pg": 0,
+"pg": 2,
 "zn": 0,
-"tx": 0,
-"n": "No datacenter-specific state statute is recorded. Dover is considering an 18-month pause and Harrington rejected a data center ordinance in August 2026."
+"tx": 3,
+"n": "HS 1 for HB 233 (August 26, 2026) requires a separate rate class and PSC-approved service agreements for large energy use facilities. HB 445 requires them to supply all their own power by year 10 under a PSC plan, and HB 310 bars them from job-creation tax credits and license fee reductions. Dover adopted an 18-month moratorium on October 12, 2026. Harrington denied a conditional use ordinance on August 17 and has a ban ordinance pending."
 }
 },
 {
@@ -310,16 +463,60 @@
 "c": 1,
 "x": 3,
 "tag": "",
-"note": "Miami is a key interconnection hub for Latin America and FPL is building generation, but the 2026 Hyperscale Data Center Act raised the exemption threshold to 100 MW and at least eight counties adopted one-year moratoriums in mid-2026. Hurricane exposure is the worst in the country.",
+"note": "Miami is a key interconnection hub for Latin America, and FPL plans large solar, battery and gas additions through 2035. HB 7031 (2025) raised the sales tax exemption threshold from 15 MW to 100 MW, and SB 484 (2026) requires full cost-of-service tariffs for loads of 50 MW or more and limits data center water permits. Counties across the state adopted one-year moratoriums from June to October 2026, and several have permanent bans. Hurricane exposure is the worst in the country.",
 "mo": 3,
 "st": "Courting, with conditions",
+"srcs": [
+{
+"t": "SB 484 (2026) Data Centers status (Florida Senate)",
+"u": "https://www.flsenate.gov/Session/Bill/2026/484",
+"type": "Government record",
+"supports": "SB 484, approved May 7, 2026 as ch. 2026-65, sets large-load tariff rules, limits data center water permits and keeps local land-use authority.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 7031 (2025) final bill analysis (Florida House)",
+"u": "https://www.flsenate.gov/Session/Bill/2025/7031/Analyses/h7031z1.WMC.PDF",
+"type": "Government record",
+"supports": "HB 7031 raised the data center sales tax exemption threshold from 15 MW to 100 MW effective Aug 1, 2025.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Florida data center moratorium tracker (SAVRN)",
+"u": "https://savrn.com/data-center-moratorium-tracker/florida",
+"type": "Market research",
+"supports": "Lists one-year moratoriums adopted June to Sept 2026 in Clay, Hernando, Sarasota, DeSoto, Washington, Manatee, Marion, Levy and other counties.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Clay County approves 1-year data center moratorium",
+"u": "https://www.yahoo.com/news/us/articles/clay-county-commissioners-approve-1-000102829.html",
+"type": "Reporting",
+"supports": "Clay County commissioners voted 4-1 on June 24, 2026 for a one-year moratorium on data center permitting.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "FPL Ten Year Power Plant Site Plan 2026-2035",
+"u": "https://www.fpl.com/content/dam/fplgp/us/en/about/pdf/ten-year-site-plan.pdf",
+"type": "Company statement",
+"supports": "FPL plans 12,293 MW of solar, 7,454 MW of batteries, the 672 MW Vandolah purchase and new gas capacity for 2032 to 2035.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Hurricane direct hits by state (NOAA AOML)",
+"u": "https://www.aoml.noaa.gov/hrd/tcfaq/E19.html",
+"type": "Government record",
+"supports": "Florida has had 120 hurricane direct hits since 1851, the most of any state and about 40 percent of all US hurricanes.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "High",
-"wt": 0,
-"pg": 0,
+"wt": 2,
+"pg": 2,
 "zn": 0,
 "tx": 1,
-"n": "The 2026 Hyperscale Data Center Act raised the sales tax exemption threshold to 100 MW, narrowing eligibility rather than restricting construction. At least eight counties adopted one-year moratoriums in mid-2026."
+"n": "SB 484 (ch. 2026-65, approved May 7, 2026) requires utilities to serve loads of 50 MW or more under tariffs that recover their full cost of service, bars large data center water permits where the use would cause harm, allows reclaimed water to be required and keeps local land use authority. HB 7031 (2025) raised the sales tax exemption threshold from 15 MW to 100 MW from August 1, 2025. Clay, Hernando, Sarasota, Manatee, Marion and other counties adopted one-year moratoriums in mid-2026, and Escambia, Walton, Wakulla and Jackson counties have permanent bans."
 }
 },
 {
@@ -336,16 +533,67 @@
 "c": 2,
 "x": 5,
 "tag": "",
-"note": "Atlanta is a top-tier growth market. Georgia PSC approved 9,885 MW of new Georgia Power generation in Dec 2025 mostly for large loads; the large-load pipeline reached ~69 GW. The sales tax exemption remained in effect after a repeal proposal and runs through 2032, but local permitting must be checked for the specific project location.",
+"note": "Atlanta is a top-tier growth market. The PSC approved 9,885 MW of new Georgia Power generation in December 2025, mostly for large loads, and Georgia Power's economic development pipeline reached 76.2 GW in March 2026, 73.1 GW of it large load. A 2025 PSC rule lets Georgia Power bill new loads over 100 MW on longer contracts with minimum bills. The sales tax exemption runs through December 31, 2031, after two 2026 repeal bills died in the House. Local permitting must be checked for the specific project location.",
 "mo": 5,
 "st": "Courting",
+"srcs": [
+{
+"t": "PSC approves 9,885 MW Georgia Power agreement (Georgia PSC)",
+"u": "https://psc.ga.gov/site/assets/files/9176/media_advisory_dec_19_decision.pdf",
+"type": "Government record",
+"supports": "On December 19, 2025 the PSC voted 5-0 to approve a stipulation letting Georgia Power add 9,885 MW, most of it to serve large loads such as data centers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Georgia Power Q1 2026 large load report (PSC filing)",
+"u": "https://services.psc.ga.gov/api/v1/External/Public/Get/Document/DownloadFile/226607/107887",
+"type": "Company statement",
+"supports": "The total economic development pipeline was 69,100 MW at year-end 2025 and 76,200 MW on March 31, 2026, with 73,100 MW of that from large loads.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 1291 (2022) signed text, data center exemption dates",
+"u": "https://gov.georgia.gov/document/2022-signed-legislation/hb-1291/download",
+"type": "Government record",
+"supports": "HB 1291 ends the data center equipment exemption period on December 31, 2031 and repeals the paragraph on January 1, 2032.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Senate 2026 composite status, session final (Georgia Senate)",
+"u": "https://www.legis.ga.gov/api/document/docs/default-source/senate-calendars/20252026/scomposite788080b4702048e088a9bb803b278911.pdf?sfvrsn=b3a0c845_26",
+"type": "Government record",
+"supports": "SB 476 passed the Senate on February 12, 2026 and SB 410 on March 6, 2026, neither moved past House committee, and HB 1059 had no action after referral.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "SB 476 as passed Senate (Georgia General Assembly)",
+"u": "https://www.legis.ga.gov/api/legislation/document/20252026/242672",
+"type": "Government record",
+"supports": "The Senate-passed SB 476 sets a sunset for all income tax credits and bars new data center sales tax exemption certificates after its effective date.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Camden adopts six-month data center moratorium (GPB)",
+"u": "https://www.gpb.org/news/2026/05/06/camden-becomes-first-county-on-the-coast-adopt-data-center-moratorium",
+"type": "Reporting",
+"supports": "On May 5, 2026 Camden County commissioners adopted a six-month data center moratorium that applies only to unincorporated Camden County.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "PSC rule on new data center power terms (Georgia PSC, 2025)",
+"u": "https://psc.ga.gov/site/assets/files/8617/media_advisory_data_centers_rule_1-23-2025.pdf",
+"type": "Government record",
+"supports": "On January 23, 2025 the PSC approved a rule letting Georgia Power bill new loads over 100 MW on special terms with longer contracts and minimum bills, with each contract reviewed by the PSC.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
-"pg": 0,
+"pg": 2,
 "zn": 0,
 "tx": 0,
-"n": "The sales tax exemption remained in effect after a repeal proposal and runs through 2032. SB 476, which would have eliminated most state tax credits, passed the Senate in February 2026 without becoming law, and the broader HB 1059 failed in committee. Camden County adopted a nine-month local moratorium."
+"n": "The equipment sales tax exemption runs through December 31, 2031 under HB 1291 (2022). SB 476 and SB 410 passed the Senate in 2026 and died in House committee, and SB 476 would have barred new data center exemption certificates. HB 1059 had no action. A January 2025 PSC rule lets Georgia Power set special terms, longer contracts and minimum bills for new loads over 100 MW, with PSC review of each contract. Camden County adopted a six-month moratorium for its unincorporated area on May 5, 2026."
 }
 },
 {
@@ -362,16 +610,53 @@
 "c": 3,
 "x": 1,
 "tag": "",
-"note": "The highest US electricity price and an isolated island grid constrain development.",
+"note": "The highest US electricity price and isolated island grids constrain development, and the state energy office says Hawaii lacks the bandwidth and cheap power data centers need. A legislative resolution set up a working group that first met in September 2026, and Hawaii County is weighing a countywide ban.",
 "mo": 1,
 "st": "No active state posture",
+"srcs": [
+{
+"t": "Hawaii Electricity Profile 2024 (EIA)",
+"u": "https://www.eia.gov/electricity/state/hawaii/index.php",
+"type": "Government record",
+"supports": "Hawaii's 2024 average retail electricity price was 38.00 cents per kWh, the highest of any state.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HCR 206 HD1 text (Hawaii Legislature)",
+"u": "https://data.capitol.hawaii.gov/sessions/session2026/bills/HCR206_HD1_.pdf",
+"type": "Government record",
+"supports": "The resolution calls Hawaii's island grids isolated and says the state has received no hyperscale data center proposals.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HCR 206 measure status (Hawaii Legislature)",
+"u": "https://data.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=HCR&billnumber=206&year=2026",
+"type": "Government record",
+"supports": "By April 27, 2026 both chambers had adopted HCR 206 HD1, which asks the State Energy Office to convene a data center working group.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Big Island data center ban debate (Civil Beat)",
+"u": "https://www.civilbeat.org/2026/10/big-island-wants-to-ban-big-data-centers-once-they-agree-on-what-they-are/",
+"type": "Reporting",
+"supports": "The state energy chief says Hawaii lacks the bandwidth and cheap power that data centers need, and the working group first met in September 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Leeward commission backs Bill 170 (Tribune-Herald)",
+"u": "https://www.hawaiitribune-herald.com/2026/10/16/hawaii-news/leeward-planning-commission-oks-bill-aimed-at-banning-data-centers/",
+"type": "Reporting",
+"supports": "The Leeward Planning Commission sent the Hawaii County Council a favorable recommendation on Bill 170, a countywide data center ban.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Low",
 "wt": 0,
 "pg": 0,
 "zn": 0,
 "tx": 0,
-"n": "No datacenter-specific state legislation is recorded. The island grid rather than policy is the binding constraint."
+"n": "No statewide data center rule is in force. HCR 206, adopted by both chambers in April 2026, asks the State Energy Office to convene a working group on data centers of 5 MW or more and report before the 2027 session. Hawaii County Bill 170, a countywide ban, received a favorable Leeward Planning Commission recommendation in October 2026 and awaits a council vote."
 }
 },
 {
@@ -702,16 +987,60 @@
 "c": 5,
 "x": 1,
 "tag": "",
-"note": "The legislature passed the first statewide moratorium (LD 307); Gov. Mills vetoed it April 24, 2026 and the override failed, but LD 713 stripped incentive eligibility and the Jay mill project was halted in June. Bangor and Eastport have local bans.",
+"note": "The legislature passed LD 307, a permitting moratorium on data centers of 20 MW or more until November 1, 2027. Gov. Mills vetoed it on April 24, 2026 and the April 29 override vote fell short. LD 713 bars data centers that begin operating on or after August 1, 2026 from the BETE and Dirigo incentives, and the Jay mill project was halted in June. Bangor extended its local moratorium in September and Eastport adopted a permanent ban.",
 "mo": 1,
 "st": "Restrictive",
+"srcs": [
+{
+"t": "LD 307 status and override vote (Maine Legislature)",
+"u": "https://legislature.maine.gov/LawMakerWeb/summary.asp?LD=307&SessionID=16",
+"type": "Government record",
+"supports": "The Senate enacted LD 307 21-13 on April 14, 2026, and the April 29 House override vote of 72-65 fell short of two-thirds, so the veto stood.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Governor Mills veto letter on LD 307",
+"u": "https://www.maine.gov/governor/mills/official_documents/veto_messages/2026-04-ld-307-act-establish-maine-data-center-coordination",
+"type": "Government record",
+"supports": "On April 24, 2026 Mills vetoed LD 307, a permitting moratorium on data centers of 20 MW or more until Nov 1, 2027, because it lacked a Jay exemption.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "LD 713 chaptered law, ch. 768 (Maine Legislature)",
+"u": "https://legislature.maine.gov/legis/bills/getPDF.asp?paper=HP0452&item=5&snum=132",
+"type": "Government record",
+"supports": "LD 713, approved April 23, 2026, bars data centers starting operations on or after Aug 1, 2026 from BETE and the Dirigo program and orders a DECD incentive study.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Developer halts Jay mill data center plan (Maine Public)",
+"u": "https://www.mainepublic.org/climate/2026-06-12/developer-halts-plans-for-data-center-at-former-jay-paper-mill",
+"type": "Reporting",
+"supports": "On June 12, 2026 the $550M Jay mill project went on hold after operator Sentinel Data Centers withdrew.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Bangor extends data center moratorium (WAGM)",
+"u": "https://www.wagmtv.com/2026/09/29/bangor-city-council-votes-extend-data-center-moratorium/",
+"type": "Reporting",
+"supports": "Bangor adopted a 180-day data center moratorium in April 2026 and voted 8-0 on Sept 28, 2026 to extend it by another 180 days.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Eastport adopts data center ban ordinance (Quoddy Tides)",
+"u": "https://www.quoddytides.com/ordinance-banning-data-centers-adopted-by-eastport-council/",
+"type": "Reporting",
+"supports": "The Eastport City Council unanimously adopted an ordinance prohibiting large-scale data centers at its Sept 9, 2026 meeting.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "High",
 "wt": 0,
 "pg": 0,
 "zn": 0,
 "tx": 3,
-"n": "The legislature passed the first statewide moratorium (LD 307); the governor vetoed it on April 24, 2026 and the override failed. LD 713 stripped datacenter incentive eligibility, the Jay mill project was halted in June, and Bangor and Eastport have local bans."
+"n": "LD 307, a statewide permitting moratorium on data centers of 20 MW or more, passed the legislature and was vetoed on April 24, 2026, and the override failed on April 29. LD 713 bars data centers that begin operating on or after August 1, 2026 from the BETE and Dirigo incentives. Bangor extended its 180-day moratorium on September 28, 2026, and Eastport adopted a permanent ban on large data centers on September 9."
 }
 },
 {
@@ -825,16 +1154,67 @@
 "c": 5,
 "x": 3,
 "tag": "",
-"note": "Gov. Whitmer has supported datacenter investment (OpenAI Stargate 'The Barn' in Saline), with a 2024 exemption and a July 2026 Responsible Growth Pledge. DTE/Consumers generation expansion remains incomplete, and local permitting requires separate review. Great Lakes water and a cold climate are favorable.",
+"note": "Gov. Whitmer has supported datacenter investment, including the OpenAI and Oracle Stargate campus under construction in Saline Township. PA 207 of 2024 created a sales tax exemption, and the July 2026 Responsible Growth Pledge is voluntary. MPSC orders set binding terms for large data center loads, and the Attorney General is appealing the Saline contracts. DTE's long-range generation plan awaits an MPSC decision. Great Lakes water and a cold climate are favorable.",
 "mo": 4,
 "st": "Courting",
+"srcs": [
+{
+"t": "Responsible Growth Action Plan and pledge (Governor)",
+"u": "https://www.michigan.gov/whitmer/news/press-releases/2026/07/15/gov-whitmer-data",
+"type": "Government record",
+"supports": "On July 15, 2026 Whitmer launched the action plan and a voluntary company pledge and asked the legislature to codify the MPSC data center safeguards.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 4906, PA 207 of 2024 status (Michigan Legislature)",
+"u": "https://legislature.mi.gov/Bills/Bill?ObjectName=2023-HB-4906",
+"type": "Government record",
+"supports": "The data center sales tax exemption bill became Public Act 207 of 2024 and the governor approved it on January 17, 2025.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Stargate campus construction in Saline Township (Oracle)",
+"u": "https://www.oracle.com/news/announcement/related-digital-oracle-openai-walbridge-and-governor-whitmer-celebrate-construction-of-stargate-campus-in-saline-township-2026-06-01/",
+"type": "Company statement",
+"supports": "On June 1, 2026 Oracle, OpenAI, Related Digital and Gov. Whitmer celebrated construction of The Barn, the Stargate campus in Saline Township.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "MPSC conditional approval of DTE Saline contracts (U-21990)",
+"u": "https://www.michigan.gov/mpsc/commission/news-releases/2025/12/18/mpsc-approves-dte-electric-energy-contracts-for-data-center",
+"type": "Government record",
+"supports": "On December 18, 2025 the MPSC approved DTE contracts for the 1,383 MW Saline data center with a 19-year term, an 80% minimum bill and a termination payment.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "MPSC data center tariff for Consumers Energy (U-21859)",
+"u": "https://www.michigan.gov/mpsc/commission/news-releases/2025/11/06/mpsc-approves-terms-of-service-between-consumers-energy-and-data-centers",
+"type": "Government record",
+"supports": "On November 6, 2025 the MPSC set binding terms for Consumers Energy loads of 100 MW or more, including a 15-year minimum contract and an 80% minimum billing demand.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "AG Nessel appeal of MPSC Saline approval (Attorney General)",
+"u": "https://www.michigan.gov/ag/news/press-releases/2026/08/07/ag-nessel-briefs-appeal-over-mpsc-approval-of-dte-saline-data-center-contracts",
+"type": "Government record",
+"supports": "The Attorney General is appealing the MPSC approval of the Saline contracts in the Michigan Court of Appeals and filed her brief on August 6, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "DTE long-range plan proposes new gas plants (Planet Detroit)",
+"u": "https://planetdetroit.org/2026/09/dte-gas-plants-data-centers-power-plan/",
+"type": "Reporting",
+"supports": "As of September 29, 2026 the DTE 20-year resource plan, which adds 2.1 GW of gas and more than doubles capacity, was still awaiting an MPSC decision.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
-"pg": 0,
+"pg": 2,
 "zn": 0,
 "tx": 0,
-"n": "The 2024 sales tax exemption remains in force and the July 2026 Responsible Growth Pledge is voluntary rather than binding. No statewide water, siting or ratepayer rule specific to data centers is recorded, so local permitting carries the review."
+"n": "The sales tax exemption in PA 207 of 2024 remains in force, and HB 5396, which would repeal it, has had no action since December 2025. The July 2026 Responsible Growth Pledge is voluntary. MPSC orders set binding terms for data center loads, including a Consumers Energy tariff for loads of 100 MW or more with a 15-year minimum contract and an 80% minimum bill, and conditions on DTE's Saline and Google contracts. No statewide water or siting rule specific to data centers is recorded, so local permitting carries the review."
 }
 },
 {
@@ -851,16 +1231,67 @@
 "c": 5,
 "x": 3,
 "tag": "",
-"note": "Cold climate and abundant water; Meta (Rosemount) and Microsoft (Becker) anchor the market. The 2025 law kept the equipment exemption but ended the electricity exemption and added fees; Xcel capacity is the constraint.",
+"note": "Cold climate and abundant water. Meta's Rosemount campus is the one hyperscale project under construction, Amazon suspended its Becker project, and Xcel will serve a Google data center in Pine Island under an agreement the Attorney General has questioned. 2025 laws kept the equipment exemption, ended the electricity exemption, added water permit conditions and fees, and ordered a very large customer class, which the PUC approved for Xcel in May 2026.",
 "mo": 3,
 "st": "Courting, with conditions",
+"srcs": [
+{
+"t": "Laws 2025, 1st Spec. Sess. ch. 12, HF 16 (MN Revisor)",
+"u": "https://www.revisor.mn.gov/laws/2025/1/Session+Law/Chapter/12/",
+"type": "Government record",
+"supports": "HF 16 was signed June 14, 2025. It sets DNR permit conditions for data centers using over 100 million gallons a year, adds a 2 to 5 million dollar annual fee, and orders a very large customer class.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Minn. Stat. 297A.68 data center exemption (MN Revisor)",
+"u": "https://www.revisor.mn.gov/statutes/cite/297A.68",
+"type": "Government record",
+"supports": "Subdivision 42 now exempts IT equipment and software for 35 years with no electricity exemption, as amended by 1Sp2025 chapter 12 and chapter 13.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Qualified Data Centers sales tax guidance (MN Revenue)",
+"u": "https://www.revenue.state.mn.us/qualified-data-centers",
+"type": "Government record",
+"supports": "The Department of Revenue states that electricity purchases stopped qualifying for the data center exemption on July 1, 2025.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "PUC safeguards for Xcel very large customers (MN PUC)",
+"u": "https://content.govdelivery.com/accounts/MNPUBUC/bulletins/417d139",
+"type": "Government record",
+"supports": "On May 18, 2026 the PUC announced binding Xcel terms for new loads of 100 MW or more, including a 15-year term, an 80% minimum bill and exit fee, and a separate rate class.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Walz announces Meta data center in Rosemount (Governor)",
+"u": "https://mn.gov/governor/newsroom/press-releases/?id=1055-614120",
+"type": "Government record",
+"supports": "On March 14, 2024 Gov. Walz announced the 800 million dollar Meta data center in Rosemount, expected to open in 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Minnesota hyperscale projects stall (Forum News Service)",
+"u": "https://www.inforum.com/news/minnesota/as-hyperscale-data-centers-boom-minnesotas-projects-are-confronting-regulatory-and-environmental-realities",
+"type": "Reporting",
+"supports": "As of October 2025 only the Meta Rosemount project was underway, Amazon had suspended Becker, and Microsoft had bought Becker land but submitted no plans.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Xcel to power Google data center in Pine Island (Xcel)",
+"u": "https://newsroom.xcelenergy.com/news/xcel-energy-to-power-new-google-data-center-in-minnesota",
+"type": "Company statement",
+"supports": "On February 24, 2026 Xcel announced it will serve a new Google data center in Pine Island under an electric service agreement.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 2,
-"pg": 0,
+"pg": 2,
 "zn": 0,
 "tx": 2,
-"n": "Minnesota established a separate water permitting requirement for data centers, one of the few state water rules aimed specifically at the sector. The 2025 law kept the equipment exemption, ended the electricity exemption and added fees."
+"n": "HF 16 (2025) adds DNR preapplication review and permit conditions for data centers using more than 100 million gallons a year, sets an annual fee and orders a very large customer class. The PUC approved Xcel's tariff for new loads of 100 MW or more in May 2026, with a 15-year term, an 80% minimum bill and exit fees. A separate 2025 tax law ended the electricity exemption and kept the equipment exemption."
 }
 },
 {
@@ -930,16 +1361,60 @@
 "c": 3,
 "x": 3,
 "tag": "",
-"note": "Kansas City and St. Louis offer connectivity; incentives available. Peculiar enacted a local ban and Ameren/Evergy headroom is moderate.",
+"note": "Kansas City and St. Louis offer connectivity, and a 15-year sales tax exemption is available for new data centers investing at least $25 million. SB 4 (2025) requires large utilities to file tariffs so customers above 100 MW pay their cost of service, and the PSC has approved Ameren Missouri and Evergy tariffs. Peculiar removed data centers from its zoning code in 2024 and St. Charles banned them in May 2026. Headroom on the Ameren and Evergy systems is rated moderate.",
 "mo": 3,
 "st": "Courting",
+"srcs": [
+{
+"t": "RSMo 393.130 large-load tariff mandate (SB 4, 2025)",
+"u": "https://revisor.mo.gov/main/OneSection.aspx?section=393.130",
+"type": "Government record",
+"supports": "Since Aug 28, 2025, large utilities must file tariffs for customers expected above 100 MW (50 MW for smaller utilities) so those customers pay their cost of service.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Large load tariff fact sheet, April 2026 (Missouri PSC)",
+"u": "https://psc.mo.gov/CMSInternetData/Community%20Outreach/Large%20Load%20Tariff%20Fact%20Sheet%20-%20April%202026.pdf",
+"type": "Government record",
+"supports": "The PSC says SB 4 covers data centers and has approved Ameren Missouri and Evergy large-load tariffs with 12-year minimum terms, collateral and exit fees.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "RSMo 144.810 data storage center sales tax exemption",
+"u": "https://revisor.mo.gov/main/OneSection.aspx?section=144.810",
+"type": "Government record",
+"supports": "New data storage centers that invest at least 25 million dollars get up to 15 years of full state and local sales and use tax exemption, and expansions can qualify too.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Peculiar reverses data center zoning (KSHB)",
+"u": "https://www.kshb.com/news/local-news/peculiar-reverses-zoning-for-data-center-after-cries-from-neighbors",
+"type": "Reporting",
+"supports": "In a story published Oct 21, 2024, KSHB reports that Peculiar's aldermen unanimously removed data centers from the light industrial zoning code, so they are no longer an allowed use.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "St. Charles passes a ban on data centers (STLPR)",
+"u": "https://www.stlpr.org/2026-05-20/st-charles-passes-a-ban-on-data-centers",
+"type": "Reporting",
+"supports": "St. Charles voted 7-1 in May 2026 to bar data centers in every zone, making its fall 2025 moratorium permanent.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Missouri lawmakers passed nothing on data centers (STLPR)",
+"u": "https://www.stlpr.org/government-politics-issues/2026-06-29/missouri-lawmakers-data-centers",
+"type": "Reporting",
+"supports": "The 2026 Missouri session passed no data center bills, and HB 3362 got one hearing and no floor vote.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
-"pg": 0,
+"pg": 2,
 "zn": 0,
 "tx": 0,
-"n": "No datacenter-specific state statute is recorded. Peculiar enacted a local ban."
+"n": "SB 4 (2025) requires utilities to file large-load tariffs so customers above 100 MW, or 50 MW for smaller utilities, pay their cost of service, and the PSC has approved Ameren Missouri and Evergy tariffs with 12-year minimum terms. The data storage center sales tax exemption remains available, and the 2026 session passed no data center bills. Peculiar removed data centers from its light industrial zoning in October 2024, and St. Charles barred them in every zone in May 2026."
 }
 },
 {
@@ -1120,16 +1595,60 @@
 "c": 3,
 "x": 4,
 "tag": "",
-"note": "The state froze its $250M AI data center incentive, then enacted the Data Center Fair Share Act (July 7, 2026) creating a separate rate class and requiring data centers to curtail before residents. Local restrictions require municipality-specific review. Strong NYC-adjacent connectivity.",
+"note": "The Data Center Fair Share Act (July 7, 2026) directs the BPU to set standards by about July 2027 that assign grid costs to large data centers and curtail them before residents. The End Data Center Tax Credits Act (August 27, 2026) capped the Next New Jersey AI credit at the $250M already awarded, so no new applications are accepted, and a law signed the same day requires semiannual energy and water reports. Local restrictions require municipality-specific review. Strong NYC-adjacent connectivity.",
 "mo": 2,
 "st": "Restrictive",
+"srcs": [
+{
+"t": "Sherrill signs Data Center Fair Share Act (NJ Governor)",
+"u": "https://www.nj.gov/governor/news/2026/20260707a.shtml",
+"type": "Government record",
+"supports": "On July 7, 2026 Sherrill signed S731/A796, which sets a data center rate class, has data centers pay their grid costs and curtail before residents.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "A796 as enacted, P.L.2026, c.32 (NJ Legislature)",
+"u": "https://pub.njleg.gov/Bills/2026/AL26/32_.HTM",
+"type": "Government record",
+"supports": "The law has BPU set standards within 12 months that assign infrastructure costs to large data centers and curtail them before residential customers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Next New Jersey Program AI status (NJEDA)",
+"u": "https://www.njeda.gov/nextnjai/",
+"type": "Government record",
+"supports": "S4390, signed Aug 27, 2026 as P.L.2026, c.77, cut Next NJ-AI credits from $500M to $250M, fully allocated, and NJEDA takes no new applications.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "NJ pauses AI data center tax break program (News 12)",
+"u": "https://newjersey.news12.com/2026/06/23/new-jersey-pauses-program-used-to-dole-out-tax-breaks-for-ai-data-centers/1f8s32nZnXpKC87InUdZMC",
+"type": "Reporting",
+"supports": "In June 2026 NJEDA paused applications for the Next New Jersey Program-AI while the Sherrill administration reviewed it.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "NJ blocks remaining $250M in AI data center credits",
+"u": "https://www.yahoo.com/news/politics/articles/growing-revolt-against-ai-data-113202728.html",
+"type": "Reporting",
+"supports": "The paused pool was the unawarded $250M of a $500M program, and CoreWeave keeps its $250M Kenilworth award.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Sherrill signs data center reporting law (NJ Governor)",
+"u": "https://www.nj.gov/governor/news/2026/20260827a.shtml",
+"type": "Government record",
+"supports": "On Aug 27, 2026 Sherrill signed S3379/A4096 requiring semiannual data center energy and water reports to BPU.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "High",
 "wt": 0,
 "pg": 2,
 "zn": 0,
 "tx": 2,
-"n": "The Data Center Fair Share Act (July 7, 2026) creates a separate ratepayer class for large data centers, requires them to cover their own grid infrastructure costs and requires them to curtail before residential customers. The state also froze its $250M AI data center incentive. Local restrictions require municipality-specific review."
+"n": "The Data Center Fair Share Act (P.L.2026, c.32, July 7, 2026) directs the BPU to adopt standards within 12 months that assign infrastructure costs to large data centers and curtail them before residential customers, after which utilities petition for a separate rate class. The End Data Center Tax Credits Act (P.L.2026, c.77, August 27, 2026) caps the Next New Jersey AI credit at the $250M already awarded. P.L.2026, c.75 requires semiannual energy and water use reports to the BPU. Local restrictions require municipality-specific review."
 }
 },
 {
@@ -1419,16 +1938,81 @@
 "c": 2,
 "x": 2,
 "tag": "",
-"note": "Third-cheapest industrial power and Google's Pryor campus; HB 2992 (effective July 1, 2026) requires large loads to fund their own grid costs. SB 1488 statewide moratorium and HB 4424 property tax rollback were proposed but not enacted; Oklahoma City passed a local pause. High tornado exposure.",
+"note": "Among the lowest industrial power prices, third lowest from January to July 2026 per EIA, and Google's Mayes County campus. HB 2992, the Data Center Customer Ratepayer Protection Act, took effect July 1, 2026 and requires large loads to fund their own grid costs. SB 259 bars groundwater for open-air evaporative cooling at data centers from November 1, 2026. SB 1488, a statewide moratorium, and HB 4424, a property tax exemption, were proposed but not enacted. Oklahoma City paused applications in April. High tornado exposure.",
 "mo": 3,
 "st": "Courting, with conditions",
+"srcs": [
+{
+"t": "Enrolled HB 2992 text (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/cf_pdf/2025-26%20ENR/hB/HB2992%20ENR.PDF",
+"type": "Government record",
+"supports": "HB 2992 requires every electric supplier to keep separate terms and tariffs so new loads of 75 MW or more repay their allocated costs, with a 10-year minimum term, effective July 1, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 2992 bill history (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/BillInfo.aspx?Bill=hb2992&Session=2600",
+"type": "Government record",
+"supports": "HB 2992 passed the House 92-2 and the Senate 46-0, cleared conference May 5, 2026 and was approved by the Governor May 11, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "SB 1488 as introduced (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/cf_pdf/2025-26%20INT/SB/SB1488%20INT.PDF",
+"type": "Government record",
+"supports": "SB 1488 would have banned building data centers with loads of 100 MW or more until Nov 1, 2029, pending a Corporation Commission study.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "SB 1488 bill history (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/BillInfo.aspx?Bill=sb1488&Session=2600",
+"type": "Government record",
+"supports": "SB 1488 was referred to committee Feb 3, 2026 and has no recorded committee or floor vote.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 4424 bill history (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/BillInfo.aspx?Bill=hb4424&Session=2600",
+"type": "Government record",
+"supports": "HB 4424, Speaker Hilbert's data center ad valorem exemption bill, was referred to Appropriations Feb 3, 2026 and never got a vote.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "OKC Council approves data center moratorium (City of OKC)",
+"u": "https://www.okc.gov/News-articles/Oklahoma-City-Council-approves-moratorium-on-new-data-centers",
+"type": "Government record",
+"supports": "Oklahoma City unanimously paused data center applications, rezonings and permits on April 21, 2026, until Dec 31, 2026 or earlier code changes.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Enrolled SB 259 groundwater act (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/cf_pdf/2025-26%20ENR/SB/SB259%20ENR.PDF",
+"type": "Government record",
+"supports": "From Nov 1, 2026, data centers may not use groundwater for open-air evaporative cooling and need closed-loop or similar low-consumption cooling to get a permit.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "EIA Table 5.6.B electricity prices by state, YTD 2026",
+"u": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_b",
+"type": "Government record",
+"supports": "For January through July 2026, Oklahoma's industrial price of 6.69 cents per kWh is the third lowest, after New Mexico and Louisiana.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Google Mayes County data center (Google)",
+"u": "https://datacenters.google/locations/mayes-county-oklahoma/",
+"type": "Company statement",
+"supports": "Google has run a data center in Pryor, Mayes County since 2007 and says it has invested more than 15 billion dollars in Oklahoma.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
 "pg": 2,
-"zn": 0,
+"zn": 1,
 "tx": 0,
-"n": "HB 2992, the Data Center Consumer Ratepayer Protection Act, took effect July 1, 2026 and requires electric suppliers to set separate terms and tariffs for large loads so they fund their own grid costs. SB 1488, a moratorium on facilities of 100 MW or more through 2029, and HB 4424 on property tax were proposed but not enacted. Oklahoma City passed a local pause."
+"n": "HB 2992, the Data Center Customer Ratepayer Protection Act, took effect July 1, 2026. It requires electric suppliers to keep separate terms and tariffs so new loads of 75 MW or more repay their allocated costs, and it requires large-load buyers of rural land to notify the Corporation Commission, county commissioners and neighbors. SB 259 bars groundwater for open-air evaporative cooling at data centers from November 1, 2026. SB 1488, a moratorium on facilities of 100 MW or more through 2029, and HB 4424 were proposed but not enacted. Oklahoma City paused applications on April 21, 2026."
 }
 },
 {
@@ -1918,16 +2502,67 @@
 "c": 5,
 "x": 4,
 "tag": "",
-"note": "Cheap hydro and a cool climate put Washington atop CNBC's grid ranking; Quincy and Seattle are established markets. Grant County PUD is effectively full and BPA transmission is the bottleneck; the exemption is limited to rural counties; Snohomish County paused applications through Dec 2026.",
+"note": "Cheap hydro and a cool climate, with established markets in Quincy and Seattle. Grant County PUD has limited data center load since March 2025 while transmission upgrades proceed, and BPA transmission is the bottleneck. ESSB 6231 narrowed both sales tax exemptions, for rural counties and for King, Pierce and Snohomish, from July 1, 2026. Snohomish County paused applications for six months in June 2026.",
 "mo": 3,
 "st": "Courting, with conditions",
+"srcs": [
+{
+"t": "HB 2515 bill summary (Washington Legislature)",
+"u": "https://app.leg.wa.gov/billsummary?BillNumber=2515&Year=2025&Initiative=false",
+"type": "Government record",
+"supports": "HB 2515 passed the House 51-41 on Feb 14, 2026 and went back to House Rules on March 12, 2026 without passing the Senate.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "E2SHB 2515 Senate bill report, Feb 27, 2026",
+"u": "https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bill%20Reports/Senate/2515-S2.E%20SBR%20WM%20TA%2026.pdf",
+"type": "Government record",
+"supports": "HB 2515 would require tariffs that block cost shifts from facilities of 20 MW or more, a demand response share, and 80 percent new clean energy by 2030.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "ESSB 6231 final bill report (C 266 L 26)",
+"u": "https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bill%20Reports/Senate/6231-S.E%20SBR%20FBR%2026.pdf",
+"type": "Government record",
+"supports": "Washington has one data center sales tax exemption for rural counties and another for King, Pierce and Snohomish, and the 2026 law narrowed both from July 1, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Snohomish County Council 2026 voting record",
+"u": "https://www.snohomishcountywa.gov/DocumentCenter/View/141689/Council-Vote-Record-2026",
+"type": "Government record",
+"supports": "The council adopted Ordinance 26-026, a data center moratorium in unincorporated Snohomish County, 5-0 on June 24, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Snohomish County data center moratorium (Everett Herald)",
+"u": "https://www.heraldnet.com/2026/06/25/snohomish-county-council-approves-emergency-data-center-moratorium/",
+"type": "Reporting",
+"supports": "The moratorium pauses data center applications in unincorporated Snohomish County for six months and can be renewed after a public hearing.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Grant PUD commission recap, March 25, 2025",
+"u": "https://www.grantpud.org/blog/commission-recap-3-25-2025",
+"type": "Government record",
+"supports": "Grant PUD planned load-growth limits for data centers until substation and transmission upgrades allow more demand.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Washington clean-energy bottleneck (OPB)",
+"u": "https://www.opb.org/article/2026/07/24/washington-clean-energy-bottleneck-calls-for-reform/",
+"type": "Reporting",
+"supports": "BPA added one mile of transmission line in five years and has a large, understaffed interconnection queue.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
 "pg": 0,
 "zn": 0,
-"tx": 1,
-"n": "The sales tax exemption is limited to rural counties. HB 2515, which would set clean energy, cost-shifting and demand response standards for large loads, is pending. Snohomish County paused applications through December 2026."
+"tx": 2,
+"n": "Washington has a sales tax exemption for rural counties and a parallel one for King, Pierce and Snohomish counties. ESSB 6231 narrowed both from July 1, 2026 by ending refurbishment certificates and removing replacement servers. HB 2515, which would have set clean energy, cost-shifting and demand response standards for large loads, passed the House and died in the Senate in March 2026. Snohomish County adopted a six-month moratorium on June 24, 2026."
 }
 },
 {
@@ -1944,16 +2579,60 @@
 "c": 4,
 "x": 2,
 "tag": "",
-"note": "HB 2014 (2025) created a certified microgrid district program letting data centers self-supply from coal or gas; Berkeley County is a Northern Virginia spillover. Rural opposition (Tucker County) is emerging; fiber infrastructure is limited.",
+"note": "HB 2014 (2025) created a certified microgrid program that exempts certified projects from PSC rate jurisdiction and bars local ordinances that limit them, with no fuel requirement. Penzance plans a $4 billion, 600 MW campus in Berkeley County, about an hour from Loudoun County. Opponents of the Tucker County project have taken its air permit to court.",
 "mo": 3,
 "st": "Courting",
+"srcs": [
+{
+"t": "HB 2014 (2025) bill history (West Virginia Legislature)",
+"u": "https://www.wvlegislature.gov/Bill_Status/Bills_history.cfm?input=2014&year=2025&sessiontype=RS&btype=bill",
+"type": "Government record",
+"supports": "HB 2014, the Certified Microgrid Program bill, passed in April 2025, was signed April 30, 2025 and took effect 90 days from passage.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 2014 enrolled text (West Virginia Legislature)",
+"u": "https://www.wvlegislature.gov/Bill_Status/bills_text.cfm?billdoc=hb2014%20sub1%20enr.htm&yr=2025&sesstype=RS&i=2014",
+"type": "Government record",
+"supports": "The act exempts certified microgrids from PSC rate jurisdiction and bars county and municipal ordinances that limit certified projects.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Berkeley County data center campus (WV Dept. of Commerce)",
+"u": "https://westvirginia.gov/4-billion-data-center-campus-planned-for-berkeley-county-positioning-west-virginia-for-the-ai-and-cloud-economy/",
+"type": "Government record",
+"supports": "Penzance plans a $4 billion, 600 MW, 548-acre Eastern Panhandle campus in Berkeley County, the state's first high impact designation.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Penzance to invest $4B in West Virginia (Construction Dive)",
+"u": "https://www.constructiondive.com/news/west-virginia-penzance-data-center-investment/814095/",
+"type": "Reporting",
+"supports": "The Berkeley County site sits a little over an hour's drive from Loudoun County's Data Center Alley.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Air Quality Board appeal 25-02-AQB certified record",
+"u": "https://aqb.wv.gov/AppealsDocuments/2025.10.15.%2025-02-AQB.%20Certified%20Record%20Part%201%20of%206.%20Pages%201%20-%20131.pdf",
+"type": "Government record",
+"supports": "Tucker United, the WV Highlands Conservancy and Sierra Club appealed the air permit for Fundamental Data's Tucker County Ridgeline facility.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "WV Responsible Data Center Development Plan (Commerce)",
+"u": "https://westvirginia.gov/wp-content/uploads/2026/08/Data-Center-Principles-August-2026-FINAL-8-26.pdf",
+"type": "Government record",
+"supports": "The August 11, 2026 plan builds on HB 2014 and makes the Ratepayer Protection Pledge a condition of state certification.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
 "pg": 0,
 "zn": -1,
 "tx": 0,
-"n": "HB 2014 (2025) created a certified microgrid district program letting data centers self-supply from coal or gas, easing siting and power supply relative to ordinary review. Rural opposition has emerged in Tucker County."
+"n": "HB 2014 (2025) created a certified microgrid program that exempts certified projects from PSC rate jurisdiction and preempts local ordinances that would limit them, easing siting and power supply relative to ordinary review. An August 2026 Commerce plan makes a ratepayer protection pledge a condition of certification. Opposition to the Tucker County project has moved into litigation over its air permit."
 }
 },
 {
@@ -2010,16 +2689,67 @@
 "c": 5,
 "x": 1,
 "tag": "",
-"note": "Gov. Gordon's EO 2026-03 ('Data Centers the Wyoming Way', June 3) explicitly keeps the state open for investment while making developers pay for new power; Cheyenne hosts a 1.8 GW Crusoe/Tallgrass campus. Cold climate, low electricity prices and low hazard exposure; limited fiber infrastructure and labor availability.",
+"note": "Gov. Gordon's EO 2026-03 ('Data Centers the Wyoming Way', June 3, 2026) sets nonbinding principles, including that whoever creates new demand pays for its infrastructure, and state law already bars large-load service agreements from shifting costs. Google now owns the 2.7 GW Project Tembo campus south of Cheyenne, and Black Hills signed agreements to serve it in September 2026. Low electricity prices and a cold, semi-arid climate. Cheyenne rejected a local moratorium in May 2026.",
 "mo": 3,
 "st": "Courting",
+"srcs": [
+{
+"t": "EO 2026-03 Data Centers the Wyoming Way (Gov. Gordon)",
+"u": "https://drive.google.com/file/d/1wxmktlM19KG5WEFCIqieNQFjBimCxpJP/view",
+"type": "Government record",
+"supports": "Gov. Gordon signed EO 2026-03 on June 3, 2026. It sets nonbinding principles, one of which is that the people creating demand bear the infrastructure costs.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "W.S. 37-3-116 service agreements (Wyoming Title 37)",
+"u": "https://wyoleg.gov/statutes/compress/title37.pdf",
+"type": "Government record",
+"supports": "W.S. 37-3-116 bars utility service agreements with customers above 5 MW from shifting costs to other customers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "W.S. 39-15-105 data center exemption (Title 39)",
+"u": "https://wyoleg.gov/statutes/compress/title39.pdf",
+"type": "Government record",
+"supports": "W.S. 39-15-105(a)(viii)(S) exempts qualifying data center equipment purchases from sales and use tax.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Black Hills 8-K on Google Cheyenne deal (SEC)",
+"u": "https://www.sec.gov/Archives/edgar/data/0001130464/000119312526415597/bkh-ex99_1.htm",
+"type": "Company statement",
+"supports": "Black Hills will serve Google's planned Cheyenne data center through 2048, and Google pays all costs of serving it.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Google revealed behind Project Tembo (Cowboy State Daily)",
+"u": "https://cowboystatedaily.com/2026/07/08/google-revealed-as-owner-of-wyomings-largest-data-center-now-project-tembo/",
+"type": "Reporting",
+"supports": "Google has replaced Crusoe as owner of the campus south of Cheyenne, now called Project Tembo and planned at 2.7 GW.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Wyoming Electricity Profile 2024 (EIA)",
+"u": "https://www.eia.gov/electricity/state/wyoming/index.php",
+"type": "Government record",
+"supports": "Wyoming's 2024 average retail electricity price was 9.14 cents per kWh, 47th among states.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Cheyenne rejects data center pause (Wyoming Public Media)",
+"u": "https://www.wyomingpublicmedia.org/wyoming-economy/2026-05-28/no-pause-on-data-centers-for-cheyenne",
+"type": "Reporting",
+"supports": "After hours of testimony on both sides, the Cheyenne City Council voted 8-1 in May 2026 against a one-year moratorium.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Low",
 "wt": 0,
 "pg": 2,
 "zn": 0,
 "tx": 0,
-"n": "Executive Order 2026-03, 'Data Centers the Wyoming Way' (June 3, 2026), keeps the state open for investment while requiring developers to pay for new power. No datacenter-specific water or siting restriction is recorded."
+"n": "W.S. 37-3-116 bars utility service agreements with customers above 5 MW from shifting costs to other customers, and Black Hills serves the Cheyenne campus under its large-load tariff. Executive Order 2026-03 (June 3, 2026) sets nonbinding principles on cost responsibility. The data center equipment sales tax exemption remains in force. No datacenter-specific water or siting restriction is recorded."
 }
 }
 ]

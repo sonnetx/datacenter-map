@@ -7,6 +7,13 @@
   --wall:#B9C2CB; --edge:#9FAAB5; --quiet:#C0C8D0; --sand-ink:#7A6E42;   /* figure strokes and walls */
   --shade:#18212B;          /* dialog backdrop and drawer shadow base */
   --c0:#00204C; --c1:#31446B; --c2:#666970; --c3:#958F78; --c4:#C4B56C; --c5:#FFEA46;
+  /* Political views, checked with the palette validator in each scheme.
+     Posture diverges from courting (blue) through no posture (gray) to
+     restrictive (red); pushback and rules are one-hue ordinal ramps, with an
+     amber step for rules that ease entry. */
+  --po0:#1c5cab; --po1:#6da7ec; --po2:#d3d6da; --po3:#ec8a6c; --po4:#b02e2b;
+  --pb0:#f2a488; --pb1:#d9603f; --pb2:#9c2b22;
+  --rue:#c99a1c; --ru0:#d3d6da; --ru1:#a596dc; --ru2:#6f55c0; --ru3:#3b2585;
   /* shared spacing and text measure */
   --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px;
   --pad-y:20px; --pad-x:20px;   /* shared card inset */
@@ -23,6 +30,11 @@
     --hover:#1E2731; --select:#243040;
     --wall:#3A4652; --edge:#5B6975; --quiet:#3E4A57; --sand-ink:#D9C97B;
     --shade:#000000;
+    /* Dark steps keep the light order, with saturation marking the stronger
+       class, and were validated against the dark panel. */
+    --po0:#2a78d6; --po1:#9ec5f4; --po2:#4f565e; --po3:#f4ab95; --po4:#d9473f;
+    --pb0:#f4ab95; --pb1:#e06a4c; --pb2:#b8382c;
+    --rue:#e0b43a; --ru0:#4f565e; --ru1:#b9adeb; --ru2:#8a70dc; --ru3:#5b3fc0;
   }
 }
 *{box-sizing:border-box}
@@ -38,7 +50,7 @@ header .asof{margin-top:var(--s3);font-size:13px;line-height:1.55;color:var(--mu
 .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:var(--s6);margin-top:var(--s6);align-items:start}
 .grid>.col{min-width:0}
 .grid>aside{position:sticky;top:var(--s4);max-height:calc(100dvh - 32px);overflow-y:auto}
-@media (max-width:900px){.grid{grid-template-columns:1fr;gap:var(--s3)}.grid>aside{order:-1;position:static;max-height:none}}
+@media (max-width:900px){.grid{grid-template-columns:1fr;gap:var(--s3)}.grid>aside{position:static;max-height:none}}
 .mapcard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x);position:relative}
 svg.map{width:100%;height:auto;max-height:64vh;display:block}
 .map-tools{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s3)}
@@ -65,10 +77,28 @@ button:focus-visible,select:focus-visible{outline:2px solid var(--focus);outline
 .scatter svg{width:100%;height:auto;display:block}
 .scatter .dot{cursor:pointer}
 .scatter .dot:hover circle,.scatter .dot.selected circle{stroke:var(--ink);stroke-width:2}
-.legend{display:grid;gap:var(--s2);margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
+.legend{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s2);margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
 .legend .lgnote{font-size:12px;max-width:var(--measure)}
 .ramp{width:180px;min-width:60px;height:10px;border-radius:2px;background:linear-gradient(90deg,var(--c0),var(--c1),var(--c2),var(--c3),var(--c4),var(--c5))}
 .legend .key{display:flex;align-items:center;gap:8px}
+/* Political views swap the fit ramp, hatch and figure switches for category
+   swatches and the local moratorium key. */
+.mapcard.politics #candidates,.mapcard.politics #figbar,.mapcard.politics #legend-ramp,.mapcard.politics #legend-rampnote,
+.mapcard.politics #legend-hatch,.mapcard.politics #tiers,.mapcard.politics #viewnote{display:none}
+.mapcard:not(.politics) #legend-cat,.mapcard:not(.politics) #legend-catnote{display:none}
+.catkey{display:flex;flex-wrap:wrap;gap:6px 16px}
+.catkey .cat{display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.catkey .cat i{width:16px;height:12px;border-radius:2px;flex:none}
+.catkey .cat b{font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.dotkey{flex-wrap:wrap;gap:6px 16px}
+.dotkey[hidden]{display:none}
+.dotkey label{display:inline-flex;align-items:center;gap:6px;color:var(--ink);cursor:pointer}
+.dotkey>span{display:inline-flex;align-items:center;gap:5px}
+.dot-in,.dot-pending{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.dot-in{background:var(--ink)}
+.dot-pending{background:var(--panel);border:1.2px solid var(--ink)}
+.lm-in{fill:var(--ink);stroke:var(--panel);stroke-width:.6}
+.lm-pending{fill:var(--panel);stroke:var(--ink);stroke-width:1}
 .swatch{width:18px;height:12px;flex:none;border:1px solid var(--rule);background:#C4B56C repeating-linear-gradient(45deg,#B5432A 0 1.5px,transparent 1.5px 6px)}
 /* Fixed or stretched fit colors: a small segmented control at the end of the ramp row. */
 .scale-toggle{display:inline-flex;margin-left:auto;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
@@ -80,18 +110,27 @@ button:focus-visible,select:focus-visible{outline:2px solid var(--focus);outline
 .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--panel);padding:8px 10px;border-radius:4px;font-size:13px;line-height:1.35;max-width:240px;display:none;z-index:5}
 .tip b{font-weight:600}
 .tip .sc{font-size:20px;font-weight:300;display:block;margin:2px 0 2px}
+.tip .sc.cat{font-size:15px;font-weight:500}
 .tip .small{opacity:.8}
 aside .card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x)}
 aside h2{font-size:15px;font-weight:600;margin:0;display:inline}
-/* on desktop the panel is always open and the summary is just a heading */
-#wpanel>summary{list-style:none;cursor:default}
+.grid>aside{display:flex;flex-direction:column;gap:var(--s3)}
+/* On the Siting fit map the model's controls come first. */
+body.fit-view #wpanel{order:-1}
+/* Advanced analysis starts closed at every width; the summary says how to open it. */
+#wpanel>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 var(--s2)}
 #wpanel>summary::-webkit-details-marker{display:none}
-@media (max-width:900px){
-  #wpanel>summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:var(--s2)}
-  #wpanel>summary::after{content:"Show";font-size:13px;color:var(--focus)}
-  #wpanel[open]>summary::after{content:"Hide"}
-  #wpanel>summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-}
+#wpanel>summary::after{content:"Show";grid-column:2;grid-row:1;font-size:13px;color:var(--focus)}
+#wpanel[open]>summary::after{content:"Hide"}
+#wpanel>summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+#wpanel .summary-sub{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin-top:2px}
+#wpanel>.lens{margin:var(--s3) 0}
+/* Findings: rules over the records, with the states they pick as buttons. */
+.findings .finding{border-top:1px solid var(--rule-soft);padding-top:var(--s3);margin-top:var(--s3)}
+.findings h3{font-size:13.5px;font-weight:600;margin:0 0 var(--s2)}
+.finding-states{display:flex;flex-wrap:wrap;gap:6px}
+.finding-states .candidate{font-size:12.5px}
+.findings .fine{font-size:11.5px;color:var(--muted);margin:var(--s2) 0 0;line-height:1.45}
 aside p.hint{margin:var(--s2) 0 var(--s3);font-size:13px;color:var(--muted)}
 .view-note{margin:0 0 var(--s4);padding:var(--s2) var(--s3);background:var(--bg);border-radius:4px;font-size:12.5px;color:var(--muted)}
 .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:var(--s4)}
@@ -197,7 +236,17 @@ body:has(.drawer[open]){overflow:hidden}
 .detail .rank{color:var(--muted);font-size:14px;max-width:var(--measure);margin-top:var(--s1)}
 .detail .score{font-size:40px;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
 .detail .score small{font-size:14px;color:var(--muted);font-weight:400;margin-left:4px}
+.detail .posture-head{flex:none;max-width:12rem;text-align:right;font-size:17px;font-weight:500;line-height:1.25}
+.detail .posture-head small{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
 .chip{display:inline-block;border:1px solid var(--warn);color:var(--warn);border-radius:3px;padding:2px 7px;font-size:12.5px;margin-top:var(--s2)}
+.politics-facts{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3) var(--s4);margin:var(--s4) 0}
+.politics-facts dt{font-size:12px;color:var(--muted)}
+.politics-facts dd{margin:2px 0 0;font-size:14px;font-weight:500}
+@media (max-width:420px){.politics-facts{grid-template-columns:1fr}}
+.local-list{list-style:none;padding:0;margin:var(--s3) 0 var(--s2)}
+.local-list li{padding:6px 0;border-bottom:1px solid var(--rule-soft);font-size:13px;overflow-wrap:anywhere}
+.local-list li span{display:block;color:var(--muted);font-size:12px}
+.drawer .fine{font-size:12px;color:var(--muted)}
 .detail .meta{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4);margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
 .breakdown-hint{font-size:12.5px;color:var(--muted);margin:var(--s4) 0 var(--s2)}
 /* Reception and regulation. Deliberately unlike the score bars: nothing here
@@ -235,13 +284,10 @@ body:has(.drawer[open]){overflow:hidden}
 .demand-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:20px 0}
 .demand-stats dt{font-size:13px;color:var(--muted)}.demand-stats dd{font-size:28px;margin:4px 0 0;font-variant-numeric:tabular-nums}
 @media(max-width:600px){.demand-stats{grid-template-columns:1fr}}
-.workflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:24px;padding:20px;background:var(--panel);border:1px solid var(--rule);border-radius:6px}
-.workflow b{font-size:14px}.workflow p{font-size:13px;color:var(--muted);margin:6px 0 0}
 .shortlist-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:16px;background:var(--panel);border:1px solid var(--rule);border-radius:6px}
 .shortlist-tools label{font-size:13px}.shortlist-tools p{width:100%;margin:0;font-size:12px;color:var(--muted)}
 #shortlist-chips{display:flex;flex-wrap:wrap;gap:8px;width:100%}#shortlist-chips:empty{display:none}
 .shortlist-tools+.tablecard{margin-top:12px}
-@media(max-width:600px){.workflow{grid-template-columns:1fr;gap:12px}}
 .table-intro{margin:var(--s6) 0 var(--s3)}
 .table-intro h2{font-size:17px;margin:0 0 var(--s1)}
 .table-intro p{font-size:13px;color:var(--muted);margin:0;max-width:var(--measure)}
@@ -367,10 +413,10 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
   :root{--pad-x:16px;--pad-y:16px}
   .lens button,.presets button{min-height:40px}
   .legend .key{gap:var(--s2);font-size:12px}
-  .legend>.key:first-child{display:grid;grid-template-columns:1fr 1fr}
-  .legend>.key:first-child .ramp{grid-column:1/-1;grid-row:1;width:100%}
-  .legend>.key:first-child #ramp-hi{text-align:right}
-  .legend>.key:first-child .scale-toggle{grid-column:1/-1;margin-left:0;justify-self:start}
+  #legend-ramp{display:grid;grid-template-columns:1fr 1fr}
+  #legend-ramp .ramp{grid-column:1/-1;grid-row:1;width:100%}
+  #legend-ramp #ramp-hi{text-align:right}
+  #legend-ramp .scale-toggle{grid-column:1/-1;margin-left:0;justify-self:start}
   .detail .score{font-size:34px}
   .detail .score small{display:block;margin:var(--s1) 0 0;text-align:right;font-size:12px}
   .detail h2{font-size:26px}
@@ -385,7 +431,7 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
   html,body{background:#fff}
   .wrap{max-width:none;padding:0}
   .grid{display:block}
-  .grid>aside,.workflow,.viewbar,.map-tools .lens,.state-picker,.candidates,.tip,.scale-toggle,.shortlist-tools,.dp-links,.cmp-remove,#legend-hatch+.key,.rotate-btn,.viewnote .hides{display:none!important}
+  .grid>aside,.viewbar,.map-tools .lens,#legend-dots label,.state-picker,.candidates,.tip,.scale-toggle,.shortlist-tools,.dp-links,.cmp-remove,#legend-hatch+.key,.rotate-btn,.viewnote .hides{display:none!important}
   .mapcard,.scatter,.compare,.tablecard,.detail{border:0;padding:0;margin:0 0 18pt;break-inside:avoid}
   svg.map{max-height:none}
   .viewpane.tall{max-height:none;overflow:visible}

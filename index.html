@@ -6,21 +6,21 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F4F6">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#10151B">
-<title>US datacenter siting suitability, October 2026</title>
-<meta name="description" content="Compare hyperscale and AI datacenter siting conditions across 50 US states using one measured factor and seven provisional analyst ratings.">
+<title>US data center politics by state, October 2026</title>
+<meta name="description" content="Map each state's 2026 data center posture, public pushback, statewide rules in force and local moratoriums, with a siting model for developers underneath.">
 <link rel="canonical" href="https://sonnetx.github.io/datacenter-map/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sonnetx.github.io/datacenter-map/">
-<meta property="og:site_name" content="US datacenter siting suitability">
-<meta property="og:title" content="US datacenter siting conditions, 2026">
-<meta property="og:description" content="Compare 50 states using adjustable weights for power, policy, water and permitting. Ratings are provisional.">
+<meta property="og:site_name" content="US data center politics by state">
+<meta property="og:title" content="US data center politics by state, 2026">
+<meta property="og:description" content="Where states court, pause or restrict data centers, and where towns and counties have passed moratoriums of their own.">
 <meta property="og:image" content="https://sonnetx.github.io/datacenter-map/assets/social-card.png?v=2026-10-13">
 <meta property="og:image:width" content="3200">
 <meta property="og:image:height" content="1800">
 <meta property="og:image:alt" content="Choropleth map of the 50 US states shaded by datacenter siting fit, with twelve states hatched to mark a 2026 policy change.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="US datacenter siting conditions, 2026">
-<meta name="twitter:description" content="Compare 50 states using adjustable weights for power, policy, water and permitting. Ratings are provisional.">
+<meta name="twitter:title" content="US data center politics by state, 2026">
+<meta name="twitter:description" content="Where states court, pause or restrict data centers, and where towns and counties have passed moratoriums of their own.">
 <meta name="twitter:image" content="https://sonnetx.github.io/datacenter-map/assets/social-card.png?v=2026-10-13">
 <meta name="twitter:image:alt" content="Choropleth map of the 50 US states shaded by datacenter siting fit, with twelve states hatched to mark a 2026 policy change.">
 <script type="application/ld+json">
@@ -28,7 +28,7 @@
   "@context": "https://schema.org",
   "@type": "Dataset",
   "name": "US datacenter siting conditions, 2026",
-  "description": "State-level records for the 50 US states: EIA 2024 industrial electricity prices, NASA POWER December and annual solar irradiance, seven provisional analyst ratings on siting factors, 2026 policy posture, public reception, statewide rules in force and citations.",
+  "description": "State-level records for the 50 US states: 2026 data center policy posture, EIA 2024 industrial electricity prices, NASA POWER December and annual solar irradiance, seven provisional analyst ratings on siting factors, 2026 policy posture, public reception, statewide rules in force and citations.",
   "url": "https://sonnetx.github.io/datacenter-map/",
   "sameAs": "https://github.com/sonnetx/datacenter-map",
   "license": "https://creativecommons.org/licenses/by/4.0/",
@@ -36,7 +36,7 @@
   "creator": {"@type": "Person", "name": "Sonnet Xu", "url": "https://sonnetx.github.io/"},
   "temporalCoverage": "2024/2026",
   "spatialCoverage": {"@type": "Place", "name": "United States"},
-  "keywords": ["datacenter", "data center", "siting", "electricity prices", "solar irradiance", "state policy", "United States"],
+  "keywords": ["datacenter", "data center", "moratorium", "state policy", "siting", "electricity prices", "solar irradiance", "state policy", "United States"],
   "distribution": [
     {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://github.com/sonnetx/datacenter-map/blob/main/data/states.json"},
     {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://sonnetx.github.io/datacenter-map/#dataset"}
@@ -55,6 +55,13 @@
   --wall:#B9C2CB; --edge:#9FAAB5; --quiet:#C0C8D0; --sand-ink:#7A6E42;   /* figure strokes and walls */
   --shade:#18212B;          /* dialog backdrop and drawer shadow base */
   --c0:#00204C; --c1:#31446B; --c2:#666970; --c3:#958F78; --c4:#C4B56C; --c5:#FFEA46;
+  /* Political views, checked with the palette validator in each scheme.
+     Posture diverges from courting (blue) through no posture (gray) to
+     restrictive (red); pushback and rules are one-hue ordinal ramps, with an
+     amber step for rules that ease entry. */
+  --po0:#1c5cab; --po1:#6da7ec; --po2:#d3d6da; --po3:#ec8a6c; --po4:#b02e2b;
+  --pb0:#f2a488; --pb1:#d9603f; --pb2:#9c2b22;
+  --rue:#c99a1c; --ru0:#d3d6da; --ru1:#a596dc; --ru2:#6f55c0; --ru3:#3b2585;
   /* shared spacing and text measure */
   --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px;
   --pad-y:20px; --pad-x:20px;   /* shared card inset */
@@ -71,6 +78,11 @@
     --hover:#1E2731; --select:#243040;
     --wall:#3A4652; --edge:#5B6975; --quiet:#3E4A57; --sand-ink:#D9C97B;
     --shade:#000000;
+    /* Dark steps keep the light order, with saturation marking the stronger
+       class, and were validated against the dark panel. */
+    --po0:#2a78d6; --po1:#9ec5f4; --po2:#4f565e; --po3:#f4ab95; --po4:#d9473f;
+    --pb0:#f4ab95; --pb1:#e06a4c; --pb2:#b8382c;
+    --rue:#e0b43a; --ru0:#4f565e; --ru1:#b9adeb; --ru2:#8a70dc; --ru3:#5b3fc0;
   }
 }
 *{box-sizing:border-box}
@@ -86,7 +98,7 @@ header .asof{margin-top:var(--s3);font-size:13px;line-height:1.55;color:var(--mu
 .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:var(--s6);margin-top:var(--s6);align-items:start}
 .grid>.col{min-width:0}
 .grid>aside{position:sticky;top:var(--s4);max-height:calc(100dvh - 32px);overflow-y:auto}
-@media (max-width:900px){.grid{grid-template-columns:1fr;gap:var(--s3)}.grid>aside{order:-1;position:static;max-height:none}}
+@media (max-width:900px){.grid{grid-template-columns:1fr;gap:var(--s3)}.grid>aside{position:static;max-height:none}}
 .mapcard{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x);position:relative}
 svg.map{width:100%;height:auto;max-height:64vh;display:block}
 .map-tools{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s3)}
@@ -113,10 +125,28 @@ button:focus-visible,select:focus-visible{outline:2px solid var(--focus);outline
 .scatter svg{width:100%;height:auto;display:block}
 .scatter .dot{cursor:pointer}
 .scatter .dot:hover circle,.scatter .dot.selected circle{stroke:var(--ink);stroke-width:2}
-.legend{display:grid;gap:var(--s2);margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
+.legend{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s2);margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
 .legend .lgnote{font-size:12px;max-width:var(--measure)}
 .ramp{width:180px;min-width:60px;height:10px;border-radius:2px;background:linear-gradient(90deg,var(--c0),var(--c1),var(--c2),var(--c3),var(--c4),var(--c5))}
 .legend .key{display:flex;align-items:center;gap:8px}
+/* Political views swap the fit ramp, hatch and figure switches for category
+   swatches and the local moratorium key. */
+.mapcard.politics #candidates,.mapcard.politics #figbar,.mapcard.politics #legend-ramp,.mapcard.politics #legend-rampnote,
+.mapcard.politics #legend-hatch,.mapcard.politics #tiers,.mapcard.politics #viewnote{display:none}
+.mapcard:not(.politics) #legend-cat,.mapcard:not(.politics) #legend-catnote{display:none}
+.catkey{display:flex;flex-wrap:wrap;gap:6px 16px}
+.catkey .cat{display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.catkey .cat i{width:16px;height:12px;border-radius:2px;flex:none}
+.catkey .cat b{font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.dotkey{flex-wrap:wrap;gap:6px 16px}
+.dotkey[hidden]{display:none}
+.dotkey label{display:inline-flex;align-items:center;gap:6px;color:var(--ink);cursor:pointer}
+.dotkey>span{display:inline-flex;align-items:center;gap:5px}
+.dot-in,.dot-pending{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.dot-in{background:var(--ink)}
+.dot-pending{background:var(--panel);border:1.2px solid var(--ink)}
+.lm-in{fill:var(--ink);stroke:var(--panel);stroke-width:.6}
+.lm-pending{fill:var(--panel);stroke:var(--ink);stroke-width:1}
 .swatch{width:18px;height:12px;flex:none;border:1px solid var(--rule);background:#C4B56C repeating-linear-gradient(45deg,#B5432A 0 1.5px,transparent 1.5px 6px)}
 /* Fixed or stretched fit colors: a small segmented control at the end of the ramp row. */
 .scale-toggle{display:inline-flex;margin-left:auto;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
@@ -128,18 +158,27 @@ button:focus-visible,select:focus-visible{outline:2px solid var(--focus);outline
 .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--panel);padding:8px 10px;border-radius:4px;font-size:13px;line-height:1.35;max-width:240px;display:none;z-index:5}
 .tip b{font-weight:600}
 .tip .sc{font-size:20px;font-weight:300;display:block;margin:2px 0 2px}
+.tip .sc.cat{font-size:15px;font-weight:500}
 .tip .small{opacity:.8}
 aside .card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:var(--pad-y) var(--pad-x)}
 aside h2{font-size:15px;font-weight:600;margin:0;display:inline}
-/* on desktop the panel is always open and the summary is just a heading */
-#wpanel>summary{list-style:none;cursor:default}
+.grid>aside{display:flex;flex-direction:column;gap:var(--s3)}
+/* On the Siting fit map the model's controls come first. */
+body.fit-view #wpanel{order:-1}
+/* Advanced analysis starts closed at every width; the summary says how to open it. */
+#wpanel>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 var(--s2)}
 #wpanel>summary::-webkit-details-marker{display:none}
-@media (max-width:900px){
-  #wpanel>summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:var(--s2)}
-  #wpanel>summary::after{content:"Show";font-size:13px;color:var(--focus)}
-  #wpanel[open]>summary::after{content:"Hide"}
-  #wpanel>summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-}
+#wpanel>summary::after{content:"Show";grid-column:2;grid-row:1;font-size:13px;color:var(--focus)}
+#wpanel[open]>summary::after{content:"Hide"}
+#wpanel>summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+#wpanel .summary-sub{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin-top:2px}
+#wpanel>.lens{margin:var(--s3) 0}
+/* Findings: rules over the records, with the states they pick as buttons. */
+.findings .finding{border-top:1px solid var(--rule-soft);padding-top:var(--s3);margin-top:var(--s3)}
+.findings h3{font-size:13.5px;font-weight:600;margin:0 0 var(--s2)}
+.finding-states{display:flex;flex-wrap:wrap;gap:6px}
+.finding-states .candidate{font-size:12.5px}
+.findings .fine{font-size:11.5px;color:var(--muted);margin:var(--s2) 0 0;line-height:1.45}
 aside p.hint{margin:var(--s2) 0 var(--s3);font-size:13px;color:var(--muted)}
 .view-note{margin:0 0 var(--s4);padding:var(--s2) var(--s3);background:var(--bg);border-radius:4px;font-size:12.5px;color:var(--muted)}
 .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:var(--s4)}
@@ -245,7 +284,17 @@ body:has(.drawer[open]){overflow:hidden}
 .detail .rank{color:var(--muted);font-size:14px;max-width:var(--measure);margin-top:var(--s1)}
 .detail .score{font-size:40px;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
 .detail .score small{font-size:14px;color:var(--muted);font-weight:400;margin-left:4px}
+.detail .posture-head{flex:none;max-width:12rem;text-align:right;font-size:17px;font-weight:500;line-height:1.25}
+.detail .posture-head small{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
 .chip{display:inline-block;border:1px solid var(--warn);color:var(--warn);border-radius:3px;padding:2px 7px;font-size:12.5px;margin-top:var(--s2)}
+.politics-facts{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3) var(--s4);margin:var(--s4) 0}
+.politics-facts dt{font-size:12px;color:var(--muted)}
+.politics-facts dd{margin:2px 0 0;font-size:14px;font-weight:500}
+@media (max-width:420px){.politics-facts{grid-template-columns:1fr}}
+.local-list{list-style:none;padding:0;margin:var(--s3) 0 var(--s2)}
+.local-list li{padding:6px 0;border-bottom:1px solid var(--rule-soft);font-size:13px;overflow-wrap:anywhere}
+.local-list li span{display:block;color:var(--muted);font-size:12px}
+.drawer .fine{font-size:12px;color:var(--muted)}
 .detail .meta{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4);margin:var(--s3) 0 0;font-size:13px;color:var(--muted)}
 .breakdown-hint{font-size:12.5px;color:var(--muted);margin:var(--s4) 0 var(--s2)}
 /* Reception and regulation. Deliberately unlike the score bars: nothing here
@@ -283,13 +332,10 @@ body:has(.drawer[open]){overflow:hidden}
 .demand-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:20px 0}
 .demand-stats dt{font-size:13px;color:var(--muted)}.demand-stats dd{font-size:28px;margin:4px 0 0;font-variant-numeric:tabular-nums}
 @media(max-width:600px){.demand-stats{grid-template-columns:1fr}}
-.workflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:24px;padding:20px;background:var(--panel);border:1px solid var(--rule);border-radius:6px}
-.workflow b{font-size:14px}.workflow p{font-size:13px;color:var(--muted);margin:6px 0 0}
 .shortlist-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:16px;background:var(--panel);border:1px solid var(--rule);border-radius:6px}
 .shortlist-tools label{font-size:13px}.shortlist-tools p{width:100%;margin:0;font-size:12px;color:var(--muted)}
 #shortlist-chips{display:flex;flex-wrap:wrap;gap:8px;width:100%}#shortlist-chips:empty{display:none}
 .shortlist-tools+.tablecard{margin-top:12px}
-@media(max-width:600px){.workflow{grid-template-columns:1fr;gap:12px}}
 .table-intro{margin:var(--s6) 0 var(--s3)}
 .table-intro h2{font-size:17px;margin:0 0 var(--s1)}
 .table-intro p{font-size:13px;color:var(--muted);margin:0;max-width:var(--measure)}
@@ -415,10 +461,10 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
   :root{--pad-x:16px;--pad-y:16px}
   .lens button,.presets button{min-height:40px}
   .legend .key{gap:var(--s2);font-size:12px}
-  .legend>.key:first-child{display:grid;grid-template-columns:1fr 1fr}
-  .legend>.key:first-child .ramp{grid-column:1/-1;grid-row:1;width:100%}
-  .legend>.key:first-child #ramp-hi{text-align:right}
-  .legend>.key:first-child .scale-toggle{grid-column:1/-1;margin-left:0;justify-self:start}
+  #legend-ramp{display:grid;grid-template-columns:1fr 1fr}
+  #legend-ramp .ramp{grid-column:1/-1;grid-row:1;width:100%}
+  #legend-ramp #ramp-hi{text-align:right}
+  #legend-ramp .scale-toggle{grid-column:1/-1;margin-left:0;justify-self:start}
   .detail .score{font-size:34px}
   .detail .score small{display:block;margin:var(--s1) 0 0;text-align:right;font-size:12px}
   .detail h2{font-size:26px}
@@ -433,7 +479,7 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
   html,body{background:#fff}
   .wrap{max-width:none;padding:0}
   .grid{display:block}
-  .grid>aside,.workflow,.viewbar,.map-tools .lens,.state-picker,.candidates,.tip,.scale-toggle,.shortlist-tools,.dp-links,.cmp-remove,#legend-hatch+.key,.rotate-btn,.viewnote .hides{display:none!important}
+  .grid>aside,.viewbar,.map-tools .lens,#legend-dots label,.state-picker,.candidates,.tip,.scale-toggle,.shortlist-tools,.dp-links,.cmp-remove,#legend-hatch+.key,.rotate-btn,.viewnote .hides{display:none!important}
   .mapcard,.scatter,.compare,.tablecard,.detail{border:0;padding:0;margin:0 0 18pt;break-inside:avoid}
   svg.map{max-height:none}
   .viewpane.tall{max-height:none;overflow:visible}
@@ -453,29 +499,25 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
 <body>
 <div class="wrap">
 <header>
-  <h1>US datacenter siting conditions</h1>
-  <p class="lede">Build a state shortlist for your next datacenter project. Compare power, policy and operating conditions for hyperscale and AI training facilities, then identify what to verify locally.</p>
-  <div class="asof">Updated October 13, 2026 · Power prices: EIA 2024 annual industrial averages · Solar: NASA POWER 2001–2020 climatology. Fit combines two measured factors with seven provisional analyst ratings.</div>
+  <h1>US data center politics by state</h1>
+  <p class="lede">States are courting, pausing and restricting data center development, and towns and counties are passing moratoriums of their own. The map shows each state's 2026 posture, public pushback, statewide rules in force and local moratoriums. Select a state for its record and sources. A siting model for developers is under Advanced analysis.</p>
+  <div class="asof" id="asof">Updated October 20, 2026 · State records: analyst classifications with linked sources · Local moratoriums: <a href="https://mjbommar.github.io/moratorium-data-2026/" target="_blank" rel="noopener">Moratorium Nation</a>, status as of <span id="local-updated"></span> · Power prices: EIA 2024 industrial averages · Solar: NASA POWER 2001 to 2020 climatology.</div>
 </header>
-<section class="workflow" aria-label="Start your comparison">
-  <div><b>1. Describe your project</b><p>Choose a size band and a priority preset, then adjust the factors that matter to your project.</p></div>
-  <div><b>2. Build a shortlist</b><p>Open state profiles, save candidates, and compare their tradeoffs <a href="#comparison">in the table</a>.</p></div>
-  <div><b>3. Verify the site</b><p>Use the shortlist to scope utility, permitting and water diligence. State fit does not establish site readiness.</p></div>
-</section>
 
 <div class="grid">
   <div class="col">
-  <div class="mapcard">
+  <div class="mapcard politics">
     <div class="map-tools">
-    <div class="lens" id="lens">
-      <button data-l="all" aria-pressed="true">Combined</button>
-      <button data-l="politics" aria-pressed="false">Political outlook</button>
-      <button data-l="physical" aria-pressed="false">Physical fundamentals</button>
+    <div class="lens" id="mapview" role="group" aria-label="Map view">
+      <button type="button" data-m="posture" aria-pressed="true">State posture</button>
+      <button type="button" data-m="pushback" aria-pressed="false">Public pushback</button>
+      <button type="button" data-m="rules" aria-pressed="false">Rules in force</button>
+      <button type="button" data-m="fit" aria-pressed="false">Siting fit</button>
     </div>
     <label class="state-picker" for="state-picker">Find a state <select id="state-picker"><option value="">Choose a state…</option></select></label>
     </div>
     <div class="candidates" id="candidates" aria-label="Leading states in the current view"></div>
-    <div class="viewbar">
+    <div class="viewbar" id="figbar">
       <div class="lens" id="viewbar" role="group" aria-label="Figure"></div>
       <button class="rotate-btn" id="rotate-btn" type="button" aria-pressed="false"><i></i><span id="rotate-label">Play figures</span></button>
     </div>
@@ -489,6 +531,7 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
       </defs>
       <g id="states"></g>
       <g id="hatches" class="hatch"></g>
+      <g id="local-dots" class="hatch" aria-hidden="true"></g>
       <g id="labels" class="hatch"></g>
     </svg>
     </div>
@@ -496,6 +539,9 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
     <p class="viewnote" id="viewnote" aria-live="polite"></p>
     <div class="tip" id="tip"></div>
     <div class="legend">
+      <div class="catkey" id="legend-cat"></div>
+      <div class="lgnote" id="legend-catnote"></div>
+      <div class="key dotkey" id="legend-dots"><label><input type="checkbox" id="show-local" checked> Local moratoriums</label><span><i class="dot-in"></i>in force <span id="local-inforce"></span></span><span><i class="dot-pending"></i>proposed <span id="local-pending"></span></span></div>
       <div class="key" id="legend-ramp"><span id="ramp-lo">Lower fit · 0</span><div class="ramp"></div><span id="ramp-hi">100 · Higher fit</span>
         <div class="scale-toggle" id="scale-toggle" role="group" aria-label="Color scale"><button type="button" data-k="fixed" aria-pressed="true">Fixed 0–100</button><button type="button" data-k="stretch" aria-pressed="false">Stretch to range</button></div></div>
       <div class="lgnote" id="legend-rampnote">Color shows weighted fit on a fixed 0–100 scale. Delivery concerns are shown separately in each profile.</div>
@@ -508,8 +554,19 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
   </div>
 
   <aside>
-    <details class="card" id="wpanel" open>
-      <summary><h2>Your project</h2></summary>
+    <section class="card findings" id="findings" aria-labelledby="findings-heading">
+      <h2 id="findings-heading">Findings</h2>
+      <p class="hint">Each list is computed from the state records and the local moratorium data, so it updates when they do. Select a state to see why.</p>
+      <div id="findings-list"></div>
+    </section>
+    <details class="card" id="wpanel">
+      <summary><h2>Advanced analysis</h2><span class="summary-sub">Siting model for a project size and set of priorities</span></summary>
+      <p class="hint">Rank states for a datacenter project, build a shortlist and compare it <a href="#comparison">in the table</a>. Opening this panel switches the map to Siting fit. State fit does not establish site readiness, so use the shortlist to scope utility, permitting and water diligence.</p>
+      <div class="lens" id="lens" role="group" aria-label="Scoring view">
+        <button type="button" data-l="all" aria-pressed="true">Combined</button>
+        <button type="button" data-l="politics" aria-pressed="false">Political outlook</button>
+        <button type="button" data-l="physical" aria-pressed="false">Physical fundamentals</button>
+      </div>
       <p class="hint">1. Project size. Loads a starting weight profile and sets the headroom and permitting a project of that scale needs.</p>
       <div class="sizes" id="sizes" role="group" aria-label="Project size">
         <button data-z="micro" aria-pressed="false">Edge or micro<small>under 5 MW</small></button>
@@ -585,7 +642,7 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
 <div class="table-intro" id="comparison">
   <h2>Compare all 50 states</h2>
   <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5, and fit and reference scores run from 0 to 100. Rank range is the one-rating sensitivity band from each profile; a narrow band means the position depends less on any single rating. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
-  <p>Pushback describes public opposition; rules in force summarize statewide regulation. Neither affects fit or rank. The Reception tab provides details.</p>
+  <p>Pushback describes public opposition, rules in force summarize statewide regulation, and local moratoriums counts the measures in force in each state's cities, counties and townships. None of them affects fit or rank. The Reception tab provides details.</p>
 </div>
 <div class="shortlist-tools">
   <label for="shortlist-picker">Add a state <select id="shortlist-picker"><option value="">Choose a state…</option></select></label>
@@ -616,8 +673,24 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
   <p>Source: <a href="https://www.eia.gov/outlooks/steo/report/elec_coal_renew.php" target="_blank" rel="noopener">EIA Short-Term Energy Outlook, September 9, 2026</a> · Checked September 13, 2026. The source page updates monthly; figures here retain the September release.</p>
 </section>
 
+<section class="meth" id="political-method" aria-labelledby="political-heading">
+  <h2 id="political-heading">How the political map works</h2>
+  <p>The map opens on three political views of the same fifty states. Each colors a state by a recorded category instead of a score, because the classifications are ordinal analyst judgments and a number such as 73 would claim more precision than they have. None of the three views changes fit, rank or delivery concerns.</p>
+  <h3>State posture</h3>
+  <p>Posture is an analyst label for how the state government treated data center development in 2026. Courting states offer incentives without new conditions. Courting with conditions keeps incentives but attaches requirements, as Alabama's cost recovery statute and Nevada's abatement order do. Reviewing or paused covers incentive pauses, permit holds and formal reviews, as in Arizona, Texas and Massachusetts. Restrictive covers states that have enacted or ordered limits, such as New York's moratorium order and Maine's bar on incentives, including limits that take effect later. No active state posture means no statewide action on record. The labels have no written rubric, so these precedents define them. Posture follows statewide actions and announced direction, so it can run ahead of the rules in force.</p>
+  <h3>Public pushback</h3>
+  <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. One local moratorium in force rules out Low. The rule counts bans and not temporary moratoriums, so Michigan reads Moderate with more than a hundred local moratoriums in force.</p>
+  <h3>Rules in force</h3>
+  <p>This view shows the strongest datacenter-specific statewide rule in force on any of four axes, which are water, power and ratepayer cost, siting and zoning, and tax incentives. The levels are eases entry, no specific rule, reporting or incentive conditions, binding conditions or narrowed incentives, and a pause, ban or repealed incentive. Pending bills, and enacted laws whose effective date has not arrived, count as no rule. California signed seven data center laws in September 2026 that take effect on January 1, 2027, so it reads Restrictive on posture and no rule on this view.</p>
+  <h3>Local moratoriums</h3>
+  <p>The dots are city, county, township and tribal moratoriums and bans on data centers from <a href="https://mjbommar.github.io/moratorium-data-2026/" target="_blank" rel="noopener">Moratorium Nation</a>, a dataset by Michael J. Bommarito published under CC BY 4.0. Each dot is placed at the coordinates the dataset gives for its jurisdiction. Filled dots are in force (active or extended) and open dots are proposed. Measures that expired, were replaced by permanent zoning or were rescinded are counted in each profile but not drawn. Statuses are the dataset's own as of <span class="local-asof"></span>, and some temporary measures have scheduled end dates since then. The page does not infer that any of them lapsed. A state-level map hides county-level conflict, so the profiles list each state's most recent local measures.</p>
+  <h3>Findings</h3>
+  <p>The findings beside the map are rules over these records, each printed under its list, so they change when a record changes. They describe where the records disagree. They do not predict where projects will be approved or blocked.</p>
+  <p>Posture, pushback and the rule axes are provisional analyst classifications. Every state now cites at least one source, and the Sources tab in each profile lists what each document establishes. A citation can support a policy event without validating a classification.</p>
+</section>
+
 <section class="meth" id="methodology">
-  <h2>How this comparison works</h2>
+  <h2>How the siting model works</h2>
   <p>This exploratory model reports weighted suitability, delivery concerns and rating sensitivity. Public response and regulation are reported separately and do not affect scores. The model does not predict project approval.</p>
   <h3>Weighted fit</h3>
   <p>Balanced starts with equal importance for the eight grid-siting factors: power headroom, power cost, incentives and policy, community and permitting, water, natural hazards, cooling climate, and connectivity. Each contributes 12.5% initially. The ninth factor, winter solar resource, starts at zero because a grid-connected project buys power rather than generating it. Presets and sliders change those shares.</p>
@@ -649,7 +722,7 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
     <h3>What the evidence establishes</h3>
     <p>All 50 historical electricity prices were compared with EIA's 2024 industrial data. Solar irradiance comes from NASA POWER at one point per state, with eight states spot-checked against NREL's solar resource service. The seven judgment factors have not been individually validated. A state citation can support a policy event without proving its numerical rating.</p>
     <p>State profiles distinguish government records, grid publications, reporting, legal analysis, market research, company statements and advocacy statements. Company plans are self-reported; an advocacy organization's account of a lawsuit is not a court finding. A bill or agenda item is not automatically an enacted restriction.</p>
-    <p>Commercial tracker totals and references without identifiable documents have been removed from the displayed source list. Some unsupported counts and subsidy estimates have also been removed from state summaries. Remaining summaries and ratings are provisional and still need a claim-by-claim review.</p>
+    <p>Commercial tracker totals and references without identifiable documents have been removed from the displayed source list. Some unsupported counts and subsidy estimates have also been removed from state summaries. On October 20, 2026 the fifteen states that had no citations were reviewed claim by claim, and every state now cites at least one source. The other summaries and all ratings remain provisional.</p>
   </div>
   <details class="sources">
     <summary>Original records and datasets</summary>
@@ -668,7 +741,7 @@ table.cmp tbody tr:hover td.best{background:var(--select)}
       <li><a href="https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf">FEMA National Risk Index documentation</a> and <a href="https://www.wri.org/aqueduct">WRI Aqueduct</a>: background for further hazard and water research. This app has not calculated its state ratings directly from these datasets.</li>
     </ul>
   </details>
-  <p class="method-note">Model version 3 · Evidence review September 7, 2026 · Solar factor and off-grid band added September 23, 2026 · State records corrected October 13, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
+  <p class="method-note">Model version 3 · Evidence review September 7, 2026 · Solar factor and off-grid band added September 23, 2026 · State records corrected October 13, 2026 · Fifteen uncited states sourced claim by claim October 20, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
 </section>
 
 <section class="datapack" id="dataset">
@@ -752,16 +825,67 @@ const STATES = [
 "c": 5,
 "x": 1,
 "tag": "",
-"note": "Favorable ambient cooling and water availability, but an isolated grid, very high power prices, seismic risk and limited fiber infrastructure.",
+"note": "Favorable ambient cooling and water, but separate grids that are not interconnected, very high power prices and severe seismic risk. DNR made a preliminary decision in May 2026 to lease 715 acres near Deadhorse for a gas-powered computing campus, which drew more than 500 mostly opposing comments. SB 250 on data center cost allocation passed the Senate and died in the House.",
 "mo": 1,
 "st": "No active state posture",
+"srcs": [
+{
+"t": "SB 250 bill history (Alaska Legislature)",
+"u": "https://www.akleg.gov/basis/Bill/Detail/34?Root=SB+250",
+"type": "Government record",
+"supports": "SB 250, a data center cost allocation bill, passed the Senate 14-5 on May 16, 2026 and was held in House committee, so it never became law.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Alaska Electricity Profile 2024 (EIA)",
+"u": "https://www.eia.gov/electricity/state/alaska/index.php",
+"type": "Government record",
+"supports": "Alaska's 2024 average retail electricity price was 22.17 cents per kWh, sixth highest among states.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Alaska data center potential (LB&B law firm)",
+"u": "https://lbblawyers.com/resource/alaska-data-centers-potential/",
+"type": "Legal analysis",
+"supports": "Alaska has a 35 F mean annual temperature and abundant fresh water, and its electric grids are separate and not interconnected.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Alaska subduction zone seismicity (USGS)",
+"u": "https://www.usgs.gov/special-topics/subduction-zone-science/science/alaska",
+"type": "Government record",
+"supports": "Alaska has more large earthquakes than the rest of the United States combined.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Anchorage AO 2026-27(S) data center ordinance",
+"u": "https://ecode360.com/AN6998/laws/LF2706619.pdf",
+"type": "Government record",
+"supports": "On March 24, 2026 Anchorage made data centers a conditional use and began requiring a letter from the utility confirming grid capacity.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "ADL 422741 STAK Energy lease notice (Alaska DNR)",
+"u": "https://aws.state.ak.us/OnlinePublicNotices/Notices/View.aspx?id=223817",
+"type": "Government record",
+"supports": "On May 12, 2026 DNR made a preliminary decision to lease 715.4 acres near Deadhorse to STAK Energy for a gas-powered computing campus.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Critics flood DNR over North Slope lease (ADN)",
+"u": "https://www.adn.com/business-economy/2026/07/07/data-center-critics-flood-alaska-land-managers-with-opposition-to-north-slope-project/",
+"type": "Reporting",
+"supports": "DNR received more than 500 public comments on the proposed 50-year North Slope lease, most of them opposed.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Low",
 "wt": 0,
 "pg": 0,
 "zn": 0,
 "tx": 0,
-"n": "No datacenter-specific state legislation is recorded. Siting runs through ordinary utility and land use review."
+"n": "SB 250, which would allocate grid costs to data centers and require community benefit agreements, passed the Senate 14-5 on May 16, 2026 and died in House committee. No statewide data center rule is in force. Anchorage made data centers a conditional use in March 2026 and requires a utility letter confirming grid capacity, and DNR's proposed North Slope lease for a gas-powered computing campus drew wide opposition."
 }
 },
 {
@@ -951,16 +1075,60 @@ const STATES = [
 "c": 3,
 "x": 3,
 "tag": "",
-"note": "ISO-NE power is scarce and expensive; Groton enacted a local moratorium. Low natural hazard exposure is the principal advantage.",
+"note": "ISO-NE power is scarce and expensive, with the third-highest retail price of any state in 2024. PA 21-1 (2021) grants qualified data centers sales, use and property tax exemptions, and a 2026 repeal bill died in committee. Groton replaced its 2022 moratorium with a 12,500 square foot cap in 2023, and other towns adopted moratoriums in 2026. Low natural hazard exposure is the principal advantage.",
 "mo": 1,
 "st": "No active state posture",
+"srcs": [
+{
+"t": "HB 6514, PA 21-1 bill status (CT General Assembly)",
+"u": "https://www.cga.ct.gov/asp/cgabillstatus/cgabillstatus.asp?selBillType=Bill&which_year=2021&bill_num=6514",
+"type": "Government record",
+"supports": "Connecticut enacted An Act Concerning Incentives for Qualified Data Centers, signed by the governor on March 4, 2021.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "OLR report 2026-R-0137, Data Centers and Energy Policy",
+"u": "https://www.cga.ct.gov/gl/tfs/20261231_2026-2027%20Artificial%20Intelligence%20Working%20Group/OLR%20Reports%20on%20Existing%20Laws%20and%20Policies/3%20data%20centers/9.14.2026%20Data%20Centers%20and%20Energy%20Policy.pdf",
+"type": "Government record",
+"supports": "As of September 14, 2026, CGS 32-286 still grants data center tax incentives, and HB 5469 (2026) died without House action.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "SB 245 (2026) bill status (CT General Assembly)",
+"u": "https://www.cga.ct.gov/asp/cgabillstatus/cgabillstatus.asp?selBillType=Bill&which_year=2026&bill_num=245",
+"type": "Government record",
+"supports": "The 2026 bill to eliminate data center tax incentives last moved on March 23, 2026, when it was referred to the Finance Committee.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Town of Groton Zoning Regulations, Sec. 5.1-6.F and 11.1",
+"u": "https://www.groton-ct.gov/document_center/Departments/Planning%20&%20development/Regulation/FINAL%20Tables%20Changed%207-15-26%20Groton_Zoning_Regulations%20no%20buttons.pdf",
+"type": "Government record",
+"supports": "Groton deleted its 2022 data center moratorium on July 14, 2023 and replaced it with a 12,500 sq ft cap on data centers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Connecticut Electricity Profile 2024 (EIA)",
+"u": "https://www.eia.gov/electricity/state/connecticut/",
+"type": "Government record",
+"supports": "Connecticut's 2024 average retail electricity price of 24.37 cents/kWh ranked third highest among states.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "2026 Summer Reliability Assessment (NERC)",
+"u": "https://www.nerc.com/globalassets/our-work/assessments/nerc_sra_2026.pdf",
+"type": "Grid operator",
+"supports": "NERC lists New England at elevated summer 2026 risk, with a 14% anticipated reserve margin against a 13% reference level.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
 "pg": 0,
 "zn": 0,
 "tx": 0,
-"n": "No datacenter-specific state statute is recorded. Groton enacted a local moratorium."
+"n": "PA 21-1 (2021, now CGS 32-286) grants qualified data centers sales, use and property tax exemptions, and the legislature's research office described it as in force in September 2026. SB 245, which would have ended those incentives, died in the Finance Committee, and HB 5469 on large load customers died without House action. Groton deleted its 2022 moratorium in 2023 and now caps data centers at 12,500 square feet."
 }
 },
 {
@@ -970,23 +1138,81 @@ const STATES = [
 "sr": 1.75,
 "sy": 4.07,
 "pw": 2,
-"po": 3,
+"po": 2,
 "op": 2,
 "w": 4,
 "h": 3,
 "c": 3,
 "x": 3,
 "tag": "",
-"note": "PJM capacity pricing at the cap flows into Delmarva bills; Dover is considering an 18-month pause and Harrington rejected a data center ordinance in Aug 2026.",
+"note": "PJM capacity prices at the auction cap contribute to Delmarva bill increases. Gov. Meyer signed three laws on August 26, 2026 that create a large energy use rate class, require such facilities to supply all their own power by year 10 and bar them from job-creation tax credits. Dover adopted an 18-month moratorium on October 12, 2026, and Harrington rejected a data center ordinance in August and is considering a ban.",
 "mo": 2,
 "st": "Reviewing or paused",
+"srcs": [
+{
+"t": "HS 1 for HB 233 bill detail (Delaware General Assembly)",
+"u": "https://legis.delaware.gov/BillDetail/143381",
+"type": "Government record",
+"supports": "Signed August 26, 2026 (Ch. 85:440), the act requires a separate utility rate class and PSC-approved service agreements for large energy use facilities.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 445 bill detail (Delaware General Assembly)",
+"u": "https://legis.delaware.gov/BillDetail/143386",
+"type": "Government record",
+"supports": "Signed August 26, 2026 (Ch. 85:442), the act requires large energy use facilities to reach 100% self-supplied power by year 10 under a PSC plan.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 310 bill detail (Delaware General Assembly)",
+"u": "https://legis.delaware.gov/BillDetail/142891",
+"type": "Government record",
+"supports": "Signed August 26, 2026 (Ch. 85:441), the act bars large energy use facilities from job-creation tax credits and license fee reductions.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "PJM 2028/2029 capacity auction results (PJM Inside Lines)",
+"u": "https://insidelines.pjm.com/pjm-capacity-auction-procures-138318-mw-of-generation-resources-as-work-continues-to-address-growing-electricity-demand/",
+"type": "Grid operator",
+"supports": "The July 14, 2026 auction cleared at the $325/MW-day cap across PJM, the third straight auction under the price collar.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Delmarva rate increase notice (DE Public Advocate)",
+"u": "https://news.delaware.gov/2026/04/06/upcoming-electricity-rate-increase-adds-to-cost-increases-for-delmarva-customers/",
+"type": "Government record",
+"supports": "Delmarva's default supply price rose 18 to 20% on June 1, 2026, and the Public Advocate names PJM capacity costs among the drivers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Dover Proposed Ordinance 2026-14, final reading text",
+"u": "https://www.cityofdover.gov/media/Government/Ordinances-Resolutions-Tributes/2026/Proposed%20Ordinance%202026-14%20-%20Data%20Center%20Moratorium%20-%20Final%20Reading.pdf",
+"type": "Government record",
+"supports": "The ordinance bars Dover permits and approvals for large energy use facilities, including data centers of 30 MW or more, for 18 months.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Dover passes data center moratorium (Spotlight Delaware)",
+"u": "https://spotlightdelaware.org/2026/10/13/in-a-first-for-delaware-dover-passes-a-moratorium-on-data-center-development/",
+"type": "Reporting",
+"supports": "Dover City Council unanimously approved the 18-month moratorium on Monday, October 12, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Harrington council packet with Aug 17, 2026 minutes",
+"u": "https://cityofharrington.civicweb.net/document/65606/City%20Council%20Meeting%20-%2021%20Sep%202026.pdf?handle=933CD65671AA452FA24B2292478266E0",
+"type": "Government record",
+"supports": "Council denied Ordinance 25-08 (data centers as a conditional use) 6-0 on August 17, 2026, and set Ordinance 26-08 banning data centers for first reading.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
-"pg": 0,
+"pg": 2,
 "zn": 0,
-"tx": 0,
-"n": "No datacenter-specific state statute is recorded. Dover is considering an 18-month pause and Harrington rejected a data center ordinance in August 2026."
+"tx": 3,
+"n": "HS 1 for HB 233 (August 26, 2026) requires a separate rate class and PSC-approved service agreements for large energy use facilities. HB 445 requires them to supply all their own power by year 10 under a PSC plan, and HB 310 bars them from job-creation tax credits and license fee reductions. Dover adopted an 18-month moratorium on October 12, 2026. Harrington denied a conditional use ordinance on August 17 and has a ban ordinance pending."
 }
 },
 {
@@ -1003,16 +1229,60 @@ const STATES = [
 "c": 1,
 "x": 3,
 "tag": "",
-"note": "Miami is a key interconnection hub for Latin America and FPL is building generation, but the 2026 Hyperscale Data Center Act raised the exemption threshold to 100 MW and at least eight counties adopted one-year moratoriums in mid-2026. Hurricane exposure is the worst in the country.",
+"note": "Miami is a key interconnection hub for Latin America, and FPL plans large solar, battery and gas additions through 2035. HB 7031 (2025) raised the sales tax exemption threshold from 15 MW to 100 MW, and SB 484 (2026) requires full cost-of-service tariffs for loads of 50 MW or more and limits data center water permits. Counties across the state adopted one-year moratoriums from June to October 2026, and several have permanent bans. Hurricane exposure is the worst in the country.",
 "mo": 3,
 "st": "Courting, with conditions",
+"srcs": [
+{
+"t": "SB 484 (2026) Data Centers status (Florida Senate)",
+"u": "https://www.flsenate.gov/Session/Bill/2026/484",
+"type": "Government record",
+"supports": "SB 484, approved May 7, 2026 as ch. 2026-65, sets large-load tariff rules, limits data center water permits and keeps local land-use authority.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 7031 (2025) final bill analysis (Florida House)",
+"u": "https://www.flsenate.gov/Session/Bill/2025/7031/Analyses/h7031z1.WMC.PDF",
+"type": "Government record",
+"supports": "HB 7031 raised the data center sales tax exemption threshold from 15 MW to 100 MW effective Aug 1, 2025.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Florida data center moratorium tracker (SAVRN)",
+"u": "https://savrn.com/data-center-moratorium-tracker/florida",
+"type": "Market research",
+"supports": "Lists one-year moratoriums adopted June to Sept 2026 in Clay, Hernando, Sarasota, DeSoto, Washington, Manatee, Marion, Levy and other counties.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Clay County approves 1-year data center moratorium",
+"u": "https://www.yahoo.com/news/us/articles/clay-county-commissioners-approve-1-000102829.html",
+"type": "Reporting",
+"supports": "Clay County commissioners voted 4-1 on June 24, 2026 for a one-year moratorium on data center permitting.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "FPL Ten Year Power Plant Site Plan 2026-2035",
+"u": "https://www.fpl.com/content/dam/fplgp/us/en/about/pdf/ten-year-site-plan.pdf",
+"type": "Company statement",
+"supports": "FPL plans 12,293 MW of solar, 7,454 MW of batteries, the 672 MW Vandolah purchase and new gas capacity for 2032 to 2035.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Hurricane direct hits by state (NOAA AOML)",
+"u": "https://www.aoml.noaa.gov/hrd/tcfaq/E19.html",
+"type": "Government record",
+"supports": "Florida has had 120 hurricane direct hits since 1851, the most of any state and about 40 percent of all US hurricanes.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "High",
-"wt": 0,
-"pg": 0,
+"wt": 2,
+"pg": 2,
 "zn": 0,
 "tx": 1,
-"n": "The 2026 Hyperscale Data Center Act raised the sales tax exemption threshold to 100 MW, narrowing eligibility rather than restricting construction. At least eight counties adopted one-year moratoriums in mid-2026."
+"n": "SB 484 (ch. 2026-65, approved May 7, 2026) requires utilities to serve loads of 50 MW or more under tariffs that recover their full cost of service, bars large data center water permits where the use would cause harm, allows reclaimed water to be required and keeps local land use authority. HB 7031 (2025) raised the sales tax exemption threshold from 15 MW to 100 MW from August 1, 2025. Clay, Hernando, Sarasota, Manatee, Marion and other counties adopted one-year moratoriums in mid-2026, and Escambia, Walton, Wakulla and Jackson counties have permanent bans."
 }
 },
 {
@@ -1029,16 +1299,67 @@ const STATES = [
 "c": 2,
 "x": 5,
 "tag": "",
-"note": "Atlanta is a top-tier growth market. Georgia PSC approved 9,885 MW of new Georgia Power generation in Dec 2025 mostly for large loads; the large-load pipeline reached ~69 GW. The sales tax exemption remained in effect after a repeal proposal and runs through 2032, but local permitting must be checked for the specific project location.",
+"note": "Atlanta is a top-tier growth market. The PSC approved 9,885 MW of new Georgia Power generation in December 2025, mostly for large loads, and Georgia Power's economic development pipeline reached 76.2 GW in March 2026, 73.1 GW of it large load. A 2025 PSC rule lets Georgia Power bill new loads over 100 MW on longer contracts with minimum bills. The sales tax exemption runs through December 31, 2031, after two 2026 repeal bills died in the House. Local permitting must be checked for the specific project location.",
 "mo": 5,
 "st": "Courting",
+"srcs": [
+{
+"t": "PSC approves 9,885 MW Georgia Power agreement (Georgia PSC)",
+"u": "https://psc.ga.gov/site/assets/files/9176/media_advisory_dec_19_decision.pdf",
+"type": "Government record",
+"supports": "On December 19, 2025 the PSC voted 5-0 to approve a stipulation letting Georgia Power add 9,885 MW, most of it to serve large loads such as data centers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Georgia Power Q1 2026 large load report (PSC filing)",
+"u": "https://services.psc.ga.gov/api/v1/External/Public/Get/Document/DownloadFile/226607/107887",
+"type": "Company statement",
+"supports": "The total economic development pipeline was 69,100 MW at year-end 2025 and 76,200 MW on March 31, 2026, with 73,100 MW of that from large loads.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 1291 (2022) signed text, data center exemption dates",
+"u": "https://gov.georgia.gov/document/2022-signed-legislation/hb-1291/download",
+"type": "Government record",
+"supports": "HB 1291 ends the data center equipment exemption period on December 31, 2031 and repeals the paragraph on January 1, 2032.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Senate 2026 composite status, session final (Georgia Senate)",
+"u": "https://www.legis.ga.gov/api/document/docs/default-source/senate-calendars/20252026/scomposite788080b4702048e088a9bb803b278911.pdf?sfvrsn=b3a0c845_26",
+"type": "Government record",
+"supports": "SB 476 passed the Senate on February 12, 2026 and SB 410 on March 6, 2026, neither moved past House committee, and HB 1059 had no action after referral.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "SB 476 as passed Senate (Georgia General Assembly)",
+"u": "https://www.legis.ga.gov/api/legislation/document/20252026/242672",
+"type": "Government record",
+"supports": "The Senate-passed SB 476 sets a sunset for all income tax credits and bars new data center sales tax exemption certificates after its effective date.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Camden adopts six-month data center moratorium (GPB)",
+"u": "https://www.gpb.org/news/2026/05/06/camden-becomes-first-county-on-the-coast-adopt-data-center-moratorium",
+"type": "Reporting",
+"supports": "On May 5, 2026 Camden County commissioners adopted a six-month data center moratorium that applies only to unincorporated Camden County.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "PSC rule on new data center power terms (Georgia PSC, 2025)",
+"u": "https://psc.ga.gov/site/assets/files/8617/media_advisory_data_centers_rule_1-23-2025.pdf",
+"type": "Government record",
+"supports": "On January 23, 2025 the PSC approved a rule letting Georgia Power bill new loads over 100 MW on special terms with longer contracts and minimum bills, with each contract reviewed by the PSC.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
-"pg": 0,
+"pg": 2,
 "zn": 0,
 "tx": 0,
-"n": "The sales tax exemption remained in effect after a repeal proposal and runs through 2032. SB 476, which would have eliminated most state tax credits, passed the Senate in February 2026 without becoming law, and the broader HB 1059 failed in committee. Camden County adopted a nine-month local moratorium."
+"n": "The equipment sales tax exemption runs through December 31, 2031 under HB 1291 (2022). SB 476 and SB 410 passed the Senate in 2026 and died in House committee, and SB 476 would have barred new data center exemption certificates. HB 1059 had no action. A January 2025 PSC rule lets Georgia Power set special terms, longer contracts and minimum bills for new loads over 100 MW, with PSC review of each contract. Camden County adopted a six-month moratorium for its unincorporated area on May 5, 2026."
 }
 },
 {
@@ -1055,16 +1376,53 @@ const STATES = [
 "c": 3,
 "x": 1,
 "tag": "",
-"note": "The highest US electricity price and an isolated island grid constrain development.",
+"note": "The highest US electricity price and isolated island grids constrain development, and the state energy office says Hawaii lacks the bandwidth and cheap power data centers need. A legislative resolution set up a working group that first met in September 2026, and Hawaii County is weighing a countywide ban.",
 "mo": 1,
 "st": "No active state posture",
+"srcs": [
+{
+"t": "Hawaii Electricity Profile 2024 (EIA)",
+"u": "https://www.eia.gov/electricity/state/hawaii/index.php",
+"type": "Government record",
+"supports": "Hawaii's 2024 average retail electricity price was 38.00 cents per kWh, the highest of any state.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HCR 206 HD1 text (Hawaii Legislature)",
+"u": "https://data.capitol.hawaii.gov/sessions/session2026/bills/HCR206_HD1_.pdf",
+"type": "Government record",
+"supports": "The resolution calls Hawaii's island grids isolated and says the state has received no hyperscale data center proposals.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HCR 206 measure status (Hawaii Legislature)",
+"u": "https://data.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=HCR&billnumber=206&year=2026",
+"type": "Government record",
+"supports": "By April 27, 2026 both chambers had adopted HCR 206 HD1, which asks the State Energy Office to convene a data center working group.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Big Island data center ban debate (Civil Beat)",
+"u": "https://www.civilbeat.org/2026/10/big-island-wants-to-ban-big-data-centers-once-they-agree-on-what-they-are/",
+"type": "Reporting",
+"supports": "The state energy chief says Hawaii lacks the bandwidth and cheap power that data centers need, and the working group first met in September 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Leeward commission backs Bill 170 (Tribune-Herald)",
+"u": "https://www.hawaiitribune-herald.com/2026/10/16/hawaii-news/leeward-planning-commission-oks-bill-aimed-at-banning-data-centers/",
+"type": "Reporting",
+"supports": "The Leeward Planning Commission sent the Hawaii County Council a favorable recommendation on Bill 170, a countywide data center ban.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Low",
 "wt": 0,
 "pg": 0,
 "zn": 0,
 "tx": 0,
-"n": "No datacenter-specific state legislation is recorded. The island grid rather than policy is the binding constraint."
+"n": "No statewide data center rule is in force. HCR 206, adopted by both chambers in April 2026, asks the State Energy Office to convene a working group on data centers of 5 MW or more and report before the 2027 session. Hawaii County Bill 170, a countywide ban, received a favorable Leeward Planning Commission recommendation in October 2026 and awaits a council vote."
 }
 },
 {
@@ -1395,16 +1753,60 @@ const STATES = [
 "c": 5,
 "x": 1,
 "tag": "",
-"note": "The legislature passed the first statewide moratorium (LD 307); Gov. Mills vetoed it April 24, 2026 and the override failed, but LD 713 stripped incentive eligibility and the Jay mill project was halted in June. Bangor and Eastport have local bans.",
+"note": "The legislature passed LD 307, a permitting moratorium on data centers of 20 MW or more until November 1, 2027. Gov. Mills vetoed it on April 24, 2026 and the April 29 override vote fell short. LD 713 bars data centers that begin operating on or after August 1, 2026 from the BETE and Dirigo incentives, and the Jay mill project was halted in June. Bangor extended its local moratorium in September and Eastport adopted a permanent ban.",
 "mo": 1,
 "st": "Restrictive",
+"srcs": [
+{
+"t": "LD 307 status and override vote (Maine Legislature)",
+"u": "https://legislature.maine.gov/LawMakerWeb/summary.asp?LD=307&SessionID=16",
+"type": "Government record",
+"supports": "The Senate enacted LD 307 21-13 on April 14, 2026, and the April 29 House override vote of 72-65 fell short of two-thirds, so the veto stood.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Governor Mills veto letter on LD 307",
+"u": "https://www.maine.gov/governor/mills/official_documents/veto_messages/2026-04-ld-307-act-establish-maine-data-center-coordination",
+"type": "Government record",
+"supports": "On April 24, 2026 Mills vetoed LD 307, a permitting moratorium on data centers of 20 MW or more until Nov 1, 2027, because it lacked a Jay exemption.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "LD 713 chaptered law, ch. 768 (Maine Legislature)",
+"u": "https://legislature.maine.gov/legis/bills/getPDF.asp?paper=HP0452&item=5&snum=132",
+"type": "Government record",
+"supports": "LD 713, approved April 23, 2026, bars data centers starting operations on or after Aug 1, 2026 from BETE and the Dirigo program and orders a DECD incentive study.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Developer halts Jay mill data center plan (Maine Public)",
+"u": "https://www.mainepublic.org/climate/2026-06-12/developer-halts-plans-for-data-center-at-former-jay-paper-mill",
+"type": "Reporting",
+"supports": "On June 12, 2026 the $550M Jay mill project went on hold after operator Sentinel Data Centers withdrew.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Bangor extends data center moratorium (WAGM)",
+"u": "https://www.wagmtv.com/2026/09/29/bangor-city-council-votes-extend-data-center-moratorium/",
+"type": "Reporting",
+"supports": "Bangor adopted a 180-day data center moratorium in April 2026 and voted 8-0 on Sept 28, 2026 to extend it by another 180 days.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Eastport adopts data center ban ordinance (Quoddy Tides)",
+"u": "https://www.quoddytides.com/ordinance-banning-data-centers-adopted-by-eastport-council/",
+"type": "Reporting",
+"supports": "The Eastport City Council unanimously adopted an ordinance prohibiting large-scale data centers at its Sept 9, 2026 meeting.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "High",
 "wt": 0,
 "pg": 0,
 "zn": 0,
 "tx": 3,
-"n": "The legislature passed the first statewide moratorium (LD 307); the governor vetoed it on April 24, 2026 and the override failed. LD 713 stripped datacenter incentive eligibility, the Jay mill project was halted in June, and Bangor and Eastport have local bans."
+"n": "LD 307, a statewide permitting moratorium on data centers of 20 MW or more, passed the legislature and was vetoed on April 24, 2026, and the override failed on April 29. LD 713 bars data centers that begin operating on or after August 1, 2026 from the BETE and Dirigo incentives. Bangor extended its 180-day moratorium on September 28, 2026, and Eastport adopted a permanent ban on large data centers on September 9."
 }
 },
 {
@@ -1518,16 +1920,67 @@ const STATES = [
 "c": 5,
 "x": 3,
 "tag": "",
-"note": "Gov. Whitmer has supported datacenter investment (OpenAI Stargate 'The Barn' in Saline), with a 2024 exemption and a July 2026 Responsible Growth Pledge. DTE/Consumers generation expansion remains incomplete, and local permitting requires separate review. Great Lakes water and a cold climate are favorable.",
+"note": "Gov. Whitmer has supported datacenter investment, including the OpenAI and Oracle Stargate campus under construction in Saline Township. PA 207 of 2024 created a sales tax exemption, and the July 2026 Responsible Growth Pledge is voluntary. MPSC orders set binding terms for large data center loads, and the Attorney General is appealing the Saline contracts. DTE's long-range generation plan awaits an MPSC decision. Great Lakes water and a cold climate are favorable.",
 "mo": 4,
 "st": "Courting",
+"srcs": [
+{
+"t": "Responsible Growth Action Plan and pledge (Governor)",
+"u": "https://www.michigan.gov/whitmer/news/press-releases/2026/07/15/gov-whitmer-data",
+"type": "Government record",
+"supports": "On July 15, 2026 Whitmer launched the action plan and a voluntary company pledge and asked the legislature to codify the MPSC data center safeguards.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 4906, PA 207 of 2024 status (Michigan Legislature)",
+"u": "https://legislature.mi.gov/Bills/Bill?ObjectName=2023-HB-4906",
+"type": "Government record",
+"supports": "The data center sales tax exemption bill became Public Act 207 of 2024 and the governor approved it on January 17, 2025.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Stargate campus construction in Saline Township (Oracle)",
+"u": "https://www.oracle.com/news/announcement/related-digital-oracle-openai-walbridge-and-governor-whitmer-celebrate-construction-of-stargate-campus-in-saline-township-2026-06-01/",
+"type": "Company statement",
+"supports": "On June 1, 2026 Oracle, OpenAI, Related Digital and Gov. Whitmer celebrated construction of The Barn, the Stargate campus in Saline Township.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "MPSC conditional approval of DTE Saline contracts (U-21990)",
+"u": "https://www.michigan.gov/mpsc/commission/news-releases/2025/12/18/mpsc-approves-dte-electric-energy-contracts-for-data-center",
+"type": "Government record",
+"supports": "On December 18, 2025 the MPSC approved DTE contracts for the 1,383 MW Saline data center with a 19-year term, an 80% minimum bill and a termination payment.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "MPSC data center tariff for Consumers Energy (U-21859)",
+"u": "https://www.michigan.gov/mpsc/commission/news-releases/2025/11/06/mpsc-approves-terms-of-service-between-consumers-energy-and-data-centers",
+"type": "Government record",
+"supports": "On November 6, 2025 the MPSC set binding terms for Consumers Energy loads of 100 MW or more, including a 15-year minimum contract and an 80% minimum billing demand.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "AG Nessel appeal of MPSC Saline approval (Attorney General)",
+"u": "https://www.michigan.gov/ag/news/press-releases/2026/08/07/ag-nessel-briefs-appeal-over-mpsc-approval-of-dte-saline-data-center-contracts",
+"type": "Government record",
+"supports": "The Attorney General is appealing the MPSC approval of the Saline contracts in the Michigan Court of Appeals and filed her brief on August 6, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "DTE long-range plan proposes new gas plants (Planet Detroit)",
+"u": "https://planetdetroit.org/2026/09/dte-gas-plants-data-centers-power-plan/",
+"type": "Reporting",
+"supports": "As of September 29, 2026 the DTE 20-year resource plan, which adds 2.1 GW of gas and more than doubles capacity, was still awaiting an MPSC decision.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
-"pg": 0,
+"pg": 2,
 "zn": 0,
 "tx": 0,
-"n": "The 2024 sales tax exemption remains in force and the July 2026 Responsible Growth Pledge is voluntary rather than binding. No statewide water, siting or ratepayer rule specific to data centers is recorded, so local permitting carries the review."
+"n": "The sales tax exemption in PA 207 of 2024 remains in force, and HB 5396, which would repeal it, has had no action since December 2025. The July 2026 Responsible Growth Pledge is voluntary. MPSC orders set binding terms for data center loads, including a Consumers Energy tariff for loads of 100 MW or more with a 15-year minimum contract and an 80% minimum bill, and conditions on DTE's Saline and Google contracts. No statewide water or siting rule specific to data centers is recorded, so local permitting carries the review."
 }
 },
 {
@@ -1544,16 +1997,67 @@ const STATES = [
 "c": 5,
 "x": 3,
 "tag": "",
-"note": "Cold climate and abundant water; Meta (Rosemount) and Microsoft (Becker) anchor the market. The 2025 law kept the equipment exemption but ended the electricity exemption and added fees; Xcel capacity is the constraint.",
+"note": "Cold climate and abundant water. Meta's Rosemount campus is the one hyperscale project under construction, Amazon suspended its Becker project, and Xcel will serve a Google data center in Pine Island under an agreement the Attorney General has questioned. 2025 laws kept the equipment exemption, ended the electricity exemption, added water permit conditions and fees, and ordered a very large customer class, which the PUC approved for Xcel in May 2026.",
 "mo": 3,
 "st": "Courting, with conditions",
+"srcs": [
+{
+"t": "Laws 2025, 1st Spec. Sess. ch. 12, HF 16 (MN Revisor)",
+"u": "https://www.revisor.mn.gov/laws/2025/1/Session+Law/Chapter/12/",
+"type": "Government record",
+"supports": "HF 16 was signed June 14, 2025. It sets DNR permit conditions for data centers using over 100 million gallons a year, adds a 2 to 5 million dollar annual fee, and orders a very large customer class.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Minn. Stat. 297A.68 data center exemption (MN Revisor)",
+"u": "https://www.revisor.mn.gov/statutes/cite/297A.68",
+"type": "Government record",
+"supports": "Subdivision 42 now exempts IT equipment and software for 35 years with no electricity exemption, as amended by 1Sp2025 chapter 12 and chapter 13.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Qualified Data Centers sales tax guidance (MN Revenue)",
+"u": "https://www.revenue.state.mn.us/qualified-data-centers",
+"type": "Government record",
+"supports": "The Department of Revenue states that electricity purchases stopped qualifying for the data center exemption on July 1, 2025.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "PUC safeguards for Xcel very large customers (MN PUC)",
+"u": "https://content.govdelivery.com/accounts/MNPUBUC/bulletins/417d139",
+"type": "Government record",
+"supports": "On May 18, 2026 the PUC announced binding Xcel terms for new loads of 100 MW or more, including a 15-year term, an 80% minimum bill and exit fee, and a separate rate class.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Walz announces Meta data center in Rosemount (Governor)",
+"u": "https://mn.gov/governor/newsroom/press-releases/?id=1055-614120",
+"type": "Government record",
+"supports": "On March 14, 2024 Gov. Walz announced the 800 million dollar Meta data center in Rosemount, expected to open in 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Minnesota hyperscale projects stall (Forum News Service)",
+"u": "https://www.inforum.com/news/minnesota/as-hyperscale-data-centers-boom-minnesotas-projects-are-confronting-regulatory-and-environmental-realities",
+"type": "Reporting",
+"supports": "As of October 2025 only the Meta Rosemount project was underway, Amazon had suspended Becker, and Microsoft had bought Becker land but submitted no plans.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Xcel to power Google data center in Pine Island (Xcel)",
+"u": "https://newsroom.xcelenergy.com/news/xcel-energy-to-power-new-google-data-center-in-minnesota",
+"type": "Company statement",
+"supports": "On February 24, 2026 Xcel announced it will serve a new Google data center in Pine Island under an electric service agreement.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 2,
-"pg": 0,
+"pg": 2,
 "zn": 0,
 "tx": 2,
-"n": "Minnesota established a separate water permitting requirement for data centers, one of the few state water rules aimed specifically at the sector. The 2025 law kept the equipment exemption, ended the electricity exemption and added fees."
+"n": "HF 16 (2025) adds DNR preapplication review and permit conditions for data centers using more than 100 million gallons a year, sets an annual fee and orders a very large customer class. The PUC approved Xcel's tariff for new loads of 100 MW or more in May 2026, with a 15-year term, an 80% minimum bill and exit fees. A separate 2025 tax law ended the electricity exemption and kept the equipment exemption."
 }
 },
 {
@@ -1623,16 +2127,60 @@ const STATES = [
 "c": 3,
 "x": 3,
 "tag": "",
-"note": "Kansas City and St. Louis offer connectivity; incentives available. Peculiar enacted a local ban and Ameren/Evergy headroom is moderate.",
+"note": "Kansas City and St. Louis offer connectivity, and a 15-year sales tax exemption is available for new data centers investing at least $25 million. SB 4 (2025) requires large utilities to file tariffs so customers above 100 MW pay their cost of service, and the PSC has approved Ameren Missouri and Evergy tariffs. Peculiar removed data centers from its zoning code in 2024 and St. Charles banned them in May 2026. Headroom on the Ameren and Evergy systems is rated moderate.",
 "mo": 3,
 "st": "Courting",
+"srcs": [
+{
+"t": "RSMo 393.130 large-load tariff mandate (SB 4, 2025)",
+"u": "https://revisor.mo.gov/main/OneSection.aspx?section=393.130",
+"type": "Government record",
+"supports": "Since Aug 28, 2025, large utilities must file tariffs for customers expected above 100 MW (50 MW for smaller utilities) so those customers pay their cost of service.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Large load tariff fact sheet, April 2026 (Missouri PSC)",
+"u": "https://psc.mo.gov/CMSInternetData/Community%20Outreach/Large%20Load%20Tariff%20Fact%20Sheet%20-%20April%202026.pdf",
+"type": "Government record",
+"supports": "The PSC says SB 4 covers data centers and has approved Ameren Missouri and Evergy large-load tariffs with 12-year minimum terms, collateral and exit fees.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "RSMo 144.810 data storage center sales tax exemption",
+"u": "https://revisor.mo.gov/main/OneSection.aspx?section=144.810",
+"type": "Government record",
+"supports": "New data storage centers that invest at least 25 million dollars get up to 15 years of full state and local sales and use tax exemption, and expansions can qualify too.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Peculiar reverses data center zoning (KSHB)",
+"u": "https://www.kshb.com/news/local-news/peculiar-reverses-zoning-for-data-center-after-cries-from-neighbors",
+"type": "Reporting",
+"supports": "In a story published Oct 21, 2024, KSHB reports that Peculiar's aldermen unanimously removed data centers from the light industrial zoning code, so they are no longer an allowed use.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "St. Charles passes a ban on data centers (STLPR)",
+"u": "https://www.stlpr.org/2026-05-20/st-charles-passes-a-ban-on-data-centers",
+"type": "Reporting",
+"supports": "St. Charles voted 7-1 in May 2026 to bar data centers in every zone, making its fall 2025 moratorium permanent.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Missouri lawmakers passed nothing on data centers (STLPR)",
+"u": "https://www.stlpr.org/government-politics-issues/2026-06-29/missouri-lawmakers-data-centers",
+"type": "Reporting",
+"supports": "The 2026 Missouri session passed no data center bills, and HB 3362 got one hearing and no floor vote.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
-"pg": 0,
+"pg": 2,
 "zn": 0,
 "tx": 0,
-"n": "No datacenter-specific state statute is recorded. Peculiar enacted a local ban."
+"n": "SB 4 (2025) requires utilities to file large-load tariffs so customers above 100 MW, or 50 MW for smaller utilities, pay their cost of service, and the PSC has approved Ameren Missouri and Evergy tariffs with 12-year minimum terms. The data storage center sales tax exemption remains available, and the 2026 session passed no data center bills. Peculiar removed data centers from its light industrial zoning in October 2024, and St. Charles barred them in every zone in May 2026."
 }
 },
 {
@@ -1813,16 +2361,60 @@ const STATES = [
 "c": 3,
 "x": 4,
 "tag": "",
-"note": "The state froze its $250M AI data center incentive, then enacted the Data Center Fair Share Act (July 7, 2026) creating a separate rate class and requiring data centers to curtail before residents. Local restrictions require municipality-specific review. Strong NYC-adjacent connectivity.",
+"note": "The Data Center Fair Share Act (July 7, 2026) directs the BPU to set standards by about July 2027 that assign grid costs to large data centers and curtail them before residents. The End Data Center Tax Credits Act (August 27, 2026) capped the Next New Jersey AI credit at the $250M already awarded, so no new applications are accepted, and a law signed the same day requires semiannual energy and water reports. Local restrictions require municipality-specific review. Strong NYC-adjacent connectivity.",
 "mo": 2,
 "st": "Restrictive",
+"srcs": [
+{
+"t": "Sherrill signs Data Center Fair Share Act (NJ Governor)",
+"u": "https://www.nj.gov/governor/news/2026/20260707a.shtml",
+"type": "Government record",
+"supports": "On July 7, 2026 Sherrill signed S731/A796, which sets a data center rate class, has data centers pay their grid costs and curtail before residents.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "A796 as enacted, P.L.2026, c.32 (NJ Legislature)",
+"u": "https://pub.njleg.gov/Bills/2026/AL26/32_.HTM",
+"type": "Government record",
+"supports": "The law has BPU set standards within 12 months that assign infrastructure costs to large data centers and curtail them before residential customers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Next New Jersey Program AI status (NJEDA)",
+"u": "https://www.njeda.gov/nextnjai/",
+"type": "Government record",
+"supports": "S4390, signed Aug 27, 2026 as P.L.2026, c.77, cut Next NJ-AI credits from $500M to $250M, fully allocated, and NJEDA takes no new applications.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "NJ pauses AI data center tax break program (News 12)",
+"u": "https://newjersey.news12.com/2026/06/23/new-jersey-pauses-program-used-to-dole-out-tax-breaks-for-ai-data-centers/1f8s32nZnXpKC87InUdZMC",
+"type": "Reporting",
+"supports": "In June 2026 NJEDA paused applications for the Next New Jersey Program-AI while the Sherrill administration reviewed it.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "NJ blocks remaining $250M in AI data center credits",
+"u": "https://www.yahoo.com/news/politics/articles/growing-revolt-against-ai-data-113202728.html",
+"type": "Reporting",
+"supports": "The paused pool was the unawarded $250M of a $500M program, and CoreWeave keeps its $250M Kenilworth award.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Sherrill signs data center reporting law (NJ Governor)",
+"u": "https://www.nj.gov/governor/news/2026/20260827a.shtml",
+"type": "Government record",
+"supports": "On Aug 27, 2026 Sherrill signed S3379/A4096 requiring semiannual data center energy and water reports to BPU.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "High",
 "wt": 0,
 "pg": 2,
 "zn": 0,
 "tx": 2,
-"n": "The Data Center Fair Share Act (July 7, 2026) creates a separate ratepayer class for large data centers, requires them to cover their own grid infrastructure costs and requires them to curtail before residential customers. The state also froze its $250M AI data center incentive. Local restrictions require municipality-specific review."
+"n": "The Data Center Fair Share Act (P.L.2026, c.32, July 7, 2026) directs the BPU to adopt standards within 12 months that assign infrastructure costs to large data centers and curtail them before residential customers, after which utilities petition for a separate rate class. The End Data Center Tax Credits Act (P.L.2026, c.77, August 27, 2026) caps the Next New Jersey AI credit at the $250M already awarded. P.L.2026, c.75 requires semiannual energy and water use reports to the BPU. Local restrictions require municipality-specific review."
 }
 },
 {
@@ -2112,16 +2704,81 @@ const STATES = [
 "c": 2,
 "x": 2,
 "tag": "",
-"note": "Third-cheapest industrial power and Google's Pryor campus; HB 2992 (effective July 1, 2026) requires large loads to fund their own grid costs. SB 1488 statewide moratorium and HB 4424 property tax rollback were proposed but not enacted; Oklahoma City passed a local pause. High tornado exposure.",
+"note": "Among the lowest industrial power prices, third lowest from January to July 2026 per EIA, and Google's Mayes County campus. HB 2992, the Data Center Customer Ratepayer Protection Act, took effect July 1, 2026 and requires large loads to fund their own grid costs. SB 259 bars groundwater for open-air evaporative cooling at data centers from November 1, 2026. SB 1488, a statewide moratorium, and HB 4424, a property tax exemption, were proposed but not enacted. Oklahoma City paused applications in April. High tornado exposure.",
 "mo": 3,
 "st": "Courting, with conditions",
+"srcs": [
+{
+"t": "Enrolled HB 2992 text (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/cf_pdf/2025-26%20ENR/hB/HB2992%20ENR.PDF",
+"type": "Government record",
+"supports": "HB 2992 requires every electric supplier to keep separate terms and tariffs so new loads of 75 MW or more repay their allocated costs, with a 10-year minimum term, effective July 1, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 2992 bill history (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/BillInfo.aspx?Bill=hb2992&Session=2600",
+"type": "Government record",
+"supports": "HB 2992 passed the House 92-2 and the Senate 46-0, cleared conference May 5, 2026 and was approved by the Governor May 11, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "SB 1488 as introduced (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/cf_pdf/2025-26%20INT/SB/SB1488%20INT.PDF",
+"type": "Government record",
+"supports": "SB 1488 would have banned building data centers with loads of 100 MW or more until Nov 1, 2029, pending a Corporation Commission study.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "SB 1488 bill history (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/BillInfo.aspx?Bill=sb1488&Session=2600",
+"type": "Government record",
+"supports": "SB 1488 was referred to committee Feb 3, 2026 and has no recorded committee or floor vote.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 4424 bill history (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/BillInfo.aspx?Bill=hb4424&Session=2600",
+"type": "Government record",
+"supports": "HB 4424, Speaker Hilbert's data center ad valorem exemption bill, was referred to Appropriations Feb 3, 2026 and never got a vote.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "OKC Council approves data center moratorium (City of OKC)",
+"u": "https://www.okc.gov/News-articles/Oklahoma-City-Council-approves-moratorium-on-new-data-centers",
+"type": "Government record",
+"supports": "Oklahoma City unanimously paused data center applications, rezonings and permits on April 21, 2026, until Dec 31, 2026 or earlier code changes.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Enrolled SB 259 groundwater act (Oklahoma Legislature)",
+"u": "https://www.oklegislature.gov/cf_pdf/2025-26%20ENR/SB/SB259%20ENR.PDF",
+"type": "Government record",
+"supports": "From Nov 1, 2026, data centers may not use groundwater for open-air evaporative cooling and need closed-loop or similar low-consumption cooling to get a permit.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "EIA Table 5.6.B electricity prices by state, YTD 2026",
+"u": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_b",
+"type": "Government record",
+"supports": "For January through July 2026, Oklahoma's industrial price of 6.69 cents per kWh is the third lowest, after New Mexico and Louisiana.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Google Mayes County data center (Google)",
+"u": "https://datacenters.google/locations/mayes-county-oklahoma/",
+"type": "Company statement",
+"supports": "Google has run a data center in Pryor, Mayes County since 2007 and says it has invested more than 15 billion dollars in Oklahoma.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
 "pg": 2,
-"zn": 0,
+"zn": 1,
 "tx": 0,
-"n": "HB 2992, the Data Center Consumer Ratepayer Protection Act, took effect July 1, 2026 and requires electric suppliers to set separate terms and tariffs for large loads so they fund their own grid costs. SB 1488, a moratorium on facilities of 100 MW or more through 2029, and HB 4424 on property tax were proposed but not enacted. Oklahoma City passed a local pause."
+"n": "HB 2992, the Data Center Customer Ratepayer Protection Act, took effect July 1, 2026. It requires electric suppliers to keep separate terms and tariffs so new loads of 75 MW or more repay their allocated costs, and it requires large-load buyers of rural land to notify the Corporation Commission, county commissioners and neighbors. SB 259 bars groundwater for open-air evaporative cooling at data centers from November 1, 2026. SB 1488, a moratorium on facilities of 100 MW or more through 2029, and HB 4424 were proposed but not enacted. Oklahoma City paused applications on April 21, 2026."
 }
 },
 {
@@ -2611,16 +3268,67 @@ const STATES = [
 "c": 5,
 "x": 4,
 "tag": "",
-"note": "Cheap hydro and a cool climate put Washington atop CNBC's grid ranking; Quincy and Seattle are established markets. Grant County PUD is effectively full and BPA transmission is the bottleneck; the exemption is limited to rural counties; Snohomish County paused applications through Dec 2026.",
+"note": "Cheap hydro and a cool climate, with established markets in Quincy and Seattle. Grant County PUD has limited data center load since March 2025 while transmission upgrades proceed, and BPA transmission is the bottleneck. ESSB 6231 narrowed both sales tax exemptions, for rural counties and for King, Pierce and Snohomish, from July 1, 2026. Snohomish County paused applications for six months in June 2026.",
 "mo": 3,
 "st": "Courting, with conditions",
+"srcs": [
+{
+"t": "HB 2515 bill summary (Washington Legislature)",
+"u": "https://app.leg.wa.gov/billsummary?BillNumber=2515&Year=2025&Initiative=false",
+"type": "Government record",
+"supports": "HB 2515 passed the House 51-41 on Feb 14, 2026 and went back to House Rules on March 12, 2026 without passing the Senate.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "E2SHB 2515 Senate bill report, Feb 27, 2026",
+"u": "https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bill%20Reports/Senate/2515-S2.E%20SBR%20WM%20TA%2026.pdf",
+"type": "Government record",
+"supports": "HB 2515 would require tariffs that block cost shifts from facilities of 20 MW or more, a demand response share, and 80 percent new clean energy by 2030.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "ESSB 6231 final bill report (C 266 L 26)",
+"u": "https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bill%20Reports/Senate/6231-S.E%20SBR%20FBR%2026.pdf",
+"type": "Government record",
+"supports": "Washington has one data center sales tax exemption for rural counties and another for King, Pierce and Snohomish, and the 2026 law narrowed both from July 1, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Snohomish County Council 2026 voting record",
+"u": "https://www.snohomishcountywa.gov/DocumentCenter/View/141689/Council-Vote-Record-2026",
+"type": "Government record",
+"supports": "The council adopted Ordinance 26-026, a data center moratorium in unincorporated Snohomish County, 5-0 on June 24, 2026.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Snohomish County data center moratorium (Everett Herald)",
+"u": "https://www.heraldnet.com/2026/06/25/snohomish-county-council-approves-emergency-data-center-moratorium/",
+"type": "Reporting",
+"supports": "The moratorium pauses data center applications in unincorporated Snohomish County for six months and can be renewed after a public hearing.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Grant PUD commission recap, March 25, 2025",
+"u": "https://www.grantpud.org/blog/commission-recap-3-25-2025",
+"type": "Government record",
+"supports": "Grant PUD planned load-growth limits for data centers until substation and transmission upgrades allow more demand.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Washington clean-energy bottleneck (OPB)",
+"u": "https://www.opb.org/article/2026/07/24/washington-clean-energy-bottleneck-calls-for-reform/",
+"type": "Reporting",
+"supports": "BPA added one mile of transmission line in five years and has a large, understaffed interconnection queue.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
 "pg": 0,
 "zn": 0,
-"tx": 1,
-"n": "The sales tax exemption is limited to rural counties. HB 2515, which would set clean energy, cost-shifting and demand response standards for large loads, is pending. Snohomish County paused applications through December 2026."
+"tx": 2,
+"n": "Washington has a sales tax exemption for rural counties and a parallel one for King, Pierce and Snohomish counties. ESSB 6231 narrowed both from July 1, 2026 by ending refurbishment certificates and removing replacement servers. HB 2515, which would have set clean energy, cost-shifting and demand response standards for large loads, passed the House and died in the Senate in March 2026. Snohomish County adopted a six-month moratorium on June 24, 2026."
 }
 },
 {
@@ -2637,16 +3345,60 @@ const STATES = [
 "c": 4,
 "x": 2,
 "tag": "",
-"note": "HB 2014 (2025) created a certified microgrid district program letting data centers self-supply from coal or gas; Berkeley County is a Northern Virginia spillover. Rural opposition (Tucker County) is emerging; fiber infrastructure is limited.",
+"note": "HB 2014 (2025) created a certified microgrid program that exempts certified projects from PSC rate jurisdiction and bars local ordinances that limit them, with no fuel requirement. Penzance plans a $4 billion, 600 MW campus in Berkeley County, about an hour from Loudoun County. Opponents of the Tucker County project have taken its air permit to court.",
 "mo": 3,
 "st": "Courting",
+"srcs": [
+{
+"t": "HB 2014 (2025) bill history (West Virginia Legislature)",
+"u": "https://www.wvlegislature.gov/Bill_Status/Bills_history.cfm?input=2014&year=2025&sessiontype=RS&btype=bill",
+"type": "Government record",
+"supports": "HB 2014, the Certified Microgrid Program bill, passed in April 2025, was signed April 30, 2025 and took effect 90 days from passage.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "HB 2014 enrolled text (West Virginia Legislature)",
+"u": "https://www.wvlegislature.gov/Bill_Status/bills_text.cfm?billdoc=hb2014%20sub1%20enr.htm&yr=2025&sesstype=RS&i=2014",
+"type": "Government record",
+"supports": "The act exempts certified microgrids from PSC rate jurisdiction and bars county and municipal ordinances that limit certified projects.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Berkeley County data center campus (WV Dept. of Commerce)",
+"u": "https://westvirginia.gov/4-billion-data-center-campus-planned-for-berkeley-county-positioning-west-virginia-for-the-ai-and-cloud-economy/",
+"type": "Government record",
+"supports": "Penzance plans a $4 billion, 600 MW, 548-acre Eastern Panhandle campus in Berkeley County, the state's first high impact designation.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Penzance to invest $4B in West Virginia (Construction Dive)",
+"u": "https://www.constructiondive.com/news/west-virginia-penzance-data-center-investment/814095/",
+"type": "Reporting",
+"supports": "The Berkeley County site sits a little over an hour's drive from Loudoun County's Data Center Alley.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Air Quality Board appeal 25-02-AQB certified record",
+"u": "https://aqb.wv.gov/AppealsDocuments/2025.10.15.%2025-02-AQB.%20Certified%20Record%20Part%201%20of%206.%20Pages%201%20-%20131.pdf",
+"type": "Government record",
+"supports": "Tucker United, the WV Highlands Conservancy and Sierra Club appealed the air permit for Fundamental Data's Tucker County Ridgeline facility.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "WV Responsible Data Center Development Plan (Commerce)",
+"u": "https://westvirginia.gov/wp-content/uploads/2026/08/Data-Center-Principles-August-2026-FINAL-8-26.pdf",
+"type": "Government record",
+"supports": "The August 11, 2026 plan builds on HB 2014 and makes the Ratepayer Protection Pledge a condition of state certification.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Moderate",
 "wt": 0,
 "pg": 0,
 "zn": -1,
 "tx": 0,
-"n": "HB 2014 (2025) created a certified microgrid district program letting data centers self-supply from coal or gas, easing siting and power supply relative to ordinary review. Rural opposition has emerged in Tucker County."
+"n": "HB 2014 (2025) created a certified microgrid program that exempts certified projects from PSC rate jurisdiction and preempts local ordinances that would limit them, easing siting and power supply relative to ordinary review. An August 2026 Commerce plan makes a ratepayer protection pledge a condition of certification. Opposition to the Tucker County project has moved into litigation over its air permit."
 }
 },
 {
@@ -2703,20 +3455,72 @@ const STATES = [
 "c": 5,
 "x": 1,
 "tag": "",
-"note": "Gov. Gordon's EO 2026-03 ('Data Centers the Wyoming Way', June 3) explicitly keeps the state open for investment while making developers pay for new power; Cheyenne hosts a 1.8 GW Crusoe/Tallgrass campus. Cold climate, low electricity prices and low hazard exposure; limited fiber infrastructure and labor availability.",
+"note": "Gov. Gordon's EO 2026-03 ('Data Centers the Wyoming Way', June 3, 2026) sets nonbinding principles, including that whoever creates new demand pays for its infrastructure, and state law already bars large-load service agreements from shifting costs. Google now owns the 2.7 GW Project Tembo campus south of Cheyenne, and Black Hills signed agreements to serve it in September 2026. Low electricity prices and a cold, semi-arid climate. Cheyenne rejected a local moratorium in May 2026.",
 "mo": 3,
 "st": "Courting",
+"srcs": [
+{
+"t": "EO 2026-03 Data Centers the Wyoming Way (Gov. Gordon)",
+"u": "https://drive.google.com/file/d/1wxmktlM19KG5WEFCIqieNQFjBimCxpJP/view",
+"type": "Government record",
+"supports": "Gov. Gordon signed EO 2026-03 on June 3, 2026. It sets nonbinding principles, one of which is that the people creating demand bear the infrastructure costs.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "W.S. 37-3-116 service agreements (Wyoming Title 37)",
+"u": "https://wyoleg.gov/statutes/compress/title37.pdf",
+"type": "Government record",
+"supports": "W.S. 37-3-116 bars utility service agreements with customers above 5 MW from shifting costs to other customers.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "W.S. 39-15-105 data center exemption (Title 39)",
+"u": "https://wyoleg.gov/statutes/compress/title39.pdf",
+"type": "Government record",
+"supports": "W.S. 39-15-105(a)(viii)(S) exempts qualifying data center equipment purchases from sales and use tax.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Black Hills 8-K on Google Cheyenne deal (SEC)",
+"u": "https://www.sec.gov/Archives/edgar/data/0001130464/000119312526415597/bkh-ex99_1.htm",
+"type": "Company statement",
+"supports": "Black Hills will serve Google's planned Cheyenne data center through 2048, and Google pays all costs of serving it.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Google revealed behind Project Tembo (Cowboy State Daily)",
+"u": "https://cowboystatedaily.com/2026/07/08/google-revealed-as-owner-of-wyomings-largest-data-center-now-project-tembo/",
+"type": "Reporting",
+"supports": "Google has replaced Crusoe as owner of the campus south of Cheyenne, now called Project Tembo and planned at 2.7 GW.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Wyoming Electricity Profile 2024 (EIA)",
+"u": "https://www.eia.gov/electricity/state/wyoming/index.php",
+"type": "Government record",
+"supports": "Wyoming's 2024 average retail electricity price was 9.14 cents per kWh, 47th among states.",
+"reviewed": "2026-10-20"
+},
+{
+"t": "Cheyenne rejects data center pause (Wyoming Public Media)",
+"u": "https://www.wyomingpublicmedia.org/wyoming-economy/2026-05-28/no-pause-on-data-centers-for-cheyenne",
+"type": "Reporting",
+"supports": "After hours of testimony on both sides, the Cheyenne City Council voted 8-1 in May 2026 against a one-year moratorium.",
+"reviewed": "2026-10-20"
+}
+],
 "rr": {
 "pb": "Low",
 "wt": 0,
 "pg": 2,
 "zn": 0,
 "tx": 0,
-"n": "Executive Order 2026-03, 'Data Centers the Wyoming Way' (June 3, 2026), keeps the state open for investment while requiring developers to pay for new power. No datacenter-specific water or siting restriction is recorded."
+"n": "W.S. 37-3-116 bars utility service agreements with customers above 5 MW from shifting costs to other customers, and Black Hills serves the Cheyenne campus under its large-load tariff. Executive Order 2026-03 (June 3, 2026) sets nonbinding principles on cost responsibility. The data center equipment sales tax exemption remains in force. No datacenter-specific water or siting restriction is recorded."
 }
 }
 ]
 ;
+const LOCAL = {"source":{"title":"Moratorium Nation: U.S. Infrastructure Moratorium Data","author":"Michael J. Bommarito","url":"https://mjbommar.github.io/moratorium-data-2026/","csv":"https://mjbommar.github.io/moratorium-data-2026/data/moratorium_inventory.csv","license":"CC BY 4.0","updated":"2026-09-23","retrieved":"2026-10-20"},"fields":["x","y","state","jurisdiction","type","enacted","status","end"],"status":{"a":"active","e":"extended","p":"pending","r":"replaced","x":"expired","d":"rescinded"},"measures":[[112.4,541.0,"AK","Houston","City","","p",""],[658.6,386.4,"AL","Rogersville","Town","","p",""],[670.5,415.3,"AL","Birmingham","City","2026-03-03","r","2026-08-30"],[675.3,414.2,"AL","Leeds","City","2026-06-08","a",""],[688.5,392.2,"AL","Fort Payne","City","2026-06-16","a",""],[667.8,401.4,"AL","Cullman","City","2026-06-22","a","2027-06-22"],[670.2,420.4,"AL","Helena","City","2026-06-22","a",""],[670.5,416.3,"AL","Homewood","City","2026-06-22","a",""],[667.6,394.7,"AL","Morgan County","County","2026-06-23","a","2027-06-23"],[668.5,393.6,"AL","Somerville","Town","2026-07","a",""],[672.4,424.6,"AL","Calera","City","2026-07-06","a",""],[676.1,408.9,"AL","Springville","City","2026-07-06","a",""],[667.0,417.2,"AL","Hueytown","City","2026-07-14","a",""],[674.1,419.0,"AL","Chelsea","City","2026-07-21","a",""],[668.5,416.1,"AL","Fairfield","City","2026-07-27","a",""],[651.9,480.6,"AL","Prichard","City","2026-08","a",""],[677.7,418.6,"AL","Harpersville","Town","2026-08-03","a",""],[672.4,411.2,"AL","Pinson","City","2026-08-06","a",""],[688.4,410.2,"AL","Anniston","City","2026-08-18","a",""],[675.9,418.7,"AL","Westover","City","2026-08-18","a",""],[660.2,487.5,"AL","Foley","City","2026-09-08","a",""],[670.9,413.8,"AL","Tarrant","City","2026-09-08","a",""],[550.5,360.8,"AR","Harrison","City","2023-05-30","d",""],[543.1,358.5,"AR","Carroll County","County","2026-06-16","a",""],[561.8,430.6,"AR","Union County","County","2026-06-30","a",""],[550.6,382.6,"AR","Russellville","City","2026-07-16","a",""],[579.2,371.4,"AR","Independence County","County","2026-08-10","a",""],[538.8,367.0,"AR","Madison County","County","2026-08-17","a",""],[200.0,431.2,"AZ","Pima County","County","2026-08-11","a",""],[28.3,192.1,"CA","Humboldt County","County","","p",""],[92.7,363.2,"CA","Irwindale","City","","r",""],[35.1,261.2,"CA","San Francisco","City","","p",""],[88.9,363.6,"CA","Monterey Park","City","2026-01-21","r",""],[89.0,364.5,"CA","Montebello","City","2026-02-11","x",""],[92.1,363.6,"CA","Baldwin Park","City","2026-03-04","e","2027-03-04"],[90.7,363.5,"CA","El Monte","City","2026-03-18","e","2027-03-17"],[48.3,259.9,"CA","Oakley","City","2026-04-14","e","2027-04-14"],[134.6,397.7,"CA","Imperial","City","2026-06-03","e","2027-05-30"],[122.0,378.9,"CA","Indio","City","2026-06-03","e","2026-10-16"],[122.6,380.0,"CA","Coachella","City","2026-06-04","r","2026-09-25"],[118.0,372.4,"CA","Desert Hot Springs","City","2026-06-16","e","2028-05-22"],[134.6,397.7,"CA","Imperial County","County","2026-06-17","d",""],[55.1,274.3,"CA","Patterson","City","2026-07-16","e","2027-07-15"],[68.7,263.7,"CA","City of Angels (Calaveras County)","City","2026-08-18","a",""],[87.8,311.6,"CA","Tulare County","County","2026-08-18","e",""],[70.6,259.8,"CA","Calaveras County","County","2026-08-25","a",""],[101.5,375.6,"CA","Lake Elsinore","City","2026-08-25","a",""],[103.3,388.8,"CA","Escondido","City","2026-08-26","a",""],[44.0,279.3,"CA","Morgan Hill","City","2026-08-26","a",""],[116.7,375.3,"CA","Palm Springs","City","2026-08-26","a",""],[25.3,186.3,"CA","Eureka","City","2026-09-01","a",""],[28.0,222.6,"CA","Mendocino County","County","2026-09-01","a",""],[44.8,282.5,"CA","Gilroy","City","2026-09-14","a",""],[37.1,258.2,"CA","Richmond","City","2026-09-15","a",""],[27.1,185.3,"CA","Arcata","City","2026-09-16","a",""],[88.8,357.4,"CA","Los Angeles County","County","2026-09-17","a",""],[341.4,272.3,"CO","Arvada","City","","p",""],[344.0,272.4,"CO","Commerce City","City","","p",""],[376.7,254.1,"CO","Logan County","County","2025-10-21","r",""],[336.7,251.6,"CO","Larimer County","County","2026-01-27","e","2027-02-25"],[389.3,258.1,"CO","Phillips County","County","2026-02-27","e",""],[315.3,308.9,"CO","Saguache County","County","2026-05-05","a",""],[342.9,273.9,"CO","Denver","City","2026-05-18","a",""],[337.9,277.3,"CO","Jefferson County","County","2026-05-19","a","2027-03-19"],[337.2,265.0,"CO","Boulder County","County","2026-06-02","a","2026-12-02"],[321.0,292.3,"CO","Buena Vista","Town","2026-06-09","a",""],[324.0,263.7,"CO","Grand County","County","2026-06-09","a","2027-06-24"],[300.1,327.9,"CO","Archuleta County","County","2026-06-16","a",""],[309.1,318.0,"CO","South Fork","Town","2026-06-18","a",""],[349.5,266.8,"CO","Hudson","Town","2026-07-01","a",""],[283.2,297.2,"CO","Montrose County","County","2026-07-01","a",""],[342.2,269.2,"CO","Broomfield","City","2026-07-07","a",""],[291.0,289.0,"CO","Delta County","County","2026-07-07","a",""],[340.1,290.8,"CO","Woodland Park","City","2026-07-16","a","2028-01-16"],[345.5,260.4,"CO","Johnstown","Town","2026-07-20","a",""],[343.5,288.8,"CO","Monument","Town","2026-07-20","a",""],[348.1,268.1,"CO","Lochbuie","Town","2026-07-21","a",""],[346.4,260.6,"CO","Milliken","Town","2026-07-30","a",""],[295.7,288.8,"CO","Paonia","Town","2026-08-11","a",""],[290.0,287.3,"CO","Cedaredge","Town","2026-08-20","a",""],[343.8,262.6,"CO","Mead","Town","2026-08-31","a",""],[342.8,258.7,"CO","Loveland","City","2026-09-15","a",""],[887.4,190.7,"CT","Cromwell","Town","","p",""],[898.7,193.7,"CT","Groton","Town","2022-06-14","r",""],[877.8,191.0,"CT","Morris","Town","2026-05","a",""],[884.2,199.1,"CT","West Haven","City","2026-06-08","a",""],[884.4,198.2,"CT","New Haven","City","2026-09-08","a","2027-09-08"],[880.2,200.8,"CT","Trumbull","Town","2026-09-09","a",""],[852.1,256.3,"DE","Dover","City","","p",""],[765.8,492.0,"FL","Alachua","City","","p",""],[771.8,531.3,"FL","Hillsborough County","County","","p",""],[726.7,479.0,"FL","Leon County","County","","p",""],[813.7,544.2,"FL","Martin County","County","","p",""],[781.5,514.8,"FL","Minneola","City","","p",""],[790.4,515.3,"FL","Orange County","County","","p",""],[783.5,484.1,"FL","St. Johns County","County","","p",""],[765.5,510.9,"FL","Citrus County","County","2026-05-26","a",""],[774.0,468.1,"FL","Nassau County","County","2026-06-08","a",""],[695.4,473.0,"FL","Holmes County","County","2026-06-16","a",""],[774.1,523.8,"FL","Zephyrhills","City","2026-06-22","a",""],[774.9,483.7,"FL","Clay County","County","2026-06-23","a",""],[767.5,517.0,"FL","Hernando County","County","2026-06-23","a",""],[700.2,487.2,"FL","Lynn Haven","City","2026-06-23","x",""],[700.0,487.2,"FL","Bay County","County","2026-07-07","a",""],[814.3,554.2,"FL","Palm Beach County","County","2026-07-07","a",""],[773.9,547.8,"FL","Sarasota County","County","2026-07-08","a",""],[768.5,523.1,"FL","Pasco County","County","2026-07-14","a",""],[717.3,494.7,"FL","Franklin County","County","2026-07-15","a",""],[742.2,477.4,"FL","Madison County","County","2026-07-22","a",""],[672.7,479.7,"FL","Santa Rosa County","County","2026-07-23","a",""],[784.7,546.0,"FL","DeSoto County","County","2026-07-28","a",""],[787.4,493.1,"FL","Flagler County","County","2026-08-03","a",""],[779.3,527.4,"FL","Lakeland","City","2026-08-03","a",""],[765.1,534.0,"FL","Pinellas Park","City","2026-08-11","a",""],[669.3,486.3,"FL","Pensacola","City","2026-08-13","a",""],[698.8,479.3,"FL","Washington County","County","2026-08-20","a",""],[792.7,496.8,"FL","Ormond Beach","City","2026-08-25","a",""],[780.3,512.2,"FL","Lake County","County","2026-09-08","a",""],[758.8,501.5,"FL","Levy County","County","2026-09-08","a",""],[778.5,491.2,"FL","Putnam County","County","2026-09-08","a",""],[773.2,501.4,"FL","Marion County","County","2026-09-15","a",""],[772.5,540.3,"FL","Manatee County","County","2026-09-22","a",""],[776.9,550.5,"FL","North Port","City","2026-09-22","a",""],[700.2,489.2,"FL","Panama City","City","2026-09-23","a",""],[708.1,407.1,"GA","Douglas County","County","2025-03-18","x",""],[709.2,415.0,"GA","Coweta County","County","2025-05-06","r",""],[718.1,404.5,"GA","DeKalb County","County","2025-06-25","e","2027-03-30"],[716.7,420.3,"GA","Pike County","County","2025-09","r",""],[727.7,405.6,"GA","Social Circle","City","2025-09","r",""],[716.1,410.2,"GA","Clayton County","County","2025-09-03","e","2026-12-31"],[732.6,419.8,"GA","Jones County","County","2025-09-16","r",""],[721.4,420.1,"GA","Lamar County","County","2025-09-16","e",""],[705.0,423.0,"GA","Troup County","County","2025-09-16","r",""],[704.9,422.7,"GA","LaGrange","City","2025-09-23","r",""],[733.1,398.0,"GA","Athens-Clarke County","County","2025-12-02","r",""],[726.1,420.6,"GA","Monroe County","County","2025-12-02","r",""],[710.1,409.4,"GA","South Fulton","City","2025-12-09","r",""],[714.2,406.8,"GA","East Point (Fulton County)","City","2026-01","e",""],[725.3,449.5,"GA","Lee County","County","2026-01","e","2026-12-31"],[725.2,407.3,"GA","Covington","City","2026-01-05","r",""],[725.5,427.5,"GA","Crawford County","County","2026-01-06","e","2026-10-01"],[714.7,398.8,"GA","Roswell","City","2026-01-12","x","2026-09-20"],[718.7,416.2,"GA","Griffin","City","2026-01-13","r",""],[721.9,406.7,"GA","Rockdale County","County","2026-01-13","e","2026-10-01"],[731.5,469.3,"GA","Thomas County","County","2026-01-20","a",""],[714.6,412.1,"GA","Fayetteville","City","2026-01-29","r",""],[706.7,419.4,"GA","Hogansville","City","2026-02","e",""],[738.3,469.2,"GA","Brooks County","County","2026-02-02","e","2026-12-31"],[703.5,389.2,"GA","Gordon County","County","2026-02-03","e","2027-01-29"],[768.7,429.2,"GA","Bulloch County","County","2026-02-17","e","2026-12-31"],[725.6,407.9,"GA","Newton County","County","2026-02-17","e","2026-10-07"],[711.0,401.3,"GA","Cobb County","County","2026-02-24","e","2027-02-24"],[711.6,421.9,"GA","Meriwether County","County","2026-02-24","e","2026-11-21"],[724.0,391.5,"GA","Hall County","County","2026-02-26","e","2027-02-23"],[702.9,410.9,"GA","Carroll County","County","2026-03-03","e","2026-11-12"],[700.0,401.2,"GA","Polk County","County","2026-03-03","r",""],[702.7,417.4,"GA","Heard County","County","2026-03-17","x",""],[698.1,401.0,"GA","Cedartown","City","2026-03-23","a",""],[719.4,470.6,"GA","Decatur County","County","2026-04-14","a",""],[732.8,384.3,"GA","Stephens County","County","2026-04-14","e","2026-10-14"],[702.5,389.3,"GA","Calhoun (Gordon County)","City","2026-04-27","e","2027-01-25"],[776.0,461.6,"GA","Camden County","County","2026-05-05","a","2026-11-01"],[775.1,464.7,"GA","Kingsland (Camden County)","City","2026-05-11","a",""],[739.8,388.2,"GA","Hart County","County","2026-05-26","a",""],[758.9,405.6,"GA","Augusta-Richmond County","County","2026-06-02","r","2026-09-15"],[734.0,461.8,"GA","Colquitt County","County","2026-06-02","e","2027-02-28"],[698.2,395.8,"GA","Floyd County","County","2026-06-09","r","2026-08-28"],[780.8,433.6,"GA","Garden City (Chatham County)","City","2026-06-15","a",""],[716.1,396.6,"GA","Milton (Fulton County)","City","2026-06-15","e","2027-01-16"],[709.2,415.0,"GA","Coweta County","County","2026-06-16","a",""],[711.4,400.9,"GA","Marietta","City","2026-07","a","2026-12-31"],[728.8,391.7,"GA","Maysville","City","2026-07","a",""],[719.5,450.3,"GA","Terrell County","County","2026-07","a",""],[740.7,461.9,"GA","Adel (Cook County)","City","2026-07-06","a",""],[734.9,388.3,"GA","Franklin County","County","2026-07-06","a",""],[738.4,399.3,"GA","Oglethorpe County","County","2026-07-06","r",""],[695.1,384.6,"GA","Walker County","County","2026-07-09","e","2027-02-02"],[724.8,454.6,"GA","Dougherty County","County","2026-07-20","e","2027-02-27"],[732.8,428.8,"GA","Warner Robins","City","2026-07-20","a",""],[716.2,401.7,"GA","Chamblee","City","2026-07-21","a",""],[712.0,394.2,"GA","Cherokee County","County","2026-07-22","e","2027-02-14"],[732.0,383.8,"GA","Toccoa","City","2026-07-27","a",""],[725.4,453.7,"GA","Albany","City","2026-07-28","a",""],[705.9,402.9,"GA","Paulding County","County","2026-07-28","a",""],[729.8,389.7,"GA","Banks County","County","2026-08","e","2027-03-09"],[736.2,393.6,"GA","Madison County","County","2026-08-03","e","2027-02-22"],[760.2,444.5,"GA","Appling County","County","2026-08-04","x",""],[735.7,412.3,"GA","Putnam County","County","2026-08-07","a","2026-11-18"],[713.5,391.7,"GA","Ball Ground","City","2026-08-13","a","2027-02-09"],[778.0,433.6,"GA","Bloomingdale","City","2026-08-20","a",""],[744.8,468.6,"GA","Lowndes County","County","2026-08-25","a",""],[782.0,434.2,"GA","Savannah","City","2026-08-27","a",""],[715.7,408.0,"GA","Forest Park","City","2026-08-31","a",""],[783.0,436.6,"GA","Chatham County","County","2026-09-11","a",""],[568.7,229.8,"IA","City of Fairfax","City","","p",""],[548.4,227.8,"IA","Marshall County","County","","p",""],[589.1,223.6,"IA","Jackson County","County","2024-09-17","e","2027-08-04"],[579.2,225.0,"IA","Jones County","County","2024-10-15","r",""],[574.6,208.1,"IA","Clayton County","County","2025-02-25","e","2026-12-31"],[540.0,228.6,"IA","Story County","County","2025-06-17","a","2027-03-31"],[535.6,251.6,"IA","Clarke County","County","2025-06-23","a",""],[571.9,235.0,"IA","Johnson County","County","2025-11-06","a","2026-11-08"],[555.8,227.2,"IA","Tama County","County","2025-11-10","a",""],[550.8,198.0,"IA","Mitchell County","County","2025-11-25","a","2026-12-31"],[567.1,217.4,"IA","Buchanan County","County","2026-01","e",""],[509.5,237.0,"IA","Shelby County","County","2026-03-17","a","2027-07-01"],[523.5,245.0,"IA","Adair County","County","2026-03-18","a",""],[527.8,251.7,"IA","Union County","County","2026-03-25","a",""],[543.6,212.2,"IA","Franklin County","County","2026-03-31","a",""],[516.3,236.9,"IA","Audubon County","County","2026-05-05","a","2027-05-01"],[520.4,258.2,"IA","Taylor County","County","2026-05-07","a",""],[511.7,198.0,"IA","Dickinson County","County","2026-05-12","a",""],[573.6,251.1,"IA","Henry County","County","2026-05-14","a",""],[579.6,252.1,"IA","Des Moines County","County","2026-05-19","a",""],[579.9,232.9,"IA","Cedar County","County","2026-05-26","a",""],[583.2,216.5,"IA","Dubuque County","County","2026-05-26","a",""],[531.5,244.9,"IA","Madison County","County","2026-05-26","a",""],[574.7,258.5,"IA","Lee County","County","2026-06-16","a",""],[494.4,212.7,"IA","Plymouth County","County","2026-06-16","a",""],[495.4,205.4,"IA","Sioux County","County","2026-06-16","a",""],[581.1,220.5,"IA","City of Cascade","City","2026-06-22","a",""],[583.8,217.0,"IA","City of Peosta","City","2026-06-23","a",""],[497.0,220.9,"IA","Woodbury County","County","2026-06-23","a",""],[506.4,220.8,"IA","Ida County","County","2026-06-30","a",""],[571.5,226.4,"IA","Linn County","County","2026-07-01","a","2028-01-01"],[578.1,245.6,"IA","Louisa County","County","2026-07-07","a",""],[520.1,204.8,"IA","Palo Alto County","County","2026-07-08","a","2027-07-08"],[585.2,215.4,"IA","City of Asbury","City","2026-07-14","a",""],[512.3,258.3,"IA","Page County","County","2026-07-21","a",""],[537.9,228.4,"IA","City of Ames","City","2026-07-28","a",""],[564.2,235.4,"IA","Iowa County","County","2026-07-31","a",""],[566.4,250.6,"IA","Jefferson County","County","2026-08-11","a",""],[566.6,250.7,"IA","City of Fairfield","City","2026-08-24","a",""],[549.7,227.5,"IA","City of Marshalltown","City","2026-08-24","a",""],[519.8,198.1,"IA","Emmet County","County","2026-08-25","a",""],[559.0,216.9,"IA","City of Waterloo","City","2026-09-08","a",""],[532.7,228.7,"IA","Boone County","County","2026-09-09","a",""],[586.7,215.2,"IA","City of Dubuque","City","2026-09-21","a",""],[181.7,66.4,"ID","Kootenai County","County","2025-03-11","r",""],[179.3,166.8,"ID","Elmore County","County","2026-07-02","a",""],[230.0,190.7,"ID","Bannock County","County","2026-07-30","a",""],[619.4,274.3,"IL","Macon County","County","","p",""],[627.0,229.8,"IL","City of Aurora","City","2025-09-25","r",""],[603.5,302.4,"IL","City of Collinsville","City","2026-01","a",""],[599.5,296.1,"IL","Village of Godfrey","Village","2026-01-20","e","2027-01-31"],[605.4,301.0,"IL","City of Troy","City","2026-03","e",""],[618.8,239.8,"IL","Ottawa","City","2026-03-03","e","2027-08-25"],[629.1,233.1,"IL","Plainfield","Village","2026-04-21","a",""],[632.0,266.7,"IL","Champaign County","County","2026-04-23","a",""],[598.4,278.9,"IL","Morgan County","County","2026-04-27","a",""],[608.3,259.8,"IL","Tazewell County","County","2026-04-29","a",""],[618.1,259.0,"IL","Town of Normal","Town","2026-05-18","e","2027-05-31"],[611.8,268.8,"IL","Logan County","County","2026-05-19","d",""],[618.5,255.7,"IL","City of Bloomington","City","2026-05-26","a",""],[627.9,290.3,"IL","City of Effingham","City","2026-06-02","a",""],[618.0,240.3,"IL","La Salle County","County","2026-06-08","a",""],[635.4,242.8,"IL","Bourbonnais","Village","2026-06-15","a",""],[597.4,241.5,"IL","Henry County","County","2026-06-18","a",""],[618.5,323.3,"IL","City of Carbondale","City","2026-06-23","a",""],[635.7,225.1,"IL","City of West Chicago","City","2026-07-20","a","2027-01-16"],[613.1,219.1,"IL","Rockford","City","2026-08-03","a",""],[613.6,252.5,"IL","Woodford County","County","2026-08-18","a",""],[610.7,231.3,"IL","Lee County","County","2026-08-20","a",""],[630.1,281.8,"IL","Mattoon","City","2026-09-01","a",""],[631.3,216.3,"IL","Lake County","County","2026-09-08","a",""],[603.8,230.8,"IL","Sterling","City","2026-09-08","a",""],[643.1,298.5,"IL","Lawrence County","County","2026-09-17","a",""],[593.6,250.7,"IL","Galesburg","City","2026-09-21","a",""],[681.9,240.0,"IN","Fort Wayne","City","","p",""],[656.9,283.7,"IN","Owen County","County","","p",""],[662.0,236.6,"IN","Marshall County","County","2025-02-03","r",""],[653.4,250.8,"IN","White County","County","2025-10-20","r",""],[656.3,275.3,"IN","Putnam County","County","2025-11-17","a",""],[656.0,238.3,"IN","Starke County","County","2025-12-15","a",""],[687.6,277.7,"IN","Franklin County","County","2025-12-24","e","2027-02-24"],[655.7,243.9,"IN","Pulaski County","County","2026-01-20","a",""],[676.4,247.1,"IN","Huntington County","County","2026-02-23","a",""],[674.3,277.4,"IN","Shelby County","County","2026-02-23","r",""],[689.7,284.0,"IN","Dearborn County","County","2026-02-24","a",""],[662.6,243.0,"IN","Fulton County","County","2026-03-02","a",""],[674.6,253.9,"IN","Grant County","County","2026-03-16","a","2028-03-16"],[683.3,232.5,"IN","DeKalb County","County","2026-04-13","a",""],[667.1,249.3,"IN","Miami County","County","2026-05-04","r",""],[685.0,273.3,"IN","Fayette County","County","2026-05-05","a",""],[644.0,234.7,"IN","Merrillville (Lake County)","Town","2026-05-26","a",""],[661.9,266.0,"IN","Boone County","County","2026-06-15","a",""],[674.2,262.0,"IN","Madison County","County","2026-06-16","e","2027-06-16"],[677.1,304.9,"IN","New Albany (Floyd County)","City","2026-07-16","a",""],[678.7,305.0,"IN","Jeffersonville","City","2026-08-03","a",""],[648.6,234.6,"IN","Valparaiso (Porter County)","City","2026-08-10","a","2028-07-31"],[652.1,311.9,"IN","Warrick County","County","2026-08-11","a",""],[666.5,255.5,"IN","Howard County","County","2026-08-17","a",""],[667.8,271.8,"IN","Indianapolis (Marion County)","City","2026-08-19","a","2027-12-31"],[678.5,300.0,"IN","Clark County","County","2026-08-27","a",""],[668.4,229.5,"IN","Elkhart","City","2026-08-27","a",""],[671.7,247.5,"IN","Wabash County","County","2026-08-31","a",""],[682.7,227.0,"IN","Steuben County","County","2026-09-15","a",""],[643.7,232.0,"IN","Gary","City","2026-09-16","a",""],[468.8,312.4,"KS","McPherson County","County","2025-08-04","r",""],[472.4,320.1,"KS","Harvey County","County","2026-01-13","a",""],[472.0,329.0,"KS","Sedgwick County","County","2026-01-14","e","2026-12-25"],[460.2,331.1,"KS","Kingman County","County","2026-02-09","a",""],[518.1,308.1,"KS","Miami County","County","2026-03","a",""],[505.2,279.3,"KS","Brown County","County","2026-03-02","a",""],[478.1,312.4,"KS","Marion County","County","2026-03-02","e","2027-06-01"],[468.8,303.2,"KS","Saline County","County","2026-03-17","a",""],[514.4,293.2,"KS","Leavenworth County","County","2026-05-13","x",""],[484.6,291.2,"KS","Riley County","County","2026-05-18","a",""],[509.9,331.2,"KS","Neosho County","County","2026-05-19","a","2027-06-01"],[463.7,320.1,"KS","South Hutchinson","City","2026-05-26","a",""],[518.1,324.4,"KS","Bourbon County","County","2026-06-15","a",""],[484.7,298.4,"KS","Geary County","County","2026-06-22","a",""],[482.9,325.2,"KS","El Dorado","City","2026-07-13","a","2026-11-30"],[511.4,298.8,"KS","Lawrence","City","2026-07-14","a",""],[503.6,297.0,"KS","Topeka","City","2026-07-14","a",""],[495.1,310.6,"KS","Lyon County","County","2026-07-23","a",""],[477.2,300.8,"KS","Dickinson County","County","2026-07-30","a","2027-07-30"],[502.2,297.5,"KS","Shawnee County","County","2026-08-13","a","2027-02-17"],[486.8,278.8,"KS","Marysville","City","2026-09","a",""],[510.0,307.9,"KS","Franklin County","County","2026-09-02","a","2028-12-31"],[637.3,346.9,"KY","Calloway County","County","","p",""],[711.3,306.6,"KY","Montgomery County","County","","p",""],[684.6,301.3,"KY","City of La Grange","City","2025-06-02","x",""],[682.9,301.6,"KY","Oldham County Fiscal Court","County","2025-06-26","e",""],[668.1,318.4,"KY","Breckinridge County","County","2025-12-05","a",""],[671.6,313.7,"KY","Meade County Fiscal Court","County","2026-01-13","a",""],[732.3,293.6,"KY","Ashland","City","2026-02-26","r",""],[698.9,302.6,"KY","Scott County","County","2026-03-13","e","2026-12-31"],[677.6,331.4,"KY","Cave City","City","2026-05-21","a",""],[656.4,320.8,"KY","Daviess County","County","2026-05-28","a",""],[672.7,330.4,"KY","Edmonson County","County","2026-06-08","a",""],[695.9,318.1,"KY","Boyle County","County","2026-06-09","a",""],[702.4,307.8,"KY","Lexington-Fayette","Other","2026-06-09","a","2026-10-31"],[674.3,340.5,"KY","Allen County","County","2026-06-10","a",""],[697.0,308.1,"KY","Versailles","City","2026-06-16","a","2026-12-31"],[727.3,293.6,"KY","Greenup County","County","2026-07","a",""],[719.8,335.6,"KY","Bell County","County","2026-07-02","a",""],[684.5,315.1,"KY","Nelson County","County","2026-07-07","a",""],[664.6,330.3,"KY","Butler County","County","2026-07-13","a","2027-07-13"],[731.7,296.4,"KY","Boyd County Fiscal Court","County","2026-07-21","a",""],[680.5,311.7,"KY","Bullitt County","County","2026-07-21","a",""],[688.1,305.2,"KY","Shelby County","County","2026-07-21","a",""],[661.8,340.2,"KY","Logan County","County","2026-07-28","a",""],[640.3,338.1,"KY","Lyon County","County","2026-08","a",""],[719.8,302.2,"KY","Rowan County","County","2026-08","a",""],[711.0,327.7,"KY","London","City","2026-08-03","a",""],[700.2,312.0,"KY","Jessamine County","County","2026-08-04","a",""],[700.2,311.6,"KY","Nicholasville","City","2026-08-10","a",""],[703.0,298.5,"KY","Harrison County","County","2026-08-11","a",""],[695.0,313.9,"KY","Mercer County Fiscal Court","County","2026-08-11","a",""],[678.4,305.5,"KY","Louisville Metro","Other","2026-08-13","a",""],[706.8,308.3,"KY","Winchester","City","2026-09-01","a",""],[614.3,501.2,"LA","New Orleans","City","2026-01-28","a",""],[878.5,167.5,"MA","Heath (proposal, not enacted as of 2026-04-29)","Town","","p",""],[896.4,166.4,"MA","Leominster","City","","p",""],[883.6,174.6,"MA","Northampton","City","","p",""],[916.0,175.0,"MA","Plymouth","Town","","p",""],[894.6,177.5,"MA","Southbridge","Town","","p",""],[886.4,170.7,"MA","Shutesbury","Town","2025-09-30","x",""],[903.0,161.9,"MA","Lowell","City","2026-03-10","a",""],[883.9,166.9,"MA","Gill","Town","2026-05-04","a","2027-05-03"],[908.1,165.7,"MA","Malden","City","2026-05-05","a",""],[908.5,166.0,"MA","Everett (restriction proposal, not moratorium)","City","2026-06-22","a",""],[882.8,179.5,"MA","Westfield","City","2026-07-06","a",""],[885.2,180.1,"MA","Agawam","City","2026-09-08","a",""],[882.6,168.5,"MA","Greenfield","City","2026-09-16","a",""],[835.1,264.2,"MD","Anne Arundel County","County","","p",""],[856.6,280.6,"MD","Pocomoke City","City","","p",""],[854.6,274.3,"MD","Salisbury","City","","p",""],[851.4,282.1,"MD","Somerset County","County","","p",""],[831.1,269.0,"MD","Prince George's County","County","2025-09-16","e","2028-07-07"],[831.6,253.9,"MD","Baltimore County","County","2026-02-02","e","2027-12-31"],[824.6,252.4,"MD","Carroll County","County","2026-02-19","a",""],[833.0,256.4,"MD","Baltimore City","City","2026-05-11","a","2027-07-16"],[828.0,259.6,"MD","Howard County","County","2026-06-01","a","2027-11-02"],[843.6,261.2,"MD","Queen Anne's County","County","2026-06-04","a",""],[812.9,254.3,"MD","Washington County","County","2026-06-30","a",""],[818.5,256.2,"MD","Frederick County","County","2026-07-01","e","2027-07-01"],[848.4,264.1,"MD","Caroline County","County","2026-07-21","a",""],[860.0,276.4,"MD","Worcester County","County","2026-07-21","a","2027-07-21"],[823.5,262.7,"MD","Montgomery County","County","2026-07-28","a",""],[847.0,262.3,"MD","Ridgely","Town","2026-08","a",""],[850.1,267.6,"MD","Federalsburg","Town","2026-08-03","r",""],[845.9,275.5,"MD","Dorchester County","County","2026-08-04","a",""],[853.9,273.9,"MD","Wicomico County","County","2026-08-04","a",""],[848.8,269.2,"MD","Hurlock","Town","2026-08-10","a",""],[837.7,274.0,"MD","Calvert County","County","2026-08-18","a",""],[842.6,267.8,"MD","Talbot County","County","2026-09-08","a",""],[900.8,120.9,"ME","Bethel","Town","","p",""],[920.2,97.1,"ME","Dover-Foxcroft","Town","","p",""],[905.1,116.9,"ME","Peru","Town","","p",""],[929.6,103.4,"ME","Bangor","City","2026-04-13","a",""],[906.8,142.1,"ME","Sanford","City","2026-05-19","e","2027-01-31"],[916.6,128.1,"ME","Brunswick","Town","2026-06-01","a",""],[911.8,135.1,"ME","Westbrook","City","2026-06-01","a",""],[910.6,135.4,"ME","Gorham","Town","2026-06-02","a",""],[912.8,136.9,"ME","Scarborough","Town","2026-06-03","a",""],[926.7,120.4,"ME","Warren","Town","2026-07-08","a",""],[956.4,92.8,"ME","Eastport","City","2026-08-12","a",""],[936.7,107.5,"ME","Ellsworth","City","2026-08-17","a",""],[911.1,130.3,"ME","Gray","Town","2026-08-18","a",""],[905.2,116.7,"ME","Dixfield","Town","2026-09-14","a",""],[713.2,207.2,"MI","Detroit (requested)","City","","p",""],[688.1,218.8,"MI","Fayette Township (Hillsdale County)","Township","","p",""],[662.7,224.3,"MI","Howard Charter Township (Cass County)","Township","","p",""],[681.2,127.2,"MI","Clark Township","Township","2025-06-24","x","2026-06-30"],[696.9,214.4,"MI","Manchester Township","Township","2025-10-14","a",""],[696.9,202.1,"MI","Howell Township","Township","2025-11-20","x",""],[702.4,211.5,"MI","Pittsfield Township","Township","2025-11-20","e","2026-11-15"],[711.7,195.6,"MI","Bruce Township (Macomb County)","Township","2025-12","a",""],[700.5,199.6,"MI","Tyrone Township (Livingston County)","Township","2025-12-02","e","2027-02-19"],[698.3,210.2,"MI","Lima Township","Township","2025-12-08","e",""],[704.6,217.6,"MI","Dundee Township","Township","2025-12-09","x",""],[669.0,179.7,"MI","Green Charter Township","Township","2025-12-09","a",""],[670.7,161.9,"MI","Springfield Township","Township","2025-12-11","e","2026-12-10"],[712.5,200.5,"MI","Utica","City","2026-01","e",""],[656.4,176.2,"MI","Mason","City","2026-01-05","r",""],[695.1,184.6,"MI","Saginaw","City","2026-01-12","e","2026-12-31"],[696.4,179.9,"MI","Saline City","City","2026-01-12","a",""],[683.5,201.9,"MI","Oneida Charter Township","Township","2026-01-13","e","2027-01-24"],[696.3,210.3,"MI","Sylvan Township (Washtenaw County)","Township","2026-01-13","e","2027-07-14"],[713.6,195.2,"MI","Armada Township","Township","2026-01-14","e","2026-12-07"],[704.1,209.1,"MI","Superior Charter Township (Washtenaw County)","Township","2026-01-20","a",""],[709.8,209.8,"MI","Taylor","City","2026-01-20","a",""],[701.2,195.4,"MI","Grand Blanc Township","Township","2026-01-21","a",""],[708.2,200.8,"MI","Pontiac","City","2026-01-21","e","2027-01-20"],[712.3,196.5,"MI","Village of Romeo","Village","2026-01-26","a",""],[700.0,179.6,"MI","Wisner Township","Township","2026-02","e","2027-02-17"],[699.2,203.9,"MI","Genoa Charter Township","Township","2026-02-02","e","2027-02-02"],[715.9,196.9,"MI","Lenox Township","Township","2026-02-02","x","2026-06-02"],[700.5,211.7,"MI","Lodi Township","Township","2026-02-03","e","2027-02-16"],[671.6,201.3,"MI","Caledonia Township","Township","2026-02-04","e","2026-10-17"],[712.7,201.6,"MI","Sterling Heights","City","2026-02-04","a",""],[696.6,212.3,"MI","Sharon Township","Township","2026-02-05","a","2027-02-05"],[704.0,197.0,"MI","Groveland Township","Township","2026-02-09","a",""],[670.5,144.1,"MI","Hayes Township (Charlevoix County)","Township","2026-02-09","e","2027-02-04"],[668.5,191.4,"MI","Solon Township (Kent County)","Township","2026-02-09","e","2027-02-10"],[702.7,205.9,"MI","South Lyon","City","2026-02-09","a",""],[707.5,220.8,"MI","Erie Township","Township","2026-02-10","a",""],[707.9,196.3,"MI","Oxford Township","Township","2026-02-11","a",""],[660.9,206.5,"MI","Saugatuck Township","Township","2026-02-11","e","2026-10-31"],[691.1,201.0,"MI","Williamstown Township","Township","2026-02-11","a",""],[702.2,208.7,"MI","Ann Arbor Charter Township","Township","2026-02-16","a",""],[698.0,208.0,"MI","Dexter Township","Township","2026-02-17","e","2027-02-12"],[683.3,199.9,"MI","Eagle Township (Clinton County)","Township","2026-02-17","a",""],[700.5,197.5,"MI","Fenton Township","Township","2026-02-17","a","2027-02-22"],[705.7,201.7,"MI","White Lake Township","Township","2026-02-17","e","2027-02-12"],[705.5,179.4,"MI","Elmwood Township (Tuscola County)","Township","2026-02-18","e","2027-06-17"],[702.1,197.3,"MI","Holly Township","Township","2026-02-18","e","2027-02-15"],[686.6,211.3,"MI","Parma Township (Jackson County)","Township","2026-02-18","a",""],[669.1,197.0,"MI","Big Rapids Charter Township","Township","2026-02-23","a",""],[673.5,201.0,"MI","Bowne Township (Kent County)","Township","2026-02-23","a",""],[709.4,207.6,"MI","Dearborn Heights","City","2026-02-24","a",""],[682.8,211.6,"MI","Marengo Township","Township","2026-02-24","a",""],[671.6,215.4,"MI","Portage","City","2026-02-24","a","2026-12-31"],[668.0,203.8,"MI","Dorr Township","Township","2026-02-26","a",""],[692.5,211.4,"MI","Leoni Township","Township","2026-03","a",""],[704.1,210.5,"MI","Ypsilanti","City","2026-03-03","a",""],[664.0,202.2,"MI","Zeeland Charter Township","Township","2026-03-03","d",""],[698.9,213.9,"MI","Bridgewater Township","Township","2026-03-05","a",""],[711.6,212.9,"MI","Gibraltar","City","2026-03-09","a",""],[710.5,200.1,"MI","Rochester Hills","City","2026-03-09","e","2027-03-04"],[698.6,212.0,"MI","Freedom Township","Township","2026-03-10","a",""],[669.3,213.6,"MI","Oshtemo Charter Township","Township","2026-03-10","a",""],[702.7,213.3,"MI","York Township","Township","2026-03-10","e","2027-03-13"],[671.1,199.0,"MI","Cascade Charter Township (Kent County)","Township","2026-03-11","x","2026-09-17"],[673.1,213.2,"MI","Comstock Charter Township","Township","2026-03-16","a",""],[693.7,206.5,"MI","Stockbridge Township (Ingham County)","Township","2026-03-16","a",""],[688.5,201.2,"MI","East Lansing","City","2026-03-17","e","2027-03-17"],[708.2,173.9,"MI","Colfax Township (Huron County)","Township","2026-03-18","a",""],[706.5,200.3,"MI","Waterford Township","Township","2026-03-23","a","2026-10-01"],[704.5,204.0,"MI","Wixom","City","2026-03-24","r","2026-09-06"],[693.9,180.3,"MI","Monitor Charter Township","Township","2026-03-26","a",""],[680.6,116.6,"MI","Sault Ste. Marie Tribe of Chippewa Indians","Tribal","2026-04-07","a",""],[653.0,226.8,"MI","New Buffalo Township","Township","2026-04-08","a",""],[660.8,210.5,"MI","Casco Township (Allegan County)","Township","2026-04-20","a",""],[702.1,193.1,"MI","City of Lapeer","City","2026-04-20","a",""],[699.9,207.8,"MI","Webster Township","Township","2026-04-21","a",""],[704.1,210.5,"MI","Ypsilanti Community Utilities Authority","Utility-authority","2026-04-22","a",""],[709.2,216.3,"MI","Frenchtown Charter Township (Monroe County)","Township","2026-04-28","a",""],[703.4,205.2,"MI","Lyon Charter Township (Oakland County)","Township","2026-05","a",""],[678.6,162.2,"MI","Lyon Township","Township","2026-05","a",""],[666.7,225.5,"MI","Mason Township (Cass County)","Township","2026-05-02","a",""],[705.9,196.6,"MI","Brandon Township","Township","2026-05-04","e","2027-04-29"],[693.2,190.5,"MI","Chesaning Township","Township","2026-05-07","a",""],[662.7,160.3,"MI","Green Lake Township (Grand Traverse County)","Township","2026-05-12","a",""],[696.0,208.4,"MI","Lyndon Township","Township","2026-05-12","a",""],[668.6,224.2,"MI","Porter Township (Cass County)","Township","2026-05-12","a",""],[692.0,180.6,"MI","Williams Charter Township","Township","2026-05-12","a",""],[672.0,219.6,"MI","Park Township (St. Joseph County)","Township","2026-05-13","a",""],[704.4,186.6,"MI","Watertown Township (Tuscola County)","Township","2026-05-18","a",""],[689.5,201.2,"MI","Meridian Township","Township","2026-05-19","a",""],[711.2,208.6,"MI","Melvindale","City","2026-05-20","a",""],[712.0,197.6,"MI","Washington Township (Macomb County)","Township","2026-05-20","a",""],[666.4,221.9,"MI","Penn Township (Cass County)","Township","2026-05-21","a",""],[655.1,182.8,"MI","Hart","City","2026-05-26","a",""],[671.1,199.0,"MI","Cascade Charter Township (Kent County)","Township","2026-05-27","a",""],[708.9,173.1,"MI","Huron County","County","2026-05-27","a",""],[660.7,224.5,"MI","Niles Charter Township","Township","2026-06-01","a",""],[654.7,171.2,"MI","Filer Township","Township","2026-06-02","a",""],[667.1,211.4,"MI","Pine Grove Township","Township","2026-06-03","a",""],[663.6,198.3,"MI","Allendale Township","Township","2026-06-08","a",""],[700.7,192.2,"MI","City of Flint","City","2026-06-08","a",""],[695.2,214.2,"MI","Norvell Township","Township","2026-06-08","a",""],[710.7,209.2,"MI","Allen Park","City","2026-06-09","a",""],[687.3,220.1,"MI","Hillsdale Township (Hillsdale County)","Township","2026-06-09","a",""],[656.7,221.2,"MI","Lincoln Township (Berrien County)","Township","2026-06-09","a",""],[714.7,174.8,"MI","Sherman Township (Huron County)","Township","2026-06-09","a",""],[657.1,170.8,"MI","Stronach Township (Manistee County)","Township","2026-06-10","a","2026-12-31"],[663.6,200.2,"MI","Blendon Township (Ottawa County)","Township","2026-06-15","a",""],[708.3,198.2,"MI","Orion Township","Township","2026-06-15","a",""],[655.2,224.8,"MI","Chikaming Township","Township","2026-06-16","a",""],[669.5,215.5,"MI","Texas Township","Township","2026-06-22","a",""],[632.6,126.8,"MI","Forsyth Township","Township","2026-06-25","a","2027-06-25"],[610.4,114.7,"MI","Houghton","City","2026-07-08","a",""],[669.4,167.5,"MI","Haring Township","Township","2026-07-13","a",""],[687.2,201.3,"MI","Lansing","City","2026-07-13","a",""],[709.4,193.9,"MI","Dryden Township","Township","2026-07-14","a",""],[704.9,180.2,"MI","Ellington Township","Township","2026-07-14","a",""],[687.3,185.4,"MI","Wheeler Township (Gratiot County)","Township","2026-07-14","a",""],[705.9,170.8,"MI","Lake Township (Huron County)","Township","2026-07-16","a",""],[658.5,216.8,"MI","Hagar Township","Township","2026-07-17","a",""],[641.5,131.0,"MI","Delta County","County","2026-07-21","a","2027-07-21"],[706.2,198.6,"MI","Independence Township","Township","2026-07-21","a",""],[670.6,213.0,"MI","Kalamazoo Township","Township","2026-07-27","a",""],[681.6,212.6,"MI","Marshall","City","2026-08-03","a",""],[653.8,177.4,"MI","Pere Marquette Charter Township","Township","2026-08-11","a",""],[671.3,213.3,"MI","Kalamazoo","City","2026-08-17","a","2027-08-16"],[704.3,211.4,"MI","Ypsilanti Township","Township","2026-08-18","a",""],[664.3,158.4,"MI","Garfield Charter Township (Grand Traverse County)","Township","2026-08-25","a","2027-08-25"],[713.3,203.5,"MI","Warren","City","2026-08-25","a",""],[664.0,202.2,"MI","Zeeland Charter Township","Township","2026-09-01","a",""],[701.2,203.5,"MI","Brighton Township","Township","2026-09-21","a",""],[720.5,191.4,"MI","Port Huron Township","Township","2026-09-21","a",""],[711.1,207.7,"MI","Dearborn","City","2026-09-22","a",""],[541.9,175.5,"MN","Rice","City","","p",""],[547.2,162.2,"MN","Woodbury","City","","p",""],[541.3,190.6,"MN","Freeborn County","County","2025-08-19","e","2027-08-19"],[543.5,164.6,"MN","Eagan","City","2026-02-17","a",""],[533.6,165.1,"MN","Carver","City","2026-04-06","a",""],[544.2,166.4,"MN","Rosemount","City","2026-04-21","a",""],[539.5,172.4,"MN","Lonsdale","City","2026-04-30","a",""],[526.1,148.3,"MN","Waite Park","City","2026-05-04","a",""],[540.9,170.4,"MN","City of Elko New Market","City","2026-05-14","a",""],[530.6,157.4,"MN","Wright County","County","2026-05-19","a",""],[535.0,174.8,"MN","Le Sueur County","County","2026-05-26","a",""],[524.7,148.1,"MN","St. Joseph","City","2026-06-15","a",""],[541.8,161.0,"MN","Minneapolis","City","2026-06-25","a","2026-11-21"],[545.5,163.8,"MN","Inver Grove Heights","City","2026-06-26","a","2027-06-26"],[546.0,148.8,"MN","North Branch","City","2026-07","a",""],[549.2,135.7,"MN","Pine County","County","2026-07","e",""],[542.8,166.6,"MN","City of Apple Valley","City","2026-07-09","a",""],[530.4,179.8,"MN","Mankato","City","2026-07-13","a",""],[536.1,154.3,"MN","Otsego","City","2026-07-27","a","2027-07-27"],[536.8,153.7,"MN","Elk River","City","2026-08-03","a",""],[534.6,162.4,"MN","Minnetrista","City","2026-08-03","a",""],[547.6,149.5,"MN","Chisago County","County","2026-08-05","a",""],[548.6,166.1,"MN","Hastings","City","2026-08-17","a",""],[549.3,124.4,"MN","Carlton County","County","2026-08-24","a",""],[529.6,183.3,"MN","Blue Earth County","County","2026-08-25","a",""],[538.6,160.4,"MN","Plymouth","City","2026-09-08","a",""],[515.3,105.1,"MN","Bemidji","City","2026-09-14","a",""],[529.9,179.6,"MN","North Mankato","City","2026-09-21","a",""],[525.0,304.5,"MO","City of Peculiar","City","2024-08-19","r",""],[591.2,300.4,"MO","City of St. Charles","City","2025-08-22","r",""],[555.6,319.9,"MO","City of Camdenton","City","2026-05-05","a",""],[592.3,300.2,"MO","City of St. Peters","City","2026-05-14","a",""],[562.1,298.0,"MO","City of Columbia","City","2026-05-18","a","2027-05-18"],[543.8,349.4,"MO","Stone County","County","2026-06-04","a",""],[573.4,277.9,"MO","Marion County","County","2026-06-15","r",""],[553.8,336.4,"MO","Webster County","County","2026-06-16","a",""],[526.7,297.1,"MO","Jackson County","County","2026-06-22","a",""],[546.5,338.3,"MO","City of Springfield","City","2026-06-29","a",""],[558.0,344.0,"MO","Ava","City","2026-07-01","a",""],[525.6,295.8,"MO","City of Independence","City","2026-07-06","a",""],[527.3,346.8,"MO","City of Neosho","City","2026-07-07","a",""],[591.2,300.4,"MO","St. Charles County","County","2026-07-13","a",""],[518.0,280.4,"MO","City of St. Joseph","City","2026-07-20","a",""],[517.3,267.2,"MO","Nodaway County","County","2026-07-21","a",""],[530.7,297.7,"MO","Oak Grove","City","2026-08-03","a",""],[590.5,307.5,"MO","Pacific","City","2026-08-04","a",""],[545.6,313.7,"MO","Benton County","County","2026-08-10","a",""],[575.2,283.7,"MO","Ralls County","County","2026-08-23","a",""],[575.3,278.0,"MO","Palmyra","City","2026-09-03","a",""],[536.0,327.3,"MO","Cedar County","County","2026-09-08","a",""],[608.9,448.2,"MS","City of Jackson","City","2026-07-14","a","2027-02-12"],[238.4,115.5,"MT","Butte-Silver Bow","County","","p",""],[220.9,90.4,"MT","Missoula County","County","2026-07-09","a",""],[845.6,344.0,"NC","Beaufort County","County","","p",""],[812.9,343.1,"NC","City of Raleigh","City","","p",""],[791.1,339.8,"NC","Guilford County","County","","p",""],[828.3,329.2,"NC","Halifax County","County","","p",""],[818.3,368.9,"NC","Town of Elizabethtown","Town","","p",""],[739.7,353.4,"NC","Madison County (cryptocurrency mining; data-center-adjacent)","County","2023-06-13","x",""],[716.6,373.4,"NC","Cherokee County (high-impact facilities; cryptocurrency mining; data-center-adjacent)","County","2023-10-02","x",""],[844.7,321.5,"NC","Gates County","County","2025-12-17","a",""],[802.2,346.5,"NC","Chatham County","County","2026-02-11","a","2027-02-11"],[738.1,360.9,"NC","Town of Canton","Town","2026-02-11","a",""],[766.2,363.4,"NC","City of Kings Mountain","City","2026-02-24","e","2027-08-25"],[741.4,366.8,"NC","City of Brevard","City","2026-03-16","r",""],[757.2,342.5,"NC","Town of Boone","Town","2026-03-23","a",""],[817.8,342.2,"NC","Town of Wendell","Town","2026-04-13","a","2026-12-31"],[809.7,344.9,"NC","Town of Apex","Town","2026-04-14","a",""],[736.8,361.1,"NC","Town of Clyde","Town","2026-04-16","a",""],[779.7,352.3,"NC","Rowan County","County","2026-04-20","a",""],[803.2,338.3,"NC","Orange County","County","2026-04-21","a",""],[726.9,364.2,"NC","Swain County","County","2026-04-21","a",""],[756.6,342.3,"NC","Watauga County","County","2026-04-21","a","2027-04-21"],[807.3,339.1,"NC","Durham","City","2026-05-04","e","2027-05-03"],[810.5,352.6,"NC","Harnett County","County","2026-05-04","a","2027-05-04"],[832.9,324.4,"NC","Northampton County","County","2026-05-04","a",""],[821.7,337.6,"NC","Town of Spring Hope","Town","2026-05-04","a",""],[786.7,333.0,"NC","Town of Mayodan","Town","2026-05-11","r",""],[854.2,324.5,"NC","Pasquotank County","County","2026-05-18","a",""],[822.3,341.3,"NC","Town of Bailey","Town","2026-05-18","a",""],[813.7,344.5,"NC","Town of Garner","Town","2026-05-19","a",""],[742.4,358.0,"NC","Town of Woodfin","Town","2026-05-19","a",""],[826.2,341.9,"NC","City of Wilson","City","2026-05-21","a","2027-05-21"],[803.5,337.9,"NC","Town of Hillsborough","Town","2026-05-27","e","2027-05-27"],[773.5,335.2,"NC","Surry County","County","2026-06-01","e","2028-07-20"],[828.1,332.6,"NC","Town of Whitakers","Town","2026-06-01","a",""],[830.7,380.5,"NC","City of Boiling Spring Lakes","City","2026-06-02","a",""],[775.3,362.4,"NC","Charlotte","City","2026-06-08","a","2026-11-05"],[812.4,360.3,"NC","Cumberland County","County","2026-06-15","a","2026-12-15"],[810.0,346.6,"NC","Town of Holly Springs","Town","2026-06-16","a","2027-06-16"],[742.4,358.6,"NC","City of Asheville","City","2026-06-23","a",""],[778.1,345.5,"NC","Davie County","County","2026-07-06","a","2027-07-05"],[818.0,334.6,"NC","Town of Franklin","Town","2026-07-06","a",""],[737.1,352.8,"NC","Town of Hot Springs","Town","2026-07-13","a",""],[774.9,333.0,"NC","City of Mount Airy","City","2026-07-16","e","2026-12-13"],[855.6,322.2,"NC","Camden County","County","2026-08-03","a",""],[831.0,336.4,"NC","Edgecombe County","County","2026-08-03","a",""],[832.6,343.6,"NC","Town of Farmville","Town","2026-08-03","a",""],[824.2,336.4,"NC","Town of Nashville","Town","2026-08-04","a",""],[777.6,368.6,"NC","Town of Waxhaw","Town","2026-08-11","a",""],[798.1,339.0,"NC","Alamance County","County","2026-08-17","a",""],[775.0,341.1,"NC","Yadkin County","County","2026-08-17","a",""],[791.1,340.1,"NC","City of Greensboro","City","2026-08-18","a",""],[733.4,367.1,"NC","Jackson County","County","2026-08-18","a",""],[819.9,327.6,"NC","Warren County","County","2026-08-19","a",""],[733.1,372.7,"NC","Town of Highlands","Town","2026-08-20","a",""],[807.7,338.5,"NC","Durham County","County","2026-08-24","a","2027-05-18"],[763.1,353.1,"NC","Town of Hildebran","Town","2026-08-24","a",""],[817.8,376.1,"NC","City of Whiteville","City","2026-08-25","a",""],[809.8,343.3,"NC","Town of Cary","Town","2026-08-27","a",""],[752.0,356.0,"NC","McDowell County","County","2026-08-31","a",""],[849.4,359.2,"NC","Town of Newport","Town","2026-09","a",""],[745.6,364.8,"NC","City of Hendersonville","City","2026-09-03","a","2027-09-03"],[767.0,358.0,"NC","Lincolnton","City","2026-09-03","a",""],[823.9,336.1,"NC","Nash County","County","2026-09-08","a",""],[832.1,382.8,"NC","City of Southport","City","2026-09-10","a",""],[772.5,350.0,"NC","City of Statesville","City","2026-09-14","a",""],[814.5,328.9,"NC","Vance County","County","2026-09-14","a",""],[480.7,117.4,"ND","Harmony Township","Township","","p",""],[384.0,80.6,"ND","Williams County","County","2023-06-20","r",""],[417.4,119.9,"ND","Morton County","County","2024-09-12","r",""],[415.0,111.0,"ND","Oliver County (Phase 1)","County","2024-12-12","d",""],[415.0,111.0,"ND","Oliver County (Phase 2)","County","2025-05-06","x","2025-08-04"],[407.4,105.5,"ND","Mercer County","County","2026-03-03","r","2026-08-05"],[415.0,111.0,"ND","Oliver County (Phase 3)","County","2026-03-13","d",""],[395.8,105.4,"ND","Dunn County","County","2026-03-18","a",""],[465.8,117.0,"ND","Barnes County","County","2026-05-19","a",""],[447.6,231.1,"NE","Garfield County","County","","p",""],[411.5,269.2,"NE","Hitchcock County","County","","p",""],[411.5,269.2,"NE","Hitchcock County","County","2025-02-03","r",""],[400.2,268.1,"NE","Dundy County","County","2025-06","e",""],[421.5,269.6,"NE","Red Willow County","County","2025-09-22","e","2027-09-22"],[380.1,220.2,"NE","Box Butte County","County","2026","a",""],[439.0,270.5,"NE","Harlan County","County","2026","a",""],[411.6,260.7,"NE","Hayes County","County","2026","a",""],[493.2,266.3,"NE","Johnson County","County","2026","a",""],[447.6,263.2,"NE","Kearney County","County","2026","a",""],[478.7,247.4,"NE","Butler County","County","2026-03-16","a",""],[435.1,241.9,"NE","Custer County","County","2026-03-31","a",""],[495.6,260.2,"NE","Otoe County","County","2026-05-19","a",""],[412.4,237.2,"NE","McPherson County","County","2026-06-10","a",""],[478.1,255.2,"NE","Seward County","County","2026-06-30","a",""],[436.6,242.0,"NE","Broken Bow","City","2026-07-14","a",""],[412.5,214.5,"NE","Cherry County","County","2026-07-14","a",""],[422.2,237.8,"NE","Logan County","County","2026-07-15","a",""],[494.8,254.6,"NE","Cass County","County","2026-08-11","a",""],[486.0,269.6,"NE","Gage County","County","2026-09-16","a",""],[903.5,150.6,"NH","Town of Nottingham","Town","2026-09-08","a","2027-09-08"],[896.3,152.1,"NH","Bow","Town","2026-09-17","a",""],[863.7,243.8,"NJ","Mullica Township","Township","","p",""],[872.2,226.7,"NJ","Asbury Park","City","2026-06-10","a",""],[867.9,245.5,"NJ","Galloway Township","Township","2026-07-14","a","2027-01-10"],[865.1,222.7,"NJ","Sayreville","Town","2026-07-20","a",""],[264.2,425.9,"NM","Grant County","County","","p",""],[294.5,401.2,"NM","Socorro County","County","2026-06-09","a",""],[315.0,369.0,"NM","Santa Fe County","County","2026-06-30","a",""],[286.0,420.3,"NM","Sierra County","County","2026-07-21","a","2028-01-21"],[342.8,347.1,"NM","Colfax County","County","2026-08-25","a",""],[299.7,386.6,"NM","Rio Communities","City","2026-08-26","a",""],[89.5,234.7,"NV","Reno","City","2026-06-01","e","2027-08-31"],[141.2,274.5,"NV","Nye County","County","2026-06-02","a",""],[178.6,217.9,"NV","Wells","City","2026-06-23","a",""],[126.7,199.0,"NV","Humboldt County","County","2026-07-06","a",""],[172.7,253.6,"NV","White Pine County","County","2026-07-22","a",""],[779.5,183.8,"NY","Buffalo","City","","p",""],[818.0,186.8,"NY","Enfield","Town","","p",""],[857.2,198.2,"NY","Mamakating","Town","","p",""],[833.7,131.4,"NY","Potsdam","Town","","p",""],[779.1,180.3,"NY","North Tonawanda","City","2024-07-16","e","2027-07-16"],[823.2,184.5,"NY","Town of Dryden (Tompkins County)","Town","2024-07-31","r",""],[775.8,177.9,"NY","Town of Lewiston (Niagara County) - proposed, public hearing held","Town","2026-04-13","a","2027-10-13"],[817.3,169.0,"NY","Town of Lysander (Onondaga County) - drafting authorized","Town","2026-05-07","a","2026-11-07"],[843.2,180.6,"NY","Town of Oneonta (Otsego County) - proposed, pending","Town","2026-05-15","a",""],[808.7,193.7,"NY","Town of Thurston","Town","2026-05-20","a",""],[872.8,198.9,"NY","Town of Southeast","Town","2026-05-21","a",""],[822.3,170.4,"NY","Town of Salina","Town","2026-05-27","a",""],[820.2,170.6,"NY","Town of Van Buren","Town","2026-06-03","a",""],[854.6,165.2,"NY","Perth","Town","2026-06-04","a",""],[850.8,200.9,"NY","Town of Highland","Town","2026-06-09","a",""],[862.6,173.1,"NY","Bethlehem","Town","2026-06-24","a",""],[868.8,196.2,"NY","Town of East Fishkill","Town","2026-06-25","a","2029-07-01"],[821.4,168.6,"NY","Clay","Town","2026-06-29","a",""],[862.2,167.0,"NY","Town of Clifton Park","Town","2026-07-07","a",""],[831.1,133.7,"NY","Canton","Town","2026-07-08","a",""],[826.0,171.9,"NY","Manlius","Town","2026-07-09","a",""],[819.1,188.4,"NY","Newfield","Town","2026-07-09","a",""],[864.8,172.8,"NY","East Greenbush","Town","2026-07-15","a",""],[887.4,209.9,"NY","Town of Brookhaven","Town","2026-07-16","a","2027-12-31"],[812.7,175.0,"NY","Town of Tyre","Town","2026-07-22","a",""],[778.9,180.8,"NY","Tonawanda","Town","2026-08-03","a",""],[882.8,212.2,"NY","Islip","Town","2026-08-11","a",""],[824.4,147.9,"NY","LeRay","Town","2026-08-13","a",""],[851.7,167.3,"NY","Mohawk (Montgomery County)","Town","2026-08-13","a",""],[868.6,207.9,"NY","Town of Orangetown","Town","2026-08-25","a",""],[729.9,226.4,"OH","Amherst","City","","p",""],[736.0,266.3,"OH","Perry","Village","","p",""],[697.9,282.2,"OH","St. Bernard","City","","p",""],[704.3,266.3,"OH","Fairborn","City","2022-09-06","x",""],[716.7,257.1,"OH","Jerome Township","Township","2025-09-03","r","2026-05-31"],[746.7,227.6,"OH","Shalersville Township","Township","2025-11","e","2026-11-01"],[741.5,233.6,"OH","Barberton","City","2025-11-10","a",""],[742.2,227.7,"OH","Boston Heights","Village","2025-11-12","a",""],[742.1,218.8,"OH","Eastlake","City","2025-11-25","a",""],[740.8,233.4,"OH","City of Norton","City","2025-12-01","r","2026-08-28"],[704.4,227.5,"OH","City of Waterville","City","2025-12-08","x",""],[718.6,257.7,"OH","Washington Township (Franklin County)","Township","2025-12-09","e","2026-09-05"],[722.3,266.3,"OH","South Bloomfield","Village","2025-12-15","r",""],[704.5,227.6,"OH","Waterville Township","Township","2025-12-17","a",""],[722.9,266.3,"OH","Village of Ashville","Village","2025-12-22","e","2027-01-02"],[705.6,234.1,"OH","Henry Township (Wood County)","Township","2026","a",""],[705.3,232.1,"OH","Liberty Township (Wood County)","Township","2026","a",""],[703.4,230.9,"OH","Weston Township (Wood County)","Township","2026","a",""],[709.3,229.6,"OH","Freedom Township (Wood County)","Township","2026-01","a",""],[753.5,228.2,"OH","Village of Lordstown","Village","2026-01-05","e","2027-01-01"],[705.8,284.2,"OH","Williamsburg Township","Township","2026-01-26","e","2027-01-25"],[697.9,283.7,"OH","Cincinnati","City","2026-02","e","2027-02-11"],[714.1,255.4,"OH","Paris Township (Union County)","Township","2026-02","r",""],[705.4,226.0,"OH","Maumee","City","2026-02-02","a","2027-02-02"],[720.3,267.2,"OH","Muhlenberg Township (Pickaway County)","Township","2026-02-02","a",""],[757.8,227.4,"OH","Hubbard Township","Township","2026-02-10","a","2027-02-10"],[702.4,285.1,"OH","Pierce Township","Township","2026-02-11","e","2027-05-31"],[731.3,292.4,"OH","Ironton","City","2026-02-12","a",""],[703.9,263.7,"OH","City of New Carlisle","City","2026-02-17","a",""],[704.0,226.3,"OH","Monclova Township","Township","2026-02-17","a",""],[702.1,223.5,"OH","Richfield Township (Lucas County)","Township","2026-02-17","a",""],[756.5,226.0,"OH","Vienna Township","Township","2026-02-17","e","2026-10-16"],[722.4,231.1,"OH","Monroeville","Village","2026-02-24","a",""],[718.5,263.4,"OH","Pleasant Township (Franklin County)","Township","2026-02-24","a",""],[716.3,290.3,"OH","Monroe Township (Adams County)","Township","2026-03","a",""],[692.9,278.6,"OH","Morgan Township (Butler County)","Township","2026-03","a",""],[704.7,230.1,"OH","Plain Township (Wood County)","Township","2026-03","a",""],[707.2,231.9,"OH","Portage Township (Wood County)","Township","2026-03","a",""],[705.8,281.9,"OH","Jackson Township (Clermont County)","Township","2026-03-02","a",""],[713.9,291.1,"OH","Sprigg Township","Township","2026-03-02","a",""],[708.1,225.3,"OH","Lake Township (Wood County)","Township","2026-03-03","a",""],[708.3,284.1,"OH","Mount Orab","Village","2026-03-03","e",""],[740.2,228.6,"OH","Richfield","Village","2026-03-03","e","2027-03-02"],[708.1,259.2,"OH","Urbana","City","2026-03-03","a",""],[726.9,227.1,"OH","Vermilion Township (Erie County)","Township","2026-03-04","a",""],[720.6,265.7,"OH","Scioto Township (Pickaway County)","Township","2026-03-05","a",""],[703.2,226.9,"OH","Spencer Township (Lucas County)","Township","2026-03-05","a",""],[706.4,278.3,"OH","Blanchester","Village","2026-03-12","a",""],[706.0,283.8,"OH","Williamsburg","Village","2026-03-12","a",""],[730.7,231.6,"OH","Wellington","Village","2026-03-16","a",""],[748.4,227.3,"OH","Freedom Township (Portage County)","Township","2026-03-19","a",""],[746.1,237.1,"OH","Plain Township (Stark County)","Township","2026-03-24","a",""],[723.9,254.0,"OH","Trenton Township (Delaware County)","Township","2026-04-01","a",""],[694.6,228.3,"OH","Archbold","Village","2026-04-06","e","2027-04-06"],[743.6,238.3,"OH","Massillon","City","2026-04-06","r","2026-08-14"],[749.9,235.9,"OH","Washington Township (Stark County)","Township","2026-04-06","a",""],[716.1,287.5,"OH","Ada","Village","2026-04-07","e","2027-09-01"],[697.2,266.0,"OH","Clay Township (Montgomery County)","Township","2026-04-07","a",""],[746.9,238.7,"OH","Canton Township","Township","2026-04-09","a",""],[738.7,235.0,"OH","Rittman","City","2026-04-13","a",""],[736.0,267.0,"OH","Shawnee Township","Township","2026-04-13","a",""],[743.9,231.2,"OH","Tallmadge","City","2026-04-13","a",""],[732.8,224.8,"OH","Avon","City","2026-04-14","a","2027-04-14"],[743.2,226.4,"OH","Twinsburg","City","2026-04-14","a",""],[745.2,229.8,"OH","Kent","City","2026-04-15","a",""],[718.1,261.9,"OH","Prairie Township (Franklin County)","Township","2026-04-15","a","2026-10-15"],[702.8,278.0,"OH","Providence Township","Township","2026-04-15","a",""],[722.9,254.1,"OH","Sunbury","City","2026-04-15","a","2027-01-31"],[745.5,231.0,"OH","Brimfield Township","Township","2026-04-20","a",""],[747.1,229.4,"OH","Ravenna","City","2026-04-20","a",""],[714.8,235.1,"OH","Tiffin","City","2026-04-20","a",""],[701.1,265.1,"OH","Vandalia","City","2026-04-20","a",""],[727.4,226.2,"OH","Vermilion","City","2026-04-20","a","2027-03-23"],[702.5,271.0,"OH","Washington Township (Montgomery County)","Township","2026-04-20","a",""],[707.0,237.8,"OH","Findlay","City","2026-04-21","a",""],[745.9,234.5,"OH","Lake Township (Stark County)","Township","2026-04-27","a",""],[745.1,227.8,"OH","Streetsboro","City","2026-04-27","a",""],[757.2,230.9,"OH","Boardman Township","Township","2026-04-28","a",""],[754.9,227.9,"OH","Weathersfield Township","Township","2026-04-30","e","2027-04-25"],[700.7,227.2,"OH","Swancreek Township (Fulton County)","Township","2026-05","a","2026-11-05"],[749.5,227.2,"OH","Windham Township (Portage County)","Township","2026-05","a",""],[719.1,241.6,"OH","Bucyrus","City","2026-05-04","a",""],[721.0,265.4,"OH","Commercial Point","Village","2026-05-04","a",""],[704.1,251.1,"OH","Lakeview","Village","2026-05-04","a",""],[704.0,273.1,"OH","Waynesville","Village","2026-05-04","a","2026-10-31"],[696.6,275.8,"OH","St. Clair Township (Butler County)","Township","2026-05-05","a",""],[725.8,241.8,"OH","Ontario","City","2026-05-06","a",""],[754.9,224.7,"OH","Bazetta Township","Township","2026-05-12","a",""],[720.5,263.3,"OH","Jackson Township (Franklin County)","Township","2026-05-12","a",""],[745.5,216.1,"OH","Painesville Township","Township","2026-05-12","a",""],[733.4,294.9,"OH","South Point","Village","2026-05-12","a",""],[733.3,226.1,"OH","North Ridgeville","City","2026-05-18","a",""],[706.6,266.4,"OH","Yellow Springs","Village","2026-05-18","a",""],[733.1,228.9,"OH","Grafton","Village","2026-05-19","a","2031-05-18"],[702.6,278.2,"OH","Hamilton Township (Warren County)","Township","2026-05-20","a","2027-05-20"],[742.4,234.9,"OH","New Franklin","City","2026-05-20","a",""],[755.0,227.6,"OH","Niles","City","2026-05-20","a",""],[751.8,242.2,"OH","Carrollton","Village","2026-05-27","a",""],[748.1,215.1,"OH","Madison Township (Lake County)","Township","2026-05-28","a",""],[737.8,224.3,"OH","Brooklyn","City","2026-06","a",""],[724.7,268.6,"OH","Washington Township (Pickaway County)","Township","2026-06","a",""],[758.3,227.6,"OH","City of Hubbard","City","2026-06-01","a","2027-06-01"],[755.1,224.1,"OH","Cortland","City","2026-06-01","a","2027-06-01"],[720.0,262.9,"OH","Grove City","City","2026-06-01","a",""],[751.3,226.9,"OH","Braceville Township","Township","2026-06-02","a","2026-11-29"],[746.7,214.6,"OH","North Perry","Village","2026-06-04","a",""],[719.9,230.7,"OH","Bellevue","City","2026-06-08","a",""],[749.7,214.0,"OH","Geneva","City","2026-06-08","a",""],[752.5,211.9,"OH","Ashtabula Township","Township","2026-06-10","a",""],[754.0,231.4,"OH","Ellsworth Township","Township","2026-06-10","a",""],[755.2,226.2,"OH","Howland Township","Township","2026-06-10","a","2026-12-07"],[736.1,226.2,"OH","Berea","City","2026-06-15","a",""],[695.6,276.6,"OH","Butler County","County","2026-06-16","a",""],[708.5,274.9,"OH","Clinton","Village","2026-06-16","a",""],[731.4,238.7,"OH","Montgomery Township (Ashland County)","Township","2026-06-17","a","2028-06-16"],[732.9,223.4,"OH","Avon Lake","City","2026-06-22","a","2027-06-22"],[739.1,227.0,"OH","Broadview Heights","City","2026-06-22","a",""],[742.3,220.8,"OH","Mayfield Village","Village","2026-06-22","a",""],[696.0,250.7,"OH","St. Marys","City","2026-06-22","a",""],[742.0,219.8,"OH","Wickliffe","City","2026-06-22","a",""],[736.8,226.2,"OH","Middleburg Heights","City","2026-06-23","a",""],[706.3,269.2,"OH","Xenia","City","2026-06-25","a",""],[744.8,226.0,"OH","Aurora","City","2026-06-30","a",""],[713.9,241.9,"OH","Upper Sandusky","City","2026-07","a",""],[750.2,234.5,"OH","Alliance","City","2026-07-06","a",""],[748.8,222.0,"OH","Middlefield","Village","2026-07-09","a",""],[756.2,228.0,"OH","Girard","City","2026-07-13","a","2027-07-13"],[731.1,281.4,"OH","Jackson","City","2026-07-13","a",""],[755.5,247.9,"OH","Green Township (Harrison County)","Township","2026-07-14","a",""],[743.5,228.0,"OH","Hudson","City","2026-07-14","a",""],[707.6,263.6,"OH","Springfield","City","2026-07-14","a",""],[742.6,218.9,"OH","Willoughby","City","2026-07-14","a",""],[738.3,222.8,"OH","Cleveland","City","2026-07-15","a",""],[698.4,266.1,"OH","Clayton","City","2026-07-16","a","2027-07-16"],[738.5,227.1,"OH","North Royalton","City","2026-07-21","a",""],[730.3,260.2,"OH","Buckeye Lake","Village","2026-07-27","a",""],[702.1,273.5,"OH","Clearcreek Township (Warren County)","Township","2026-07-27","a",""],[746.5,215.5,"OH","Perry Township (Lake County)","Township","2026-07-28","a",""],[738.4,273.3,"OH","Athens Township (Athens County)","Township","2026-08-01","a",""],[739.4,272.2,"OH","Athens","City","2026-08-03","a",""],[716.3,258.1,"OH","Plain City","Village","2026-08-10","a","2027-08-10"],[749.1,226.1,"OH","Garrettsville","Village","2026-08-12","a",""],[704.3,266.3,"OH","Fairborn","City","2026-08-17","a",""],[757.6,245.8,"OH","Jefferson","Village","2026-08-17","a",""],[722.4,247.1,"OH","Mount Gilead","Village","2026-08-17","a",""],[723.6,275.1,"OH","Chillicothe","City","2026-08-24","d",""],[688.8,225.9,"OH","Bridgewater Township (Williams County)","Township","2026-09","a",""],[686.9,226.1,"OH","Northwest Township (Williams County)","Township","2026-09","a",""],[691.8,233.3,"OH","Defiance","City","2026-09-01","a","2027-02-28"],[700.3,271.0,"OH","Miamisburg","City","2026-09-01","a",""],[751.4,228.0,"OH","Newton Falls","Village","2026-09-02","a",""],[734.8,224.4,"OH","Westlake","City","2026-09-03","a",""],[697.2,277.1,"OH","Fairfield Township (Butler County)","Township","2026-09-08","a",""],[741.8,226.9,"OH","Northfield Center Township","Township","2026-09-08","a",""],[702.7,275.8,"OH","Warren","City","2026-09-09","a",""],[700.2,245.6,"OH","Lima","City","2026-09-14","a",""],[690.1,225.2,"OH","Pioneer","Village","2026-09-14","a",""],[755.7,227.9,"OH","McDonald","Village","2026-09-16","a",""],[715.0,270.4,"OH","Fayette County","County","2026-09-21","a","2027-06-01"],[489.0,386.2,"OK","Seminole Nation of Oklahoma","Tribal","2026-03-07","a",""],[498.2,363.3,"OK","Tulsa","City","2026-03-25","a",""],[491.9,351.7,"OK","Pawhuska","City","2026-04-14","a",""],[470.2,378.7,"OK","Oklahoma City","City","2026-04-21","a",""],[471.3,374.5,"OK","Edmond","City","2026-06-08","a",""],[501.8,365.7,"OK","Broken Arrow","City","2026-06-15","a",""],[476.2,374.5,"OK","Luther","Town","2026-06-17","a",""],[471.6,384.5,"OK","Norman","City","2026-06-23","a",""],[507.0,412.1,"OK","Choctaw","City","2026-07-21","a",""],[481.0,382.2,"OK","Shawnee","City","2026-08-17","a",""],[84.1,100.0,"OR","Clackamas County","County","","p",""],[74.6,88.9,"OR","City of Hillsboro","City","2026-07-27","a",""],[74.3,97.6,"OR","Woodburn","City","2026-09-14","a",""],[70.3,101.3,"OR","Salem","City","2026-09-21","a",""],[834.8,214.6,"PA","Dorrance Township","Township","2025-08-11","r",""],[824.0,218.4,"PA","Montour County","County","2025-11-18","r",""],[847.3,236.5,"PA","East Whiteland Township","Township","2026-03","a",""],[820.7,213.9,"PA","Muncy Township","Township","2026-04-28","a",""],[841.9,200.2,"PA","Clinton Township (Wayne County)","Township","2026-04-30","a",""],[775.7,238.8,"PA","Upper Burrell Township","Township","2026-05","a",""],[846.2,237.2,"PA","West Whiteland Township","Township","2026-05","a",""],[849.5,213.5,"PA","Smithfield Township (Monroe County)","Township","2026-05-06","r",""],[835.2,215.8,"PA","Butler Township (Luzerne County)","Township","2026-05-12","a",""],[823.9,241.0,"PA","Warrington Township (York County)","Township","2026-05-13","a",""],[828.8,222.9,"PA","Mount Carmel Township","Township","2026-05-18","a",""],[857.1,232.9,"PA","Bensalem Township","Township","2026-06-08","a",""],[834.4,217.9,"PA","Hazle Township","Township","2026-06-08","a",""],[769.9,230.9,"PA","Center Township (Butler County)","Township","2026-06-10","a",""],[783.2,223.2,"PA","Brookville Borough","Other","2026-06-16","a",""],[853.5,229.1,"PA","Doylestown Township","Township","2026-06-16","a",""],[816.6,212.5,"PA","Lycoming County","County","2026-06-18","a",""],[826.3,240.7,"PA","Conewago Township (York County)","Township","2026-07-07","a",""],[817.4,214.8,"PA","Williamsport","City","2026-07-09","a",""],[769.3,236.0,"PA","Adams Township (Butler County)","Township","2026-07-13","a",""],[839.3,244.3,"PA","Little Britain Township","Township","2026-07-14","a",""],[859.5,229.9,"PA","Morrisville Borough","Other","2026-07-21","a",""],[859.4,230.8,"PA","Falls Township (Bucks County)","Township","2026-07-27","a",""],[773.9,235.2,"PA","Buffalo Township (Butler County)","Township","2026-08-12","a",""],[819.1,217.3,"PA","Gregg Township (Union County)","Township","2026-08-20","a",""],[832.8,222.3,"PA","West Mahanoy Township","Township","2026-09-15","a",""],[902.0,192.1,"RI","Westerly","Town","2026-07-27","a",""],[802.4,414.3,"SC","Mount Pleasant","Town","","p",""],[790.2,373.4,"SC","Chesterfield County","County","2026-06-01","a",""],[765.0,384.9,"SC","Newberry County","County","2026-06-05","a",""],[787.0,415.3,"SC","Colleton County","County","2026-07-06","r",""],[770.4,369.4,"SC","York County","County","2026-07-13","a",""],[771.6,375.6,"SC","Chester County","County","2026-07-20","a",""],[755.9,390.4,"SC","Greenwood County","County","2026-07-21","a",""],[789.7,390.8,"SC","Sumter County","County","2026-08-11","a","2027-02-07"],[744.7,383.3,"SC","Anderson County","County","2026-08-18","a",""],[783.1,403.4,"SC","Orangeburg County","County","2026-09-08","a",""],[792.4,395.8,"SC","Clarendon County","County","2026-09-14","a",""],[773.4,381.7,"SC","Fairfield County","County","2026-09-14","a",""],[757.0,382.9,"SC","Laurens County","County","2026-09-14","a",""],[781.8,426.7,"SC","Jasper County","County","2026-09-21","a",""],[755.4,372.2,"SC","Spartanburg County","County","2026-09-21","a",""],[783.6,381.8,"SC","Kershaw County","County","2026-09-22","a",""],[458.4,150.1,"SD","Aberdeen","City","2026-07-20","a",""],[475.0,206.2,"SD","Yankton County","County","2026-07-21","a","2027-01-17"],[717.9,360.4,"TN","Blount County","County","","p",""],[670.6,349.3,"TN","Gallatin","City","","p",""],[728.3,346.7,"TN","Hamblen County","County","","p",""],[607.4,383.0,"TN","Memphis","City","","p",""],[706.7,357.7,"TN","Roane County","County","","p",""],[676.2,348.7,"TN","Trousdale County","County","","p",""],[744.3,341.9,"TN","Johnson City","City","2025-06-05","e","2026-12-03"],[742.3,342.7,"TN","Jonesborough","Town","2025-10-13","r",""],[746.4,335.2,"TN","Bristol","City","2025-10-24","a",""],[744.9,337.7,"TN","Sullivan County","County","2026-01","e",""],[742.0,343.5,"TN","Washington County","County","2026-03-23","a","2027-06-30"],[675.1,374.3,"TN","Moore County","County","2026-04-20","a",""],[686.4,371.1,"TN","Grundy County","County","2026-05-18","a",""],[660.3,346.6,"TN","Cedar Hill","Town","2026-06-01","a",""],[684.5,364.1,"TN","McMinnville","City","2026-06-03","a",""],[679.5,369.1,"TN","Coffee County","County","2026-06-09","a",""],[704.0,351.4,"TN","Morgan County","County","2026-06-12","a",""],[712.1,351.1,"TN","Anderson County","County","2026-06-15","a",""],[732.0,352.2,"TN","Cocke County","County","2026-06-15","a",""],[698.2,356.3,"TN","Cumberland County","County","2026-06-15","a",""],[713.0,351.1,"TN","Clinton","City","2026-06-22","a",""],[716.9,353.3,"TN","Knox County","County","2026-06-22","a",""],[684.3,364.0,"TN","Warren County","County","2026-06-22","a",""],[710.6,359.6,"TN","Loudon County","County","2026-06-29","a",""],[636.9,354.4,"TN","Paris","City","2026-07","a",""],[717.2,353.8,"TN","Knoxville","City","2026-07-07","a",""],[672.4,370.0,"TN","Shelbyville","City","2026-07-07","a","2027-07-08"],[696.3,374.5,"TN","Unincorporated Hamilton County","County","2026-07-15","a",""],[689.4,358.0,"TN","Sparta","City","2026-07-16","a","2027-01-12"],[654.9,356.4,"TN","Dickson County","County","2026-07-20","a",""],[660.9,367.7,"TN","Maury County","County","2026-07-20","a",""],[689.5,358.0,"TN","White County","County","2026-07-20","a",""],[673.6,354.6,"TN","Wilson County","County","2026-07-20","a",""],[699.8,364.0,"TN","Rhea County","County","2026-07-21","a",""],[668.2,353.5,"TN","Nashville-Davidson County","City","2026-07-24","a","2026-12-01"],[701.0,362.0,"TN","Spring City","Town","2026-07-30","a",""],[683.0,357.9,"TN","Smithville","City","2026-08-03","a","2028-02-03"],[712.4,344.7,"TN","LaFollette","City","2026-08-04","a",""],[697.3,356.5,"TN","Crossville","City","2026-08-11","a","2028-08-11"],[748.6,342.0,"TN","Carter County","County","2026-08-17","a",""],[723.9,355.1,"TN","Sevierville","City","2026-08-17","a","2028-02-13"],[659.2,357.0,"TN","Kingston Springs","Town","2026-08-20","a",""],[710.6,359.6,"TN","Loudon","City","2026-08-24","a",""],[703.9,371.0,"TN","Charleston","City","2026-09-08","a",""],[467.2,596.2,"TX","Brownsville","City","","p",""],[476.5,431.2,"TX","Denton","City","","p",""],[472.7,441.0,"TX","Fort Worth","City","","p",""],[388.4,418.7,"TX","Lubbock","City","","p",""],[477.2,459.1,"TX","Hill County","County","2026-05-12","d",""],[463.2,589.7,"TX","Harlingen","City","2026-05-20","e","2026-12-16"],[458.0,502.4,"TX","Hays County","County","2026-06-23","a",""],[493.2,506.3,"TX","Austin County","County","2026-07-27","a",""],[489.8,434.9,"TX","Lavon","City","2026-08-07","a",""],[193.0,296.6,"UT","Iron County","County","2026-05-26","a",""],[208.8,217.9,"UT","Box Elder County","County","2026-06-10","a",""],[200.1,285.2,"UT","Milford","City","2026-06-16","a",""],[234.5,214.4,"UT","Cache County","County","2026-06-23","a",""],[233.1,213.5,"UT","Logan","City","2026-06-30","a",""],[260.1,281.9,"UT","Grand County","County","2026-07-07","a",""],[232.5,292.8,"UT","Wayne County","County","2026-07-08","a",""],[228.5,267.8,"UT","Sanpete County","County","2026-08-04","a",""],[227.6,226.9,"UT","Clearfield","City","2026-09-08","a",""],[845.3,314.6,"VA","Suffolk","City","","p",""],[810.6,295.3,"VA","Fluvanna County","County","2025-09-17","r",""],[807.6,271.0,"VA","Front Royal","Town","2026-07-06","a",""],[851.2,312.9,"VA","City of Chesapeake","City","2026-07-21","a",""],[855.4,309.6,"VA","Virginia Beach","City","2026-08-18","a",""],[815.7,265.2,"VA","Loudoun County","County","2026-09-16","a",""],[871.6,124.9,"VT","Morristown","Town","2026-08-31","a",""],[126.6,58.5,"WA","City of Wenatchee","City","2018-02-22","r",""],[126.8,58.7,"WA","City of East Wenatchee","City","2018-03-27","r",""],[140.5,68.9,"WA","City of Moses Lake","City","2018-05","r",""],[111.6,30.3,"WA","Skagit County","County","2026-06-01","a",""],[97.5,46.0,"WA","City of Seattle","City","2026-06-09","a",""],[97.6,46.4,"WA","Seattle","City","2026-06-09","a","2027-06-11"],[171.1,64.0,"WA","Spokane","City","2026-06-23","a",""],[109.0,40.1,"WA","Snohomish County","County","2026-06-24","a",""],[96.5,49.2,"WA","Burien","City","2026-06-29","a",""],[95.7,52.6,"WA","Federal Way","City","2026-07-07","a",""],[102.7,37.3,"WA","Marysville","City","2026-07-13","a",""],[138.4,89.3,"WA","Pasco","City","2026-07-20","a","2027-01-20"],[100.1,28.6,"WA","La Conner","Town","2026-07-28","a",""],[115.9,61.0,"WA","Cle Elum","City","2026-07-31","a",""],[120.7,64.4,"WA","Kittitas County","County","2026-08-10","e","2027-08-10"],[114.5,78.9,"WA","Yakima County","County","2026-08-11","a",""],[102.7,28.7,"WA","Mount Vernon","City","2026-08-12","a",""],[98.8,49.6,"WA","Renton","City","2026-08-17","a",""],[93.6,83.7,"WA","Skamania County","County","2026-08-18","a",""],[170.7,66.7,"WA","Spokane County","County","2026-08-18","a","2026-12-15"],[95.7,59.9,"WA","Pierce County","County","2026-08-25","a",""],[156.6,62.7,"WA","Lincoln County","County","2026-09","a",""],[84.7,30.5,"WA","Port Angeles","City","2026-09-01","a",""],[631.3,200.1,"WI","Milwaukee","City","","p",""],[600.9,134.0,"WI","Vilas County","County","","p",""],[607.0,201.2,"WI","City of Madison","City","2026-01-24","a",""],[606.1,199.2,"WI","Westport","Town","2026-04-06","a",""],[581.0,211.0,"WI","Cassville","Town","2026-04-16","a",""],[582.6,209.1,"WI","Beetown","Town","2026-04-17","a",""],[630.6,175.9,"WI","Manitowoc County","County","2026-04-28","a",""],[634.0,160.5,"WI","Door County","County","2026-05-26","a",""],[609.8,195.2,"WI","Hampden","Town","2026-05-26","a",""],[609.8,195.2,"WI","Hampden","Town","2026-05-26","a",""],[556.1,160.8,"WI","Baldwin","Village","2026-06","a",""],[606.2,201.3,"WI","Dane County","County","2026-06-04","a",""],[630.0,169.3,"WI","Town of New Denmark","Town","2026-06-08","a",""],[558.8,120.9,"WI","City of Superior","City","2026-06-16","a",""],[585.6,206.8,"WI","Grant County","County","2026-06-16","a",""],[604.9,200.8,"WI","Middleton","City","2026-06-16","a",""],[578.0,184.3,"WI","La Crosse County","County","2026-06-18","a",""],[626.1,167.3,"WI","Village of Ashwaubenon","Village","2026-06-23","a",""],[615.1,161.6,"WI","Shawano County","County","2026-06-24","a",""],[624.2,167.4,"WI","Village of Hobart","Village","2026-07-07","a",""],[624.8,171.3,"WI","Village of Wrightstown","Village","2026-07-07","a",""],[617.9,172.7,"WI","Greenville","Village","2026-07-13","a",""],[603.9,210.4,"WI","Green County","County","2026-07-14","a",""],[628.7,183.9,"WI","City of Sheboygan","City","2026-07-20","a",""],[610.0,200.9,"WI","Village of Cottage Grove","Village","2026-07-20","a",""],[585.2,182.7,"WI","Monroe County","County","2026-07-21","a",""],[574.7,139.4,"WI","Sawyer County","County","2026-08","a",""],[613.6,209.7,"WI","Janesville (Rock County town)","Town","2026-08-03","a",""],[573.3,157.6,"WI","Chippewa County","County","2026-08-11","a",""],[627.8,167.8,"WI","Bellevue","Village","2026-08-12","a",""],[575.4,186.2,"WI","La Crosse","City","2026-08-13","a",""],[617.4,192.7,"WI","Dodge County","County","2026-08-18","a",""],[601.4,142.0,"WI","Oneida County","County","2026-08-18","a",""],[555.2,150.2,"WI","Polk County","County","2026-08-18","a",""],[617.3,177.7,"WI","Winnebago County","County","2026-08-18","a",""],[597.9,160.3,"WI","Marathon County","County","2026-08-25","a",""],[554.6,159.4,"WI","St. Croix County","County","2026-09-01","a",""],[619.2,178.6,"WI","Oshkosh","City","2026-09-08","a",""],[596.9,193.5,"WI","Sauk County","County","2026-09-15","a",""],[609.5,163.0,"WI","Tigerton","Village","2026-09-15","a",""]]};
 // Scoring model. Pure functions over STATES and the scenario state (size,
 // weights, view, rankMode, priceScale); no DOM. tests/model.test.cjs loads this
 // file directly, so keep it free of browser globals.
@@ -2869,9 +3673,10 @@ function fitColor(v){ const [lo,hi]=fitDomain(); return ramp((v-lo)/(hi-lo)); }
 function activeWeights(){ return view==="all" ? weights : LENSES[view]; }
 function viewLabel(){ return view==="all" ? "Combined" : view==="politics" ? "Political outlook" : "Physical fundamentals"; }
 function rankModeLabel(){ return rankMode==="delivery" ? "Delivery first" : "Weighted fit"; }
-// Interface: map, priorities panel, scenario address, state profiles, table,
-// shortlist comparison, share card and scatter plot. Runs after model.js in
-// the same script.
+// Interface: political map views, local moratoriums, findings, map,
+// priorities panel, scenario address, state profiles, table, shortlist
+// comparison, share card and scatter plot. Runs after model.js in the same
+// script.
 
 // Theme colors, read from the stylesheet so SVG and canvas drawings follow
 // the light or dark scheme the page is showing. Re-read when the scheme flips.
@@ -2879,10 +3684,58 @@ const THEME={};
 function readTheme(){
   const cs=getComputedStyle(document.documentElement), v=n=>cs.getPropertyValue(n).trim();
   Object.assign(THEME,{ink:v("--ink"),muted:v("--muted"),rule:v("--rule"),soft:v("--rule-soft"),panel:v("--panel"),bg:v("--bg"),
-    warn:v("--warn"),focus:v("--focus"),wall:v("--wall"),edge:v("--edge"),quiet:v("--quiet"),sand:v("--sand-ink")});
+    warn:v("--warn"),focus:v("--focus"),wall:v("--wall"),edge:v("--edge"),quiet:v("--quiet"),sand:v("--sand-ink"),
+    posture:[0,1,2,3,4].map(i=>v("--po"+i)),pushback:[0,1,2].map(i=>v("--pb"+i)),rules:["e",0,1,2,3].map(i=>v("--ru"+i))});
   return THEME;
 }
 readTheme();
+
+// --- local moratoriums ---
+// Moratorium Nation's city, county, township and tribal measures on data
+// centers, with the source's own status as of its update date. They are
+// context, like the reception record, and never touch fit or rank.
+const LOCAL_BY={};
+STATES.forEach(s=>{ LOCAL_BY[s.a]={inForce:[],pending:[],past:[]}; });
+LOCAL.measures.forEach(([x,y,st,name,type,enacted,status,end])=>{
+  const bucket=LOCAL_BY[st]; if(!bucket) return;
+  const m={x,y,st,name,type,enacted,status,end};
+  (status==="a"||status==="e" ? bucket.inForce : status==="p" ? bucket.pending : bucket.past).push(m);
+});
+STATES.forEach(s=>{ s.localIn=LOCAL_BY[s.a].inForce.length; s.localPending=LOCAL_BY[s.a].pending.length; });
+const LOCAL_TOTAL={inForce:STATES.reduce((n,s)=>n+s.localIn,0),pending:STATES.reduce((n,s)=>n+s.localPending,0)};
+// The source gives a month or only a year when it cannot confirm the day.
+function longDate(iso){
+  const parts=/^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(iso||"");
+  if(!parts) return iso||"an unrecorded date";
+  const [,y,m,d]=parts, month=m?["January","February","March","April","May","June","July","August","September","October","November","December"][+m-1]:"";
+  return m ? (d ? `${month} ${+d}, ${y}` : `${month} ${y}`) : y;
+}
+const LOCAL_AS_OF=longDate(LOCAL.source.updated);
+
+// --- political map views ---
+// The first three views color states by a recorded category, not a score,
+// because ordinal analyst labels do not support finer distinctions. Siting
+// fit is the scored model, with its controls under Advanced analysis.
+const POSTURE_ORDER=["Courting","Courting, with conditions","No active state posture","Reviewing or paused","Restrictive"];
+// The four axes share one friction scale, so each level names its rule and
+// its tax incentive reading together.
+const RULE_LABEL={"-1":"Eases entry","0":"No specific rule","1":"Reporting or incentive conditions","2":"Binding conditions or narrowed incentives","3":"Pause, ban or repealed incentives"};
+// The strongest datacenter-specific statewide rule in force on any of the
+// four axes. A state whose only rules ease entry reads -1.
+function strongestRule(s){ const v=["wt","pg","zn","tx"].map(k=>s.rr[k]), top=Math.max(...v); return top>0 ? top : Math.min(...v)<0 ? -1 : 0; }
+const MAP_VIEWS={
+  posture:{label:"State posture",classOf:s=>s.st,
+    classes:()=>POSTURE_ORDER.map((c,i)=>({key:c,label:c,color:THEME.posture[i]})),
+    note:"Posture is an analyst label for how the state government treated data center development in 2026, from courting it to restricting it. It follows statewide actions and announced direction, so a state can be Restrictive before its rules take effect."},
+  pushback:{label:"Public pushback",classOf:s=>s.rr.pb,
+    classes:()=>["Low","Moderate","High"].map((c,i)=>({key:c,label:c,color:THEME.pushback[i]})),
+    note:"Pushback records organized public opposition. Low means none on record, Moderate means local restrictions or contested proceedings in some places, and High means multiple local bans, a statewide restriction that cleared a chamber, or a referendum."},
+  rules:{label:"Rules in force",classOf:s=>strongestRule(s),
+    classes:()=>[-1,0,1,2,3].map((c,i)=>({key:c,label:RULE_LABEL[c],color:THEME.rules[i]})),
+    note:"The strongest datacenter-specific statewide rule in force on water, power cost, siting or tax incentives. Pending bills and enacted laws that have not taken effect count as no rule."},
+  fit:{label:"Siting fit"}
+};
+let mapView="posture", showLocal=true;
 // --- map ---
 function pathOf(geom){
   const f = topojson.feature(TOPO, geom).geometry;
@@ -2935,6 +3788,15 @@ TOPO.objects.states.geometries.forEach(g=>{
   p.addEventListener("blur",()=>tip.style.display="none");
 });
 
+// In-force measures draw over proposed ones; ended measures are not drawn.
+const gDots=document.getElementById("local-dots");
+gDots.innerHTML=LOCAL.measures.filter(m=>m[6]==="p").map(m=>`<circle class="lm-pending" cx="${m[0]}" cy="${m[1]}" r="2.2"/>`).join("")
+  +LOCAL.measures.filter(m=>m[6]==="a"||m[6]==="e").map(m=>`<circle class="lm-in" cx="${m[0]}" cy="${m[1]}" r="2.2"/>`).join("");
+document.getElementById("local-inforce").textContent=LOCAL_TOTAL.inForce.toLocaleString("en-US");
+document.getElementById("local-pending").textContent=LOCAL_TOTAL.pending.toLocaleString("en-US");
+document.querySelectorAll("#local-updated,.local-asof").forEach(el=>{ el.textContent=LOCAL_AS_OF; });
+document.getElementById("show-local").addEventListener("change",e=>{ showLocal=e.target.checked; gDots.style.display=showLocal?"":"none"; scheduleURL(); });
+
 // only factors you actually weighted can be a strength or a drag on your score
 function bestWorst(s){
   const W=activeWeights();
@@ -2944,7 +3806,13 @@ function bestWorst(s){
   return {best:arr[0].f.name.toLowerCase(), worst:arr[arr.length-1].f.name.toLowerCase()};
 }
 function showTip(abbr,e){
-  const s=BY[abbr], bw=bestWorst(s);
+  const s=BY[abbr];
+  if(mapView!=="fit"){
+    const head=mapView==="pushback" ? s.rr.pb+" pushback" : mapView==="rules" ? RULE_LABEL[strongestRule(s)] : s.st;
+    tip.innerHTML=`<b>${s.n}</b>${s.tag?` <span class="small">(${s.tag})</span>`:""}<span class="sc cat">${head}</span><span class="small">Posture: ${s.st}<br>Pushback: ${s.rr.pb}<br>Strongest rule in force: ${RULE_LABEL[strongestRule(s)].toLowerCase()}<br>Local moratoriums: ${s.localIn} in force, ${s.localPending} proposed</span>`;
+    placeTip(e); return;
+  }
+  const bw=bestWorst(s);
   const head = hasWeights()
     ? `<span class="sc">${s.total.toFixed(0)} <span class="small" style="font-size:13px">rank ${s.rank} of 50${s.tied?", tied":""}</span></span>`
     : `<span class="sc" style="font-size:15px">No score</span>`;
@@ -2952,6 +3820,9 @@ function showTip(abbr,e){
     ? `${deliveryLabel(s)} ${deliveryContext()}<br>One-rating sensitivity: rank ${s.rankMin}–${s.rankMax}<br>Highest rated factor: ${bw.best}<br>Lowest rated factor: ${bw.worst}`
     : `${s.st}<br>Raise at least one priority to score this state.`;
   tip.innerHTML=`<b>${s.n}</b>${s.tag?` <span class="small">(${s.tag})</span>`:""}${head}<span class="small">${body}</span>`;
+  placeTip(e);
+}
+function placeTip(e){
   tip.style.display="block";
   const r=mapcard.getBoundingClientRect();
   const bounds=tip.getBoundingClientRect();
@@ -2963,13 +3834,39 @@ function showTip(abbr,e){
   tip.style.left=x+"px"; tip.style.top=y+"px";
 }
 function paint(){
-  const scored=hasWeights();
-  STATES.forEach(s=>{ paths[s.a].style.fill = scored ? fitColor(s.total) : THEME.soft; });
-  renderRampLegend();
-  document.getElementById("hint").textContent = scored
+  const scored=hasWeights(), fit=mapView==="fit";
+  const fill=fit ? null : Object.fromEntries(MAP_VIEWS[mapView].classes().map(c=>[String(c.key),c.color]));
+  STATES.forEach(s=>{ paths[s.a].style.fill = fit ? (scored ? fitColor(s.total) : THEME.soft) : fill[String(MAP_VIEWS[mapView].classOf(s))]; });
+  // the hatch marks a 2026 action on the fit map; the political views already show it
+  gHatch.style.display=fit?"":"none";
+  renderRampLegend(); renderMapLegend();
+  document.getElementById("hint").textContent = !fit
+    ? "Select a state to see its record and sources."
+    : scored
     ? "Select a state to see its scores and sources."
     : "Choose a priority or preset to see scores.";
 }
+// Swatches with how many states fall in each, for the three political views.
+function renderMapLegend(){
+  const box=document.getElementById("legend-cat"), note=document.getElementById("legend-catnote");
+  if(mapView==="fit"){ box.innerHTML=""; note.textContent=""; return; }
+  const mv=MAP_VIEWS[mapView], counts={};
+  STATES.forEach(s=>{ const k=String(mv.classOf(s)); counts[k]=(counts[k]||0)+1; });
+  box.innerHTML=mv.classes().map(c=>`<span class="cat"><i style="background:${c.color}"></i>${c.label}<b>${counts[String(c.key)]||0}</b></span>`).join("");
+  note.textContent=mv.note;
+}
+function setMapView(id,opts={}){
+  if(!MAP_VIEWS[id]) return;
+  mapView=id;
+  document.querySelectorAll("#mapview button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.m===id)));
+  mapcard.classList.toggle("politics",id!=="fit");
+  document.body.classList.toggle("fit-view",id==="fit");
+  // the twelve figures all draw fit, so a political view always shows the map
+  FIGS.setView(id==="fit" ? FIGS.active() : "map");
+  paint(); renderDetail(); scheduleURL();
+  if(id==="fit" && opts.openPanel && matchMedia("(min-width:901px)").matches) wpanel.open=true;
+}
+document.querySelectorAll("#mapview button").forEach(b=>b.addEventListener("click",()=>setMapView(b.dataset.m,{openPanel:true})));
 
 // The ramp legend reads the domain the colors actually span. Under Stretch
 // the end labels carry the scenario's lowest and highest fit.
@@ -2986,6 +3883,12 @@ function setColorScale(k){
 document.querySelectorAll("#scale-toggle button").forEach(b=>b.addEventListener("click",()=>setColorScale(b.dataset.k)));
 
 // --- weights UI ---
+// Everything in the Advanced analysis panel changes the siting model, so
+// opening the panel or editing anything in it shows the Siting fit map.
+const wpanel=document.getElementById("wpanel");
+wpanel.addEventListener("toggle",()=>{ if(wpanel.open && mapView!=="fit") setMapView("fit"); });
+for(const ev of ["input","change"]) wpanel.addEventListener(ev,()=>{ if(mapView!=="fit") setMapView("fit"); },true);
+wpanel.addEventListener("click",e=>{ if(e.target.closest("#sizes button,#presets button,#workload button,#lens button") && mapView!=="fit") setMapView("fit"); },true);
 const wbox=document.getElementById("weights");
 FACTORS.forEach(f=>{
   const d=document.createElement("div"); d.className="w";
@@ -3079,8 +3982,16 @@ function weightsKey(W){ return FACTORS.map(f=>W[f.k]||0).join("."); }
 // with no size in the address the page starts from Balanced; with one, from
 // that size's profile. Encoding and decoding share this rule.
 function baseWeights(z){ return z==="hyper" ? PRESETS.balanced : SIZES[z].weights; }
+// Any siting setting away from its default means the link was made on the
+// Siting fit map, so such links omit m=fit and older links keep opening there.
+function impliesFit(){
+  return size!=="hyper" || weightsKey(weights)!==weightsKey(baseWeights(size)) || view!=="all" || rankMode!=="fit"
+    || priceScale.low!==DEFAULT_SCALE.low || priceScale.high!==DEFAULT_SCALE.high || FIGS.active()!=="map" || colorScale!=="fixed";
+}
 function encodeURLState(){
   const parts=[];
+  if(mapView!==(impliesFit()?"fit":"posture")) parts.push("m="+mapView);
+  if(!showLocal) parts.push("d=0");
   if(size!=="hyper") parts.push("z="+size);
   if(weightsKey(weights)!==weightsKey(baseWeights(size))) parts.push("w="+weightsKey(weights));
   if(view!=="all") parts.push("v="+view);
@@ -3102,7 +4013,7 @@ function scheduleURL(){ clearTimeout(urlTimer); urlTimer=setTimeout(writeURL,150
 // Malformed values are dropped one at a time and can never throw: a bad link
 // still opens the page with everything else it asked for.
 function readURLState(){
-  let figure=null, profile=null;
+  let figure=null, profile=null, map=null;
   try{
     const q=new URLSearchParams(location.search);
     const z=q.get("z");
@@ -3126,12 +4037,14 @@ function readURLState(){
     figure=q.get("f");
     if(q.get("k")==="stretch") colorScale="stretch";
     const st=(q.get("st")||"").trim().toUpperCase(); if(BY[st]) profile=st;
+    if(MAP_VIEWS[q.get("m")]) map=q.get("m");
+    if(q.get("d")==="0"){ showLocal=false; document.getElementById("show-local").checked=false; gDots.style.display="none"; }
   }catch(err){}
   setSize(size); setPressed(presetMatching(weights)); setLens(view);
   document.getElementById("rank-mode").value=rankMode;
   document.getElementById("price-low").value=priceScale.low; document.getElementById("price-high").value=priceScale.high;
   renderShortlistChips();
-  return {figure,profile};
+  return {figure,profile,map};
 }
 function copyAddress(status,doneText){
   writeURL();
@@ -3140,7 +4053,7 @@ function copyAddress(status,doneText){
   try{ (navigator.clipboard ? navigator.clipboard.writeText(location.href) : Promise.reject()).then(done,fail); }catch(err){ fail(); }
 }
 document.getElementById("copy-link").addEventListener("click",()=>{
-  copyAddress(document.getElementById("link-status"),"Link copied. It reproduces the size, priorities, ranking rule, price anchors, color scale, figure and shortlist.");
+  copyAddress(document.getElementById("link-status"),"Link copied. It reproduces the map view, size, priorities, ranking rule, price anchors, color scale, figure and shortlist.");
 });
 
 // --- state profiles ---
@@ -3223,6 +4136,34 @@ document.getElementById("profile-link").addEventListener("click",()=>{
   copyAddress(document.getElementById("profile-link-status"),"Link copied. It opens this profile with the current scenario.");
 });
 function rankedStates(){ return [...STATES].sort((a,b)=>a.rank-b.rank||a.n.localeCompare(b.n)); }
+// --- findings ---
+// Each list is a rule over the records, written out beside it, so a reader can
+// check the rule as well as the result, and the lists move when records do.
+const courting=s=>s.st==="Courting"||s.st==="Courting, with conditions";
+const FINDINGS=[
+  {title:"Courting states with the most local moratoriums",
+   rule:"State posture is Courting or Courting with conditions. Ranked by local moratoriums in force.",
+   pick:()=>STATES.filter(s=>courting(s)&&s.localIn>0).sort((a,b)=>b.localIn-a.localIn||a.n.localeCompare(b.n)).slice(0,5),
+   value:s=>`${s.localIn} local`},
+  {title:"Courting states with high pushback",
+   rule:"State posture is Courting or Courting with conditions, and public pushback is High.",
+   pick:()=>STATES.filter(s=>courting(s)&&s.rr.pb==="High")},
+  {title:"High pushback where building continues",
+   rule:"Public pushback is High, and buildout momentum is 4 or 5 of 5.",
+   pick:()=>STATES.filter(s=>s.rr.pb==="High"&&s.mo>=4)},
+  {title:"Restrictive or paused with no rule in force",
+   rule:"State posture is Restrictive or Reviewing or paused, with no datacenter-specific statewide rule in force yet.",
+   pick:()=>STATES.filter(s=>(s.st==="Restrictive"||s.st==="Reviewing or paused")&&strongestRule(s)<=0)}
+];
+function renderFindings(){
+  const box=document.getElementById("findings-list");
+  box.innerHTML=FINDINGS.map(f=>{
+    const list=f.pick(); if(!list.length) return "";
+    const shown=f.value?list:[...list].sort((a,b)=>a.n.localeCompare(b.n));
+    return `<div class="finding"><h3>${f.title}</h3><div class="finding-states">${shown.map(s=>`<button type="button" class="candidate" data-a="${s.a}" aria-pressed="${s.a===selected}">${s.n}${f.value?`<span>${f.value(s)}</span>`:""}</button>`).join("")}</div><p class="fine">${f.rule}</p></div>`;
+  }).join("");
+  box.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>select(b.dataset.a)));
+}
 function renderCandidates(){
   const box=document.getElementById("candidates");
   if(!hasWeights()){box.textContent="Choose a priority or preset to rank states.";return;}
@@ -3289,7 +4230,21 @@ function renderReception(s){
     <h3>Datacenter-specific rules in force</h3>
     <ul class="axes">${rows}</ul>
     <p class="note">${rr.n}</p>
-    <p class="evidence-note">Reception and regulation are provisional analyst assessments. They contribute no points and do not affect rankings. Regulatory axes record statewide rules in force; notes describe pending bills. Public opposition and regulatory requirements are distinct.</p>`;
+    ${renderLocal(s)}
+    <p class="evidence-note">Reception and regulation are provisional analyst assessments. They contribute no points and do not affect rankings. Regulatory axes record statewide rules in force; notes describe pending bills. Public opposition and regulatory requirements are distinct. Local moratorium counts come from Moratorium Nation and contribute no points either.</p>`;
+}
+// The state's own local measures, newest first. County and town action can
+// stop a project where state policy courts it, and a state view hides that.
+const LOCAL_SHOWN=8;
+function renderLocal(s){
+  const b=LOCAL_BY[s.a];
+  const recent=[...b.inForce].sort((x,y)=>(y.enacted||"").localeCompare(x.enacted||"")||x.name.localeCompare(y.name));
+  const item=m=>`<li><b>${escapeHTML(m.name)}</b><span>${escapeHTML(m.type)}${m.enacted?" · enacted "+longDate(m.enacted):""}${m.status==="e"?" · extended":""}${m.end?" · scheduled to end "+longDate(m.end):""}</span></li>`;
+  const counts=`${b.inForce.length} in force and ${b.pending.length} proposed in ${s.n}'s cities, counties, townships and tribal governments, as Moratorium Nation recorded them on ${LOCAL_AS_OF}.${b.past.length?` Another ${b.past.length} ${b.past.length===1?"has":"have"} expired, been replaced by permanent rules or been rescinded.`:""}`;
+  return `<h3>Local moratoriums</h3>
+    <p class="note">${counts}</p>
+    ${recent.length?`<ul class="local-list">${recent.slice(0,LOCAL_SHOWN).map(item).join("")}</ul>`:""}
+    <p class="fine">${recent.length>LOCAL_SHOWN?`The ${LOCAL_SHOWN} most recent are listed. `:""}<a href="${escapeHTML(LOCAL.source.url)}" target="_blank" rel="noopener">Every measure, with its documents, at Moratorium Nation ↗</a></p>`;
 }
 function renderDetail(){
   if(!selected) return;
@@ -3306,10 +4261,16 @@ function renderDetail(){
   const swing=s.swing?` The largest single move is ${s.swing.name.toLowerCase()} at ${s.swing.value}/5 instead of ${s[s.swing.k]}/5, which would place it at rank ${s.swing.rank}.`:(scored?" No single one-level change moves its rank.":"");
   const sensitivity=scored?`<p class="sensitivity"><b>One-rating sensitivity: rank ${s.rankMin}–${s.rankMax}.</b> This changes one of this state's analyst ratings by one level at a time, holding all other states fixed.${swing} It is not a confidence interval.</p>`:"";
   document.getElementById("detail").innerHTML=`
-    <div class="top"><div><h2>${s.n}</h2>${s.tag?`<span class="chip">${s.tag}</span>`:""}</div><div class="score">${scored?s.total.toFixed(0):"—"}<small>fit / 100</small></div></div>
+    <div class="top"><div><h2>${s.n}</h2>${s.tag?`<span class="chip">${s.tag}</span>`:""}</div>${mapView==="fit"?`<div class="score">${scored?s.total.toFixed(0):"—"}<small>fit / 100</small></div>`:`<div class="posture-head">${s.st}<small>state posture</small></div>`}</div>
     <button type="button" class="close-btn" id="save-state" aria-pressed="${shortlist.has(s.a)}" onclick="toggleShortlist(selected)">${shortlist.has(s.a)?"Remove from shortlist":"Add to shortlist"}</button>
-    <p class="rank">${scored?`Rank ${s.rank} of 50${s.tied?" (tied)":""} · ${rankModeLabel()} · ${viewLabel()} · ${sizeLabel()}`:"Set a priority to calculate fit. Facts and sources remain available."}</p>
+    <p class="rank">${!scored?"Set a priority to calculate fit. Facts and sources remain available.":mapView==="fit"?`Rank ${s.rank} of 50${s.tied?" (tied)":""} · ${rankModeLabel()} · ${viewLabel()} · ${sizeLabel()}`:`Siting fit ${s.total.toFixed(0)} of 100, rank ${s.rank} of 50${s.tied?" (tied)":""}, under the Advanced analysis settings`}</p>
     <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">
+      <dl class="politics-facts">
+        <div><dt>State posture</dt><dd>${s.st}</dd></div>
+        <div><dt>Public pushback</dt><dd>${s.rr.pb}</dd></div>
+        <div><dt>Strongest statewide rule in force</dt><dd>${RULE_LABEL[strongestRule(s)]}</dd></div>
+        <div><dt>Local moratoriums</dt><dd>${s.localIn} in force · ${s.localPending} proposed</dd></div>
+      </dl>
       <div class="delivery-status" data-tier="${deliveryTier(s)}"><b>${deliveryLabel(s)} ${deliveryContext()}</b><p>Power headroom ${s.pw}/5 · Community and permitting ${s.op}/5. Lower concern at this size needs headroom ${SIZES[size].floors.pw} and permitting ${SIZES[size].floors.op}. These are analyst ratings, not a confirmed power allocation or permit decision.</p></div>
       <div class="fact"><p>2024 industrial electricity price</p><strong>${s.p.toFixed(2)}¢/kWh</strong><a href="${EIA_SOURCE.u}" target="_blank" rel="noopener">EIA measured benchmark ↗</a></div>
       <div class="fact"><p>December solar irradiance at the state's population center (annual ${s.sy.toFixed(2)})</p><strong>${s.sr.toFixed(2)} kWh/m²/day</strong><a href="${SOLAR_SOURCE.u}" target="_blank" rel="noopener">NASA POWER 2001–2020 climatology ↗</a></div>
@@ -3319,7 +4280,7 @@ function renderDetail(){
       </details>
       <h3>Analyst summary</h3><p class="note">${s.note}</p>
       <p class="evidence-note">${sources.length?"References are listed in Sources, with their type and scope. The summary and individual ratings have not been fully verified against original records.":"No state-specific references are recorded. The summary and judgment ratings need supporting evidence; only the EIA price has been checked."}</p>
-      <div class="meta"><span>State posture: ${s.st}</span><span>Momentum: ${s.mo}/5 · context only</span><span>Reception: ${s.rr.pb} pushback · context only</span></div>
+      <div class="meta"><span>Buildout momentum: ${s.mo}/5 · context only</span><span>Posture, pushback, rules and local moratoriums are context and add no points</span></div>
     </section>
     <section id="panel-reception" role="tabpanel" aria-labelledby="tab-reception" tabindex="0" hidden>
       ${renderReception(s)}
@@ -3342,7 +4303,7 @@ const COLS=[
   {k:"rank",label:"#"},{k:"n",label:"State"},{k:"total",label:"Fit"},{k:"swing",label:"Rank range"},
   {k:"p",label:"¢/kWh"},{k:"sr",label:"Dec sun"},{k:"pw",label:"Headroom"},{k:"po",label:"Policy"},{k:"op",label:"Community"},
   {k:"w",label:"Water"},{k:"h",label:"Hazard"},{k:"c",label:"Climate"},{k:"x",label:"Connectivity"},{k:"delivery",label:"Delivery concerns"},
-  {k:"pb",label:"Pushback"},{k:"rules",label:"Rules in force"},
+  {k:"pb",label:"Pushback"},{k:"rules",label:"Rules in force"},{k:"local",label:"Local moratoriums"},
   {k:"phy",label:"Physical"},{k:"pol",label:"Political"}
 ];
 const thead=document.getElementById("thead");
@@ -3365,6 +4326,7 @@ function sortValue(s,key){
   if(key==="swing") return s.rank===null ? null : s.rankMax-s.rankMin;
   if(key==="pb") return PB_ORDER[s.rr.pb];
   if(key==="rules") return ruleCount(s);
+  if(key==="local") return s.localIn;
   return s[key];
 }
 function renderTable(){
@@ -3386,7 +4348,7 @@ function renderTable(){
   document.getElementById("export-comparison").disabled=rows.length===0;
   const dash=v=>scored?v:"--";
   const tb=document.getElementById("tbody");
-  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${dash(scored?(s.rankMin===s.rankMax?String(s.rank):s.rankMin+"–"+s.rankMax):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.sr.toFixed(1)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
+  tb.innerHTML=rows.map(s=>`<tr data-a="${s.a}" tabindex="0" class="${s.a===selected?"selected":""}" aria-label="${s.n}${scored?`, score ${s.total.toFixed(0)}, rank ${s.rank}`:", not scored"}"><td>${dash(s.rank)}</td><td>${s.n}${s.tag?`<span class="flag" title="${s.tag}"></span>`:""}</td><td class="tot">${dash(scored?s.total.toFixed(0):null)}</td><td>${dash(scored?(s.rankMin===s.rankMax?String(s.rank):s.rankMin+"–"+s.rankMax):null)}</td><td>${s.p.toFixed(2)}</td><td>${s.sr.toFixed(1)}</td><td>${s.pw}</td><td>${s.po}</td><td>${s.op}</td><td>${s.w}</td><td>${s.h}</td><td>${s.c}</td><td>${s.x}</td><td>${deliveryLabel(s).replace(" modeled","")}</td><td>${s.rr.pb}</td><td>${ruleCount(s)} of 4</td><td>${s.localIn}</td><td>${dash(scored?s.phy.toFixed(0):null)}</td><td>${dash(scored?s.pol.toFixed(0):null)}</td></tr>`).join("");
   if(!rows.length) tb.innerHTML=`<tr><td colspan="${COLS.length}" class="empty">Your shortlist is empty. Add a state above or from a state profile to start comparing.</td></tr>`;
   tb.querySelectorAll("tr[data-a]").forEach(tr=>{
     tr.addEventListener("click",()=>select(tr.dataset.a));
@@ -3436,6 +4398,7 @@ function renderCompare(){
   });
   rows.push(row("Pushback",shown.map(s=>PB_ORDER[s.rr.pb]),(v,s)=>s.rr.pb,{mark:false}));
   rows.push(row("Rules in force",shown.map(s=>ruleCount(s)),v=>`${v} of 4`,{mark:false}));
+  rows.push(row("Local moratoriums",shown.map(s=>s.localIn),(v,s)=>`${v} in force<span class="cmp-fine">${s.localPending} proposed</span>`,{mark:false,sub:"Moratorium Nation"}));
   rows.push(row("State posture",shown.map(()=>null),(v,s)=>s.st,{mark:false}));
   // Where the shortlist disagrees most, among the factors that count.
   const spreads=FACTORS.filter(f=>(W[f.k]||0)>0).map(f=>{const vs=shown.map(s=>sub(s,f.k));return {f,d:Math.max(...vs)-Math.min(...vs)};}).sort((p,q)=>q.d-p.d);
@@ -4225,6 +5188,8 @@ function setView(id){
     b.setAttribute("aria-pressed",String(b.dataset.v===id)));
   viewnote.innerHTML=currentView().note;
   legendHatch.hidden = !["map","cartogram","count"].includes(id);
+  // the local moratorium dots exist only on the map
+  document.getElementById("legend-dots").hidden = id!=="map";
   const showsFit=["map","relief","cartogram","prices","profiles","flow","count"].includes(id);
   legendRamp.hidden=!showsFit; legendRampNote.hidden=!showsFit;
   tip.style.display="none";
@@ -4276,18 +5241,20 @@ function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); rende
 // Redraw when the operating system flips between light and dark: the SVG and
 // canvas drawings read their colors from the stylesheet at draw time.
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{ readTheme(); paint(); renderScatter(); FIGS.draw(); });
-// on a phone the priorities panel starts collapsed so the map and results stay reachable
+// The Advanced analysis panel starts closed, and a phone keeps it closed so the
+// map comes first. On a wide screen a link made on the Siting fit map opens it.
 (function(){
   const mq=window.matchMedia("(max-width:900px)"), panel=document.getElementById("wpanel");
-  if(mq.matches) panel.removeAttribute("open");
-  mq.addEventListener("change",e=>{ if(e.matches) panel.removeAttribute("open"); else panel.setAttribute("open",""); });
+  mq.addEventListener("change",e=>{ if(e.matches) panel.removeAttribute("open"); });
 })();
 // Read the address first, score, then show the requested figure (figures read
-// scores, so they cannot be drawn before the first compute), then normalize
-// the address so a copied link is canonical.
+// scores, so they cannot be drawn before the first compute) and map view, then
+// normalize the address so a copied link is canonical.
 const initial=readURLState();
 refresh();
+renderFindings();
 if(initial.figure && FIGS.has(initial.figure)) FIGS.setView(initial.figure);
+setMapView(initial.map || (impliesFit() ? "fit" : "posture"),{openPanel:true});
 // A linked profile opens last, once every figure and rank it shows exists.
 if(initial.profile) select(initial.profile);
 urlReady=true; writeURL();
@@ -4311,7 +5278,8 @@ urlReady=true; writeURL();
     ["natural_hazard_1_5",s=>s.h],["climate_cooling_1_5",s=>s.c],
     ["connectivity_1_5",s=>s.x],["momentum_1_5",s=>s.mo],
     ["state_posture",s=>s.st],["action_tag_2026",s=>s.tag],
-    ["pushback",s=>s.rr.pb],
+    ["pushback",s=>s.rr.pb],["strongest_rule_in_force",s=>strongestRule(s)],
+    ["local_moratoriums_in_force",s=>s.localIn],["local_moratoriums_proposed",s=>s.localPending],
     ["rule_water",s=>s.rr.wt],["rule_power_cost",s=>s.rr.pg],
     ["rule_siting_zoning",s=>s.rr.zn],["rule_tax_incentives",s=>s.rr.tx],
     ["rules_in_force_count",s=>ruleCount(s)],

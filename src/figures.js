@@ -664,6 +664,8 @@ function setView(id){
     b.setAttribute("aria-pressed",String(b.dataset.v===id)));
   viewnote.innerHTML=currentView().note;
   legendHatch.hidden = !["map","cartogram","count"].includes(id);
+  // the local moratorium dots exist only on the map
+  document.getElementById("legend-dots").hidden = id!=="map";
   const showsFit=["map","relief","cartogram","prices","profiles","flow","count"].includes(id);
   legendRamp.hidden=!showsFit; legendRampNote.hidden=!showsFit;
   tip.style.display="none";

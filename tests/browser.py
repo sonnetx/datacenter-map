@@ -20,8 +20,83 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     page.goto((ROOT / 'index.html').as_uri())
     assert page.locator('.state').count()==50
     assert page.locator('#state-dialog').evaluate('(e)=>!e.open')
-    assert page.locator('#presets [aria-pressed=true]').inner_text()=='Balanced'
+    # the panel starts closed, so read the pressed preset's text without layout
+    assert page.locator('#presets [aria-pressed=true]').text_content()=='Balanced'
     page.screenshot(path=str(Path(output) / 'desktop.png'),full_page=True)
+
+    # The page opens on the political map: posture colors, the local
+    # moratorium layer, computed findings, and the siting model closed.
+    assert page.evaluate('mapView')=='posture' and page.evaluate('location.search')==''
+    assert page.locator('#mapview [aria-pressed=true]').inner_text()=='State posture'
+    assert page.locator('.mapcard').evaluate('(e)=>e.classList.contains("politics")')
+    assert not page.locator('#wpanel').evaluate('(e)=>e.open')
+    assert page.locator('#candidates').is_hidden() and page.locator('#figbar').is_hidden() and page.locator('#legend-ramp').is_hidden()
+    assert page.locator('#legend-cat .cat').count()==5
+    assert sum(int(b) for b in page.locator('#legend-cat .cat b').all_inner_texts())==50
+    # A state's fill is its legend swatch, here New York's Restrictive.
+    restrictive=page.evaluate('[...document.querySelectorAll("#legend-cat .cat")].find(c=>c.textContent.startsWith("Restrictive")).querySelector("i").style.backgroundColor')
+    assert page.evaluate('paths.NY.style.fill')==restrictive
+    assert page.evaluate('getComputedStyle(document.getElementById("hatches")).display')=='none'
+    local=page.evaluate('LOCAL.measures.filter(m=>"aep".includes(m[6])).length')
+    assert page.locator('#local-dots circle').count()==local and local>900
+    assert page.evaluate('STATES.reduce((n,s)=>n+s.localIn,0)')==page.evaluate('LOCAL.measures.filter(m=>"ae".includes(m[6])).length')
+    assert page.locator('#local-updated').inner_text().endswith('2026')
+    # Every finding lists only states its printed rule selects.
+    assert page.locator('#findings .finding').count()>=3
+    assert page.evaluate('[...document.querySelectorAll("#findings .finding")][1].querySelectorAll("button").length')>0
+    assert page.evaluate('[...[...document.querySelectorAll("#findings .finding")][1].querySelectorAll("button")].every(b=>courting(BY[b.dataset.a])&&BY[b.dataset.a].rr.pb==="High")')
+    counts=page.evaluate('[...[...document.querySelectorAll("#findings .finding")][0].querySelectorAll("button")].map(b=>BY[b.dataset.a].localIn)')
+    assert counts==sorted(counts,reverse=True),counts
+    page.locator('[data-m=pushback]').click()
+    assert page.evaluate('mapView')=='pushback'
+    assert [int(b) for b in page.locator('#legend-cat .cat b').all_inner_texts()]==[page.evaluate(f'STATES.filter(s=>s.rr.pb==="{v}").length') for v in ['Low','Moderate','High']]
+    page.wait_for_function('new URLSearchParams(location.search).get("m")==="pushback"')
+    page.locator('[data-m=rules]').click()
+    assert page.locator('#legend-cat .cat').count()==5 and page.evaluate('strongestRule(BY.NY)')==3
+    page.locator('#show-local').uncheck()
+    page.wait_for_function('new URLSearchParams(location.search).get("d")==="0"')
+    assert page.evaluate('getComputedStyle(document.getElementById("local-dots")).display')=='none'
+    page.locator('#show-local').check()
+    page.locator('[data-m=posture]').click()
+    page.wait_for_function('location.search===""')
+    # A finding opens the profile, which leads with the political record and
+    # lists the state's own local measures.
+    page.locator('#findings .candidate').first.click()
+    assert page.locator('#state-dialog').evaluate('(e)=>e.open')
+    assert page.locator('#detail .politics-facts > div').count()==4
+    assert page.locator('#detail .posture-head').count()==1 and page.locator('#detail .top .score').count()==0
+    page.locator('#tab-reception').click()
+    assert 'Local moratoriums' in page.locator('#panel-reception').inner_text()
+    assert 0<page.locator('#panel-reception .local-list li').count()<=8
+    for width in [320,390]:
+        page.set_viewport_size({'width':width,'height':800})
+        for tab in ['overview','reception']:
+            page.locator('#tab-'+tab).click()
+            assert page.locator('#state-dialog').evaluate('(e)=>e.scrollWidth<=e.clientWidth+1'),(width,tab,'political profile overflow')
+    page.set_viewport_size({'width':1440,'height':1000})
+    page.locator('#tab-overview').click()
+    page.keyboard.press('Escape')
+    # The table and the dataset carry the local counts.
+    page.locator('th[data-k=local] button').click()
+    assert page.locator('#tbody tr').first.get_attribute('data-a')==page.evaluate('[...STATES].sort((a,b)=>b.localIn-a.localIn)[0].a')
+    page.locator('th[data-k=rank] button').click()
+    # Opening Advanced analysis switches to the siting model, and so does any
+    # edit inside it after a reader has moved back to a political view.
+    page.locator('#wpanel > summary').click()
+    page.wait_for_function('mapView==="fit"')
+    assert not page.locator('.mapcard').evaluate('(e)=>e.classList.contains("politics")')
+    assert page.locator('#candidates').is_visible() and page.locator('#figbar').is_visible()
+    page.locator('[data-m=posture]').click()
+    assert page.evaluate('mapView')=='posture' and page.locator('#wpanel').evaluate('(e)=>e.open')
+    page.locator('[data-p=cost]').click()
+    assert page.evaluate('mapView')=='fit'
+    page.locator('#reset-model').click()
+    page.locator('#wpanel > summary').click()
+    page.locator('[data-m=posture]').click()
+    # The Siting fit button opens the panel beside the map on a wide screen.
+    page.locator('[data-m=fit]').click()
+    assert page.evaluate('mapView')=='fit' and page.locator('#wpanel').evaluate('(e)=>e.open')
+    page.wait_for_function('new URLSearchParams(location.search).get("m")==="fit"')
     candidate=page.locator('.candidate').first
     candidate.click()
     assert page.locator('#state-dialog').evaluate('(e)=>e.open')
@@ -58,6 +133,9 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
                 assert page.locator('#tab-'+tab).evaluate('(e)=>e.getBoundingClientRect().width>0'),(width,tab)
         print('Responsive profiles passed',width)
     page.keyboard.press('Escape')
+    # Narrow widths close the panel so the map comes first; reopen it.
+    assert not page.locator('#wpanel').evaluate('(e)=>e.open')
+    page.locator('#wpanel > summary').click()
     page.locator('#w-pw').fill('40')
     page.locator('#w-pw').dispatch_event('input')
     weights=page.evaluate('({...weights})')
@@ -116,7 +194,7 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     header,*body=[line for line in csv.splitlines() if line]
     assert len(body)==50,len(body)
     assert header.startswith('postal,state,')
-    for column in ['pushback','rule_water','rule_power_cost','rule_siting_zoning','rule_tax_incentives']:
+    for column in ['pushback','rule_water','rule_power_cost','rule_siting_zoning','rule_tax_incentives','strongest_rule_in_force','local_moratoriums_in_force','local_moratoriums_proposed']:
         assert column in header.split(','),column
     assert body[0].startswith('AK,Alaska,')
     with page.expect_download() as caught:
@@ -152,7 +230,7 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     # marks its most favorable cell without ever marking context rows.
     order=page.evaluate('[...document.querySelectorAll("#compare .cmp-state")].map(b=>b.dataset.a)')
     assert order==sorted(order,key=lambda a:ranks[a]),order
-    assert page.locator('#compare tbody tr').count()==5+9+3
+    assert page.locator('#compare tbody tr').count()==5+9+4
     assert page.locator('#compare tbody tr').first.locator('td.best').count()==1
     assert page.locator('#compare tbody tr:last-child td.best').count()==0
     assert 'Widest gap' in page.locator('#compare .cmp-summary').inner_text()
@@ -320,6 +398,14 @@ with TemporaryDirectory(prefix="datacenter-browser-") as output, sync_playwright
     assert page.evaluate('location.search')=='?w=15.15.10.10.5.10.5.30.0&s=VA'
     page.goto(uri)
     assert page.evaluate('location.search')==''
+    # Map view and the local layer travel in the address on their own.
+    page.goto(uri+'?m=rules&d=0')
+    assert page.evaluate('mapView')=='rules' and not page.locator('#show-local').is_checked()
+    assert page.evaluate('location.search')=='?m=rules&d=0'
+    page.goto(uri+'?m=fit')
+    assert page.evaluate('mapView')=='fit' and page.locator('#wpanel').evaluate('(e)=>e.open')
+    page.goto(uri+'?m=nope')
+    assert page.evaluate('mapView')=='posture' and page.evaluate('location.search')==''
 
     # Dark scheme: the figures read their colors from the stylesheet, so every
     # one of them redraws without error and the panel really is dark.

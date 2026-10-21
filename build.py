@@ -8,6 +8,7 @@ src/template.html holds the markup. build.py inlines, in this order:
     __TOPOJSON_LIB__   src/topojson-client.min.js
     __TOPO__           src/states-albers-10m.json   (map geometry)
     __STATES__         data/states.json             (the state records)
+    __LOCAL__          data/local_measures.json     (local moratoriums, from scripts/local_measures.py)
     __MODEL_JS__       src/model.js                 (scoring, no DOM)
     __APP_JS__         src/app.js                   (map, panel, profiles, table)
     __FIGURES_JS__     src/figures.js               (the twelve figures)
@@ -45,6 +46,9 @@ def build():
         out = out.replace(marker, body)
     assert out.count("__STATES__") == 1
     out = out.replace("__STATES__", states)
+    local = read("data/local_measures.json").rstrip("\n").replace("</", "<\\/")
+    assert out.count("__LOCAL__") == 1
+    out = out.replace("__LOCAL__", local)
     return out
 
 if __name__ == "__main__":

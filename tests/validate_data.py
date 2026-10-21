@@ -15,6 +15,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "states.json"
+LOCAL = ROOT / "data" / "local_measures.json"
 
 # The 50 states. DC and territories are deliberately out of scope: the map
 # geometry, the ranking and the "of 50" copy all assume exactly these.
@@ -169,6 +170,50 @@ def check_rr(where, rr):
         fail(at, "'n' contains a double space")
 
 
+# Local moratoriums from Moratorium Nation, written by scripts/local_measures.py.
+LOCAL_FIELDS = ["x", "y", "state", "jurisdiction", "type", "enacted", "status", "end"]
+LOCAL_STATUS = {"a", "e", "p", "r", "x", "d"}
+# The source gives a month or only a year when it cannot confirm the day.
+ISO_DATE = re.compile(r"^\d{4}(-\d{2}(-\d{2})?)?$")
+
+
+def check_local():
+    try:
+        doc = json.loads(LOCAL.read_text())
+    except (OSError, json.JSONDecodeError) as e:
+        fail("local_measures.json", f"cannot be read: {e}")
+        return None
+    src = doc.get("source") or {}
+    for key in ("title", "url", "license", "updated", "retrieved"):
+        if not src.get(key):
+            fail("local_measures.json", f"source is missing {key!r}")
+    if doc.get("fields") != LOCAL_FIELDS:
+        fail("local_measures.json", f"fields must be {LOCAL_FIELDS}")
+        return None
+    measures = doc.get("measures")
+    if not isinstance(measures, list) or not measures:
+        fail("local_measures.json", "measures must be a non-empty list")
+        return None
+    for i, m in enumerate(measures):
+        at = f"local_measures.json measure {i + 1}"
+        if not isinstance(m, list) or len(m) != len(LOCAL_FIELDS):
+            fail(at, f"must be a list of {len(LOCAL_FIELDS)} values")
+            continue
+        x, y, st, name, kind, enacted, status, end = m
+        if not (isinstance(x, (int, float)) and isinstance(y, (int, float)) and 0 <= x <= 975 and 0 <= y <= 610):
+            fail(at, f"coordinates {x!r}, {y!r} fall outside the 975 by 610 map")
+        if st not in POSTAL:
+            fail(at, f"state {st!r} is not a US state postal code")
+        if not isinstance(name, str) or not name.strip() or re.search(r'[<>"]', name):
+            fail(at, f"jurisdiction {name!r} is empty or contains markup characters")
+        if status not in LOCAL_STATUS:
+            fail(at, f"status {status!r} is not one of {', '.join(sorted(LOCAL_STATUS))}")
+        for label, v in (("enacted", enacted), ("end", end)):
+            if v and not ISO_DATE.match(str(v)):
+                fail(at, f"{label} date {v!r} is not an ISO date")
+    return measures
+
+
 def main():
     try:
         states = json.loads(DATA.read_text())
@@ -280,6 +325,15 @@ def main():
         if isinstance(tag, str) and tag.strip() and not srcs:
             fail(where, f"has tag {tag!r} but no 'srcs'; flagged states must cite their source")
 
+    measures = check_local()
+    # B1 in the election re-rating rules: one in-force local moratorium or ban
+    # rules out Low pushback.
+    if measures:
+        in_force = {m[2] for m in measures if isinstance(m, list) and len(m) == 8 and m[6] in ("a", "e")}
+        for s in states:
+            if isinstance(s, dict) and (s.get("rr") or {}).get("pb") == "Low" and s.get("a") in in_force:
+                fail(f"{s.get('a')} 'rr'", "pushback is Low, but a local moratorium is in force (rule B1)")
+
     missing = sorted(POSTAL - set(seen_codes))
     if missing:
         fail("file", f"no record for {', '.join(missing)}")
@@ -303,6 +357,9 @@ def main():
     pushback = {level: sum(1 for s in states if s["rr"]["pb"] == level) for level in sorted(PUSHBACK)}
     ruled = sum(1 for s in states if any(s["rr"][k] > 0 for k in AXES))
     print(f"data/states.json ok: 50 states, {cited} with citations, {links} source links")
+    if measures:
+        print(f"data/local_measures.json ok: {len(measures)} local measures, "
+              f"{sum(1 for m in measures if m[6] in ('a', 'e'))} in force")
     print(
         "  reception: "
         + ", ".join(f"{n} {level.lower()}" for level, n in pushback.items())

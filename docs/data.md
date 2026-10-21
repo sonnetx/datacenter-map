@@ -45,6 +45,23 @@ The `rr` record describes public response and statewide regulation. It does not 
 
 Pending bills do not affect these values. `rr.n` summarizes relevant statutes, executive orders, proposals and local actions in one to three sentences. Classifications are provisional analyst judgments, and nobody has individually verified them against original records.
 
+## Local moratoriums
+
+`data/local_measures.json` holds the city, county, township and tribal measures from [Moratorium Nation](https://mjbommar.github.io/moratorium-data-2026/) (Michael J. Bommarito, CC BY 4.0) whose sectors include data centers. `scripts/local_measures.py` downloads the inventory, projects each measure's coordinates with the page's Albers USA projection and checks that the point falls inside its own state. A point within 4 map pixels of its state's simplified outline is kept where it lands, and anything farther is dropped and reported. Rerun the script, then the build, to refresh it.
+
+`source` records the dataset, its license, the date the source page gives for its last update (`updated`) and the date the script ran (`retrieved`). Each entry in `measures` follows `fields`.
+
+| Field | Meaning |
+|---|---|
+| `x`, `y` | Map coordinates in the 975 by 610 frame of `src/states-albers-10m.json` |
+| `state` | Postal code |
+| `jurisdiction`, `type` | The jurisdiction's name and kind (City, County, Township, Town, Village, Tribal and others) |
+| `enacted` | ISO date the measure was enacted, or empty when the source has none |
+| `status` | One letter for the source's status: `a` active, `e` extended, `p` pending, `r` replaced, `x` expired, `d` rescinded |
+| `end` | Scheduled end date when the source gives one |
+
+The page counts active and extended measures as in force and pending ones as proposed. It does not infer that a measure lapsed after the source's update date. The counts contribute no points.
+
 ## Downloads
 
-The page exports CSV with one row per state and flattened `rr` fields, or JSON matching `data/states.json`. Both use the loaded dataset. Downloads require no registration, and GoatCounter records CSV and JSON download events.
+The page exports CSV with one row per state, flattened `rr` fields, the strongest rule in force and the local moratorium counts, or JSON matching `data/states.json`. Both use the loaded dataset. Downloads require no registration, and GoatCounter records CSV and JSON download events.

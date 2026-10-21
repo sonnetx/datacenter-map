@@ -6,21 +6,21 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F4F6">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#10151B">
-<title>US datacenter siting suitability, October 2026</title>
-<meta name="description" content="Compare hyperscale and AI datacenter siting conditions across 50 US states using one measured factor and seven provisional analyst ratings.">
+<title>US data center politics by state, October 2026</title>
+<meta name="description" content="Map each state's 2026 data center posture, public pushback, statewide rules in force and local moratoriums, with a siting model for developers underneath.">
 <link rel="canonical" href="https://sonnetx.github.io/datacenter-map/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sonnetx.github.io/datacenter-map/">
-<meta property="og:site_name" content="US datacenter siting suitability">
-<meta property="og:title" content="US datacenter siting conditions, 2026">
-<meta property="og:description" content="Compare 50 states using adjustable weights for power, policy, water and permitting. Ratings are provisional.">
+<meta property="og:site_name" content="US data center politics by state">
+<meta property="og:title" content="US data center politics by state, 2026">
+<meta property="og:description" content="Where states court, pause or restrict data centers, and where towns and counties have passed moratoriums of their own.">
 <meta property="og:image" content="https://sonnetx.github.io/datacenter-map/assets/social-card.png?v=2026-10-13">
 <meta property="og:image:width" content="3200">
 <meta property="og:image:height" content="1800">
 <meta property="og:image:alt" content="Choropleth map of the 50 US states shaded by datacenter siting fit, with twelve states hatched to mark a 2026 policy change.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="US datacenter siting conditions, 2026">
-<meta name="twitter:description" content="Compare 50 states using adjustable weights for power, policy, water and permitting. Ratings are provisional.">
+<meta name="twitter:title" content="US data center politics by state, 2026">
+<meta name="twitter:description" content="Where states court, pause or restrict data centers, and where towns and counties have passed moratoriums of their own.">
 <meta name="twitter:image" content="https://sonnetx.github.io/datacenter-map/assets/social-card.png?v=2026-10-13">
 <meta name="twitter:image:alt" content="Choropleth map of the 50 US states shaded by datacenter siting fit, with twelve states hatched to mark a 2026 policy change.">
 <script type="application/ld+json">
@@ -28,7 +28,7 @@
   "@context": "https://schema.org",
   "@type": "Dataset",
   "name": "US datacenter siting conditions, 2026",
-  "description": "State-level records for the 50 US states: EIA 2024 industrial electricity prices, NASA POWER December and annual solar irradiance, seven provisional analyst ratings on siting factors, 2026 policy posture, public reception, statewide rules in force and citations.",
+  "description": "State-level records for the 50 US states: 2026 data center policy posture, EIA 2024 industrial electricity prices, NASA POWER December and annual solar irradiance, seven provisional analyst ratings on siting factors, 2026 policy posture, public reception, statewide rules in force and citations.",
   "url": "https://sonnetx.github.io/datacenter-map/",
   "sameAs": "https://github.com/sonnetx/datacenter-map",
   "license": "https://creativecommons.org/licenses/by/4.0/",
@@ -36,7 +36,7 @@
   "creator": {"@type": "Person", "name": "Sonnet Xu", "url": "https://sonnetx.github.io/"},
   "temporalCoverage": "2024/2026",
   "spatialCoverage": {"@type": "Place", "name": "United States"},
-  "keywords": ["datacenter", "data center", "siting", "electricity prices", "solar irradiance", "state policy", "United States"],
+  "keywords": ["datacenter", "data center", "moratorium", "state policy", "siting", "electricity prices", "solar irradiance", "state policy", "United States"],
   "distribution": [
     {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://github.com/sonnetx/datacenter-map/blob/main/data/states.json"},
     {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://sonnetx.github.io/datacenter-map/#dataset"}
@@ -52,29 +52,25 @@ __CSS__
 <body>
 <div class="wrap">
 <header>
-  <h1>US datacenter siting conditions</h1>
-  <p class="lede">Build a state shortlist for your next datacenter project. Compare power, policy and operating conditions for hyperscale and AI training facilities, then identify what to verify locally.</p>
-  <div class="asof">Updated October 13, 2026 · Power prices: EIA 2024 annual industrial averages · Solar: NASA POWER 2001–2020 climatology. Fit combines two measured factors with seven provisional analyst ratings.</div>
+  <h1>US data center politics by state</h1>
+  <p class="lede">States are courting, pausing and restricting data center development, and towns and counties are passing moratoriums of their own. The map shows each state's 2026 posture, public pushback, statewide rules in force and local moratoriums. Select a state for its record and sources. A siting model for developers is under Advanced analysis.</p>
+  <div class="asof" id="asof">Updated October 20, 2026 · State records: analyst classifications with linked sources · Local moratoriums: <a href="https://mjbommar.github.io/moratorium-data-2026/" target="_blank" rel="noopener">Moratorium Nation</a>, status as of <span id="local-updated"></span> · Power prices: EIA 2024 industrial averages · Solar: NASA POWER 2001 to 2020 climatology.</div>
 </header>
-<section class="workflow" aria-label="Start your comparison">
-  <div><b>1. Describe your project</b><p>Choose a size band and a priority preset, then adjust the factors that matter to your project.</p></div>
-  <div><b>2. Build a shortlist</b><p>Open state profiles, save candidates, and compare their tradeoffs <a href="#comparison">in the table</a>.</p></div>
-  <div><b>3. Verify the site</b><p>Use the shortlist to scope utility, permitting and water diligence. State fit does not establish site readiness.</p></div>
-</section>
 
 <div class="grid">
   <div class="col">
-  <div class="mapcard">
+  <div class="mapcard politics">
     <div class="map-tools">
-    <div class="lens" id="lens">
-      <button data-l="all" aria-pressed="true">Combined</button>
-      <button data-l="politics" aria-pressed="false">Political outlook</button>
-      <button data-l="physical" aria-pressed="false">Physical fundamentals</button>
+    <div class="lens" id="mapview" role="group" aria-label="Map view">
+      <button type="button" data-m="posture" aria-pressed="true">State posture</button>
+      <button type="button" data-m="pushback" aria-pressed="false">Public pushback</button>
+      <button type="button" data-m="rules" aria-pressed="false">Rules in force</button>
+      <button type="button" data-m="fit" aria-pressed="false">Siting fit</button>
     </div>
     <label class="state-picker" for="state-picker">Find a state <select id="state-picker"><option value="">Choose a state…</option></select></label>
     </div>
     <div class="candidates" id="candidates" aria-label="Leading states in the current view"></div>
-    <div class="viewbar">
+    <div class="viewbar" id="figbar">
       <div class="lens" id="viewbar" role="group" aria-label="Figure"></div>
       <button class="rotate-btn" id="rotate-btn" type="button" aria-pressed="false"><i></i><span id="rotate-label">Play figures</span></button>
     </div>
@@ -88,6 +84,7 @@ __CSS__
       </defs>
       <g id="states"></g>
       <g id="hatches" class="hatch"></g>
+      <g id="local-dots" class="hatch" aria-hidden="true"></g>
       <g id="labels" class="hatch"></g>
     </svg>
     </div>
@@ -95,6 +92,9 @@ __CSS__
     <p class="viewnote" id="viewnote" aria-live="polite"></p>
     <div class="tip" id="tip"></div>
     <div class="legend">
+      <div class="catkey" id="legend-cat"></div>
+      <div class="lgnote" id="legend-catnote"></div>
+      <div class="key dotkey" id="legend-dots"><label><input type="checkbox" id="show-local" checked> Local moratoriums</label><span><i class="dot-in"></i>in force <span id="local-inforce"></span></span><span><i class="dot-pending"></i>proposed <span id="local-pending"></span></span></div>
       <div class="key" id="legend-ramp"><span id="ramp-lo">Lower fit · 0</span><div class="ramp"></div><span id="ramp-hi">100 · Higher fit</span>
         <div class="scale-toggle" id="scale-toggle" role="group" aria-label="Color scale"><button type="button" data-k="fixed" aria-pressed="true">Fixed 0–100</button><button type="button" data-k="stretch" aria-pressed="false">Stretch to range</button></div></div>
       <div class="lgnote" id="legend-rampnote">Color shows weighted fit on a fixed 0–100 scale. Delivery concerns are shown separately in each profile.</div>
@@ -107,8 +107,19 @@ __CSS__
   </div>
 
   <aside>
-    <details class="card" id="wpanel" open>
-      <summary><h2>Your project</h2></summary>
+    <section class="card findings" id="findings" aria-labelledby="findings-heading">
+      <h2 id="findings-heading">Findings</h2>
+      <p class="hint">Each list is computed from the state records and the local moratorium data, so it updates when they do. Select a state to see why.</p>
+      <div id="findings-list"></div>
+    </section>
+    <details class="card" id="wpanel">
+      <summary><h2>Advanced analysis</h2><span class="summary-sub">Siting model for a project size and set of priorities</span></summary>
+      <p class="hint">Rank states for a datacenter project, build a shortlist and compare it <a href="#comparison">in the table</a>. Opening this panel switches the map to Siting fit. State fit does not establish site readiness, so use the shortlist to scope utility, permitting and water diligence.</p>
+      <div class="lens" id="lens" role="group" aria-label="Scoring view">
+        <button type="button" data-l="all" aria-pressed="true">Combined</button>
+        <button type="button" data-l="politics" aria-pressed="false">Political outlook</button>
+        <button type="button" data-l="physical" aria-pressed="false">Physical fundamentals</button>
+      </div>
       <p class="hint">1. Project size. Loads a starting weight profile and sets the headroom and permitting a project of that scale needs.</p>
       <div class="sizes" id="sizes" role="group" aria-label="Project size">
         <button data-z="micro" aria-pressed="false">Edge or micro<small>under 5 MW</small></button>
@@ -184,7 +195,7 @@ __CSS__
 <div class="table-intro" id="comparison">
   <h2>Compare all 50 states</h2>
   <p>Sort by any column and select a row for details. Judgment ratings run from 1 to 5, and fit and reference scores run from 0 to 100. Rank range is the one-rating sensitivity band from each profile; a narrow band means the position depends less on any single rating. Delivery concerns are a separate modeled signal. Higher is more favorable, except for electricity prices.</p>
-  <p>Pushback describes public opposition; rules in force summarize statewide regulation. Neither affects fit or rank. The Reception tab provides details.</p>
+  <p>Pushback describes public opposition, rules in force summarize statewide regulation, and local moratoriums counts the measures in force in each state's cities, counties and townships. None of them affects fit or rank. The Reception tab provides details.</p>
 </div>
 <div class="shortlist-tools">
   <label for="shortlist-picker">Add a state <select id="shortlist-picker"><option value="">Choose a state…</option></select></label>
@@ -215,8 +226,24 @@ __CSS__
   <p>Source: <a href="https://www.eia.gov/outlooks/steo/report/elec_coal_renew.php" target="_blank" rel="noopener">EIA Short-Term Energy Outlook, September 9, 2026</a> · Checked September 13, 2026. The source page updates monthly; figures here retain the September release.</p>
 </section>
 
+<section class="meth" id="political-method" aria-labelledby="political-heading">
+  <h2 id="political-heading">How the political map works</h2>
+  <p>The map opens on three political views of the same fifty states. Each colors a state by a recorded category instead of a score, because the classifications are ordinal analyst judgments and a number such as 73 would claim more precision than they have. None of the three views changes fit, rank or delivery concerns.</p>
+  <h3>State posture</h3>
+  <p>Posture is an analyst label for how the state government treated data center development in 2026. Courting states offer incentives without new conditions. Courting with conditions keeps incentives but attaches requirements, as Alabama's cost recovery statute and Nevada's abatement order do. Reviewing or paused covers incentive pauses, permit holds and formal reviews, as in Arizona, Texas and Massachusetts. Restrictive covers states that have enacted or ordered limits, such as New York's moratorium order and Maine's bar on incentives, including limits that take effect later. No active state posture means no statewide action on record. The labels have no written rubric, so these precedents define them. Posture follows statewide actions and announced direction, so it can run ahead of the rules in force.</p>
+  <h3>Public pushback</h3>
+  <p>Pushback is Low where no organized opposition or local restriction is on record, Moderate where local restrictions or contested proceedings exist in some jurisdictions, and High where there are multiple local bans, a statewide restriction that cleared a chamber, or a referendum. One local moratorium in force rules out Low. The rule counts bans and not temporary moratoriums, so Michigan reads Moderate with more than a hundred local moratoriums in force.</p>
+  <h3>Rules in force</h3>
+  <p>This view shows the strongest datacenter-specific statewide rule in force on any of four axes, which are water, power and ratepayer cost, siting and zoning, and tax incentives. The levels are eases entry, no specific rule, reporting or incentive conditions, binding conditions or narrowed incentives, and a pause, ban or repealed incentive. Pending bills, and enacted laws whose effective date has not arrived, count as no rule. California signed seven data center laws in September 2026 that take effect on January 1, 2027, so it reads Restrictive on posture and no rule on this view.</p>
+  <h3>Local moratoriums</h3>
+  <p>The dots are city, county, township and tribal moratoriums and bans on data centers from <a href="https://mjbommar.github.io/moratorium-data-2026/" target="_blank" rel="noopener">Moratorium Nation</a>, a dataset by Michael J. Bommarito published under CC BY 4.0. Each dot is placed at the coordinates the dataset gives for its jurisdiction. Filled dots are in force (active or extended) and open dots are proposed. Measures that expired, were replaced by permanent zoning or were rescinded are counted in each profile but not drawn. Statuses are the dataset's own as of <span class="local-asof"></span>, and some temporary measures have scheduled end dates since then. The page does not infer that any of them lapsed. A state-level map hides county-level conflict, so the profiles list each state's most recent local measures.</p>
+  <h3>Findings</h3>
+  <p>The findings beside the map are rules over these records, each printed under its list, so they change when a record changes. They describe where the records disagree. They do not predict where projects will be approved or blocked.</p>
+  <p>Posture, pushback and the rule axes are provisional analyst classifications. Every state now cites at least one source, and the Sources tab in each profile lists what each document establishes. A citation can support a policy event without validating a classification.</p>
+</section>
+
 <section class="meth" id="methodology">
-  <h2>How this comparison works</h2>
+  <h2>How the siting model works</h2>
   <p>This exploratory model reports weighted suitability, delivery concerns and rating sensitivity. Public response and regulation are reported separately and do not affect scores. The model does not predict project approval.</p>
   <h3>Weighted fit</h3>
   <p>Balanced starts with equal importance for the eight grid-siting factors: power headroom, power cost, incentives and policy, community and permitting, water, natural hazards, cooling climate, and connectivity. Each contributes 12.5% initially. The ninth factor, winter solar resource, starts at zero because a grid-connected project buys power rather than generating it. Presets and sliders change those shares.</p>
@@ -248,7 +275,7 @@ __CSS__
     <h3>What the evidence establishes</h3>
     <p>All 50 historical electricity prices were compared with EIA's 2024 industrial data. Solar irradiance comes from NASA POWER at one point per state, with eight states spot-checked against NREL's solar resource service. The seven judgment factors have not been individually validated. A state citation can support a policy event without proving its numerical rating.</p>
     <p>State profiles distinguish government records, grid publications, reporting, legal analysis, market research, company statements and advocacy statements. Company plans are self-reported; an advocacy organization's account of a lawsuit is not a court finding. A bill or agenda item is not automatically an enacted restriction.</p>
-    <p>Commercial tracker totals and references without identifiable documents have been removed from the displayed source list. Some unsupported counts and subsidy estimates have also been removed from state summaries. Remaining summaries and ratings are provisional and still need a claim-by-claim review.</p>
+    <p>Commercial tracker totals and references without identifiable documents have been removed from the displayed source list. Some unsupported counts and subsidy estimates have also been removed from state summaries. On October 20, 2026 the fifteen states that had no citations were reviewed claim by claim, and every state now cites at least one source. The other summaries and all ratings remain provisional.</p>
   </div>
   <details class="sources">
     <summary>Original records and datasets</summary>
@@ -267,7 +294,7 @@ __CSS__
       <li><a href="https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf">FEMA National Risk Index documentation</a> and <a href="https://www.wri.org/aqueduct">WRI Aqueduct</a>: background for further hazard and water research. This app has not calculated its state ratings directly from these datasets.</li>
     </ul>
   </details>
-  <p class="method-note">Model version 3 · Evidence review September 7, 2026 · Solar factor and off-grid band added September 23, 2026 · State records corrected October 13, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
+  <p class="method-note">Model version 3 · Evidence review September 7, 2026 · Solar factor and off-grid band added September 23, 2026 · State records corrected October 13, 2026 · Fifteen uncited states sourced claim by claim October 20, 2026 · County, utility territory and project-specific conditions require separate investigation.</p>
 </section>
 
 <section class="datapack" id="dataset">
@@ -290,6 +317,7 @@ __CSS__
 <script>
 const TOPO = __TOPO__;
 const STATES = __STATES__;
+const LOCAL = __LOCAL__;
 __MODEL_JS__
 __APP_JS__
 __FIGURES_JS__

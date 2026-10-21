@@ -46,6 +46,8 @@ The address records the scenario, and each parameter is omitted at its default.
 
 | Parameter | Meaning |
 |---|---|
+| `m` | Map view: `posture`, `pushback`, `rules` or `fit`. Omitted when it matches the default, which is `fit` for a link that carries any siting parameter and `posture` otherwise, so older links still open on the fit map |
+| `d` | `0` hides the local moratorium dots |
 | `z` | Project size |
 | `w` | Nine weights in factor order. Eight-weight links from version 2 still open, with solar read as zero. |
 | `v` | View (Combined, Political outlook, Physical fundamentals) |

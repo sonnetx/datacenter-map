@@ -3,18 +3,20 @@ function refresh(){ compute(); syncSliders(); paint(); renderCandidates(); rende
 // Redraw when the operating system flips between light and dark: the SVG and
 // canvas drawings read their colors from the stylesheet at draw time.
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{ readTheme(); paint(); renderScatter(); FIGS.draw(); });
-// on a phone the priorities panel starts collapsed so the map and results stay reachable
+// The Advanced analysis panel starts closed, and a phone keeps it closed so the
+// map comes first. On a wide screen a link made on the Siting fit map opens it.
 (function(){
   const mq=window.matchMedia("(max-width:900px)"), panel=document.getElementById("wpanel");
-  if(mq.matches) panel.removeAttribute("open");
-  mq.addEventListener("change",e=>{ if(e.matches) panel.removeAttribute("open"); else panel.setAttribute("open",""); });
+  mq.addEventListener("change",e=>{ if(e.matches) panel.removeAttribute("open"); });
 })();
 // Read the address first, score, then show the requested figure (figures read
-// scores, so they cannot be drawn before the first compute), then normalize
-// the address so a copied link is canonical.
+// scores, so they cannot be drawn before the first compute) and map view, then
+// normalize the address so a copied link is canonical.
 const initial=readURLState();
 refresh();
+renderFindings();
 if(initial.figure && FIGS.has(initial.figure)) FIGS.setView(initial.figure);
+setMapView(initial.map || (impliesFit() ? "fit" : "posture"),{openPanel:true});
 // A linked profile opens last, once every figure and rank it shows exists.
 if(initial.profile) select(initial.profile);
 urlReady=true; writeURL();
@@ -38,7 +40,8 @@ urlReady=true; writeURL();
     ["natural_hazard_1_5",s=>s.h],["climate_cooling_1_5",s=>s.c],
     ["connectivity_1_5",s=>s.x],["momentum_1_5",s=>s.mo],
     ["state_posture",s=>s.st],["action_tag_2026",s=>s.tag],
-    ["pushback",s=>s.rr.pb],
+    ["pushback",s=>s.rr.pb],["strongest_rule_in_force",s=>strongestRule(s)],
+    ["local_moratoriums_in_force",s=>s.localIn],["local_moratoriums_proposed",s=>s.localPending],
     ["rule_water",s=>s.rr.wt],["rule_power_cost",s=>s.rr.pg],
     ["rule_siting_zoning",s=>s.rr.zn],["rule_tax_incentives",s=>s.rr.tx],
     ["rules_in_force_count",s=>ruleCount(s)],
